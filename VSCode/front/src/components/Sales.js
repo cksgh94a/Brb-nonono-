@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-const webSocket = new WebSocket("ws://45.120.65.65/wsSales/jsales");
+const wsStart = new wsStart("ws://45.120.65.65/wsSales/jstart");
+const wsStart = new wsStart("ws://45.120.65.65/wsSales/jstop");
 const exchangeList = [
   {
     name: "BITTREX",
@@ -95,7 +96,7 @@ class Sales extends Component {
     alert(string);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
-    webSocket.send(trasJson);
+    wsStart.send(trasJson);
     console.log(trasJson + '전송');
   }
 
@@ -142,13 +143,13 @@ class Sales extends Component {
 
 
         <div className="Sales-start-btn" id="Sale-start">
-          <button id="Sale-detail-btn" style={{ margin: '3px' }}>
-            상세 내역
-                </button>
+          <button id="Sale-stop-btn" style={{ margin: '3px' }}>
+            거래 종료
+          </button>
           <br></br>
           <button id="Sale-start-btn" onClick={this.handleStartbtn} style={{ margin: '3px' }}>
             거래 시작
-                </button>
+          </button>
         </div>
       </div>
     );

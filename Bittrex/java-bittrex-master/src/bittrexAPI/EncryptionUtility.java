@@ -1,3 +1,5 @@
+package bittrexAPI;
+
 import java.io.UnsupportedEncodingException;
 import java.security.*;
 import java.util.Base64;

@@ -1,3 +1,6 @@
+package bittrexAPI;
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -345,7 +348,6 @@ public class Bittrex {
             HttpsURLConnection httpsURLConnection = (HttpsURLConnection) url.openConnection();
             httpsURLConnection.setRequestMethod("GET");
             httpsURLConnection.setRequestProperty("apisign", EncryptionUtility.calculateHash(secret, urlString, encryptionAlgorithm));
-            System.out.println( httpsURLConnection.getRequestProperty("apisign")  );
 			BufferedReader reader = new BufferedReader(new InputStreamReader(httpsURLConnection.getInputStream()));
 
 			StringBuffer resultBuffer = new StringBuffer();

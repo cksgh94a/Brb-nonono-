@@ -1,3 +1,5 @@
+package bittrexAPI;
+
 public class ReconnectionAttemptsExceededException extends RuntimeException {
 	
 	  private static final long serialVersionUID = 3756544403778584892L;
