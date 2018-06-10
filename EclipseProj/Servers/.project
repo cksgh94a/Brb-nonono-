@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Servers</name>
+	<comment></comment>
+	<projects>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+	<variableList>
+		<variable>
+			<name>gson</name>
+			<value>file:/C:/Devel/EclipseProj/gson-2.8.1.jar</value>
+		</variable>
+	</variableList>
+</projectDescription>

@@ -1,0 +1,11 @@
+강좌https://blog.naver.com/wjdrudtn0225/221238520707
+https://blog.naver.com/aufcl4858/221026005027
+http://webframeworks.kr/tutorials/weplanet/react-native-progress-circle/
+
+props : 웹에서 변경 불가
+state : 웹에서 변경 가능
+
+var : 재선언, 재할당 가능
+let : 재선언 불가, 재할당 가능
+const : 재선언, 재할당 불가
+input : 입력폼 (phone_book)
