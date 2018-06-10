@@ -8,10 +8,4 @@
 	</buildSpec>
 	<natures>
 	</natures>
-	<variableList>
-		<variable>
-			<name>gson</name>
-			<value>file:/C:/Devel/EclipseProj/gson-2.8.1.jar</value>
-		</variable>
-	</variableList>
 </projectDescription>

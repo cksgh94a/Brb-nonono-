@@ -1,6 +1,26 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
+const webSocket = new WebSocket("ws://45.120.65.65/wsSales/jsales");
+const exchangeList = [
+  {
+    name: "BITTREX",
+    //link?
+  },
+  {
+    name: "BITHUMB"
+  },
+  {
+    name: "BINANCE"
+  },
+  {
+    name: "KORBIT"
+  },
+  {
+    name: "COINONE"
+  }
+]
+
 const coinList = [
   {
     name: "ETH",
@@ -49,25 +69,6 @@ const coinList = [
   }
 ]
 
-const exchangeList = [
-  {
-    name: "BITTREX",
-    //link?
-  },
-  {
-    name: "BITHUMB"
-  },
-  {
-    name: "BINANCE"
-  },
-  {
-    name: "KORBIT"
-  },
-  {
-    name: "COINONE"
-  }
-]
-
 const unitList = [
   "5m", "10m", "15m", "30m", "1h", "6h", "1d", "1w", "1m", "1y"
 ]
@@ -76,21 +77,27 @@ class Sales extends Component {
 
   handleStartbtn = () => {
     let SL_coinSelectbox = document.getElementById("SL_coinSelectbox");
-    SL_coinSelectbox = SL_coinSelectbox.options[SL_coinSelectbox.selectedIndex].text;
+    var sCoin = SL_coinSelectbox.options[SL_coinSelectbox.selectedIndex].text;
     let SL_exchangeSelectbox = document.getElementById("SL_exchangeSelectbox");
-    SL_exchangeSelectbox = SL_exchangeSelectbox.options[SL_exchangeSelectbox.selectedIndex].text;
+    var sExchange = SL_exchangeSelectbox.options[SL_exchangeSelectbox.selectedIndex].text;
     let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
-    SL_strategySelectbox = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
+    var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
     let SL_priceInputbox = document.getElementById("SL_priceInputbox");
-    //SL_priceInputbox = SL_priceInputbox.text;
+    var sPrice = SL_priceInputbox.value;
     let SL_deadlineInputbox = document.getElementById("SL_deadlineInputbox");
-    //SL_deadlineInputbox = SL_deadlineInputbox.text;
+    var sDeadline = SL_deadlineInputbox.value;
 
-    let string = SL_coinSelectbox + '\n' + SL_exchangeSelectbox + '\n' + SL_strategySelectbox + '\n' + SL_priceInputbox.value + '\n' + SL_deadlineInputbox.value +  '\n' + "이 맞습니까?";
+    var json1 = {"sales" :[{"코인종류" : sCoin, "거래소" : sExchange, "전략" : sStrategy, "금액" : sPrice, "기간": sDeadline}]};
+    var trasJson =  JSON.stringify(json1);
+
+    let string = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n' + "이 맞습니까?";
 
     alert(string);
-  }
 
+    //웹소켓으로 textMessage객체의 값을 보낸다.
+    webSocket.send(trasJson);
+    console.log(trasJson + '전송');
+  }
 
   render() {
     return (

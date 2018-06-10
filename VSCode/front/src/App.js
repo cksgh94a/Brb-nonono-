@@ -27,7 +27,6 @@ class App extends Component {
         
         <div>
           bottom<br/>
-          <Five/>
         </div>
 
       </div>
