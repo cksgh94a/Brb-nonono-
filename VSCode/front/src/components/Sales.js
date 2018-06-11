@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
-const mainHandle = new WebSocket("ws://localhost:8080/wsSales/mainhandle");
-// const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
+// const mainHandle = new WebSocket("ws://localhost:8080/wsSales/mainhandle");
+const mainHandle = new WebSocket("ws://45.120.65.65/wsSales/mainhandle");
 const exchangeList = [
   {
     name: "BITTREX",
@@ -78,6 +77,8 @@ const unitList = [
 class Sales extends Component {
 
   handleStartbtn = () => {
+    let SL_nameInputbox = document.getElementById("SL_nameInputbox");
+    var sName = SL_nameInputbox.value;
     let SL_coinSelectbox = document.getElementById("SL_coinSelectbox");
     var sCoin = SL_coinSelectbox.options[SL_coinSelectbox.selectedIndex].text;
     let SL_exchangeSelectbox = document.getElementById("SL_exchangeSelectbox");
@@ -89,22 +90,23 @@ class Sales extends Component {
     let SL_deadlineInputbox = document.getElementById("SL_deadlineInputbox");
     var sDeadline = SL_deadlineInputbox.value;
 
-    var json1 = {"status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "deadline": sDeadline};
-    var trasJson =  JSON.stringify(json1);
+    var jsonStart = {"name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "deadline": sDeadline};
 
     let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n' + "이 맞습니까?";
 
     alert(alertMsg);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
-    botHandle.send(trasJson);
-    mainHandle.send(JSON.stringify(true));
-    console.log(trasJson + '전송');
+    mainHandle.send(JSON.stringify(jsonStart));
+    console.log(jsonStart + '전송');
   }
 
   handleStopbtn = () => {
+    let SL_nameInputbox = document.getElementById("SL_nameInputbox");
+    var sName = SL_nameInputbox.value;
     alert("거래를 중지하시겠습니까?");
-    mainHandle.send(JSON.stringify(false));
+    var jsonStop = {"name" : sName, "status" : false};
+    mainHandle.send(JSON.stringify(jsonStop));
   }
 
   render() {
@@ -113,6 +115,9 @@ class Sales extends Component {
         <h4 className="Sales-color">
           Sales configuration
                 </h4>
+        <div>
+          <input className="Sales-input" id="SL_nameInputbox" placeholder="이름" ></input>
+        </div>
 
         <div>
           <select className="Sales-box" id="SL_coinSelectbox" size='1'>
@@ -153,7 +158,6 @@ class Sales extends Component {
           <button id="Sale-start-btn" onClick={this.handleStartbtn} style={{ margin: '3px' }}>
             거래 시작
           </button>
-          <br></br>
           <button id="Sale-stop-btn" onClick={this.handleStopbtn} style={{ margin: '3px' }}>
             거래 종료
           </button>

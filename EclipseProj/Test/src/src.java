@@ -22,8 +22,11 @@ class Member {
 
 public class src {
 	public static void main(String[] args) {
-		Gson gson = new Gson(); 
-		String jsonString = "{'id':'jekalmin','name':'Min','age':26,'address':'Seoul'}";
-		System.out.print(gson.fromJson(jsonString, Member.class));
+//		Gson gson = new Gson(); 
+//		String jsonString = "{'id':'jekalmin','name':'Min','age':26,'address':'Seoul'}";
+//		System.out.print(gson.fromJson(jsonString, Member.class));
+		Boolean b = false;
+		System.out.println(b);
 	}
+
 }

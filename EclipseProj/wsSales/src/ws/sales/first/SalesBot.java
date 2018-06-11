@@ -1,8 +1,5 @@
 package ws.sales.first;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.util.Date;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -12,57 +9,71 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.google.gson.Gson;
 
+import java.util.*;
+
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 
-class SalesInfo{
-	private boolean status;
-	private String coin;
-	private String exchange;
-	private String strategy;
-	private String price;
-	private String deadline;
-
-	public boolean getStatus() { return status; }
-	public String getCoin() { return coin; }
-	public String getExchange() { return exchange; }
-	public String getStrategy() { return strategy; }
-	public String getPrice() { return price; }
-	public String getDeadline() { return deadline; }
-}
-
 @ServerEndpoint("/mainhandle")
-public class SalesBot {	
-
-    @OnOpen
-    public void openBotHandle() {
-    	BotHandle bH = new BotHandle();    	    	
-    }
-	static boolean STATUS;
+public class SalesBot extends Thread {	
+	static Map<String, Boolean> map = new HashMap<String, Boolean>();
+	private String name;
 	
-	public void main(boolean b) throws InterruptedException {
-        System.out.println("client is now connected... 메인");
-        STATUS = b;
-    	System.out.println(STATUS);
-
-//        String fileNameD = "/usr/local/server/apache-tomcat-8.0.52/webapps/React_ch/resDate.txt" ;
-//		while(STATUS) {
-//	        try{
-//	    		Date dt = new Date();
-//	    		System.out.println(dt.toString());
-//	    		
-//	            BufferedWriter fwD = new BufferedWriter(new FileWriter(fileNameD, true));
-//	             
-//	            fwD.write(dt.toString()+"\n");
-//	            fwD.flush(); 
-//	            fwD.close();	             	             
-//	        }
-//	        catch(Exception e){
-//	            e.printStackTrace();
-//	        }
-//			System.out.println("되냥!\n");
-//			Thread.sleep(2000);
-//		}
-		
+	public SalesBot() {}
+	public SalesBot(String s) { this.name = s; }
+	
+	public void run() {
+        System.out.println("client is now connected... thread");
+        
+        try {
+            //파일 객체 생성
+            File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.name+".txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            
+    		while(map.get(this.name)) {
+                if(file.isFile() && file.canWrite()){ 
+                Date d = new Date();            
+                String s = d.toString();
+                    //쓰기
+                    bufferedWriter.write(this.name + " " + s);
+                    //개행문자쓰기
+                    bufferedWriter.newLine();  
+                }
+    			Thread.sleep(2000);
+    		}      
+            
+            bufferedWriter.close();
+        } catch(Exception e) {        	
+        }
 	}
+    
+    @OnOpen
+	public void main() {
+        System.out.println("client is now connected... ");
+	}
+
+    @OnMessage
+    public void handleMessage(String message){
+        System.out.println("client is now connected... message");
+        Gson gson = new Gson();
+        SalesInfo sInfo = gson.fromJson(message, SalesInfo.class);
+        
+        map.put(sInfo.getName(), sInfo.getStatus());
+        
+        if(sInfo.getStatus()) {
+            SalesBot bot = new SalesBot(sInfo.getName());
+            bot.start();        	
+        }
+    }
+
+    @OnClose
+    public void handleClose(){
+        System.out.println("client is now disconnected...");
+    }
+    
+    @OnError
+    public void handleError(Throwable t){
+        t.printStackTrace();
+    }
 }
