@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-const wsStart = new wsStart("ws://45.120.65.65/wsSales/jstart");
-const wsStart = new wsStart("ws://45.120.65.65/wsSales/jstop");
+const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
+const mainHandle = new WebSocket("ws://localhost:8080/wsSales/mainhandle");
+// const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
 const exchangeList = [
   {
     name: "BITTREX",
@@ -88,16 +89,22 @@ class Sales extends Component {
     let SL_deadlineInputbox = document.getElementById("SL_deadlineInputbox");
     var sDeadline = SL_deadlineInputbox.value;
 
-    var json1 = {"sales" :[{"코인종류" : sCoin, "거래소" : sExchange, "전략" : sStrategy, "금액" : sPrice, "기간": sDeadline}]};
+    var json1 = {"status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "deadline": sDeadline};
     var trasJson =  JSON.stringify(json1);
 
-    let string = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n' + "이 맞습니까?";
+    let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n' + "이 맞습니까?";
 
-    alert(string);
+    alert(alertMsg);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
-    wsStart.send(trasJson);
+    botHandle.send(trasJson);
+    mainHandle.send(JSON.stringify(true));
     console.log(trasJson + '전송');
+  }
+
+  handleStopbtn = () => {
+    alert("거래를 중지하시겠습니까?");
+    mainHandle.send(JSON.stringify(false));
   }
 
   render() {
@@ -143,12 +150,12 @@ class Sales extends Component {
 
 
         <div className="Sales-start-btn" id="Sale-start">
-          <button id="Sale-stop-btn" style={{ margin: '3px' }}>
-            거래 종료
-          </button>
-          <br></br>
           <button id="Sale-start-btn" onClick={this.handleStartbtn} style={{ margin: '3px' }}>
             거래 시작
+          </button>
+          <br></br>
+          <button id="Sale-stop-btn" onClick={this.handleStopbtn} style={{ margin: '3px' }}>
+            거래 종료
           </button>
         </div>
       </div>
