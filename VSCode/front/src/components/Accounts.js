@@ -13,22 +13,12 @@ class Accounts extends Component{
 
     render() {
         return(
-
             <div>
-
                 <div>
                     Wallet<br></br>{wallet[0].exchange} &nbsp;/&nbsp; {wallet[0].balance}
 
                 </div>
-
-
-
-
-
-
             </div>
-
-
         );
     }
 

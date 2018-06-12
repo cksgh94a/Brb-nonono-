@@ -1,19 +1,23 @@
 package ws.sales.first;
 
-class SalesInfo{
-	private String name;
-	private Boolean status;
-	private String coin;
-	private String exchange;
-	private String strategy;
-	private String price;
-	private String deadline;
+import java.util.*;
 
+class SalesInfo{
+	private String name;	// 봇 이름
+	private Boolean status;	// 봇 상태
+	private String coin;	// 코인 종류
+	private String exchange;	// 거래소
+	private String strategy;	// 전략
+	private String price;	// 시작 금액
+	private Date endDate;	// 기간
+	private Date startDate;	// 시작일
+	
 	public String getName() { return name; }
 	public Boolean getStatus() { return status; }
 	public String getCoin() { return coin; }
 	public String getExchange() { return exchange; }
 	public String getStrategy() { return strategy; }
 	public String getPrice() { return price; }
-	public String getDeadline() { return deadline; }
+	public Date getEndDate() { return endDate; }
+	public Date getStartDate() { return startDate; }
 }

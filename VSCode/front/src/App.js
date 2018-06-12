@@ -6,7 +6,6 @@ import Sales from './components/Sales';
 import NowTrading from './components/NowTrading';
 import Accounts from './components/Accounts';
 import WalletInfo from './components/WalletInfo';
-import Five from './components/Five';
 
 class App extends Component {
 

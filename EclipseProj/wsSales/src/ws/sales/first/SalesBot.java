@@ -16,7 +16,7 @@ import java.io.File;
 import java.io.FileWriter;
 
 // 봇 메인 클래스
-@ServerEndpoint("/mainhandle")
+@ServerEndpoint("/bothandle")
 public class SalesBot extends Thread {
 	// <봇 이름, 상태> 맵 => 봇이 이부분 참조하여 실행, 정지
 	static Map<String, Boolean> map = new HashMap<String, Boolean>();
