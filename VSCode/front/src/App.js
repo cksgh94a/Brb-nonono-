@@ -7,11 +7,16 @@ import NowTrading from './components/NowTrading';
 // import Accounts from './components/Accounts';
 import WalletInfo from './components/WalletInfo';
 
+
+
+const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
+
 class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      id : "a"
+      id : "a",
+      listJ: new Array()
     };
 
   }
@@ -27,7 +32,7 @@ class App extends Component {
           <div className="one"><NowTrading id = {this.state.id}/></div>
           <div className="three"><ChartSelect/></div>
           <div className="four"><WalletInfo/></div>
-          <div className="five"><Sales id = {this.state.id}/></div>
+          <div className="five"><Sales id = {this.state.id} /></div>
           </div>
         
         <div>

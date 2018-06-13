@@ -6,7 +6,6 @@ import TradingElement from './TradingElement';
 const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
 // const ntHandle = new WebSocket("ws://45.120.65.65/wsSales/nthandle");
 
-    
 class NowTrading extends Component {
     constructor(props) {
        super(props);
@@ -26,7 +25,7 @@ class NowTrading extends Component {
                 }
         }
     }
-
+    
     render() {
         return(
             <div >

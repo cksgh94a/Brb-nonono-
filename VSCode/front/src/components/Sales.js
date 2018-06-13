@@ -4,11 +4,8 @@ import './Sales.css';
 const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
 // const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
 
-const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
-
 const exchangeList = ["BITTREX", "BITHUMB", "BINANCE", "KORBIT", "COINONE"]
 const coinList = ["ETH", "BTC", "BTG", "XRP", "EOS", "LTC", "DOG", "ETC", "QTUM"]
-
 
 class Sales extends Component {
 
@@ -34,7 +31,6 @@ class Sales extends Component {
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
     botHandle.send(JSON.stringify(jsonStart));
-    ntHandle.send(this.props.id)
     console.log(jsonStart + '전송');
   }
 

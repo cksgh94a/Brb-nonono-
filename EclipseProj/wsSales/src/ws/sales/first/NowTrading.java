@@ -13,6 +13,8 @@ import java.util.*;
 // 진행 중인 거래 정보 전송
 @ServerEndpoint("/nthandle")
 public class NowTrading {
+	
+	static boolean S = false;
 
     @OnMessage
     public String handleMessage(String id){
