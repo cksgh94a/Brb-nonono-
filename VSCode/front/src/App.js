@@ -1,13 +1,20 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 import ChartSelect from './components/ChartSelect';
 import Sales from './components/Sales';
 import NowTrading from './components/NowTrading';
-import Accounts from './components/Accounts';
+// import Accounts from './components/Accounts';
 import WalletInfo from './components/WalletInfo';
 
 class App extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      id : "a"
+    };
+
+  }
 
   render() {
 
@@ -17,11 +24,10 @@ class App extends Component {
           TASS Draft
         </header>
         <div className="wrapper">
-          <div className="one"><NowTrading/></div>
-          <div className="two"><Sales/></div>
+          <div className="one"><NowTrading id = {this.state.id}/></div>
           <div className="three"><ChartSelect/></div>
           <div className="four"><WalletInfo/></div>
-          <div className="five"></div>
+          <div className="five"><Sales id = {this.state.id}/></div>
           </div>
         
         <div>

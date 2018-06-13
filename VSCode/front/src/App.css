@@ -71,18 +71,10 @@
   border: 1px solid #343a40;
   background-color: #343a40;
   grid-row-start: 1;
-  grid-row-end: 3;
-  grid-column-start: 0;
-  grid-column-end: 1;
-  overflow: scroll;
-}
-.two { 
-  border: 1px solid #343a40;
-  background-color: #343a40;
-  grid-row-start: 3;
   grid-row-end: 7;
   grid-column-start: 0;
   grid-column-end: 1;
+  overflow: scroll;
 }
 .three {
   border: 1px solid #343a40;
@@ -100,6 +92,7 @@
 }
 .five {
   border: 1px solid #343a40;
+  background-color: #343a40;
   grid-row-start: 3;
   grid-row-end: 7;
   grid-column-start: 6;

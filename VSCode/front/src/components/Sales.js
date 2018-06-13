@@ -1,12 +1,14 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-// const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
-const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
+const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
+// const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
+
+const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
 
 const exchangeList = ["BITTREX", "BITHUMB", "BINANCE", "KORBIT", "COINONE"]
 const coinList = ["ETH", "BTC", "BTG", "XRP", "EOS", "LTC", "DOG", "ETC", "QTUM"]
-const unitList = ["5m", "10m", "15m", "30m", "1h", "6h", "1d", "1w", "1m", "1y"]
+
 
 class Sales extends Component {
 
@@ -23,15 +25,16 @@ class Sales extends Component {
 
     let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
     var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
+    
+    var jsonStart = {"id" : this.props.id, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "endDate": new Date(), "profit" : 100};
 
-    var jsonStart = {"name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "deadline": sDeadline};
-
-    let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n' + "이 맞습니까?";
+    let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n이 맞습니까?';
 
     alert(alertMsg);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
     botHandle.send(JSON.stringify(jsonStart));
+    ntHandle.send(this.props.id)
     console.log(jsonStart + '전송');
   }
 

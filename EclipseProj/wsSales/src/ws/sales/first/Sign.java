@@ -8,12 +8,6 @@ import javax.websocket.server.ServerEndpoint;
 
 import com.google.gson.Gson;
 
-import java.util.*;
-
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-
 class SignInfo {
 	private String eMail;	// 이메일
 	private String phone;	// 전화번호

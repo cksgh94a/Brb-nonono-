@@ -1,33 +1,41 @@
 import React, { Component } from 'react';
 import './NowTrading.css';
-import NTComp from './NTComp';
+import TradingElement from './TradingElement';
 
 
-const ntHandle = new WebSocket("ws://45.120.65.65/wsSales/nthandle");
-ntHandle.onmessage = (event) => {
-    const listJ = new Array(JSON.parse(event.data));
-}
+const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
+// const ntHandle = new WebSocket("ws://45.120.65.65/wsSales/nthandle");
 
-const list = [
-    {name : "존버가즈아", date : "2018-5-24", coin : "XRP", 
-    exchange : "COINONE", profit : "54.2", strategy : "불린저밴드"},
-    {name : "내꺼1", date : "2018-4-3", coin : "BTC",
-    exchange : "COINONE", profit : "-123.2", strategy : "custom1"},
-    {name : "아는형님꺼", date : "2018-3-24", coin : "XRP",
-    exchange : "BITTREX", profit : "254.2", strategy : "custom2"}
-]
-
-
+    
 class NowTrading extends Component {
+    constructor(props) {
+       super(props);
+
+        this.state = {
+            listJ: new Array()
+        };
+    
+        ntHandle.onopen = (event) => {
+            ntHandle.send(this.props.id)
+        }
+        
+        ntHandle.onmessage = (event) => {
+            if(event.data != "null"){
+                this.setState(
+                    {listJ: JSON.parse(event.data)});
+                }
+        }
+    }
+
     render() {
         return(
             <div >
                 <div className = "NowTrading-elementList">
                     <div>
-                    {list.map((nt) => {
-                        return (<NTComp name = {nt.name} date = {nt.date} 
+                    {this.state.listJ.map((nt, i) => {
+                        return (<TradingElement id = {this.props.id} name = {nt.name} date = {nt.startDate} 
                             coin = {nt.coin} exchange = {nt.exchange}
-                            profit = {nt.profit} strategy = {nt.strategy}
+                            profit = {nt.profit} strategy = {nt.strategy} key = {nt.i}
                                  />);
                     })}
                     </div>

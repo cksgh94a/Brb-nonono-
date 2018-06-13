@@ -15,13 +15,20 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 
+
 // 봇 메인 클래스
 @ServerEndpoint("/bothandle")
 public class SalesBot extends Thread {
+			
 	// <봇 이름, 상태> 맵 => 봇이 이부분 참조하여 실행, 정지
 	static Map<String, Boolean> map = new HashMap<String, Boolean>();
-	private String name;	// 봇 이름
 	
+	// 현재 진행중인 거래 리스트
+	static ArrayList<TradingElement> nowTrading = new ArrayList<TradingElement>();
+	
+	private String name;	// 개별 봇 이름
+	
+	public SalesBot() {}
 	public SalesBot(String s) { this.name = s; }	// 봇 이름 설정하는 생성자
 	
 	// 봇 실행 함수
@@ -33,24 +40,21 @@ public class SalesBot extends Thread {
             File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.name+".txt");
             BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
             
-            
             /*
              * 여기다가 로직 호출하면 될듯
              */
             
     		while(map.get(this.name)) {
                 if(file.isFile() && file.canWrite()){ 
-                Date d = new Date();            
-                String s = d.toString();
-                    //쓰기
-                    bufferedWriter.write(this.name + " " + s);
-                    //개행문자쓰기
-                    bufferedWriter.newLine();  
+	                Date d = new Date();            
+	                String time = d.toString();
+                    bufferedWriter.write(this.name + " " + time + map + "\n" + nowTrading);	// 쓰기
+                    bufferedWriter.newLine();	// 개행문자쓰기  
                 }
     			Thread.sleep(2000);	// 이부분이나 로직 함수에서 슬립해서 거래하면 될듯
     		}      
-            
             bufferedWriter.close();	// 로그는 임시로 마지막에 한번에 생성하게 해놈
+            
         } catch(Exception e) {        	
         }
 	}
@@ -62,22 +66,33 @@ public class SalesBot extends Thread {
         
         // json 파싱
         Gson gson = new Gson();
-        SalesInfo sInfo = gson.fromJson(message, SalesInfo.class);
+        TradingElement tInfo = gson.fromJson(message, TradingElement.class);
         
+    	nowTrading.add(tInfo);
+    	
         // 봇 실행 상태 기록
-        map.put(sInfo.getName(), sInfo.getStatus());
+        map.put(tInfo.getId()+tInfo.getName(), tInfo.getStatus());
         
-        if(sInfo.getStatus()) {	// 실행 신호 오면 봇 새로 만들어서 실행
-            SalesBot bot = new SalesBot(sInfo.getName());
-            bot.start();        	
+        
+        if(tInfo.getStatus()) {	// 실행 신호 오면 봇 새로 만들어서 실행
+            SalesBot bot = new SalesBot(tInfo.getId()+tInfo.getName());
+            bot.start();
         }
-        else {	// 종료 신호 오면
-        	map.remove(false);	// 종료된 봇은 리스트에서 삭제
+        
+        else {
+        	for(int i = nowTrading.size() - 1; i >= 0; i--) {
+        		
+        		if((nowTrading.get(i).getId()+nowTrading.get(i).getName()).equals(tInfo.getId()+tInfo.getName())) {
+        			System.out.println("지우냐???");
+        			nowTrading.remove(i);  
+        			
+        		}
+    		} 
         }
     }
     
     @OnOpen
-	public void main() {
+	public void handleOpen() {
         System.out.println("client is now connected... ");
 	}
 
