@@ -8,9 +8,6 @@ import NowTrading from './components/NowTrading';
 import WalletInfo from './components/WalletInfo';
 
 
-
-const ntHandle = new WebSocket("ws://localhost:8080/wsSales/nthandle");
-
 class App extends Component {
   constructor(props){
     super(props);

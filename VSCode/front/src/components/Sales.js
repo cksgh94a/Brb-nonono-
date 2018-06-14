@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
+// const botHandle = new WebSocket("ws://localhost:8080/tass/bothandle");
 const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
 // const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
 
-const exchangeList = ["BITTREX", "BITHUMB", "BINANCE", "KORBIT", "COINONE"]
-const coinList = ["ETH", "BTC", "BTG", "XRP", "EOS", "LTC", "DOG", "ETC", "QTUM"]
+const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
+const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
 
 class Sales extends Component {
 
@@ -63,11 +64,10 @@ class Sales extends Component {
 
         <div>
           <select className="Sales-box" id="SL_strategySelectbox" size='1'>
-            <option> 불린저밴드 </option>
-            <option> Momentum </option>
-            <option> 각종여러가지 </option>
-            <option> 골든크로스  </option>
-            <option> 돈잘버는법  </option>
+            <option>bollingerPatternNaked</option>
+            <option>Bollingertrade</option>
+            <option>trendFollowing</option>
+            <option>patterNakedTrade</option>
           </select>
         </div>
 

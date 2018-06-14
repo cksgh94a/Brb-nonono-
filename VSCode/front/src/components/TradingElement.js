@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './NowTrading.css';
 
 
+// const botHandle = new WebSocket("ws://localhost:8080/tass/bothandle");
 const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
 // const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
 
