@@ -11,7 +11,7 @@ class TradingElement{
 	private double price;	// 시작 금액
 	private Date startDate;
 	private long period;	// 기간
-	private String profit = "100.00";
+	private String profit;
 	private long residualDate;
 	
 	public TradingElement(String i, String n, Boolean b, String c, String e, double p, String s, Date sD, long pd) {
@@ -24,6 +24,7 @@ class TradingElement{
 		this.strategy = s;
 		this.startDate = sD;
 		this.period = pd;
+		this.profit = "100.00";
 	}
 	
 	public String getId() { return id; }
