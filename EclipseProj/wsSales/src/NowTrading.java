@@ -25,6 +25,7 @@ public class NowTrading {
     	System.out.println(SalesBot.nowTrading.size());
     	for(int i=0; i < SalesBot.nowTrading.size(); i++) {
     		if(SalesBot.nowTrading.get(i).getId().equals(id)) {
+    			SalesBot.nowTrading.get(i).setResDate();
     			nT.add(SalesBot.nowTrading.get(i));
     		}
     	}

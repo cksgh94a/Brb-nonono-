@@ -1,3 +1,25 @@
+
+        try {
+            // 파일 객체 생성
+            File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.name+".txt");
+            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+            
+            if(file.isFile() && file.canWrite()){
+                Date d = new Date();            
+                String time = d.toString();
+                bufferedWriter.write(this.botName + " " + time + SalesBot.map + "\n" + new Date());	// 쓰기
+                bufferedWriter.newLine();	// 개행문자쓰기  
+            }
+    		bufferedWriter.close();	// 로그는 임시로 마지막에 한번에 생성하게 해놈
+            
+        } catch(Exception e) {        	
+        }
+        
+============================
+
+
+
+
 package ws.sales.first;
 
 

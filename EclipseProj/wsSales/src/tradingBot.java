@@ -43,7 +43,7 @@ class tradingBot {
 
 	// test 초기값
 	int testNum = 0; // 비트코인 0개
-	int testStartAsset = 1000000000; // 10억
+	double testStartAsset = 1000000000; // 10억
 
 	// DB
 	private Connection conn = null;
@@ -60,6 +60,7 @@ class tradingBot {
 	public tradingBot(double priceAmount, String _ID, String start, String end, String exchange, String coin_crypto,
 			String coin_exchange, String Algoset, String API_KEY, String Sec_KEY, String botName) {
 		this.priceAmount = priceAmount;
+		this.testStartAsset = priceAmount;
 		this._ID = _ID;
 		this.start = start;
 		this.end = end;
@@ -220,7 +221,12 @@ class tradingBot {
 		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // 이부분은 차차 개선 -> 여러가지 거래소도 동일하게 추상화 필요
 		Cryptowatch crypt = new Cryptowatch(10, 1); // 1회성 콜 -> 이대로 사용해도 괜찮음, 거래를 하지 않기 때문에 괜춘
 
-		while (true) {
+//		try {
+//        // 파일 객체 생성
+//        File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.botName+".txt");
+//        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+        
+		while (SalesBot.map.get(botName)) {
 			double[] currentData = getHistoryArray(crypt, _corrInterval, _intervalNumber, _intervalNumber);
 			double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
 			System.out.println();
@@ -230,15 +236,27 @@ class tradingBot {
 				sellCoin(brx, 10, currentData[_intervalNumber - 1]); // sell
 			} else {
 				doNothing();
-			}
+			}        
+//			
+//            if(file.isFile() && file.canWrite()){
+//                Date d = new Date();            
+//                String time = d.toString();
+//                bufferedWriter.write(this.botName + " " + time + SalesBot.map + "\n" + new Date());	// 쓰기
+//                bufferedWriter.newLine();	// 개행문자쓰기  
+//            }
+	        
 
 			try {
-				Thread.sleep(60050);
+				Thread.sleep(6000*10+50);
 			} catch (Exception e) {
 				System.out.println(e.toString());
 			}
 			System.out.println();
 		}
+//		bufferedWriter.close();	// 로그는 임시로 마지막에 한번에 생성하게 해놈
+//        
+//        } catch(Exception e) {        	
+//        }
 	}
 
 	public void trendFollowing(int less_ave, int more_ave) {
@@ -279,7 +297,6 @@ class tradingBot {
 	}
 
 	public void bollingerPatternNaked() {
-
 		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // 이부분은 차차 개선 -> 여러가지 거래소도 동일하게 추상화 필요
 		Cryptowatch crypt = new Cryptowatch(10, 1); // 1회성 콜 -> 이대로 사용해도 괜찮음, 거래를 하지 않기 때문에 괜춘
 
@@ -290,82 +307,97 @@ class tradingBot {
 		// getBollinder -> queue를주고 다음 상하한을 받음
 		// wait 5.0001초
 		// 값을 받고 비교 -> 로직
-		// B S W 리턴 -> 실행
+		// B S W 리턴 -> 실행		
 		// queue 새로세팅
-		while (true) {
+		
 
-//			try {
-//				bufWriter = new BufferedWriter(new FileWriter("C:\\Users\\Lee Jun-hyeong\\Desktop\\patternlog.txt"));
-//			} catch (IOException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
-			
-			double[] bollingerHL = getBollinger(crypt, history_queue, _mul);
-			// ------------------
-			try {
-				Thread.sleep(1000 * _interval);
-			} catch (Exception e) {
-				System.out.println(e.toString());
-			}
-			// -------------------
-			double currentLast = getCurrentPrice(crypt, coin_crypto);
-			System.out.println(" --> 현재가 : " + currentLast);
-			// -----------------
-			// 매수타이밍
-			if (currentLast < bollingerHL[1]) {
-				// BUY
-				// 얼마나 살건지 알고리즘 셋팅에 따라
-				System.out.println("잠정적 매수 타이밍");
-				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
-				if (corr > 0.4) {
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					buyCoin(brx, 50, currentLast);
-				} else if (corr < -0.5) {
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					sellCoin(brx, 40, currentLast);
-				
-				} else {
-					doNothing();
-				}
-			}
-			// 매도타이밍
-			else if (currentLast > bollingerHL[0]) {
-				// SELL
-				// 얼마나 팔건지 알고리즘 셋팅에 따라
-				System.out.println("잠정적 매도 타이밍");
-				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
-				if (corr > 0.3) {
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					buyCoin(brx, 20, currentLast);
-				} else if (corr < -0.5) {
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					sellCoin(brx, 80, currentLast);
-				} else {
-					doNothing();
-				}
-			}
-			// 대기타이밍
-			else {
-				// wait
-				System.out.println("잠정적 대기 타이밍");
-				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
-				if (corr > 0.75) {
-					//4개구매
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					buyCoin(brx, 30, currentLast);
-				} else {
-					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
-					doNothing();
-				}
-			}
-			// -----------------
-			history_queue.remove();
-			history_queue.add(currentLast);
-			System.out.println("돈으로 환산한 총 현재 재산 : " + (int)(currentLast * testNum + testStartAsset) + "KRW");
-			System.out.println();
-			
-		}
+//        try {
+//            // 파일 객체 생성
+//            File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.botName+".txt");
+//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+
+    		while (SalesBot.map.get(botName)) {
+
+//    			try {
+//    				bufWriter = new BufferedWriter(new FileWriter("C:\\Users\\Lee Jun-hyeong\\Desktop\\patternlog.txt"));
+//    			} catch (IOException e1) {
+//    				// TODO Auto-generated catch block
+//    				e1.printStackTrace();
+//    			}
+    			
+    			double[] bollingerHL = getBollinger(crypt, history_queue, _mul);
+    			// ------------------
+    			try {
+    				Thread.sleep(1000 * _interval);
+    			} catch (Exception e) {
+    				System.out.println(e.toString());
+    			}
+    			// -------------------
+    			double currentLast = getCurrentPrice(crypt, coin_crypto);
+    			System.out.println(" --> 현재가 : " + currentLast);
+    			// -----------------
+    			// 매수타이밍
+    			if (currentLast < bollingerHL[1]) {
+    				// BUY
+    				// 얼마나 살건지 알고리즘 셋팅에 따라
+    				System.out.println("잠정적 매수 타이밍");
+    				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
+    				if (corr > 0.4) {
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					buyCoin(brx, 50, currentLast);
+    				} else if (corr < -0.5) {
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					sellCoin(brx, 40, currentLast);
+    				
+    				} else {
+    					doNothing();
+    				}
+    			}
+    			// 매도타이밍
+    			else if (currentLast > bollingerHL[0]) {
+    				// SELL
+    				// 얼마나 팔건지 알고리즘 셋팅에 따라
+    				System.out.println("잠정적 매도 타이밍");
+    				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
+    				if (corr > 0.3) {
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					buyCoin(brx, 20, currentLast);
+    				} else if (corr < -0.5) {
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					sellCoin(brx, 80, currentLast);
+    				} else {
+    					doNothing();
+    				}
+    			}
+    			// 대기타이밍
+    			else {
+    				// wait
+    				System.out.println("잠정적 대기 타이밍");
+    				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
+    				if (corr > 0.75) {
+    					//4개구매
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					buyCoin(brx, 30, currentLast);
+    				} else {
+    					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
+    					doNothing();
+    				}
+    			}
+    			// -----------------
+    			history_queue.remove();
+    			history_queue.add(currentLast);
+    			System.out.println("돈으로 환산한 총 현재 재산 : " + (int)(currentLast * testNum + testStartAsset) + "KRW");
+    			System.out.println();
+//                if(file.isFile() && file.canWrite()){
+//                    bufferedWriter.write(this.botName + " 보유자산 : " + (int)(currentLast * testNum + testStartAsset) + "KRW\n" + new Date());	// 쓰기
+//                    bufferedWriter.newLine();	// 개행문자쓰기  
+//                }
+    		}
+//    		bufferedWriter.close();	// 로그는 임시로 마지막에 한번에 생성하게 해놈
+            
+//        } catch(Exception e) {        	
+//        }
+
 	}
 
 	public void Bollingertrade() {
@@ -382,7 +414,7 @@ class tradingBot {
 		// 값을 받고 비교 -> 로직
 		// B S W 리턴 -> 실행
 		// queue 새로세팅
-		while (true) {
+		while (SalesBot.map.get(botName)) {
 
 			double[] bollingerHL = getBollinger(crypt, history_queue, _mul);
 			// ------------------
@@ -412,6 +444,7 @@ class tradingBot {
 			// -----------------
 			history_queue.remove();
 			history_queue.add(currentLast);
+        	
 			System.out.println();
 		}
 	}
@@ -441,8 +474,23 @@ class tradingBot {
 			testStartAsset -= price * how;
 			System.out.print("구매한 코인의 수 : "+how+", 구매한 코인의 개당 가격 : " + price + " --> ");
 		}
+		
+		Cryptowatch crypt = new Cryptowatch(10, 1);
+		double currentLast = getCurrentPrice(crypt, coin_crypto);
+
+    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    		
+    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
+    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
+    			System.out.println();
+    			System.out.println(String.format("%.2f", asd));
+    			System.out.println();
+    		}
+		} 
+    	
 		// 디비 쿼리 날려주기
-		// transaction log로 날려
+		// transaction log로 날려    	
 		System.out.println("현재 코인 보유 수 : " + testNum + " / 현재 돈 : " + testStartAsset + "KRW");
 		ExecSQL_Insert(_ID, exchange, coin_crypto, 1, amount, price);
 	}
@@ -465,10 +513,23 @@ class tradingBot {
 			testNum -= testNum;
 			System.out.print("판매한 코인의 수 : "+temp+", 판매한 코인의 개당 가격 : " + price + " --> ");
 		}
+		
+		Cryptowatch crypt = new Cryptowatch(10, 1);
+		double currentLast = getCurrentPrice(crypt, coin_crypto);
+
+    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    		
+    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
+    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
+    			System.out.println(String.format("%.2f", asd));
+    		}
+		} 
 		// 디비 쿼리 날려주기
 		// transaction log로 날려줌
 		System.out.println("현재 코인 보유 수 : " + testNum + " / 현재 돈 : " + testStartAsset + "KRW");
 		ExecSQL_Insert(_ID, exchange, coin_crypto, 2, amount, price);
+		
 	}
 
 	public void doNothing() {
@@ -477,6 +538,20 @@ class tradingBot {
 		System.out.println("현재 코인 보유 수 : " + testNum + " / 현재 돈 : " + testStartAsset + "KRW");
 		// 디비 쿼리 날려주기
 		ExecSQL_Insert(_ID, exchange, coin_crypto, 3, 0, 0);
+		
+		Cryptowatch crypt = new Cryptowatch(10, 1);
+		double currentLast = getCurrentPrice(crypt, coin_crypto);
+
+    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    		
+    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
+    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
+    			System.out.println();
+    			System.out.println(String.format("%.2f", asd));
+    			System.out.println();
+    		}
+		} 
 	}
 
 	// 가격 히스토리를 보여줌 -> ohlc 중 뭘 사용할건지 추가 / interval과 갯수 파라미터

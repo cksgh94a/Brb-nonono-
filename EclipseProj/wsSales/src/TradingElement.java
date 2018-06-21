@@ -10,10 +10,11 @@ class TradingElement{
 	private String strategy;
 	private double price;	// 시작 금액
 	private Date startDate;
-	private Date endDate;	// 기간
-	private double profit;
+	private long period;	// 기간
+	private String profit = "100.00";
+	private long residualDate;
 	
-	public TradingElement(String i, String n, Boolean b, String c, String e, double p, String s, Date sD, Date eD) {
+	public TradingElement(String i, String n, Boolean b, String c, String e, double p, String s, Date sD, long pd) {
 		this.id = i;
 		this.name = n;
 		this.status = b;
@@ -22,7 +23,7 @@ class TradingElement{
 		this.price = p;
 		this.strategy = s;
 		this.startDate = sD;
-		this.endDate = eD;
+		this.period = pd;
 	}
 	
 	public String getId() { return id; }
@@ -33,8 +34,13 @@ class TradingElement{
 	public String getStrategy() { return strategy; }
 	public double getPrice() { return price; }
 	public Date getStartDate() { return startDate; }
-	public Date getEndDate() { return endDate; }
-	public double getProfit() { return profit; }
+	public long getEndDate() { return period; }
+	public String getProfit() { return profit; }
 	
-	public void setProfit(double p) { this.profit = p; }	
+	public void setProfit(String p) { this.profit = p; }	
+	public void setResDate() {
+		long ed = this.startDate.getTime()+ 24*60*60*1000*period;
+		this.residualDate = (ed - new Date().getTime()) / (24*60*60*1000);
+	}
+	
 }

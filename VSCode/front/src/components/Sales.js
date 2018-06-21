@@ -24,7 +24,7 @@ class Sales extends Component {
     let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
     var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
     
-    var jsonStart = {"id" : this.props.id, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "endDate": new Date(), "profit" : 100};
+    var jsonStart = {"id" : this.props.id, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "period": sDeadline};
 
     let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n이 맞습니까?';
 
@@ -72,10 +72,10 @@ class Sales extends Component {
         </div>
 
         <div>
-          <input className="Sales-input" id="SL_priceInputbox" placeholder="금액" ></input>
+          <input className="Sales-input" id="SL_priceInputbox" placeholder="금액 (원)" ></input>
         </div>
         <div>
-          <input className="Sales-input" id="SL_deadlineInputbox" placeholder="마감 기한" ></input>
+          <input className="Sales-input" id="SL_deadlineInputbox" placeholder="거래 기간 (일)" ></input>
         </div>
         <div className="Sales-start-btn" id="Sale-start">
           <button id="Sale-start-btn" onClick={this.handleStartbtn} style={{ margin: '3px' }}>

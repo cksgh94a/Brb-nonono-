@@ -11,6 +11,11 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
+import java.util.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
 class initializing {
 
 	// websocket 통신으로 받아오는 부분
@@ -62,15 +67,18 @@ class initializing {
 		else if(exchange.equals("bithumb")) {
 			coin_ex = coin_target;
 		}
-		System.out.println("간다?");
-		
+
 		SQL_Insert(); // trade봇정보 insert
 		tradingBot trbot = new tradingBot(priceAmount, _ID, startDate, endDate, exchange, coin_crypto, coin_ex, "none",
 				API_KEY, Secret_KEY, botName);
-		System.out.println("여긴?");
-		//trbot.Bollingertrade();
-		//trbot.patterNakedTrade();
-		trbot.bollingerPatternNaked();
+		if (strategyName.equals("bollingerPatternNaked"))
+			trbot.bollingerPatternNaked();
+		else if (strategyName.equals("Bollingertrade"))
+			trbot.Bollingertrade();
+		else if (strategyName.equals("patterNakedTrade"))
+			trbot.patterNakedTrade();
+		else 
+			System.out.println("전략 선택 오류다!!!");
 	}
 	
 	public static void SQL_Select() {

@@ -33,7 +33,7 @@ class NowTrading extends Component {
                 <div className = "NowTrading-elementList">
                     <div>
                     {this.state.listJ.map((nt, i) => {
-                        return (<TradingElement id = {this.props.id} name = {nt.name} date = {nt.startDate} 
+                        return (<TradingElement id = {this.props.id} name = {nt.name} resDate = {nt.residualDate} 
                             coin = {nt.coin} exchange = {nt.exchange}
                             profit = {nt.profit} strategy = {nt.strategy} key = {nt.i}
                                  />);

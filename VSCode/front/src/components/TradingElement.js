@@ -19,7 +19,7 @@ class TradingElement extends Component {
         return(
             <div >
                 <div className = "NowTrading-element" >
-                    <b>{this.props.name}</b><br/>시작일 : {this.props.date}<br/>
+                    <b>{this.props.name}</b><br/>잔여일 : {this.props.resDate}일<br/>
                     코인 : {this.props.coin}<br/>거래소 : {this.props.exchange}<br/>
                     수익률 : {this.props.profit}%<br/>전략 : {this.props.strategy}<br/>
                     <button id="Sale-stop-btn" onClick={this.handleStopbtn}>

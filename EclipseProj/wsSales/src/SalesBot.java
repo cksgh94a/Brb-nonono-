@@ -38,32 +38,10 @@ public class SalesBot extends Thread {
 	// 봇 실행 함수
 	public void run() {
         System.out.println("client is now connected... thread");
-        
-        try {
-            //파일 객체 생성
-//            File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.name+".txt");
-//            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
-            
-            /*
-             * 여기다가 로직 호출하면 될듯
-             */
 
-//    		while(map.get(this.name)) {
-    		while(true) {
-            	initializing bot = new initializing(tElement); 
-            	bot.main();
-//                if(file.isFile() && file.canWrite()){
-//	                Date d = new Date();            
-//	                String time = d.toString();
-//                    bufferedWriter.write(this.name + " " + time + map + "\n" + nowTrading);	// 쓰기
-//                    bufferedWriter.newLine();	// 개행문자쓰기  
-//                }
-//    			Thread.sleep(2000);	// 이부분이나 로직 함수에서 슬립해서 거래하면 될듯
-    		}      
-//            bufferedWriter.close();	// 로그는 임시로 마지막에 한번에 생성하게 해놈
-            
-        } catch(Exception e) {        	
-        }
+    	initializing bot = new initializing(tElement); 
+    	bot.main();
+        
 	}
 
 	// 웹소켓 통해 json 왔을 떄
@@ -75,7 +53,7 @@ public class SalesBot extends Thread {
         Gson gson = new Gson();
         TradingElement tInfo = gson.fromJson(message, TradingElement.class);
         
-    	nowTrading.add(tInfo);
+    	nowTrading.add(tInfo);	// 현재 진행 중인 거래 기록
     	
         // 봇 실행 상태 기록
         map.put(tInfo.getId()+tInfo.getName(), tInfo.getStatus());
@@ -91,9 +69,7 @@ public class SalesBot extends Thread {
         	for(int i = nowTrading.size() - 1; i >= 0; i--) {
         		
         		if((nowTrading.get(i).getId()+nowTrading.get(i).getName()).equals(tInfo.getId()+tInfo.getName())) {
-        			System.out.println("지우냐???");
-        			nowTrading.remove(i);  
-        			
+        			nowTrading.remove(i);
         		}
     		} 
         }
