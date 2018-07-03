@@ -57,7 +57,8 @@ class initializing {
 		// 추후에 tradingBot에다가 이 걸 넘겨줘도 됨
 		String APIK;
 		String SecK;
-		SQL_Select(); // key select
+		String selectSql = String.format("SELECT API_KEY, Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", _ID, exchange);
+		DB.useDB(selectSql, "select");; // key select
 
 		String coin_ex = "";
 		String coin_crypto = coin_target + coin_base;
@@ -68,7 +69,7 @@ class initializing {
 			coin_ex = coin_target;
 		}
 
-		SQL_Insert(); // trade봇정보 insert
+		DB.useDB(selectSql, "insert"); // trade봇정보 insert
 		tradingBot trbot = new tradingBot(priceAmount, _ID, startDate, endDate, exchange, coin_crypto, coin_ex, "none",
 				API_KEY, Secret_KEY, botName);
 		if (strategyName.equals("bollingerPatternNaked"))
@@ -81,6 +82,7 @@ class initializing {
 			System.out.println("전략 선택 오류다!!!");
 	}
 	
+	/*
 	public static void SQL_Select() {
 		Connection conn = null;
 		Statement stmt = null;
@@ -143,6 +145,6 @@ class initializing {
 				} catch (SQLException e) {
 				}
 		}
-	}
+	}*/
 
 }
