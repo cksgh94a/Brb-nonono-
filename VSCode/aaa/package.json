@@ -6,10 +6,12 @@
     "global": "^4.3.2",
     "kaazing-enterprise-client": "^4.1.0",
     "node-bittrex-api": "^0.8.3",
-    "react": "^16.4.0",
-    "react-dom": "^16.4.0",
+    "npm": "^6.1.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
     "react-scripts": "1.1.4",
-    "react-websocket": "^2.0.0"
+    "react-websocket": "^2.0.0",
+    "yarn": "^1.7.0"
   },
   "scripts": {
     "start": "react-scripts start",

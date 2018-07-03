@@ -14,7 +14,7 @@ import com.google.gson.JsonObject;
 public class insertDB {
 
 	
-	private static String url = "jdbc:mysql://127.0.0.1/practice_db?user=root&password=01028798551&serverTimezone=UTC";
+	private static String url = "jdbc:mysql://127.0.0.1/test?user=root&password= &autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
 	
 	@OnOpen
     public void handleOpen(){

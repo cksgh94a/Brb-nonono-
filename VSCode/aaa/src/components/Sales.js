@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-// const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
-const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
+const botHandle = new WebSocket("ws://localhost:8080/wsSales/bothandle");
+// const botHandle = new WebSocket("ws://45.120.65.65/wsSales/bothandle");
 
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
