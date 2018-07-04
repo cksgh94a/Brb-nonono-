@@ -1,20 +1,20 @@
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.time.LocalDate;
-import java.time.LocalTime;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import java.util.*;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
+//import java.sql.Connection;
+//import java.sql.DriverManager;
+//import java.sql.ResultSet;
+//import java.sql.SQLException;
+//import java.sql.Statement;
+//import java.time.LocalDate;
+//import java.time.LocalTime;
+//
+//import com.google.gson.Gson;
+//import com.google.gson.JsonObject;
+//import com.google.gson.JsonParser;
+//
+//import java.util.*;
+//import java.io.BufferedWriter;
+//import java.io.File;
+//import java.io.FileWriter;
 
 class initializing {
 
@@ -49,8 +49,6 @@ class initializing {
 	private static String API_KEY="";
 	private static String Secret_KEY="";
 	
-	private static String url = "jdbc:mysql://127.0.0.1/practice_db?user=root&password=01028798551&serverTimezone=UTC";
-	//private static String url = "jdbc:mysql://127.0.0.1/test_ljh?user=root&serverTimezone=UTC";
 	public void main() {
 		// TODO Auto-generated method stub
 		// 함수내부로
@@ -58,7 +56,7 @@ class initializing {
 		String APIK;
 		String SecK;
 		String selectSql = String.format("SELECT API_KEY, Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", _ID, exchange);
-		DB.useDB(selectSql, "select");; // key select
+//		DB.useDB(selectSql, "select");	// key select
 
 		String coin_ex = "";
 		String coin_crypto = coin_target + coin_base;
@@ -69,7 +67,7 @@ class initializing {
 			coin_ex = coin_target;
 		}
 
-		DB.useDB(selectSql, "insert"); // trade봇정보 insert
+//		DB.useDB(selectSql, "insert"); // trade봇정보 insert
 		tradingBot trbot = new tradingBot(priceAmount, _ID, startDate, endDate, exchange, coin_crypto, coin_ex, "none",
 				API_KEY, Secret_KEY, botName);
 		if (strategyName.equals("bollingerPatternNaked"))

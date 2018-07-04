@@ -1,14 +1,14 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+//import java.io.BufferedWriter;
+//import java.io.FileWriter;
+//import java.io.IOException;
+//
+//import com.google.gson.Gson;
+//import com.google.gson.JsonArray;
+//import com.google.gson.JsonObject;
+
 import java.sql.*;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-
 
 @ServerEndpoint("/insertDB")
 public class insertDB {
@@ -26,7 +26,7 @@ public class insertDB {
 	public void handleSql(String sql) {
 		Connection conn = null;
 		Statement stmt = null;
-		ResultSet rs = null; //ResultSet 梓端 識情
+//		ResultSet rs = null; //ResultSet 梓端 識情
 		
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");

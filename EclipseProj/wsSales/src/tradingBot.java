@@ -1,5 +1,5 @@
 import java.sql.*;
-import java.time.LocalDate;
+//import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Date;
 import java.util.Iterator;
@@ -12,7 +12,7 @@ import java.util.Queue;
 import bittrexAPI.*;
 import cern.colt.matrix.DoubleMatrix1D;
 import cern.colt.matrix.impl.DenseDoubleMatrix1D;
-import java.lang.Object;
+//import java.lang.Object;
 import org.apache.commons.math3.stat.correlation.PearsonsCorrelation;
 import java.io.*;
 
@@ -226,7 +226,7 @@ class tradingBot {
 //        File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.botName+".txt");
 //        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
         
-		while (SalesBot.map.get(botName)) {
+		while (ServerMain.map.get(botName)) {
 			double[] currentData = getHistoryArray(crypt, _corrInterval, _intervalNumber, _intervalNumber);
 			double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
 			System.out.println();
@@ -316,7 +316,7 @@ class tradingBot {
 //            File file = new File("/usr/local/server/apache-tomcat-8.0.52/webapps/"+this.botName+".txt");
 //            BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
 
-    		while (SalesBot.map.get(botName)) {
+    		while (ServerMain.map.get(botName)) {
 
 //    			try {
 //    				bufWriter = new BufferedWriter(new FileWriter("C:\\Users\\Lee Jun-hyeong\\Desktop\\patternlog.txt"));
@@ -414,7 +414,7 @@ class tradingBot {
 		// 값을 받고 비교 -> 로직
 		// B S W 리턴 -> 실행
 		// queue 새로세팅
-		while (SalesBot.map.get(botName)) {
+		while (ServerMain.map.get(botName)) {
 
 			double[] bollingerHL = getBollinger(crypt, history_queue, _mul);
 			// ------------------
@@ -478,10 +478,10 @@ class tradingBot {
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
 
-    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    	for(int i = ServerMain.nowTrading.size() - 1; i >= 0; i--) {
     		
-    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
-    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    		if((ServerMain.nowTrading.get(i).getId()+ServerMain.nowTrading.get(i).getName()).equals(botName)) {
+    			ServerMain.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
     			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
     			System.out.println();
     			System.out.println(String.format("%.2f", asd));
@@ -517,10 +517,10 @@ class tradingBot {
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
 
-    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    	for(int i = ServerMain.nowTrading.size() - 1; i >= 0; i--) {
     		
-    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
-    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    		if((ServerMain.nowTrading.get(i).getId()+ServerMain.nowTrading.get(i).getName()).equals(botName)) {
+    			ServerMain.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
     			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
     			System.out.println(String.format("%.2f", asd));
     		}
@@ -542,10 +542,10 @@ class tradingBot {
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
 
-    	for(int i = SalesBot.nowTrading.size() - 1; i >= 0; i--) {
+    	for(int i = ServerMain.nowTrading.size() - 1; i >= 0; i--) {
     		
-    		if((SalesBot.nowTrading.get(i).getId()+SalesBot.nowTrading.get(i).getName()).equals(botName)) {
-    			SalesBot.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+    		if((ServerMain.nowTrading.get(i).getId()+ServerMain.nowTrading.get(i).getName()).equals(botName)) {
+    			ServerMain.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
     			double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
     			System.out.println();
     			System.out.println(String.format("%.2f", asd));

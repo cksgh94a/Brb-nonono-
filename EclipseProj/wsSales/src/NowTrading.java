@@ -22,11 +22,11 @@ public class NowTrading {
     	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
     	System.out.println(id);
     	nT.clear();
-    	System.out.println(SalesBot.nowTrading.size());
-    	for(int i=0; i < SalesBot.nowTrading.size(); i++) {
-    		if(SalesBot.nowTrading.get(i).getId().equals(id)) {
-    			SalesBot.nowTrading.get(i).setResDate();
-    			nT.add(SalesBot.nowTrading.get(i));
+    	System.out.println(ServerMain.nowTrading.size());
+    	for(int i=0; i < ServerMain.nowTrading.size(); i++) {
+    		if(ServerMain.nowTrading.get(i).getId().equals(id)) {
+    			ServerMain.nowTrading.get(i).setResDate();
+    			nT.add(ServerMain.nowTrading.get(i));
     		}
     	}
     	
@@ -36,12 +36,12 @@ public class NowTrading {
     
     @OnOpen
 	public void hadleOpen() {
-        System.out.println("nt client is now connected... ");
+        System.out.println("현재거래 연결!");
 	}
 
     @OnClose
     public void handleClose(){
-        System.out.println("client is now disconnected...");
+        System.out.println("현재 거래 종료!");
     }
     
     @OnError
