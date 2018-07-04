@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-// const botHandle = new WebSocket("ws://localhost:8080/wsSales/mainhandle");
-const botHandle = new WebSocket("ws://45.120.65.65/wsSales/mainhandle");
+const authHandle = new WebSocket("ws://localhost:8080/Auth/authhandle");
+const mainHandle = new WebSocket("ws://localhost:8080/BORABOT/mainhandle");
+// const mainHandle = new WebSocket("ws://45.120.65.65/BORABOT/mainhandle");
 
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
@@ -30,7 +31,7 @@ class Sales extends Component {
     alert(alertMsg);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
-    botHandle.send(JSON.stringify(jsonStart));
+    mainHandle.send(JSON.stringify(jsonStart));
     console.log(jsonStart + '전송');
   }
 
