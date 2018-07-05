@@ -180,11 +180,15 @@ class tradingBot {
 			ResultSet rs = useDB.Query(selectSql, "select");
 			try {
 				while(rs.next()) {  
+					System.out.println("on_going = " + rs.getBoolean("on_going"));
 					run = rs.getBoolean("on_going");
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();			
 			}
+			///////////////////////
+			System.out.println("run = " + run);
+			
 		}
 	}
 
