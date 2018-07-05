@@ -11,7 +11,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 
 @ServerEndpoint("/insertDB")
-public class insertDB {
+public class °ðÁö¿ö¾ß´ïinsertDB {
 
 	
 	private static String url = "jdbc:mysql://127.0.0.1/test?user=root&password= &autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";

@@ -9,17 +9,19 @@ public class DB {
 		String Secret_KEY= "";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				
-		// 1. DB 사용 객체 useDB 생성
+	/* 공통
+	 * 1. DB 사용 객체 useDB 생성
+	 * */
 		DB useDB = new DB();	
 		
-		// 2. 쿼리문 String 생성
+	// SELECT문
+		// 2-1. SELECT 쿼리문 String 생성
 		String selectSql = String.format("SELECT API_KEY, "
 				+ "Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", "dirtyrobot00", "bithumb");
+
 		
-		// 3. ResultSet rs를 useDB.Query(쿼리문, "select" or "insert")로 생성
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
-		// 4-1. SELECT문의 경우 rs에 저장된 ResultSet에서 원하는 값을 추출
+		// 3-1. SELECT문은 ResultSet rs를 useDB.Query(쿼리문, "select")로 생성 후 필요한 값 추출
+		ResultSet rs = useDB.Query(selectSql, "select");
 		try {
 			while(rs.next()) {  
 				API_KEY = rs.getString("API_KEY");
@@ -29,13 +31,18 @@ public class DB {
 			e.printStackTrace();			
 		}
 		
-		// 4-2. INSERT문의 경우
-		 
+	// INSERT, UPDATE문
+		// 2-2. INSERT 쿼리문 String 생성
 		String insertSql = String.format("INSERT INTO Trade VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", \"%s\" ,\"%s\")",
 				"dirtyrobot00", "test", "btc", "bithumb", "123123123", "321321321", "bollingerPatternNaked", dateFormat.format(new Date()), "", dateFormat.format(new Date()));
-		useDB.Query(insertSql, "insert");
+				
+		// 3-2. INSERT문의 경우 useDB.Query(쿼리문, "select")로 DB에 입력
+		useDB.Query(insertSql, "insert");		
 		
-		// 5. DB 사용후 clean()을 이용하여 정리
+
+	/* 공통
+	 * 4. DB 사용후 clean()을 이용하여 정리
+	 * */
 		useDB.clean();
 		
 		System.out.println(API_KEY + " && " + Secret_KEY);
@@ -59,7 +66,7 @@ public class DB {
 		
 	    try {	
 	    	// DB 접속
-	    	String url = "jdbc:mysql://localhost:3306/test?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
+	    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
 	        con = DriverManager.getConnection(url,"root","1111");	
 	        System.out.println("데이터베이스 접속 성공!");
 	

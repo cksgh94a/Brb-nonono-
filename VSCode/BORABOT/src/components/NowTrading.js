@@ -3,8 +3,9 @@ import './NowTrading.css';
 import TradingElement from './TradingElement';
 
 
-const ntHandle = new WebSocket("ws://localhost:8080/BORABOT/nthandle");
-// const ntHandle = new WebSocket("ws://45.120.65.65/BORABOT/nthandle");
+// const ntHandle = new WebSocket("ws://localhost:8080/Auth/nthandle");
+// const ntHandle = new WebSocket("ws://localhost:8080/BORABOT/nthandle");
+const ntHandle = new WebSocket("ws://45.120.65.65/BORABOT/nthandle");
 
 class NowTrading extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class NowTrading extends Component {
                 <div className = "NowTrading-elementList">
                     <div>
                     {this.state.listJ.map((nt, i) => {
-                        return (<TradingElement id = {this.props.id} name = {nt.name} resDate = {nt.residualDate} 
+                        return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 
                             coin = {nt.coin} exchange = {nt.exchange}
                             profit = {nt.profit} strategy = {nt.strategy} key = {nt.i}
                                  />);

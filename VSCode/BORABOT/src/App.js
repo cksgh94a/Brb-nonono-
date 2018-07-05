@@ -12,7 +12,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      id : "a",
+      id : "cksgh94a",
       listJ: new Array()
     };
 

@@ -7,10 +7,9 @@ import javax.websocket.OnMessage;
 import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 
-import java.util.*;
+import com.google.gson.Gson;
 
-//import com.google.gson.Gson;
-//
+import java.util.*;
 //import java.io.BufferedWriter;
 //import java.io.File;
 //import java.io.FileWriter;
@@ -46,16 +45,21 @@ public class ServerMain extends Thread {
 
 	// 웹소켓 통해 json 왔을 떄
     @OnMessage
-    public void handleMessage(String message){
+    public String handleMessage(String message){
         System.out.println("메시지를 받았습니다");
         
-        DB test = new DB();
-        test.UsingDB();
+//        DB test = new DB();
+//        test.UsingDB();
         
-//        // json 파싱
-//        Gson gson = new Gson();
-//        TradingElement tInfo = gson.fromJson(message, TradingElement.class);
-//        
+        // json 파싱
+        Gson gson = new Gson();
+        TradingElement tInfo = gson.fromJson(message, TradingElement.class);
+
+    	String ntJson = gson.toJson(tInfo);
+    	tInfo.setResDate();
+    	tInfo.profit = "110.11";
+    	
+    	return ntJson;
 //    	nowTrading.add(tInfo);	// 현재 진행 중인 거래 기록
 //    	
 //        // 봇 실행 상태 기록

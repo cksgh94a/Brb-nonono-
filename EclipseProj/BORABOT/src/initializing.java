@@ -53,9 +53,9 @@ class initializing {
 		// TODO Auto-generated method stub
 		// 함수내부로
 		// 추후에 tradingBot에다가 이 걸 넘겨줘도 됨
-		String APIK;
-		String SecK;
-		String selectSql = String.format("SELECT API_KEY, Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", _ID, exchange);
+//		String APIK;
+//		String SecK;
+//		String selectSql = String.format("SELECT API_KEY, Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", _ID, exchange);
 //		DB.useDB(selectSql, "select");	// key select
 
 		String coin_ex = "";
