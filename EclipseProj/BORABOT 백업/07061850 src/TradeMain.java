@@ -25,7 +25,7 @@ public class TradeMain extends Thread {
 	public void run() {
         System.out.println("스레드 실행");
 
-    	TradeBot bot = new TradeBot(tElement); 
+    	TradingBot bot = new TradingBot(tElement); 
     	bot.main();
 	}
 
