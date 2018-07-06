@@ -434,6 +434,17 @@ class tradingBot {
 
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
+
+//		for(int i = TradeMain.nowTrading.size() - 1; i >= 0; i--) {
+//
+//			if((TradeMain.nowTrading.get(i).getId()+TradeMain.nowTrading.get(i).getName()).equals(botName)) {
+//				TradeMain.nowTrading.get(i).setProfit(String.format("%.2f", ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0)));
+//				double asd = ((currentLast * (double)testNum + testStartAsset)/priceAmount*100.0);
+//				System.out.println();
+//				System.out.println(String.format("%.2f", asd));
+//				System.out.println();
+//			}
+//		} 
 	}
 
 	// 가격 히스토리를 보여줌 -> ohlc 중 뭘 사용할건지 추가 / interval과 갯수 파라미터
