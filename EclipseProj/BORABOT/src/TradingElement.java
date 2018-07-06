@@ -9,11 +9,11 @@ class TradingElement{
 	private String coin;
 	private String exchange;
 	private String strategy;
-	private double price;	// 시작 금액
+	private double startAsset;	// 시작 금액
 	private Date startDate;
 	private long period;
 	private Date endDate = new Date();
-	private double finalPrice = this.price*1.1;
+	private double endAsset = this.startAsset*1.1;
 
 	public String getId() { return id; }
 	public String getName() { return name; }
@@ -21,7 +21,7 @@ class TradingElement{
 	public String getCoin() { return coin; }
 	public String getExchange() { return exchange; }
 	public String getStrategy() { return strategy; }
-	public double getPrice() { return price; }
+	public double getStartAsset() { return startAsset; }
 	public Date getStartDate() { return startDate; }
 	public Date getEndDate() { return endDate; }
 //	
@@ -32,11 +32,11 @@ class TradingElement{
 		this.name = n;
 		this.coin = c;
 		this.exchange = e;
-		this.price = p;
+		this.startAsset = p;
 		this.strategy = s;
 		this.startDate = sD;
 		this.endDate = eD;
-		this.finalPrice = fP;
+		this.endAsset = fP;
 	}
 	
 	// 거래 생성 시 DB 입력
@@ -45,7 +45,7 @@ class TradingElement{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		String insertSql = String.format("INSERT INTO trade VALUES('"
-				+id+"', '"+name+"', '"+coin+"', '"+exchange+"', '"+price+"', '"+price+"', '"+strategy
+				+id+"', '"+name+"', '"+coin+"', '"+exchange+"', '"+startAsset+"', '"+endAsset+"', '"+strategy
 				+"', '"+dateFormat.format(startDate)+"', "+status+", '"+dateFormat.format(endDate)+"')");
 
 		DB.Query(insertSql, "insert");

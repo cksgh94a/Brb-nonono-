@@ -30,7 +30,7 @@ public class NowTrading {
 		
 		try {
 			while(rs.next()) {
-				if (rs.getBoolean("on_going")) {
+				if (rs.getBoolean("status")) {
 					TradingElement tE = new TradingElement(
 						rs.getString("bot_name"),
 						rs.getString("coin"),

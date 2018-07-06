@@ -25,7 +25,7 @@ public class TradeMain extends Thread {
 	public void run() {
         System.out.println("스레드 실행");
 
-    	initializing bot = new initializing(tElement); 
+    	TradingBot bot = new TradingBot(tElement); 
     	bot.main();
 	}
 
@@ -47,7 +47,7 @@ public class TradeMain extends Thread {
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		DB.Query(String.format(
-    				"update trade set on_going=0, end_date=\'%s\' where user_id=\'%s\' and bot_name=\'%s\' and on_going=1" ,
+    				"update trade set status=0, end_date=\'%s\' where user_id=\'%s\' and bot_name=\'%s\' and status=1" ,
         			dateFormat.format(new Date()), tInfo.getId(), tInfo.getName()), "insert");		
     		DB.clean();		
         }
