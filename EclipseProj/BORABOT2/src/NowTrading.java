@@ -10,7 +10,7 @@ import com.google.gson.Gson;
 import java.util.*;
 import java.util.Date;
 
-// ì§„í–‰ ì¤‘ì¸ ê±°ë˜ ì •ë³´ ì „ì†¡
+// ÁøÇà ÁßÀÎ °Å·¡ Á¤º¸ Àü¼Û
 @ServerEndpoint("/nthandle")
 public class NowTrading {
 	
@@ -23,11 +23,16 @@ public class NowTrading {
     	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
     	nT.clear();
 
+		// 1. DB »ç¿ë °´Ã¼ useDB »ı¼º
+		DB useDB = new DB();	
 		
+		// 2. Äõ¸®¹® String »ı¼º
 		String selectSql = String.format("SELECT * from trade where user_id=\'%s\'", id);
 		
-		ResultSet rs = DB.Query(selectSql, "select"); 
+		// 3. ResultSet rs¸¦ useDB.Query(Äõ¸®¹®, "select" or "insert")·Î »ı¼º
+		ResultSet rs = useDB.Query(selectSql, "select"); 
 		
+		// 4-1. SELECT¹®ÀÇ °æ¿ì rs¿¡ ÀúÀåµÈ ResultSet¿¡¼­ ¿øÇÏ´Â °ªÀ» ÃßÃâ
 		try {
 			while(rs.next()) {
 				if (rs.getBoolean("on_going")) {
@@ -48,8 +53,8 @@ public class NowTrading {
 			e.printStackTrace();			
 		}		
 		
-		// 5. DB ì‚¬ìš©í›„ clean()ì„ ì´ìš©í•˜ì—¬ ì •ë¦¬
-		DB.clean();	
+		// 5. DB »ç¿ëÈÄ clean()À» ÀÌ¿ëÇÏ¿© Á¤¸®
+		useDB.clean();	
 		
     	String ntJson = gson.toJson(nT);
     	return ntJson;

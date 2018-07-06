@@ -3,19 +3,19 @@ import java.util.Date;
 import java.text.SimpleDateFormat;
 
 public class DB {
-	// DB SELECT INSERT ì‚¬ìš©ê°€ì´ë“œ (1~5ë‹¨ê³„) 
+	// DB SELECT INSERT »ç¿ë°¡ÀÌµå (1~5´Ü°è) 
 	public void UsingDB() {
 		String API_KEY = "";
 		String Secret_KEY= "";
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
-	// SELECTë¬¸
-		// 1-1. SELECT ì¿¼ë¦¬ë¬¸ String ìƒì„±
+	// SELECT¹®
+		// 1-1. SELECT Äõ¸®¹® String »ı¼º
 		String selectSql = String.format("SELECT API_KEY, "
 				+ "Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", "dirtyrobot00", "bithumb");
 
 		
-		// 2-1. SELECTë¬¸ì€ ResultSet rsë¥¼ useDB.Query(ì¿¼ë¦¬ë¬¸, "select")ë¡œ ìƒì„± í›„ í•„ìš”í•œ ê°’ ì¶”ì¶œ
+		// 2-1. SELECT¹®Àº ResultSet rs¸¦ useDB.Query(Äõ¸®¹®, "select")·Î »ı¼º ÈÄ ÇÊ¿äÇÑ °ª ÃßÃâ
 		ResultSet rs = DB.Query(selectSql, "select");
 		try {
 			while(rs.next()) {  
@@ -26,55 +26,55 @@ public class DB {
 			e.printStackTrace();			
 		}
 		
-	// INSERT, UPDATEë¬¸
-		// 1-2. INSERT ì¿¼ë¦¬ë¬¸ String ìƒì„±
+	// INSERT, UPDATE¹®
+		// 1-2. INSERT Äõ¸®¹® String »ı¼º
 		String insertSql = String.format("INSERT INTO Trade VALUES(\"%s\", \"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", \"%s\" ,\"%s\")",
 				"dirtyrobot00", "test", "btc", "bithumb", "123123123", "321321321", "bollingerPatternNaked", dateFormat.format(new Date()), "", dateFormat.format(new Date()));
 				
-		// 2-2. INSERTë¬¸ì˜ ê²½ìš° useDB.Query(ì¿¼ë¦¬ë¬¸, "select")ë¡œ DBì— ì…ë ¥
+		// 2-2. INSERT¹®ÀÇ °æ¿ì useDB.Query(Äõ¸®¹®, "select")·Î DB¿¡ ÀÔ·Â
 		DB.Query(insertSql, "insert");		
 		
 
-	/* ê³µí†µ
-	 * 3. DB ì‚¬ìš©í›„ clean()ì„ ì´ìš©í•˜ì—¬ ì •ë¦¬
+	/* °øÅë
+	 * 3. DB »ç¿ëÈÄ clean()À» ÀÌ¿ëÇÏ¿© Á¤¸®
 	 * */
 		DB.clean();
 		
 		System.out.println(API_KEY + " && " + Secret_KEY);
 	}
 	
-	// DB Query í•¨ìˆ˜
+	// DB Query ÇÔ¼ö
 	static private Connection con = null;
 	static private Statement stmt = null;
-	static private ResultSet rs = null; //ResultSet ê°ì²´ ì„ ì–¸
+	static private ResultSet rs = null; //ResultSet °´Ã¼ ¼±¾ğ
 
 	static public ResultSet Query(String Sql, String INSSEL) {
 		
-		// ë“œë¼ì´ë²„ ë¡œë“œ
+		// µå¶óÀÌ¹ö ·Îµå
 	    try {	
 	        Class.forName("com.mysql.cj.jdbc.Driver");
-	        System.out.println("ë“œë¼ì´ë²„ ë¡œë“œ ì„±ê³µ!");
+	        System.out.println("µå¶óÀÌ¹ö ·Îµå ¼º°ø!");
 	
 	    } catch (ClassNotFoundException e) {
 	       System.out.println(e.getMessage());
 	    }
 		
 	    try {	
-	    	// DB ì ‘ì†
+	    	// DB Á¢¼Ó
 	    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
 	        con = DriverManager.getConnection(url,"root","1111");	
-	        System.out.println("ë°ì´í„°ë² ì´ìŠ¤ ì ‘ì† ì„±ê³µ!");
+	        System.out.println("µ¥ÀÌÅÍº£ÀÌ½º Á¢¼Ó ¼º°ø!");
 	
 	        stmt = con.createStatement();
 	        
-	        // INSERTë¬¸
+	        // INSERT¹®
 	        if (INSSEL == "insert") {
 				stmt.executeUpdate(Sql);
 	        }
-	        // SELECTë¬¸
+	        // SELECT¹®
 	        else if (INSSEL == "select"){
 				rs = stmt.executeQuery(Sql);	        	
-	        } else { System.out.println("ë°ì´í„°ë² ì´ìŠ¤ êµ¬ë¬¸ ì˜¤ë¥˜!"); }
+	        } else { System.out.println("µ¥ÀÌÅÍº£ÀÌ½º ±¸¹® ¿À·ù!"); }
 
 	        	        
 	    } catch (SQLException se) {

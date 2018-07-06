@@ -30,20 +30,20 @@ class tradingBot {
 	private String Algoset;
 	private String API_KEY;
 	private String Sec_KEY;
-	private double priceAmount; // ì²˜ìŒ ì‹œì‘ í•˜ëŠ” ëˆ
+	private double priceAmount; // Ã³À½ ½ÃÀÛ ÇÏ´Â µ·
 	private double coinmany = 0;
 	private double testStartAsset;
 
-	// Algosetì—ì„œ ë½‘ì•„ë‚´ì•¼í•¨
+	// Algoset¿¡¼­ »Ì¾Æ³»¾ßÇÔ
 	private int _period_day = 20;
 	private int _mul = 2;
 	private int _interval = 60;
-	private int _corrInterval = 60; // íŒ¨í„´ì¸ì‹í•˜ëŠ”ë° 1ë¶„ë´‰ì„ ì‚¬ìš©, ì¦‰ 1ë¶„ë§ˆë‹¤ ì„œì¹˜
-	private int _totalLength = 1440; // í•˜ë£¨ì¹˜ ë°ì´í„°ì˜ íŒ¨í„´ì„ ë¹„êµ
-	private int _intervalNumber = 15; // 15ë¶„ì˜ íŒ¨í„´ì„ ë³¸ë‹¤ëŠ” ëœ»
+	private int _corrInterval = 60; // ÆĞÅÏÀÎ½ÄÇÏ´Âµ¥ 1ºĞºÀÀ» »ç¿ë, Áï 1ºĞ¸¶´Ù ¼­Ä¡
+	private int _totalLength = 1440; // ÇÏ·çÄ¡ µ¥ÀÌÅÍÀÇ ÆĞÅÏÀ» ºñ±³
+	private int _intervalNumber = 15; // 15ºĞÀÇ ÆĞÅÏÀ» º»´Ù´Â ¶æ
 
-	// test ì´ˆê¸°ê°’
-	int testNum = 0; // ë¹„íŠ¸ì½”ì¸ 0ê°œ
+	// test ÃÊ±â°ª
+	int testNum = 0; // ºñÆ®ÄÚÀÎ 0°³
 
 	public tradingBot(double priceAmount, String _ID, Date start, Date end, String exchange, String coin_crypto,
 			String coin_exchange, String Algoset, String API_KEY, String Sec_KEY, String botName) {
@@ -66,9 +66,9 @@ class tradingBot {
 			String selectSql = "SELECT * FROM trans_log;";
 			ResultSet rs = DB.Query(selectSql, "select");
 
-			while (rs.next()) // next()ì— ëŒ€í•œ ì„¤ëª…ì€ ë³¸ë¬¸ì—
+			while (rs.next()) // next()¿¡ ´ëÇÑ ¼³¸íÀº º»¹®¿¡
 			{
-				System.out.println(rs.getString(1) + "\t" + // ë³¸ë¬¸ ì„¤ëª…
+				System.out.println(rs.getString(1) + "\t" + // º»¹® ¼³¸í
 						rs.getString(2) + "\t" + rs.getString(3) + "\t" + rs.getString(4) + "\t" + rs.getString(5));
 			}
 
@@ -81,7 +81,7 @@ class tradingBot {
 		double[] currentData = getHistoryArray(crypt, interval, intervalNumber, intervalNumber);
 		double[] dayData = getHistoryArray(crypt, interval, totalLength, totalLength);
 
-		System.out.print("í˜„ì¬ë¶€í„° 15ë¶„ ì „ê¹Œì§€ ë°ì´í„° : ".toString());
+		System.out.print("ÇöÀçºÎÅÍ 15ºĞ Àü±îÁö µ¥ÀÌÅÍ : ".toString());
 		for (int k = 0; k < intervalNumber; k++) {
 			System.out.print(currentData[k] + " ");
 		}
@@ -121,13 +121,13 @@ class tradingBot {
 		}
 
 
-		System.out.print("\nê°€ì¥ ì¼ì¹˜í•˜ëŠ” ë°ì´í„° : ");
+		System.out.print("\n°¡Àå ÀÏÄ¡ÇÏ´Â µ¥ÀÌÅÍ : ");
 		for (int k = idx; k < idx + intervalNumber; k++) {
 			System.out.print(dayData[k] + " ");
 		}
 
 
-		// ì¶”ì„¸ì¸¡ì • idx+intervalNumber ~ 15ê°œ
+		// Ãß¼¼ÃøÁ¤ idx+intervalNumber ~ 15°³
 		idx += 15;
 		double[] x = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 		double[] y = new double[intervalNumber];
@@ -137,7 +137,7 @@ class tradingBot {
 		double corr = new PearsonsCorrelation().correlation(y, x);
 
 
-		System.out.print("\nì¶”í›„ ë°ì´í„° : ");
+		System.out.print("\nÃßÈÄ µ¥ÀÌÅÍ : ");
 		for (int k = 0; k < intervalNumber; k++) {
 			System.out.print(y[k] + " ");
 		}
@@ -148,9 +148,9 @@ class tradingBot {
 
 	public void patterNakedTrade() {
 
-		System.out.println("pattrnì§„í–‰!");
-		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ì´ë¶€ë¶„ì€ ì°¨ì°¨ ê°œì„  -> ì—¬ëŸ¬ê°€ì§€ ê±°ë˜ì†Œë„ ë™ì¼í•˜ê²Œ ì¶”ìƒí™” í•„ìš”
-		Cryptowatch crypt = new Cryptowatch(10, 1); // 1íšŒì„± ì½œ -> ì´ëŒ€ë¡œ ì‚¬ìš©í•´ë„ ê´œì°®ìŒ, ê±°ë˜ë¥¼ í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ê´œì¶˜
+		System.out.println("pattrnÁøÇà!");
+		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ÀÌºÎºĞÀº Â÷Â÷ °³¼± -> ¿©·¯°¡Áö °Å·¡¼Òµµ µ¿ÀÏÇÏ°Ô Ãß»óÈ­ ÇÊ¿ä
+		Cryptowatch crypt = new Cryptowatch(10, 1); // 1È¸¼º Äİ -> ÀÌ´ë·Î »ç¿ëÇØµµ ±¦ÂúÀ½, °Å·¡¸¦ ÇÏÁö ¾Ê±â ¶§¹®¿¡ ±¦Ãá
 
 
 		while (tradingBot.isRun(_ID, botName)) {
@@ -177,8 +177,8 @@ class tradingBot {
 
 	public void trendFollowing(int less_ave, int more_ave) {
 
-		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ì´ë¶€ë¶„ì€ ì°¨ì°¨ ê°œì„  -> ì—¬ëŸ¬ê°€ì§€ ê±°ë˜ì†Œë„ ë™ì¼í•˜ê²Œ ì¶”ìƒí™” í•„ìš”
-		Cryptowatch crypt = new Cryptowatch(10, 1); // 1íšŒì„± ì½œ -> ì´ëŒ€ë¡œ ì‚¬ìš©í•´ë„ ê´œì°®ìŒ, ê±°ë˜ë¥¼ í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ê´œì¶˜
+		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ÀÌºÎºĞÀº Â÷Â÷ °³¼± -> ¿©·¯°¡Áö °Å·¡¼Òµµ µ¿ÀÏÇÏ°Ô Ãß»óÈ­ ÇÊ¿ä
+		Cryptowatch crypt = new Cryptowatch(10, 1); // 1È¸¼º Äİ -> ÀÌ´ë·Î »ç¿ëÇØµµ ±¦ÂúÀ½, °Å·¡¸¦ ÇÏÁö ¾Ê±â ¶§¹®¿¡ ±¦Ãá
 
 		Queue<Double> more_que = new LinkedList<Double>();
 		Queue<Double> less_que = new LinkedList<Double>();
@@ -202,7 +202,7 @@ class tradingBot {
 		double less_average = more_sum / more_ave;
 
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
-		System.out.println(" -->  í˜„ì¬ê°€ : " + currentLast);
+		System.out.println(" -->  ÇöÀç°¡ : " + currentLast);
 
 		if (less_average > more_average) {
 			buyCoin(brx, 10, currentLast); // buy
@@ -213,18 +213,18 @@ class tradingBot {
 	}
 
 	public void bollingerPatternNaked() {
-		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ì´ë¶€ë¶„ì€ ì°¨ì°¨ ê°œì„  -> ì—¬ëŸ¬ê°€ì§€ ê±°ë˜ì†Œë„ ë™ì¼í•˜ê²Œ ì¶”ìƒí™” í•„ìš”
-		Cryptowatch crypt = new Cryptowatch(10, 1); // 1íšŒì„± ì½œ -> ì´ëŒ€ë¡œ ì‚¬ìš©í•´ë„ ê´œì°®ìŒ, ê±°ë˜ë¥¼ í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ê´œì¶˜
+		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ÀÌºÎºĞÀº Â÷Â÷ °³¼± -> ¿©·¯°¡Áö °Å·¡¼Òµµ µ¿ÀÏÇÏ°Ô Ãß»óÈ­ ÇÊ¿ä
+		Cryptowatch crypt = new Cryptowatch(10, 1); // 1È¸¼º Äİ -> ÀÌ´ë·Î »ç¿ëÇØµµ ±¦ÂúÀ½, °Å·¡¸¦ ÇÏÁö ¾Ê±â ¶§¹®¿¡ ±¦Ãá
 
-		// ì¸í„°ë²Œ ëª‡ë¶„, ì¸í„°ë²Œ ê°¯ìˆ˜ ì •í•´ì„œ íì— ë„£ì–´ì¤Œ (ë³¼ë¦°ì €)
+		// ÀÎÅÍ¹ú ¸îºĞ, ÀÎÅÍ¹ú °¹¼ö Á¤ÇØ¼­ Å¥¿¡ ³Ö¾îÁÜ (º¼¸°Àú)
 		Queue<Double> history_queue = getHistoryQueue(crypt, _interval, _period_day * _interval);
 
 		// while
-		// getBollinder -> queueë¥¼ì£¼ê³  ë‹¤ìŒ ìƒí•˜í•œì„ ë°›ìŒ
-		// wait 5.0001ì´ˆ
-		// ê°’ì„ ë°›ê³  ë¹„êµ -> ë¡œì§
-		// B S W ë¦¬í„´ -> ì‹¤í–‰		
-		// queue ìƒˆë¡œì„¸íŒ…
+		// getBollinder -> queue¸¦ÁÖ°í ´ÙÀ½ »óÇÏÇÑÀ» ¹ŞÀ½
+		// wait 5.0001ÃÊ
+		// °ªÀ» ¹Ş°í ºñ±³ -> ·ÎÁ÷
+		// B S W ¸®ÅÏ -> ½ÇÇà		
+		// queue »õ·Î¼¼ÆÃ
 
 
 
@@ -238,13 +238,13 @@ class tradingBot {
 			}
 			// -------------------
 			double currentLast = getCurrentPrice(crypt, coin_crypto);
-			System.out.println(" --> í˜„ì¬ê°€ : " + currentLast);
+			System.out.println(" --> ÇöÀç°¡ : " + currentLast);
 			// -----------------
-			// ë§¤ìˆ˜íƒ€ì´ë°
+			// ¸Å¼öÅ¸ÀÌ¹Ö
 			if (currentLast < bollingerHL[1]) {
 				// BUY
-				// ì–¼ë§ˆë‚˜ ì‚´ê±´ì§€ ì•Œê³ ë¦¬ì¦˜ ì…‹íŒ…ì— ë”°ë¼
-				System.out.println("ì ì •ì  ë§¤ìˆ˜ íƒ€ì´ë°");
+				// ¾ó¸¶³ª »ì°ÇÁö ¾Ë°í¸®Áò ¼ÂÆÃ¿¡ µû¶ó
+				System.out.println("ÀáÁ¤Àû ¸Å¼ö Å¸ÀÌ¹Ö");
 				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
 				if (corr > 0.4) {
 					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
@@ -257,11 +257,11 @@ class tradingBot {
 					doNothing();
 				}
 			}
-			// ë§¤ë„íƒ€ì´ë°
+			// ¸ÅµµÅ¸ÀÌ¹Ö
 			else if (currentLast > bollingerHL[0]) {
 				// SELL
-				// ì–¼ë§ˆë‚˜ íŒ”ê±´ì§€ ì•Œê³ ë¦¬ì¦˜ ì…‹íŒ…ì— ë”°ë¼
-				System.out.println("ì ì •ì  ë§¤ë„ íƒ€ì´ë°");
+				// ¾ó¸¶³ª ÆÈ°ÇÁö ¾Ë°í¸®Áò ¼ÂÆÃ¿¡ µû¶ó
+				System.out.println("ÀáÁ¤Àû ¸Åµµ Å¸ÀÌ¹Ö");
 				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
 				if (corr > 0.3) {
 					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
@@ -273,13 +273,13 @@ class tradingBot {
 					doNothing();
 				}
 			}
-			// ëŒ€ê¸°íƒ€ì´ë°
+			// ´ë±âÅ¸ÀÌ¹Ö
 			else {
 				// wait
-				System.out.println("ì ì •ì  ëŒ€ê¸° íƒ€ì´ë°");
+				System.out.println("ÀáÁ¤Àû ´ë±â Å¸ÀÌ¹Ö");
 				double corr = corrPatternAnalysis(crypt, _corrInterval, _totalLength, _intervalNumber);
 				if (corr > 0.75) {
-					//4ê°œêµ¬ë§¤
+					//4°³±¸¸Å
 					System.out.print("Perason Correlation Coefficieint : " + corr+ " ");
 					buyCoin(brx, 30, currentLast);
 				} else {
@@ -290,25 +290,25 @@ class tradingBot {
 			// -----------------
 			history_queue.remove();
 			history_queue.add(currentLast);
-			System.out.println("ëˆìœ¼ë¡œ í™˜ì‚°í•œ ì´ í˜„ì¬ ì¬ì‚° : " + (int)(currentLast * testNum + testStartAsset) + "KRW");
+			System.out.println("µ·À¸·Î È¯»êÇÑ ÃÑ ÇöÀç Àç»ê : " + (int)(currentLast * testNum + testStartAsset) + "KRW");
 			System.out.println();
 		}
 	}
 
 	public void Bollingertrade() {
 
-		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ì´ë¶€ë¶„ì€ ì°¨ì°¨ ê°œì„  -> ì—¬ëŸ¬ê°€ì§€ ê±°ë˜ì†Œë„ ë™ì¼í•˜ê²Œ ì¶”ìƒí™” í•„ìš”
-		Cryptowatch crypt = new Cryptowatch(10, 1); // 1íšŒì„± ì½œ -> ì´ëŒ€ë¡œ ì‚¬ìš©í•´ë„ ê´œì°®ìŒ, ê±°ë˜ë¥¼ í•˜ì§€ ì•Šê¸° ë•Œë¬¸ì— ê´œì¶˜
+		Bittrex brx = new Bittrex(API_KEY, Sec_KEY, 30, 1); // ÀÌºÎºĞÀº Â÷Â÷ °³¼± -> ¿©·¯°¡Áö °Å·¡¼Òµµ µ¿ÀÏÇÏ°Ô Ãß»óÈ­ ÇÊ¿ä
+		Cryptowatch crypt = new Cryptowatch(10, 1); // 1È¸¼º Äİ -> ÀÌ´ë·Î »ç¿ëÇØµµ ±¦ÂúÀ½, °Å·¡¸¦ ÇÏÁö ¾Ê±â ¶§¹®¿¡ ±¦Ãá
 
-		// ì¸í„°ë²Œ ëª‡ë¶„, ì¸í„°ë²Œ ê°¯ìˆ˜ ì •í•´ì„œ íì— ë„£ì–´ì¤Œ
+		// ÀÎÅÍ¹ú ¸îºĞ, ÀÎÅÍ¹ú °¹¼ö Á¤ÇØ¼­ Å¥¿¡ ³Ö¾îÁÜ
 		Queue<Double> history_queue = getHistoryQueue(crypt, _interval, _period_day * _interval);
 
 		// while
-		// getBollinder -> queueë¥¼ì£¼ê³  ë‹¤ìŒ ìƒí•˜í•œì„ ë°›ìŒ
-		// wait 5.0001ì´ˆ
-		// ê°’ì„ ë°›ê³  ë¹„êµ -> ë¡œì§
-		// B S W ë¦¬í„´ -> ì‹¤í–‰
-		// queue ìƒˆë¡œì„¸íŒ…
+		// getBollinder -> queue¸¦ÁÖ°í ´ÙÀ½ »óÇÏÇÑÀ» ¹ŞÀ½
+		// wait 5.0001ÃÊ
+		// °ªÀ» ¹Ş°í ºñ±³ -> ·ÎÁ÷
+		// B S W ¸®ÅÏ -> ½ÇÇà
+		// queue »õ·Î¼¼ÆÃ
 		while (tradingBot.isRun(_ID, botName)) {
 
 			double[] bollingerHL = getBollinger(crypt, history_queue, _mul);
@@ -320,17 +320,17 @@ class tradingBot {
 			}
 			// -------------------
 			double currentLast = getCurrentPrice(crypt, coin_crypto);
-			System.out.println("í˜„ì¬ê°€ : " + currentLast);
+			System.out.println("ÇöÀç°¡ : " + currentLast);
 			// -----------------
-			// ë§¤ìˆ˜íƒ€ì´ë°
+			// ¸Å¼öÅ¸ÀÌ¹Ö
 			if (currentLast < bollingerHL[1]) {
 				// BUY
-				// ì–¼ë§ˆë‚˜ ì‚´ê±´ì§€ ì•Œê³ ë¦¬ì¦˜ ì…‹íŒ…ì— ë”°ë¼
+				// ¾ó¸¶³ª »ì°ÇÁö ¾Ë°í¸®Áò ¼ÂÆÃ¿¡ µû¶ó
 
 				buyCoin(brx, 10, currentLast);
 			} else if (currentLast > bollingerHL[0]) {
 				// SELL
-				// ì–¼ë§ˆë‚˜ íŒ”ê±´ì§€ ì•Œê³ ë¦¬ì¦˜ ì…‹íŒ…ì— ë”°ë¼
+				// ¾ó¸¶³ª ÆÈ°ÇÁö ¾Ë°í¸®Áò ¼ÂÆÃ¿¡ µû¶ó
 				sellCoin(brx, 10, currentLast);
 			} else {
 				// wait
@@ -344,7 +344,7 @@ class tradingBot {
 		}
 	}
 
-	// ë£¨í”„ ë°˜ë³µ ê²°ì •
+	// ·çÇÁ ¹İº¹ °áÁ¤
 	static public boolean isRun(String id, String botname) {
 		String selectSql = String.format(
 				"select on_going from trade where user_id = \'%s\' and bot_name = \'%s\'", id, botname);
@@ -352,7 +352,7 @@ class tradingBot {
 		ResultSet rs = DB.Query(selectSql, "select");
 		boolean b = true;
 		try {
-			System.out.println("try ë“¤ì–´ì˜´\n" + selectSql);
+			System.out.println("try µé¾î¿È\n" + selectSql);
 			while(rs.next()) {  
 				b = rs.getBoolean("on_going");
 			}
@@ -362,7 +362,7 @@ class tradingBot {
 		return b;		
 	}
 	
-	// IOC êµ¬í˜„í•˜ê¸°
+	// IOC ±¸ÇöÇÏ±â
 	public boolean IOC_commit(Bittrex brx) {
 
 		return true;
@@ -376,7 +376,7 @@ class tradingBot {
 		if (testStartAsset > price * amount) {
 			testNum += amount;
 			testStartAsset -= price * amount;
-			System.out.print("êµ¬ë§¤í•œ ì½”ì¸ì˜ ìˆ˜ : "+amount+", êµ¬ë§¤í•œ ì½”ì¸ì˜ ê°œë‹¹ ê°€ê²© : " + price + " --> ");
+			System.out.print("±¸¸ÅÇÑ ÄÚÀÎÀÇ ¼ö : "+amount+", ±¸¸ÅÇÑ ÄÚÀÎÀÇ °³´ç °¡°İ : " + price + " --> ");
 		}
 		else if (testStartAsset < price * 1.5) {
 			System.out.println("have no money to buy(or less than price of 1 coin)");
@@ -385,15 +385,15 @@ class tradingBot {
 			int how = (int)((int)testStartAsset / price);
 			testNum += how;
 			testStartAsset -= price * how;
-			System.out.print("êµ¬ë§¤í•œ ì½”ì¸ì˜ ìˆ˜ : "+how+", êµ¬ë§¤í•œ ì½”ì¸ì˜ ê°œë‹¹ ê°€ê²© : " + price + " --> ");
+			System.out.print("±¸¸ÅÇÑ ÄÚÀÎÀÇ ¼ö : "+how+", ±¸¸ÅÇÑ ÄÚÀÎÀÇ °³´ç °¡°İ : " + price + " --> ");
 		}
 
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
 
-		// ë””ë¹„ ì¿¼ë¦¬ ë‚ ë ¤ì£¼ê¸°
-		// transaction logë¡œ ë‚ ë ¤    	
-		System.out.println("í˜„ì¬ ì½”ì¸ ë³´ìœ  ìˆ˜ : " + testNum + " / í˜„ì¬ ëˆ : " + testStartAsset + "KRW");
+		// µğºñ Äõ¸® ³¯·ÁÁÖ±â
+		// transaction log·Î ³¯·Á    	
+		System.out.println("ÇöÀç ÄÚÀÎ º¸À¯ ¼ö : " + testNum + " / ÇöÀç µ· : " + testStartAsset + "KRW");
 //		ExecSQL_Insert(_ID, exchange, coin_crypto, 1, amount, price);
 	}
 
@@ -404,7 +404,7 @@ class tradingBot {
 		if (testNum > amount) {
 			testNum -= amount;
 			testStartAsset += amount * price;
-			System.out.print("íŒë§¤í•œ ì½”ì¸ì˜ ìˆ˜ : "+amount+", íŒë§¤í•œ ì½”ì¸ì˜ ê°œë‹¹ ê°€ê²© : " + price + " --> ");
+			System.out.print("ÆÇ¸ÅÇÑ ÄÚÀÎÀÇ ¼ö : "+amount+", ÆÇ¸ÅÇÑ ÄÚÀÎÀÇ °³´ç °¡°İ : " + price + " --> ");
 		} 
 		else if (testNum == 0){
 			System.out.println("have no coin to sell");
@@ -413,14 +413,14 @@ class tradingBot {
 			int temp = testNum;
 			testStartAsset += testNum * price;
 			testNum -= testNum;
-			System.out.print("íŒë§¤í•œ ì½”ì¸ì˜ ìˆ˜ : "+temp+", íŒë§¤í•œ ì½”ì¸ì˜ ê°œë‹¹ ê°€ê²© : " + price + " --> ");
+			System.out.print("ÆÇ¸ÅÇÑ ÄÚÀÎÀÇ ¼ö : "+temp+", ÆÇ¸ÅÇÑ ÄÚÀÎÀÇ °³´ç °¡°İ : " + price + " --> ");
 		}
 
 		Cryptowatch crypt = new Cryptowatch(10, 1);
 		double currentLast = getCurrentPrice(crypt, coin_crypto);
-		// ë””ë¹„ ì¿¼ë¦¬ ë‚ ë ¤ì£¼ê¸°
-		// transaction logë¡œ ë‚ ë ¤ì¤Œ
-		System.out.println("í˜„ì¬ ì½”ì¸ ë³´ìœ  ìˆ˜ : " + testNum + " / í˜„ì¬ ëˆ : " + testStartAsset + "KRW");
+		// µğºñ Äõ¸® ³¯·ÁÁÖ±â
+		// transaction log·Î ³¯·ÁÁÜ
+		System.out.println("ÇöÀç ÄÚÀÎ º¸À¯ ¼ö : " + testNum + " / ÇöÀç µ· : " + testStartAsset + "KRW");
 //		ExecSQL_Insert(_ID, exchange, coin_crypto, 2, amount, price);
 
 	}
@@ -428,8 +428,8 @@ class tradingBot {
 	public void doNothing() {
 		System.out.println("--> WAIT");
 
-		System.out.println("í˜„ì¬ ì½”ì¸ ë³´ìœ  ìˆ˜ : " + testNum + " / í˜„ì¬ ëˆ : " + testStartAsset + "KRW");
-		// ë””ë¹„ ì¿¼ë¦¬ ë‚ ë ¤ì£¼ê¸°
+		System.out.println("ÇöÀç ÄÚÀÎ º¸À¯ ¼ö : " + testNum + " / ÇöÀç µ· : " + testStartAsset + "KRW");
+		// µğºñ Äõ¸® ³¯·ÁÁÖ±â
 //		ExecSQL_Insert(_ID, exchange, coin_crypto, 3, 0, 0);
 
 		Cryptowatch crypt = new Cryptowatch(10, 1);
@@ -447,7 +447,7 @@ class tradingBot {
 //		} 
 	}
 
-	// ê°€ê²© íˆìŠ¤í† ë¦¬ë¥¼ ë³´ì—¬ì¤Œ -> ohlc ì¤‘ ë­˜ ì‚¬ìš©í• ê±´ì§€ ì¶”ê°€ / intervalê³¼ ê°¯ìˆ˜ íŒŒë¼ë¯¸í„°
+	// °¡°İ È÷½ºÅä¸®¸¦ º¸¿©ÁÜ -> ohlc Áß ¹» »ç¿ëÇÒ°ÇÁö Ãß°¡ / interval°ú °¹¼ö ÆÄ¶ó¹ÌÅÍ
 	public Queue getHistoryQueue(Cryptowatch crypt, int interval, int period_day) {
 
 		Date date = new Date();
@@ -468,7 +468,7 @@ class tradingBot {
 		for (int i = 0; i < ohlc_jsarr.size(); i++) {
 
 			jsarr = ohlc_jsarr.get(i).getAsJsonArray();
-			history_queue.add(jsarr.get(4).getAsDouble()); // ì¢…ê°€(C)ë§Œ ì‚¬ìš©
+			history_queue.add(jsarr.get(4).getAsDouble()); // Á¾°¡(C)¸¸ »ç¿ë
 		}
 
 		return history_queue;
@@ -484,7 +484,7 @@ class tradingBot {
 		String ohlc_result_string = gson.toJson(ohlc_json.get("result"));
 		JsonObject ohlc_result_json = new JsonParser().parse(ohlc_result_string).getAsJsonObject();
 		JsonArray ohlc_jsarr = ohlc_result_json.get(Integer.toString(_interval)).getAsJsonArray();
-		// System.out.println("ì œì´ìŠ¨ í¬ê¸° " + ohlc_jsarr.size());
+		// System.out.println("Á¦ÀÌ½¼ Å©±â " + ohlc_jsarr.size());
 		double[] historyArray = new double[ohlc_jsarr.size()];
 
 		JsonArray jsarr;
@@ -499,7 +499,7 @@ class tradingBot {
 		return historyArray;
 	}
 
-	// 1íšŒì„± ë³¼ë¦°ì €ê°’ ê²Ÿ , ì´ë¯¸ íˆìŠ¤í† ë¦¬íì— intervalì´ ì„¤ì •ë˜ì–´ìˆìŒ. ë”°ë¼ì„œ í‘œì¤€í¸ì°¨(mul)ë§Œ í•„ìš”
+	// 1È¸¼º º¼¸°Àú°ª °Ù , ÀÌ¹Ì È÷½ºÅä¸®Å¥¿¡ intervalÀÌ ¼³Á¤µÇ¾îÀÖÀ½. µû¶ó¼­ Ç¥ÁØÆíÂ÷(mul)¸¸ ÇÊ¿ä
 	public double[] getBollinger(Cryptowatch crypt, Queue history_queue, int _mul) {
 
 		Iterator<Double> iter = null;
@@ -522,22 +522,22 @@ class tradingBot {
 		double stddev = Math.sqrt(deviation);
 
 		System.out.print("average : " + average);
-		//System.out.print(" / ë¶„ì‚°  : " + deviation);
-		//System.out.print(" / í‘œì¤€í¸ì°¨ : " + stddev);
-		System.out.print(" / ë‹¤ìŒ ìƒí•œ : " + (average + stddev));
-		System.out.print(" / ë‹¤ìŒ í•˜í•œ : " + (average - stddev));
+		//System.out.print(" / ºĞ»ê  : " + deviation);
+		//System.out.print(" / Ç¥ÁØÆíÂ÷ : " + stddev);
+		System.out.print(" / ´ÙÀ½ »óÇÑ : " + (average + stddev));
+		System.out.print(" / ´ÙÀ½ ÇÏÇÑ : " + (average - stddev));
 
 		double ret[] = { average + stddev, average - stddev };
 		return ret;
 	}
 
-	// ê±°ë˜í•˜ëŠ” ê±°ë˜ì†Œë¥¼ í†µí•˜ì—¬ í˜„ì¬ê°’ì„ ë°›ìŒ. í˜„ì¬ê°’ ì¤‘ ì¢…ê°€ë¥¼ ì‚¬ìš© (Bid, Ask, Last)
+	// °Å·¡ÇÏ´Â °Å·¡¼Ò¸¦ ÅëÇÏ¿© ÇöÀç°ªÀ» ¹ŞÀ½. ÇöÀç°ª Áß Á¾°¡¸¦ »ç¿ë (Bid, Ask, Last)
 	public double getCurrentPrice(Cryptowatch crypt, String coin_crypto) {
 
-		String api_string = crypt.getCurrentPrice(exchange, coin_crypto); // apiì½œ -> stringì„ ê°€ì§€ê³ ì˜´
-		JsonObject json_result = new JsonParser().parse(api_string).getAsJsonObject(); // stringì„ jsonìœ¼ë¡œ ë³€ê²½
-		String result_string = gson.toJson(json_result.get("result")); // json ì¤‘ì—ì„œ resultë¥¼ stringìœ¼ë¡œ íŒŒì‹±
-		JsonObject result_json = new JsonParser().parse(result_string).getAsJsonObject(); // resultë¥¼ ë‹¤ì‹œ jsonìœ¼ë¡œ íŒŒì‹±
+		String api_string = crypt.getCurrentPrice(exchange, coin_crypto); // apiÄİ -> stringÀ» °¡Áö°í¿È
+		JsonObject json_result = new JsonParser().parse(api_string).getAsJsonObject(); // stringÀ» jsonÀ¸·Î º¯°æ
+		String result_string = gson.toJson(json_result.get("result")); // json Áß¿¡¼­ result¸¦ stringÀ¸·Î ÆÄ½Ì
+		JsonObject result_json = new JsonParser().parse(result_string).getAsJsonObject(); // result¸¦ ´Ù½Ã jsonÀ¸·Î ÆÄ½Ì
 		double currentLast = Double.parseDouble(result_json.get("price").toString());
 
 		return currentLast;

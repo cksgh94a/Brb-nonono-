@@ -10,7 +10,7 @@ import java.util.*;
 import com.google.gson.Gson;
 
 
-// ë´‡ ë©”ì¸ í´ë˜ìŠ¤
+// º¿ ¸ŞÀÎ Å¬·¡½º
 @ServerEndpoint("/mainhandle")
 public class TradeMain extends Thread {
 	
@@ -19,32 +19,32 @@ public class TradeMain extends Thread {
 	public TradeMain() {}
 	public TradeMain(TradingElement t) { 
 		this.tElement = t;
-		}	// ë´‡ ì´ë¦„ ì„¤ì •í•˜ëŠ” ìƒì„±ì
+		}	// º¿ ÀÌ¸§ ¼³Á¤ÇÏ´Â »ı¼ºÀÚ
 	
-	// ë´‡ ì‹¤í–‰ í•¨ìˆ˜
+	// º¿ ½ÇÇà ÇÔ¼ö
 	public void run() {
-        System.out.println("ìŠ¤ë ˆë“œ ì‹¤í–‰");
+        System.out.println("½º·¹µå ½ÇÇà");
 
     	initializing bot = new initializing(tElement); 
     	bot.main();
 	}
 
-	// ì›¹ì†Œì¼“ í†µí•´ json ì™”ì„ ë–„
+	// À¥¼ÒÄÏ ÅëÇØ json ¿ÔÀ» ‹š
     @OnMessage
     public void handleMessage(String message){
-        System.out.println("ë©”ì‹œì§€ë¥¼ ë°›ì•˜ìŠµë‹ˆë‹¤");
+        System.out.println("¸Ş½ÃÁö¸¦ ¹Ş¾Ò½À´Ï´Ù");
         
-        // json íŒŒì‹±
+        // json ÆÄ½Ì
         Gson gson = new Gson();
         TradingElement tInfo = gson.fromJson(message, TradingElement.class);
 
-        if (tInfo.getStatus() == true) {	// ê±°ë˜ ì‹œì‘ (DBì— ê±°ë˜ ì •ë³´ ì…ë ¥)
+        if (tInfo.getStatus() == true) {	// °Å·¡ ½ÃÀÛ (DB¿¡ °Å·¡ Á¤º¸ ÀÔ·Â)
             tInfo.insertDB();
 		    TradeMain bot = new TradeMain(tInfo);
 		    bot.start();
         }
     
-        else {	// ê±°ë˜ ì¢…ë£Œ (DBì˜ ê±°ë˜ ìƒíƒœ, ê±°ë˜ ì¢…ë£Œ ì‹œê°„ ë³€ê²½) 
+        else {	// °Å·¡ Á¾·á (DBÀÇ °Å·¡ »óÅÂ, °Å·¡ Á¾·á ½Ã°£ º¯°æ) 
     		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		DB.Query(String.format(
     				"update trade set on_going=0, end_date=\'%s\' where user_id=\'%s\' and bot_name=\'%s\' and on_going=1" ,

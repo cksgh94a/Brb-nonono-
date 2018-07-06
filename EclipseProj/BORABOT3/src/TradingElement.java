@@ -5,11 +5,11 @@ import java.util.*;
 class TradingElement{
 	private String id;
 	private String name;
-	private Boolean status;	// ë´‡ ìƒíƒœ
+	private Boolean status;	// º¿ »óÅÂ
 	private String coin;
 	private String exchange;
 	private String strategy;
-	private double price;	// ì‹œì‘ ê¸ˆì•¡
+	private double price;	// ½ÃÀÛ ±İ¾×
 	private Date startDate;
 	private long period;
 	private Date endDate = new Date();
@@ -39,7 +39,7 @@ class TradingElement{
 		this.finalPrice = fP;
 	}
 	
-	// ê±°ë˜ ìƒì„± ì‹œ DB ì…ë ¥
+	// °Å·¡ »ı¼º ½Ã DB ÀÔ·Â
 	public void insertDB() {
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
