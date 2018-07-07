@@ -4,6 +4,10 @@
   <artifactId>BORABOT</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>war</packaging>
+  <properties>
+    <project.build.sourceEncoding>utf-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
+  </properties>
   <dependencies>
 	<dependency>
 	  <groupId>com.google.code.gson</groupId>

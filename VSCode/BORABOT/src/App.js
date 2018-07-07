@@ -1,45 +1,38 @@
 import React, { Component } from 'react';
-// import logo from './logo.svg';
 import './App.css';
 import ChartSelect from './components/ChartSelect';
 import Sales from './components/Sales';
 import NowTrading from './components/NowTrading';
-// import Accounts from './components/Accounts';
 import WalletInfo from './components/WalletInfo';
+import WalletInfoChild from './components/WalletInfoChild';
 
+import HeaderContainer from './containers/Base/HeaderContainer';
+
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as userActions from './redux/modules/user';
 
 class App extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      id : "cksgh94a",
-      listJ: new Array()
-    };
-
-  }
 
   render() {
-
     return (
       <div className="App">
-      <header className="App-header">
-          TASS Draft
-        </header>
+        <div>
+          <HeaderContainer/>
+        </div>
         <div className="wrapper">
-          <div className="one"><NowTrading id = {this.state.id}/></div>
+          <div className="one"><NowTrading id = "cksgh94a"/></div>
           <div className="three"><ChartSelect/></div>
           <div className="four"><WalletInfo/></div>
-          <div className="five"><Sales id = {this.state.id} /></div>
-          </div>
-        
-        <div>
-          bottom<br/>
+          <div className="four_child"><WalletInfoChild/></div>
+          <div className="five"><Sales id = "cksgh94a"/></div>
         </div>
-
       </div>
     );
   }
 }
 
-export default App;
-
+export default connect(null, (dispatch) => ({
+    UserActions: bindActionCreators(userActions, dispatch)
+  })
+)(App);
