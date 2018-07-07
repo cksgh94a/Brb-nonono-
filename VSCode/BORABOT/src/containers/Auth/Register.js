@@ -12,7 +12,7 @@ import './Register.css';
 
 
 
-const regHandle = new WebSocket("ws://45.120.65.65/Auth/authandle");
+const regHandle = new WebSocket("ws://45.120.65.65/BORABOT/authandle");
 
 class Register extends Component {
 

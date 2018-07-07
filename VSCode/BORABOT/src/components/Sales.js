@@ -5,6 +5,8 @@ import './Sales.css';
 // const mainHandle = new WebSocket("ws://localhost:8080/BORABOT/mainhandle");
 const mainHandle = new WebSocket("ws://45.120.65.65/BORABOT/mainhandle");
 
+const regHandle = new WebSocket("ws://45.120.65.65/BORABOT/authandle");
+
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
 
