@@ -10,9 +10,8 @@ import storage from '../../lib/storage';
 import axios from 'axios';
 import './Register.css';
 
-
-
-const regHandle = new WebSocket("ws://45.120.65.65/BORABOT/authandle");
+const authHandle = new WebSocket("ws://45.120.65.65/BORABOT/authhandle");
+// const authHandle = new WebSocket("ws://localhost:8080/BORABOT/authhandle");
 
 class Register extends Component {
 
@@ -23,11 +22,11 @@ class Register extends Component {
         {
           email: null,
           password: null,
-          name: null,
-          number: null,
-          account: null,
-          checkBox1: (!!this.props.complete) || false,
-          checkBox2: (!!this.props.complete) || false,
+        //   name: null,
+        //   number: null,
+        //   account: null,
+        //   checkBox1: (!!this.props.complete) || false,
+        //   checkBox2: (!!this.props.complete) || false,
         }
     }
   }
@@ -164,6 +163,8 @@ class Register extends Component {
           window.location.href = '/auth/login';
       })
       .catch(err=>console.log(err));
+      
+      authHandle.send(JSON.stringify(this.state.registerInfo));
     }
 
 
