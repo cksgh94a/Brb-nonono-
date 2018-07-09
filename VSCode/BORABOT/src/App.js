@@ -21,11 +21,11 @@ class App extends Component {
           <HeaderContainer/>
         </div>
         <div className="wrapper">
-          <div className="one"><NowTrading id = "cksgh94a"/></div>
+          <div className="one"><NowTrading email = "cksgh94a@gmail.com"/></div>
           <div className="three"><ChartSelect/></div>
           <div className="four"><WalletInfo/></div>
           <div className="four_child"><WalletInfoChild/></div>
-          <div className="five"><Sales id = "cksgh94a"/></div>
+          <div className="five"><Sales email = "cksgh94a@gmail.com"/></div>
         </div>
       </div>
     );

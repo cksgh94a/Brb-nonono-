@@ -2,6 +2,7 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
 
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -38,8 +39,8 @@ public class TradeMain extends Thread {
 
         if (tInfo.getStatus() == true) {	// 거래 시작 (DB에 거래 정보 입력)
             tInfo.insertDB();
-		    TradeMain bot = new TradeMain(tInfo);
-		    bot.start();
+//		    TradeMain bot = new TradeMain(tInfo);
+//		    bot.start(); 
         }
     
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 

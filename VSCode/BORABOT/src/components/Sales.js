@@ -25,7 +25,7 @@ class Sales extends Component {
     let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
     var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
     
-    var jsonStart = {"id" : this.props.id, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "period": sDeadline};
+    var jsonStart = {"email" : this.props.email, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "period": sDeadline};
 
     let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n이 맞습니까?';
 
