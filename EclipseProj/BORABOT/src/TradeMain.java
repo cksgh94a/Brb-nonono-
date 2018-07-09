@@ -2,7 +2,6 @@ import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
 
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
