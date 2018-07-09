@@ -9,13 +9,11 @@ import queryString from 'query-string';
 import Background from '../../components/Auth/AuthWrapper';
 import HeaderContainer from '../Base/HeaderContainer';
 import Header, { LoginButton } from '../../components/Base/Header';
+
 import { Route } from 'react-router-dom';
 import { Home, Auth } from '../../pages';
 
 import './Login.css';
-
-
-const loginHandle = new WebSocket("ws://45.120.65.65/BORABOT/loginhandle");
 
 const initialState = {
     login: {
@@ -27,23 +25,16 @@ const initialState = {
     }
 }
 
+// const loginHandle = new WebSocket("ws://localhost:8080/BORABOT/loginhandle");
+const loginHandle = new WebSocket("ws://45.120.65.65/BORABOT/loginhandle");
+
 class Login extends Component {
     constructor(props){
       super(props);
       this.state={
-        loginInfo: {
-          email: "",
-          password: "",
-        },
-        r:""
-      }
-
-      loginHandle.onmessage = (event) => {
-        if(event.data != "null"){
-            this.setState(
-              {r: JSON.parse(event.data)});
-        }
-      }
+        email: "",
+        password: "",
+      };
     }
 
     componentDidMount() {
@@ -80,48 +71,17 @@ class Login extends Component {
         return false;
     }
 
-    handleChange = (e,i) => { //0:email, 1:pw
-         const { AuthActions } = this.props;
-         const { name, value } = e.target;
-
-         AuthActions.changeInput({
-             name,
-             value,
-             form: 'login'
-         });
-
-         const crypto = require('crypto');
-
-
-         if(i===0){
-           let login=this.state.loginInfo;
-           login.email=value;
-           this.setState({loginInfo:login});
-         }
-         else if(i===1){ //단일성 암호화
-           let login=this.state.loginInfo;
-           // crypto.randomBytes(64, (err, buf) => {
-           //   crypto.pbkdf2('value', buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
-           //       login.password=key.toString('base64');
-           //   });
-           // });
-           login.password=value;
-           this.setState({loginInfo:login});
-         }
-     }
-
     handleLocalLogin = async () => {
         const { form, AuthActions, UserActions, history } = this.props;
         const { email, password } = form.toJS();
-        let users = this.state.loginInfo;
-
-        // await AuthActions.localLogin({email, password});
 
         try {
-          console.log('before await error');
-            await AuthActions.localLogin({ email, password });
-          console.log('after await error');
+            AuthActions.localLogin({email, password});
+            console.log('b');
             const loggedInfo = this.props.result.toJS();
+
+            var test = "cksgh94a@gmail.com";
+            loginHandle.send(test);
 
             UserActions.setLoggedInfo(loggedInfo);
             history.push('/');
@@ -131,9 +91,7 @@ class Login extends Component {
             console.log('a');
             this.setError('잘못된 계정정보입니다.');
         }
-        loginHandle.send(this.state.loginInfo.email);
     }
-
 
     render() {
       // form 에서 email 과 password 값을 읽어옴
@@ -153,23 +111,20 @@ class Login extends Component {
                     name="email"
                     placeholder="Username"
                     value={email}
-                    onChange={(e)=>handleChange(e,0)}
+                    onChange={handleChange}
                 />
                 <InputWithLabel
                     name="password"
                     placeholder="****"
                     type="password"
                     value={password}
-                    onChange={(e)=>handleChange(e,1)}
+                    onChange={handleChange}
                 />
                 {
                   error && <AuthError>{error}</AuthError>
                 }
                 <div className="loginButton">
-                  <AuthButton onClick={ () => {
-                    this.handleLocalLogin();
-                  }
-                }>로그인</AuthButton>
+                  <AuthButton onClick={handleLocalLogin}>로그인</AuthButton>
                 </div>
             </AuthContent>
             <div className="Comments_1">

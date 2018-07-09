@@ -14,6 +14,7 @@ const authHandle = new WebSocket("ws://45.120.65.65/BORABOT/authhandle");
 // const authHandle = new WebSocket("ws://localhost:8080/BORABOT/authhandle");
 
 class Register extends Component {
+
   constructor(props) {
     super(props);
     this.state={
@@ -21,6 +22,11 @@ class Register extends Component {
         {
           email: null,
           password: null,
+        //   name: null,
+        //   number: null,
+        //   account: null,
+        //   checkBox1: (!!this.props.complete) || false,
+        //   checkBox2: (!!this.props.complete) || false,
         }
     }
   }
@@ -97,7 +103,7 @@ class Register extends Component {
       }
   }, 300)
 
-   handleChange = (e,i) => { //0:email, 1:pw
+   handleChange = (e,i) => { //0:email, 1:pw, 2:checkBox1, 3:checkBox2
         const { AuthActions } = this.props;
         const { name, value } = e.target;
 
@@ -118,6 +124,13 @@ class Register extends Component {
 
         const crypto = require('crypto');
 
+        // crypto.createHash('sha512').update('value').digest('base64');
+        // crypto.randomBytes(64, (err, buf) => {
+        //   crypto.pbkdf2('value', buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
+        //     console.log(key.toString('base64'));
+        //   });
+        // });
+
         if(i===0){
           let register=this.state.registerInfo;
           register.email=value;
@@ -125,12 +138,17 @@ class Register extends Component {
         }
         else if(i===1){ //단일성 암호화
           let register=this.state.registerInfo;
-          crypto.randomBytes(64, (err, buf) => {
-            crypto.pbkdf2('value', buf.toString('base64'), 100000, 64, 'sha512', (err, key) => {
-                register.password=key.toString('base64');
-            });
-          });
-          // register.password=value;
+          register.password=crypto.createHash('sha512').update('value').digest('base64');
+          this.setState({registerInfo:register});
+        }
+        else if(i===2){
+          let register=this.state.registerInfo;
+          register.checkBox1=value;
+          this.setState({registerInfo:register});
+        }
+        else if(i===3){
+          let register=this.state.registerInfo;
+          register.checkBox2=value;
           this.setState({registerInfo:register});
         }
     }
@@ -145,7 +163,7 @@ class Register extends Component {
           window.location.href = '/auth/login';
       })
       .catch(err=>console.log(err));
-
+      
       authHandle.send(JSON.stringify(this.state.registerInfo));
     }
 

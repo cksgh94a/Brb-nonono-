@@ -12,26 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as userActions from './redux/modules/user';
 
-import storage from './lib/storage';
-
 class App extends Component {
-  initializeUserInfo = async () => {
-      const loggedInfo = storage.get('loggedInfo'); // 로그인 정보를 로컬스토리지에서 가져오기.
-      if(!loggedInfo) return; // 로그인 정보 없으면 중지.
-
-      const { UserActions } = this.props;
-      UserActions.setLoggedInfo(loggedInfo);
-      try {
-          await UserActions.checkStatus();
-      } catch (e) {
-          storage.remove('loggedInfo');
-          window.location.href = '/auth/login?expired';
-      }
-  }
-
-  componentDidMount() {
-      this.initializeUserInfo();
-  }
 
   render() {
     return (

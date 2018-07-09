@@ -3,7 +3,6 @@ import './NowTrading.css';
 import TradingElement from './TradingElement';
 
 
-// const ntHandle = new WebSocket("ws://localhost:8080/Auth/nthandle");
 // const ntHandle = new WebSocket("ws://localhost:8080/BORABOT/nthandle");
 const ntHandle = new WebSocket("ws://45.120.65.65/BORABOT/nthandle");
 
@@ -13,7 +12,7 @@ class NowTrading extends Component {
 
         this.state = {
             listJ: new Array()
-        }
+        };
     
         ntHandle.onopen = (event) => {
             ntHandle.send(this.props.email)

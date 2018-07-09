@@ -8,7 +8,6 @@ const CHANGE_INPUT = 'auth/CHANGE_INPUT'; // input 값 변경
 const INITIALIZE_FORM = 'auth/INITIALIZE_FORM'; // form 초기화
 
 const CHECK_EMAIL_EXISTS = 'auth/CHECK_EMAIL_EXISTS'; // 이메일 중복 확인
-// const CHECK_TERMBOX = 'auth/CHECK_TERMBOX'; //이용약관 체크 여부확인
 const CHECK_USERID_EXISTS = 'auth/CHECK_USERID_EXISTS'; // 아이디 중복 확인
 
 const LOCAL_REGISTER = 'auth/LOCAL_REGISTER'; // 이메일 가입
@@ -21,10 +20,9 @@ const SET_ERROR = 'auth/SET_ERROR'; // 오류 설정
 export const changeInput = createAction(CHANGE_INPUT); //  { form, name, value }
 export const initializeForm = createAction(INITIALIZE_FORM); // form
 export const checkEmailExists = createAction(CHECK_EMAIL_EXISTS, AuthAPI.checkEmailExists); // email
-// export const checkTermBox = createAction(CHECK_TERMBOX, AuthAPI.checkTermBox); // termbox
 export const checkUserIdExists = createAction(CHECK_USERID_EXISTS, AuthAPI.checkUserIdExists); // userId
 
-export const localRegister = createAction(LOCAL_REGISTER, AuthAPI.localRegister); // { email, password }
+export const localRegister = createAction(LOCAL_REGISTER, AuthAPI.localRegister); // { email, userId, password }
 export const localLogin = createAction(LOCAL_LOGIN, AuthAPI.localLogin); // { email, password }
 
 export const logout = createAction(LOGOUT, AuthAPI.logout);
