@@ -1,14 +1,11 @@
 import java.sql.*;
-import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 
 import com.google.gson.Gson;
 
 import java.util.*;
-import java.util.Date;
 
 // 진행 중인 거래 정보 전송
 @ServerEndpoint("/nthandle")
@@ -24,7 +21,7 @@ public class NowTrading {
     	nT.clear();
 
 		
-		String selectSql = String.format("SELECT * from trade where user_id=\'%s\'", id);
+		String selectSql = String.format("SELECT * from trade where email=\'%s\'", id);
 		
 		ResultSet rs = DB.Query(selectSql, "select"); 
 		

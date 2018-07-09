@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 class TradingElement{
-	private String id;
+	private String email;
 	private String name;
 	private Boolean status;	// 봇 상태
 	private String coin;
@@ -15,7 +15,7 @@ class TradingElement{
 	private Date endDate = new Date();
 	private double endAsset = this.startAsset*1.1;
 
-	public String getId() { return id; }
+	public String getEmail() { return email; }
 	public String getName() { return name; }
 	public Boolean getStatus() { return status; }
 	public String getCoin() { return coin; }
@@ -45,7 +45,7 @@ class TradingElement{
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		String insertSql = String.format("INSERT INTO trade VALUES('"
-				+id+"', '"+name+"', '"+coin+"', '"+exchange+"', '"+startAsset+"', '"+endAsset+"', '"+strategy
+				+email+"', '"+name+"', '"+coin+"', '"+exchange+"', '"+startAsset+"', '"+endAsset+"', '"+strategy
 				+"', '"+dateFormat.format(startDate)+"', "+status+", '"+dateFormat.format(endDate)+"')");
 
 		DB.Query(insertSql, "insert");

@@ -8,7 +8,7 @@ class TradeBot {
 	private String exchange;
 	private String coin_target;
 	private String coin_base = "krw";
-	private String _ID;
+	private String email;
 	private double sAsset;
 	private Date startDate;
 	private Date endDate;
@@ -18,7 +18,7 @@ class TradeBot {
 	public TradeBot(TradingElement t) {
 		this.exchange = t.getExchange();
 		this.coin_target = t.getCoin();
-		this._ID = t.getId();
+		this.email = t.getEmail();
 		this.sAsset = t.getStartAsset();
 		this.startDate = t.getStartDate();
 		this.endDate = t.getEndDate();
@@ -41,7 +41,7 @@ class TradeBot {
 			coin_ex = coin_target;
 		}
 
-		while(isRun(_ID, botName)) {
+		while(isRun(email, botName)) {
 			
 			try {
 				Thread.sleep(60*10+50);
@@ -64,9 +64,9 @@ class TradeBot {
 
 
 	// 루프 반복 결정
-	static public boolean isRun(String id, String botname) {
+	static public boolean isRun(String email, String botname) {
 		String selectSql = String.format(
-				"select status from trade where user_id = \'%s\' and bot_name = \'%s\'", id, botname);
+				"select status from trade where email = \'%s\' and bot_name = \'%s\'", email, botname);
 
 		ResultSet rs = DB.Query(selectSql, "select");
 		boolean b = true;

@@ -1,7 +1,5 @@
-import javax.websocket.OnClose;
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
 import javax.websocket.server.ServerEndpoint;
 
 import java.text.SimpleDateFormat;
@@ -47,8 +45,8 @@ public class TradeMain extends Thread {
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		DB.Query(String.format(
-    				"update trade set status=0, end_date=\'%s\' where user_id=\'%s\' and bot_name=\'%s\' and status=1" ,
-        			dateFormat.format(new Date()), tInfo.getId(), tInfo.getName()), "insert");		
+    				"update trade set status=0, end_date=\'%s\' where email=\'%s\' and bot_name=\'%s\' and status=1" ,
+        			dateFormat.format(new Date()), tInfo.getEmail(), tInfo.getName()), "insert");		
     		DB.clean();		
         }
     }
