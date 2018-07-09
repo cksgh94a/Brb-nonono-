@@ -1,6 +1,3 @@
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 import javax.websocket.OnError;
 import javax.websocket.OnMessage;
 import javax.websocket.server.ServerEndpoint;
@@ -12,12 +9,10 @@ public class Auth {
 
 	// 웹소켓 통해 json 왔을 떄
     @OnMessage
-    public void handleMessage(String message){
-        System.out.println("메시지를 받았습니다");
-        
+    public void handleMessage(String message){        
         // json 파싱
         Gson gson = new Gson();
-        AuthElement aInfo = gson.fromJson(message, AuthElement.class);
+        CustomerElement aInfo = gson.fromJson(message, CustomerElement.class);
 
         System.out.println(aInfo.getEmail() + aInfo.getPassword());
         aInfo.insertDB();

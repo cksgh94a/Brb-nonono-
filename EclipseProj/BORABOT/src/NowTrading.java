@@ -11,17 +11,14 @@ import java.util.*;
 @ServerEndpoint("/nthandle")
 public class NowTrading {
 	
-	static boolean S = false;
-
     @OnMessage
-    public String handleMessage(String id){
-    	Gson gson = new Gson();
+    public String handleMessage(String email){
     			
     	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
     	nT.clear();
 
 		
-		String selectSql = String.format("SELECT * from trade where email=\'%s\'", id);
+		String selectSql = String.format("SELECT * from trade where email=\'%s\'", email);
 		
 		ResultSet rs = DB.Query(selectSql, "select"); 
 		
@@ -48,6 +45,8 @@ public class NowTrading {
 		// 5. DB 사용후 clean()을 이용하여 정리
 		DB.clean();	
 		
+    	Gson gson = new Gson();
+    	
     	String ntJson = gson.toJson(nT);
     	return ntJson;
     }

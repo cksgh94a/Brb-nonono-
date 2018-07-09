@@ -25,6 +25,8 @@ const initialState = {
     }
 }
 
+const loginHandle = new WebSocket("ws://localhost:8080/BORABOT/loginhandle");
+
 class Login extends Component {
     constructor(props){
       super(props);
@@ -73,9 +75,11 @@ class Login extends Component {
         const { email, password } = form.toJS();
 
         try {
-            // await AuthActions.localLogin({email, password});
+            AuthActions.localLogin({email, password});
             console.log('b');
             const loggedInfo = this.props.result.toJS();
+
+            loginHandle.send(JSON.stringify(this.state.loggedInfo));
 
             UserActions.setLoggedInfo(loggedInfo);
             history.push('/');

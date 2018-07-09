@@ -1,4 +1,4 @@
-public class AuthElement {
+public class CustomerElement {
 	
 	private String email;
 	private String password;
