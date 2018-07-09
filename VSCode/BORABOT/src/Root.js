@@ -3,6 +3,8 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import App from './App';
 import { Provider } from 'react-redux';
 
+import HeaderContainer from './containers/Base/HeaderContainer';
+
 import { Home, Auth } from './pages';
 
 const Root = ({store}) => {

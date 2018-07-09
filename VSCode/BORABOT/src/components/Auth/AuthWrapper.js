@@ -19,7 +19,6 @@ const Positioner_1 = styled.div`
 
 const Positioner_2 = styled.div`
     position: absolute;
-    padding-left: 90rem;
     align-items: right;
     justify-content: right;
 `;
@@ -54,9 +53,9 @@ const Contents = styled.div`
 
 const AuthWrapper = ({children}) => (
   <div>
-    <Positioner_1>
+    {/* <Positioner_1> */}
       <HeaderContainer/>
-    </Positioner_1>
+    {/* </Positioner_1> */}
     <Positioner_2>
       <LogoWrapper>
         <Logo to="/">BoraBot</Logo>

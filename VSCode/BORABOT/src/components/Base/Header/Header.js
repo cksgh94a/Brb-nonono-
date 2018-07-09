@@ -16,6 +16,7 @@ const Positioner = styled.div`
 
 // 내용 중간 정렬
 const WhiteBackground = styled.div`
+width: 100%;
     background: ${oc.grape[7]};
     display: flex;
     padding-left: 3rem;
@@ -24,7 +25,8 @@ const WhiteBackground = styled.div`
 
 // 해더의 내용
 const HeaderContents = styled.div`
-    width: 117rem;
+    width: 100%;
+    min-width: 900px;
     height: 55px;
     display: flex;
 

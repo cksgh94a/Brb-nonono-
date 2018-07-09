@@ -16,10 +16,10 @@ public class NowTrading {
     			
     	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
     	nT.clear();
-
 		
 		String selectSql = String.format("SELECT * from trade where email=\'%s\'", email);
-		
+
+		System.out.println("NTNTNTNT "+selectSql);
 		ResultSet rs = DB.Query(selectSql, "select"); 
 		
 		try {

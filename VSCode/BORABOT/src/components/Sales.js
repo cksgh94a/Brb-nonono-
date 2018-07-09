@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import './Sales.css';
 
-// const mainHandle = new WebSocket("ws://localhost:8080/Auth/mainhandle");
 // const mainHandle = new WebSocket("ws://localhost:8080/BORABOT/mainhandle");
 const mainHandle = new WebSocket("ws://45.120.65.65/BORABOT/mainhandle");
 

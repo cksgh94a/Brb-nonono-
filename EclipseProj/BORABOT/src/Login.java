@@ -14,14 +14,15 @@ public class Login {
 	// 웹소켓 통해 json 왔을 떄
     @OnMessage
     public String handleMessage(String email){        
-		String selectSql = String.format("SELECT * from trade where email=\'%s\'", email);
-		
+		String selectSql = String.format("SELECT password from customer where email=\'%s\'", email);
+				
 		ResultSet rs = DB.Query(selectSql, "select"); 
 		
 		String pwd= "";
 		try {
 			while(rs.next()) {
-				pwd = rs.getString("bot_name");
+				pwd = rs.getString("password");
+				System.out.println("password = " + pwd);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();			

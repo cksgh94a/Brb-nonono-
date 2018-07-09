@@ -25,7 +25,8 @@ const initialState = {
     }
 }
 
-const loginHandle = new WebSocket("ws://localhost:8080/BORABOT/loginhandle");
+// const loginHandle = new WebSocket("ws://localhost:8080/BORABOT/loginhandle");
+const loginHandle = new WebSocket("ws://45.120.65.65/BORABOT/loginhandle");
 
 class Login extends Component {
     constructor(props){
@@ -79,7 +80,8 @@ class Login extends Component {
             console.log('b');
             const loggedInfo = this.props.result.toJS();
 
-            loginHandle.send(JSON.stringify(this.state.loggedInfo));
+            var test = "cksgh94a@gmail.com";
+            loginHandle.send(test);
 
             UserActions.setLoggedInfo(loggedInfo);
             history.push('/');
