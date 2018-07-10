@@ -1,16 +1,27 @@
 {
   "name": "front",
-  "version": "0.1.0",
+  "version": "1.7.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
     "global": "^4.3.2",
+    "immutable": "^3.8.2",
     "kaazing-enterprise-client": "^4.1.0",
     "node-bittrex-api": "^0.8.3",
     "npm": "^6.1.0",
+    "open-color": "^1.6.3",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",
+    "react-hot-loader": "^4.3.3",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "react-websocket": "^2.0.0",
+    "redux": "^4.0.0",
+    "redux-actions": "^2.4.0",
+    "redux-pender": "^1.2.1",
+    "styled-components": "^3.3.3",
+    "validator": "^10.4.0",
     "yarn": "^1.8.0"
   },
   "scripts": {

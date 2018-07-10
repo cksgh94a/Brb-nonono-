@@ -13,10 +13,10 @@ class NowTrading extends Component {
 
         this.state = {
             listJ: new Array()
-        }
+        };
     
         ntHandle.onopen = (event) => {
-            ntHandle.send(this.props.email)
+            ntHandle.send(this.props.id)
         }
         
         ntHandle.onmessage = (event) => {
@@ -33,7 +33,7 @@ class NowTrading extends Component {
                 <div className = "NowTrading-elementList">
                     <div>
                     {this.state.listJ.map((nt, i) => {
-                        return (<TradingElement email = {this.props.email} name = {nt.name} endDate = {nt.endDate} 
+                        return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 
                             coin = {nt.coin} exchange = {nt.exchange}
                             profit = {nt.profit} strategy = {nt.strategy} key = {nt.i}
                                  />);
