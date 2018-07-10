@@ -44,7 +44,9 @@ public class DoLogin extends HttpServlet {
 		session.setAttribute("Email", email);
 
 		// 로그인 버튼 후 화면 지정
-		response.sendRedirect("/LoginTest");
+//		response.sendRedirect("/LoginTest");
+        request.setAttribute("data", "흐으으음");
+        request.getRequestDispatcher("/").forward(request, response);
 	}
 
 }

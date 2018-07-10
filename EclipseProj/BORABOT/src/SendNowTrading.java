@@ -34,13 +34,13 @@ public class SendNowTrading extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 
-//		// 데이터 인코딩 설정
-//	    request.setCharacterEncoding("utf-8");
-//	    response.setContentType("text/html;charset=utf-8");
-//	    
-//	    // 세션의 사용자 정보 확인
-//	    String email = (String) request.getSession().getAttribute("Email");
-//	    
+		// 데이터 인코딩 설정
+	    request.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html;charset=utf-8");
+	    
+	    // 세션의 사용자 정보 확인
+	    String email = (String) request.getSession().getAttribute("Email");
+	    
 //	    // 현재 진행중인 거래 리스트 초기화
 //    	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
 //    	nT.clear();
@@ -77,9 +77,9 @@ public class SendNowTrading extends HttpServlet {
 //    	
 //    	String ntJson = gson.toJson(nT);
 //
-//        request.setAttribute("data", ntJson);
-//        request.getRequestDispatcher("/LoginTest").forward(request, response);
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+        request.setAttribute("data", "흐으으음");
+        request.getRequestDispatcher("/BORABOT").forward(request, response);
+//		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 	
 	/**
