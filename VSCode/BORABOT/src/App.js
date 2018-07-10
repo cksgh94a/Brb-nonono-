@@ -21,21 +21,26 @@ class App extends Component {
   render() {
 
     return (
+      <div>
       <div className="App">
-      <header className="App-header">
-          TASS Draft
-        </header>
-        <div className="wrapper">
-          <div className="one"><NowTrading id = {this.state.id}/></div>
-          <div className="three"><ChartSelect/></div>
-          <div className="four"><WalletInfo/></div>
-          <div className="five"><Sales id = {this.state.id} /></div>
-          </div>
-        
-        <div>
-          bottom<br/>
-        </div>
-
+      <div className="wrapper">
+        <div className="one"><NowTrading id = {this.state.id}/></div>
+        <div className="three"><ChartSelect/></div>
+        <div className="four"><WalletInfo/></div>
+        <div className="five"><Sales id = {this.state.id} /></div>
+      </div>
+      </div>
+      <form action="DoAuth" method="POST">회원가입<br/>
+        Username: <input type="text" name="email"/><br /> Password:
+        <input type="password" name="password"/><br /> <input
+          type="submit" value="회원가입"/>
+      </form><br/><br/>
+      <form action="DoLogin" method="POST">Login<br/>
+        Username: <input type="text" name="email"/><br /> Password:
+        <input type="password" name="password"/><br /> <input
+          type="submit" value="로그인"/>
+      </form>
+      
       </div>
     );
   }

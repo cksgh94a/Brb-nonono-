@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class DoLogin
@@ -30,20 +31,20 @@ public class DoLogin extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// read form data
-		String username = request.getParameter("username");
+		
+		// 데이터 인코딩 설정
+	    request.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html;charset=utf-8");
+
+		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		// perform business logic
-		PrintWriter out = response.getWriter();
+		// 세션에 사용자 정보 저장
+		HttpSession session = request.getSession();
+		session.setAttribute("Email", email);
 
-		// Build HTML code
-		String htmlResponse = "<html>";
-		htmlResponse += "<h2> Your name is : " + username + "<br/>";
-		htmlResponse += "Your password is : " + password + "</h2>";
-		htmlResponse += "</html>";
-
-		out.println(htmlResponse);
-
+		// 로그인 버튼 후 화면 지정
+		response.sendRedirect("/LoginTest");
 	}
 
 }

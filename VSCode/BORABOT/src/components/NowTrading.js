@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './NowTrading.css';
 import TradingElement from './TradingElement';
+import axios from 'axios';
 
 
 // const ntHandle = new WebSocket("ws://localhost:8080/Auth/nthandle");
@@ -15,18 +16,27 @@ class NowTrading extends Component {
             listJ: new Array()
         };
     
-        ntHandle.onopen = (event) => {
-            ntHandle.send(this.props.id)
-        }
+        // ntHandle.onopen = (event) => {
+        //     ntHandle.send(this.props.id)
+        // }
         
-        ntHandle.onmessage = (event) => {
-            if(event.data != "null"){
-                this.setState(
-                    {listJ: JSON.parse(event.data)});
-                }
-        }
+        // ntHandle.onmessage = (event) => {
+        //     if(event.data != "null"){
+        //         this.setState(
+        //             {listJ: JSON.parse(event.data)});
+        //         }
+        // }
+
+        console.log("dkdkdkdk")
+        axios.get('http://localhost:8080/BORABOT/SendNowTrading')
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error){
+            console.log(error);
+        });
     }
-    
+
     render() {
         return(
             <div >
