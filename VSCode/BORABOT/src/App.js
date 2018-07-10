@@ -30,7 +30,7 @@ class App extends Component {
         <div className="five"><Sales id = {this.state.id} /></div>
       </div>
       </div>
-      <form action="DoAuth" method="POST">회원가입<br/>
+      <form action="DoAuth" method="POST">회원가입<br/> 
         Username: <input type="text" name="email"/><br /> Password:
         <input type="password" name="password"/><br /> <input
           type="submit" value="회원가입"/>

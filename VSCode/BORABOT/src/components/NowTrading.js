@@ -28,7 +28,7 @@ class NowTrading extends Component {
         // }
 
         console.log("dkdkdkdk")
-        axios.get('http://localhost:8080/BORABOT/SendNowTrading')
+        axios.get('/SendNowTrading')
         .then(function (response) {
             console.log(response);
         })
