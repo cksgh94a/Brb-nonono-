@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import './NowTrading.css';
 import TradingElement from './TradingElement';
-// import fetchJsonp from 'fetch-jsonp';
-// import axios from 'axios';
-
-
-// const ntHandle = new WebSocket("ws://localhost:8080/Auth/nthandle");
-// const ntHandle = new WebSocket("ws://localhost:8080/BORABOT/nthandle");
-// const ntHandle = new WebSocket("ws://45.120.65.65/BORABOT/nthandle");
 
 
 class NowTrading extends Component {
@@ -17,32 +10,12 @@ class NowTrading extends Component {
         this.state = {
             listE: []
         };
-    
-        // ntHandle.onopen = (event) => {
-        //     ntHandle.send(this.props.id)
-        // }
-        
-        // ntHandle.onmessage = (event) => {
-        //     if(event.data != "null"){
-        //         this.setState(
-        //             {listJ: JSON.parse(event.data)});
-        //         }
-        // }
-
     }
     componentDidMount() {
-        // fetch('http://localhost:8080/BORABOT/NowTrading',{
-        //     credentials: 'include',
-        //     mode: 'no-cors'
-        // }).then((response)=>{console.log(response);
-        //     console.log(response.json());
-        // }).catch((e) => {console.log(e);})
-
-        // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ
-        
-        // fetch('http://localhost:8080/BORABOT/NowTrading'
-        fetch('NowTrading'
-        , {credentials: 'include'}
+        // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ        
+        fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용
+        // fetch('NowTrading'              // 서버용
+        // , {credentials: 'include'}  // vscode로 테스트할 때는 여기 주석처리하고 크롬 cors 허용
         )
         .then(res => res.json())
         .then(
