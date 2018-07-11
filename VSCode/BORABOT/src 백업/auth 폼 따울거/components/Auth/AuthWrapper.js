@@ -175,8 +175,10 @@ const Background = styled.div`
     backgournd: white;
 `;
 
-export default connect(
-  null, (dispatch) => ({
-    UserActions: bindActionCreators(userActions, dispatch)
-  })
-)(AuthWrapper);
+// export default connect(
+//   null, (dispatch) => ({
+//     UserActions: bindActionCreators(userActions, dispatch)
+//   })
+// )(AuthWrapper);
+
+export default AuthWrapper;

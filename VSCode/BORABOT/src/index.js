@@ -1,26 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Root from './Root';
-import registerServiceWorker from './registerServiceWorker';
 import './index.css';
-import configureStore from './redux/configureStore';
-import { AppContainer } from 'react-hot-loader';
-// const { jwtMiddleware } = require('./lib/token');
-const store = configureStore();
+import App from './App';
+import registerServiceWorker from './registerServiceWorker';
 
-const render = Component => {
-    ReactDOM.render(
-        <AppContainer>
-            <Component store={store}/>
-        </AppContainer>,
-        document.getElementById('root')
-    );
-};
-
-render(Root);
-
-if(module.hot) {
-    module.hot.accept('./Root', () => render(Root));
-}
-
+ReactDOM.render(<App />, document.getElementById('root'));
 registerServiceWorker();

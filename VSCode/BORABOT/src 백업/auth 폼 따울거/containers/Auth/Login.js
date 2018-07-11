@@ -1,60 +1,60 @@
 import React, { Component } from 'react';
 import { AuthContent, InputWithLabel, AuthButton, RightAlignedLink, AuthError } from '../../components/Auth';
-import { connect } from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as authActions from '../../redux/modules/auth';
-import * as userActions from '../../redux/modules/user';
-import storage from '../../lib/storage';
-import queryString from 'query-string';
-// import Background from '../../components/Auth/AuthWrapper';
-import Header, { LoginButton } from '../../components/Base/Header';
-import { Route } from 'react-router-dom';
-import { Home, Auth } from '../../pages';
+// import { connect } from 'react-redux';
+// import {bindActionCreators} from 'redux';
+// import * as authActions from '../../redux/modules/auth';
+// import * as userActions from '../../redux/modules/user';
+// import storage from '../../lib/storage';
+// import queryString from 'query-string';
+// // import Background from '../../components/Auth/AuthWrapper';
+// import Header, { LoginButton } from '../../components/Base/Header';
+// import { Route } from 'react-router-dom';
+// import { Home, Auth } from '../../pages';
 import './Login.css';
 
 
 const crypto = require('crypto');
-const loginHandle = new WebSocket("ws://45.120.65.65/BORABOT/loginhandle");
+// const loginHandle = new WebSocket("ws://45.120.65.65/BORABOT/loginhandle");
 
 
-var key = "tHis_iS_pRivaTe_Key";
+// var key = "tHis_iS_pRivaTe_Key";
 
-var serverpassword;
-var auto_padding;
+// var serverpassword;
+// var auto_padding;
 
-const initialState = {
-    login: {
-        status: 'INIT'
-    },
-    status: {
-        isLoggedIn: false,
-        currentUser: '',
-    }
-}
+// const initialState = {
+//     login: {
+//         status: 'INIT'
+//     },
+//     status: {
+//         isLoggedIn: false,
+//         currentUser: '',
+//     }
+// }
 
 
 class Login extends Component {
-    constructor(props){
-      super(props);
-      this.state={
-        loginInfo: {
-          email: "",
-          password: "",
-        },
-        serverpassword: ""
-      }
-      loginHandle.onmessage = (event) => {
-        if(event.data != "null"){
-            this.setState(
-              {serverpassword: JSON.parse(event.data)});
-        }
-        console.log(this.state.serverpassword);
-        if(this.state.loginInfo.password = this.state.serverpassword) {
-          console.log('hello');
-          console.log('serverpassword: ', this.state.serverpassword);
-        }
-      }
-    }
+    // constructor(props){
+    //   super(props);
+    //   this.state={
+    //     loginInfo: {
+    //       email: "",
+    //       password: "",
+    //     },
+    //     serverpassword: ""
+    //   }
+    //   loginHandle.onmessage = (event) => {
+    //     if(event.data != "null"){
+    //         this.setState(
+    //           {serverpassword: JSON.parse(event.data)});
+    //     }
+    //     console.log(this.state.serverpassword);
+    //     if(this.state.loginInfo.password = this.state.serverpassword) {
+    //       console.log('hello');
+    //       console.log('serverpassword: ', this.state.serverpassword);
+    //     }
+    //   }
+    // }
 
     encrypt = (err, key) => {
       var cipher = crypto.createCipher('aes-256-cbc', key);
@@ -70,14 +70,14 @@ class Login extends Component {
       return decipheredPlainpw;
     }
 
-    componentDidMount() {
-      const { location } = this.props;
-      const query = queryString.parse(location.search);
+    // componentDidMount() {
+    //   const { location } = this.props;
+    //   const query = queryString.parse(location.search);
 
-      if(query.expired !== undefined) {
-          this.setError('세션에 만료되었습니다. 다시 로그인 하세요.')
-      }
-    }
+    //   if(query.expired !== undefined) {
+    //       this.setError('세션에 만료되었습니다. 다시 로그인 하세요.')
+    //   }
+    // }
 
     // handleChange = (e) => {
     //     const { AuthActions } = this.props;
@@ -90,20 +90,20 @@ class Login extends Component {
     //     });
     // }
 
-    componentWillUnmount() {
-        const { AuthActions } = this.props;
-        AuthActions.initializeForm('login')
-    }
+    // componentWillUnmount() {
+    //     const { AuthActions } = this.props;
+    //     AuthActions.initializeForm('login')
+    // }
 
-    setError = (message) => {
-        const { AuthActions } = this.props;
-        AuthActions.setError({
-            form: 'login',
-            message
-        });
+    // setError = (message) => {
+    //     const { AuthActions } = this.props;
+    //     AuthActions.setError({
+    //         form: 'login',
+    //         message
+    //     });
 
-        return false;
-    }
+    //     return false;
+    // }
 
     // handleChange = (e,i) => { //0:email, 1:pw
     //      const { AuthActions } = this.props;
@@ -266,14 +266,16 @@ class Login extends Component {
   }
 }
 
-export default connect(
-    (state) => ({
-        form: state.auth.getIn(['login', 'form']),
-        error: state.auth.getIn(['login', 'error']),
-        result: state.auth.get('result')
-    }),
-    (dispatch) => ({
-        AuthActions: bindActionCreators(authActions, dispatch),
-        UserActions: bindActionCreators(userActions, dispatch)
-    })
-)(Login);
+// export default connect(
+//     (state) => ({
+//         form: state.auth.getIn(['login', 'form']),
+//         error: state.auth.getIn(['login', 'error']),
+//         result: state.auth.get('result')
+//     }),
+//     (dispatch) => ({
+//         AuthActions: bindActionCreators(authActions, dispatch),
+//         UserActions: bindActionCreators(userActions, dispatch)
+//     })
+// )(Login);
+
+export default Login;

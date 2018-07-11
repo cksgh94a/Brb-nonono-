@@ -7,7 +7,7 @@ import { Home, Auth } from './pages';
 
 const Root = ({store}) => {
     return (
-        <Provider store={store}>
+        // <Provider store={store}>
             <BrowserRouter>
                 <div>
                   <Route exact path="/" component={App}/>
@@ -15,7 +15,7 @@ const Root = ({store}) => {
                   <Route path="/containers/auth/login" component={Login}/>
                 </div>
             </BrowserRouter>
-        </Provider>
+        // </Provider>
     );
 };
 

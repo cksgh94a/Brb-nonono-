@@ -241,16 +241,18 @@ class Register extends Component {
 }
 
 
-export default connect(
-    (state) => ({
-        form: state.auth.getIn(['register', 'form']),
-        error: state.auth.getIn(['register', 'error']),
-        exists: state.auth.getIn(['register', 'exists']),
-        result: state.auth.get('result')
-    }),
-    (dispatch) => ({
-        AuthActions: bindActionCreators(authActions, dispatch),
-        UserActions: bindActionCreators(userActions, dispatch)
-    }),
+// export default connect(
+//     (state) => ({
+//         form: state.auth.getIn(['register', 'form']),
+//         error: state.auth.getIn(['register', 'error']),
+//         exists: state.auth.getIn(['register', 'exists']),
+//         result: state.auth.get('result')
+//     }),
+//     (dispatch) => ({
+//         AuthActions: bindActionCreators(authActions, dispatch),
+//         UserActions: bindActionCreators(userActions, dispatch)
+//     }),
 
-)(Register);
+// )(Register);
+
+export default Register;

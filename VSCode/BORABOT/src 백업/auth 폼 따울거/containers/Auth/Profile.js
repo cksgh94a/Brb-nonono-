@@ -34,18 +34,18 @@ class Profile extends Component {
         }
     }
   }
-  componentWillUnmount() {
-      const { AuthActions } = this.props;
-      AuthActions.initializeForm('profile')
-  }
+  // componentWillUnmount() {
+  //     const { AuthActions } = this.props;
+  //     AuthActions.initializeForm('profile')
+  // }
 
-  setError = (message) => {
-     const { AuthActions } = this.props;
-     AuthActions.setError({
-         form: 'profile',
-         message
-     });
-  }
+  // setError = (message) => {
+  //    const { AuthActions } = this.props;
+  //    AuthActions.setError({
+  //        form: 'profile',
+  //        message
+  //    });
+  // }
 
   // handleChange = (e,i) => { //0:name, 1:number, 2:account, 3:SecretKey, 4:APIKey
   //   const { AuthActions } = this.props;
@@ -153,16 +153,17 @@ class Profile extends Component {
         );
       }
 }
-export default connect(
-    (state) => ({
-        form: state.auth.getIn(['profile', 'form']),
-        error: state.auth.getIn(['profile', 'error']),
-        exists: state.auth.getIn(['profile', 'exists']),
-        result: state.auth.get('result')
-    }),
-    (dispatch) => ({
-        AuthActions: bindActionCreators(authActions, dispatch),
-        UserActions: bindActionCreators(userActions, dispatch)
-    }),
+// export default connect(
+//     (state) => ({
+//         form: state.auth.getIn(['profile', 'form']),
+//         error: state.auth.getIn(['profile', 'error']),
+//         exists: state.auth.getIn(['profile', 'exists']),
+//         result: state.auth.get('result')
+//     }),
+//     (dispatch) => ({
+//         AuthActions: bindActionCreators(authActions, dispatch),
+//         UserActions: bindActionCreators(userActions, dispatch)
+//     }),
 
-)(Profile);
+// )(Profile);
+export default Profile;

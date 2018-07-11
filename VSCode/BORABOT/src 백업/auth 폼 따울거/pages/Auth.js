@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {bindActionCreators} from 'redux';
-import * as baseActions from '../redux/modules/base';
+// import { connect } from 'react-redux';
+// import {bindActionCreators} from 'redux';
+// import * as baseActions from '../redux/modules/base';
 import { AuthWrapper } from '../components/Auth';
 import { Route } from 'react-router-dom';
 import { Login, Register, Profile, BackTesting, Blog } from '../containers/Auth';
@@ -13,9 +13,9 @@ class Auth extends Component {
     // }
 
     // 페이지에서 벗어 날 때 다시 활성화
-    componentWillUnmount() {
-        this.props.BaseActions.setHeaderVisibility(true);
-    }
+    // componentWillUnmount() {
+    //     this.props.BaseActions.setHeaderVisibility(true);
+    // }
 
     render() {
         return (
@@ -32,11 +32,13 @@ class Auth extends Component {
     }
 }
 
-export default connect(
-    (state) => ({
+// export default connect(
+//     (state) => ({
 
-    }),
-    (dispatch) => ({
-        BaseActions: bindActionCreators(baseActions, dispatch)
-    })
-)(Auth);
+//     }),
+//     (dispatch) => ({
+//         BaseActions: bindActionCreators(baseActions, dispatch)
+//     })
+// )(Auth);
+
+export default Auth;

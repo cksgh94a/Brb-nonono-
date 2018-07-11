@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import oc from 'open-color';
-import { shadow, media } from '../../../lib/styleUtils';
-import { AuthContent, InputWithLabel, AuthButton, RightAlignedLink, AuthError } from '../../Auth';
+// import { shadow, media } from '../../../lib/styleUtils';
+// import { AuthContent, InputWithLabel, AuthButton, RightAlignedLink, AuthError } from '../../Auth';
 
 // 상단 고정
 const Positioner = styled.div`
@@ -31,16 +31,17 @@ const HeaderContents = styled.div`
     padding-right: 1rem;
     padding-top: 0.5rem;
 
+    `;
 
-    ${media.wide`
-        width: 992px;
-    `}
+    // ${media.wide`
+    //     width: 992px;
+    // `}
 
-    ${media.tablet`
-        width: 100%;
-        height: 100%;
-    `}
-`;
+    // ${media.tablet`
+    //     width: 100%;
+    //     height: 100%;
+    // `}
+    // `;
 
 // 로고
 const Logo = styled(Link)`
