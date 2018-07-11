@@ -5,6 +5,7 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import configureStore from './redux/configureStore';
 import { AppContainer } from 'react-hot-loader';
+// const { jwtMiddleware } = require('./lib/token');
 const store = configureStore();
 
 const render = Component => {

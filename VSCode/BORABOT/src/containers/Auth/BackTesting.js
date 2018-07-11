@@ -7,7 +7,6 @@ import * as userActions from '../../redux/modules/user';
 import storage from '../../lib/storage';
 import queryString from 'query-string';
 // import Background from '../../components/Auth/AuthWrapper';
-import HeaderContainer from '../Base/HeaderContainer';
 import Header, { LoginButton } from '../../components/Base/Header';
 import { Route } from 'react-router-dom';
 import { Home, Auth } from '../../pages';

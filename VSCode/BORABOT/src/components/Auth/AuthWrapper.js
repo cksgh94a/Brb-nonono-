@@ -8,7 +8,6 @@ import { connect } from 'react-redux';
 import {bindActionCreators} from 'redux';
 import * as userActions from '../../redux/modules/user';
 
-import HeaderContainer from '../../containers/Base/HeaderContainer';
 
 // 상단 고정
 const Positioner = styled.div`

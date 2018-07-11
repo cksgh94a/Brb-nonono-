@@ -68,14 +68,14 @@ const Spacer_2 = styled.div`
 
 
 // 백테스팅, 전략 공유 게시판, 회원정보관리, 로그아웃
-const BackTesting = styled.div`
+const BackTesting = styled(Link)`
   font-size: 1rem;
   color: white;
   font-family: 'Rajdhani';
   text_decoration: none;
 `;
 
-const Blog = styled.div`
+const Blog = styled(Link)`
   font-size: 1rem;
   color: white;
   font-family: 'Rajdhani';
@@ -104,9 +104,9 @@ const Header = ({children}) => {
                 <HeaderContents>
                   <Logo to="/">BoraBot</Logo>
                   <Spacer/>
-                  <BackTesting> 백테스팅 </BackTesting>
+                  <BackTesting to="../../../auth/backtesting"> 백테스팅 </BackTesting>
                   <Spacer_1/>
-                  <Blog> 전략 공유 게시판 </Blog>
+                  <Blog to="../../../auth/blog"> 전략 공유 게시판 </Blog>
                   <Spacer_1/>
                   <Profile to="../../../auth/profile"> 회원정보관리 </Profile>
                   <Spacer_1/>
