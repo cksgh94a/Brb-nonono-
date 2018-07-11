@@ -19,7 +19,7 @@ import com.google.gson.Gson;
 /**
  * Servlet implementation class SendNowTrading
  */
-@WebServlet("/SendNowTrading")
+@WebServlet("/NowTrading")
 public class NowTrading extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -42,10 +42,10 @@ public class NowTrading extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 	    
 	    // cors 해결
-	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-        response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
-        response.setHeader("Access-Control-Allow-Origin", "*");
+//	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+//        response.setHeader("Access-Control-Max-Age", "3600");
+//        response.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
+//        response.setHeader("Access-Control-Allow-Origin", "*");
 		
         HttpSession session = request.getSession();
 		System.out.println(session.getId());
@@ -53,7 +53,7 @@ public class NowTrading extends HttpServlet {
     	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
     	nT.clear();
     	
-    	//테스트용
+    	//테스트용 트레이딩 정보
     	nT.add(new TradingElement("s", "s", "s", 1.1, "s", new Date(), new Date(), 1.1));
     	nT.add(new TradingElement("s", "s", "s", 2.2, "s", new Date(), new Date(), 2.2));
     	
@@ -92,6 +92,7 @@ public class NowTrading extends HttpServlet {
 
 		PrintWriter out = response.getWriter();
 		out.print(ntJson);
+//		response.sendRedirect("http://localhost:3000");
 	}
 
 	/**
