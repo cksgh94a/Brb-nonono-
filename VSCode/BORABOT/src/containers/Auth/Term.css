@@ -1,4 +1,4 @@
-.App {
+.Main {
   text-align: center;
   background-color: #0f1316;
   width: 100%;
@@ -6,27 +6,24 @@
   height: auto;
   /* min-height: 100%;
   max-width: 1023px;
-
   width: 100%;
   height: auto;
-
   position: relative;
   top: 0;
   left: 0; */
 }
 @media (max-width: 2047px) {
-  .App {
+  .Main {
     width: auto;
   }
 }
 
-.body {
-  background-color: #0f1316;
+.Wrapper {
+  background-color: white;
 }
 
-
-.Bottom {
-  color: white;
+.body {
+  background-color: #0f1316;
 }
 
 :root {
@@ -71,7 +68,6 @@
   grid-auto-rows: auto;
 }
 .one {
-  width: 220px;
   border: 10px #343a40;
   background-color: #343a40;
   align-content: center;
@@ -91,17 +87,15 @@
   background-color: #0f1316;
 }
 .four {
-  min-width: 270px;
   border: 10px solid #343a40;
   border-bottom: #c0cbd4;
   background-color: #c0cbd4;
   grid-row-start: 1;
-  grid-row-end: 3;
-  grid-column-start: 7;
-  grid-column-end: 8;
+  grid-row-end: 2;
+  grid-column-start: 6;
+  grid-column-end: 7;
 }
 .four_child {
-  min-width: 270px;
   z-index: 5;
   /* margin-bottom: 50px; */
   border: 10px solid #343a40;
@@ -109,24 +103,23 @@
   background-color: #c0cbd4;
   grid-row-start: 2;
   grid-row-end: 3;
-  grid-column-start: 7;
-  grid-column-end: 8;
+  grid-column-start: 6;
+  grid-column-end: 7;
 }
 .five {
-  min-width: 270px;
   border: 10px solid #343a40;
   background-color: #343a40;
   grid-row-start: 3;
   grid-row-end: 7;
-  grid-column-start: 7;
-  grid-column-end: 8;
+  grid-column-start: 6;
+  grid-column-end: 7;
 }
 
-.App-scroll{
+.Main-scroll{
   overflow: scroll;
 }
 
-@keyframes App-logo-spin {
+@keyframes Main-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }

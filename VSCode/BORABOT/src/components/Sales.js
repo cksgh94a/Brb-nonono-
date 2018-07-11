@@ -3,8 +3,8 @@ import './Sales.css';
 
 // const mainHandle = new WebSocket("ws://localhost:8080/Auth/mainhandle");
 // const mainHandle = new WebSocket("ws://localhost:8080/BORABOT/mainhandle");
-// const mainHandle = new WebSocket("ws://45.120.65.65/BORABOT/mainhandle");
-// const authHandle = new WebSocket("ws://45.120.65.65/Auth/authhandle");
+const mainHandle = new WebSocket("ws://45.120.65.65/BORABOT/mainhandle");
+
 
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
@@ -25,14 +25,14 @@ class Sales extends Component {
     let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
     var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
     
-    var jsonStart = {"id" : this.props.id, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "period": sDeadline};
+    var jsonStart = {"email" : this.props.email, "name" : sName, "status" : true, "coin" : sCoin, "exchange" : sExchange, "strategy" : sStrategy, "price" : sPrice, "startDate" : new Date(), "period": sDeadline};
 
     let alertMsg = sCoin + '\n' + sExchange + '\n' + sStrategy + '\n' + sPrice + '\n' + sDeadline +  '\n이 맞습니까?';
 
     alert(alertMsg);
 
     //웹소켓으로 textMessage객체의 값을 보낸다.
-    // mainHandle.send(JSON.stringify(jsonStart));
+    mainHandle.send(JSON.stringify(jsonStart));
     console.log(jsonStart + '전송');
   }
 

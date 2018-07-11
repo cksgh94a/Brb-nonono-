@@ -89,6 +89,7 @@ class ChartSelect extends Component {
 
     let base = 'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-'
     let addr = base.concat(this.state.coin.name);
+    console.log(addr);
     fetch(addr)
       .then(response => response.json())
       .then(json => {
