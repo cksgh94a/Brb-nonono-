@@ -1,15 +1,16 @@
 
 
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 
@@ -32,61 +33,40 @@ public class SendNowTrading extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		// TODO Auto-generated method stub.
 
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-	    // 세션의 사용자 정보 확인
-	    String email = (String) request.getSession().getAttribute("Email");
-	    
-//	    // 현재 진행중인 거래 리스트 초기화
-//    	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
-//    	nT.clear();
-//		
-//    	//현재 진행중인 거래 정보 DB에서 가져옴
-//		String selectSql = String.format("SELECT * from trade where email=\'%s\'", email);
-//
-//		ResultSet rs = DB.Query(selectSql, "select"); 
-//		
-//		try {
-//			while(rs.next()) {
-//				if (rs.getBoolean("status")) {
-//					TradingElement tE = new TradingElement(
-//						rs.getString("bot_name"),
-//						rs.getString("coin"),
-//						rs.getString("exchange_name"),
-//						rs.getDouble("start_asset"),
-//						rs.getString("strategy_name"),
-//						rs.getDate("start_date"),
-//						rs.getDate("end_date"),
-//						rs.getDouble("last_asset")
-//						);
-//					nT.add(tE);
-//				}
-//			}
-//		} catch (SQLException e) {
-//			e.printStackTrace();			
-//		}		
-//		
-//		// 5. DB 사용후 clean()을 이용하여 정리
-//		DB.clean();	
-//		
-//    	Gson gson = new Gson();
-//    	
-//    	String ntJson = gson.toJson(nT);
-//
-        request.setAttribute("data", "흐으으음");
-        request.getRequestDispatcher("/BORABOT").forward(request, response);
-//		response.getWriter().append("Served at: ").append(request.getContextPath());
+	    // cors 해결
+	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Max-Age", "3600");
+        response.setHeader("Access-Control-Allow-Headers", "x-requested-with");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+		
+        HttpSession session = request.getSession();
+		System.out.println(session.getId());
+
+    	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
+    	nT.clear();
+    	nT.add(new TradingElement("s", "s", "s", 1.1, "s", new Date(), new Date(), 1.1));
+    	nT.add(new TradingElement("s", "s", "s", 2.2, "s", new Date(), new Date(), 2.2));
+    	
+    	Gson gson = new Gson();
+    	String ntJson = gson.toJson(nT);
+		   	
+
+		PrintWriter out = response.getWriter();
+		out.print(ntJson);
 	}
-	
+
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		doGet(request, response);
 	}
 
 }

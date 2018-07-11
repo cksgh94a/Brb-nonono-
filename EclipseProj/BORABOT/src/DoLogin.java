@@ -42,11 +42,11 @@ public class DoLogin extends HttpServlet {
 		// 세션에 사용자 정보 저장
 		HttpSession session = request.getSession();
 		session.setAttribute("Email", email);
+		System.out.println(session.getId());
+
 
 		// 로그인 버튼 후 화면 지정
-//		response.sendRedirect("/LoginTest");
-        request.setAttribute("data", "흐으으음");
-        request.getRequestDispatcher("/").forward(request, response);
+		response.sendRedirect("http://localhost:3000");
 	}
 
 }
