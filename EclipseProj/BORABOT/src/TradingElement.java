@@ -10,10 +10,10 @@ class TradingElement{
 	private String exchange;
 	private String strategy;
 	private double startAsset;	// 시작 금액
-	private Date startDate;
+	private Date startDate = new Date();
 	private long period;
 	private Date endDate = new Date();
-	private double endAsset = this.startAsset*1.1;
+	private double endAsset = this.startAsset;
 
 	public String getEmail() { return email; }
 	public String getName() { return name; }
@@ -27,12 +27,23 @@ class TradingElement{
 //	
 	public TradingElement() {
 	}	
+
 	
-	public TradingElement(String n, String c, String e, double p, String s, Date sD, Date eD, double fP) {
+	public TradingElement(String em, Boolean st, String n, String c, String e, double a, String s) {
+		this.email = em;
+		this.status = st;
 		this.name = n;
 		this.coin = c;
 		this.exchange = e;
-		this.startAsset = p;
+		this.startAsset = a;
+		this.strategy = s;
+	}
+	
+	public TradingElement(String n, String c, String e, double a, String s, Date sD, Date eD, double fP) {
+		this.name = n;
+		this.coin = c;
+		this.exchange = e;
+		this.startAsset = a;
 		this.strategy = s;
 		this.startDate = sD;
 		this.endDate = eD;

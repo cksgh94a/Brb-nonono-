@@ -38,8 +38,35 @@ class Sales extends Component {
 
   render() {
     return (
-      <div>
-        <h4 className="Sales-color">
+      <div>        
+        <form action="TradeMain" method="POST">
+        {/* <form action="http://localhost:8080/BORABOT/TradeMain" method="POST"> */}
+          <h4 className="Sales-color">Sales configuration</h4>
+          <input className="Sales-input" id="SL_nameInputbox" placeholder="이름" name="botname"/><br/>
+          <select className="Sales-box" id="SL_coinSelectbox" size='1' name="coin">
+            {coinList.map((coin, i) => {
+              return (<option key={i}> {coin} </option>)
+            })}
+          </select><br/>
+          <select className="Sales-box" id="SL_exchangeSelectbox" size='1' name="exchange">
+            {exchangeList.map((exchange, i) => {
+              return (<option key={i}> {exchange} </option>)
+            })
+            }
+          </select><br/>
+          <select className="Sales-box" id="SL_strategySelectbox" size='1' name="strategy">
+            <option>bollingerPatternNaked</option>
+            <option>Bollingertrade</option>
+            <option>trendFollowing</option>
+            <option>patterNakedTrade</option>
+          </select><br/>
+          <input className="Sales-input" id="SL_priceInputbox" placeholder="금액 (원)" name="asset"/><br/>
+          <input className="Sales-input" id="SL_deadlineInputbox" placeholder="거래 기간 (일)" name="period"/><br/>
+          <input name="status" value="true"/><br/><br/>
+          <input type="submit" value="거래 시작"/>
+        </form><br/>
+        
+        {/* <h4 className="Sales-color">
           Sales configuration
                 </h4>
         <div>
@@ -82,7 +109,7 @@ class Sales extends Component {
           <button id="Sale-start-btn" onClick={this.handleStartbtn} style={{ margin: '3px' }}>
             거래 시작
           </button>
-        </div>
+        </div> */}
       </div>
     );
   }

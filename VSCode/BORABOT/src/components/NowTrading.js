@@ -39,8 +39,10 @@ class NowTrading extends Component {
         // }).catch((e) => {console.log(e);})
 
         // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ
-        fetch('http://localhost:8080/BORABOT/NowTrading',
-        // {credentials: 'include'}
+        
+        // fetch('http://localhost:8080/BORABOT/NowTrading'
+        fetch('NowTrading'
+        , {credentials: 'include'}
         )
         .then(res => res.json())
         .then(
