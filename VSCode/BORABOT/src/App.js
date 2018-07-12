@@ -5,6 +5,7 @@ import Sales from './components/Sales';
 import NowTrading from './components/NowTrading';
 import WalletInfo from './components/WalletInfo';
 import Login from './components/Login';
+import Register from './components/Register';
 
 class App extends Component {
   constructor(props){
@@ -28,7 +29,7 @@ class App extends Component {
         <div className="five"><Sales id = {this.state.id} /></div>
       </div>
       </div>
-      <Login/>      
+      <Register/><Login/>
       </div>
     );
   }
