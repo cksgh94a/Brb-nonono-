@@ -4,7 +4,7 @@ import ChartSelect from './components/main/ChartSelect';
 import Sales from './components/main/Sales';
 import NowTrading from './components/main/NowTrading';
 import WalletInfo from './components/main/WalletInfo';
-import Login from './components//initial/Login';
+import Login from './components/initial/Login';
 
 class App extends Component {
 
