@@ -1,4 +1,14 @@
 import React, { Component } from 'react';
+import crypto from 'crypto';
+
+var key = "tHis_iS_pRivaTe_Key";
+const encrypt = (err, key) => {
+  let cipher = crypto.createCipher('aes-256-cbc', key);
+  let encipheredpw = cipher.update(err, 'utf-8', 'hex');
+  // encipheredpw = cipher.setAutoPadding(auto_padding=true);
+  encipheredpw += cipher.final('hex');
+  return encipheredpw;
+}
 
 class Register extends Component {
   constructor(props) {
@@ -27,29 +37,22 @@ class Register extends Component {
         isVal: false
       })
     }
-    console.log(this.state.email)
-    console.log(this.state.password)
   }
 
   handleRegister = (e) => {
-    const formData = new FormData();
-    formData.append(email,this.state.email);
-    formData.append(password,this.state.password);
-    fetch('http://localhost:8080/BORABOT/Register', {method: 'POST', body: formData})
+    this.setState({
+      password: encrypt(this.state.password, key)
+    })
   }
 
   render() {
     return (
       <div>
-        회원가입<br/>
-        <input type="text" placeholder="email" onChange={(e)=>this.handleChange(e)}/><br/>
-        <input type="password" placeholder="비밀번호" onChange={(e)=>this.handleChange(e)}/><br/>
-        <button disabled={this.state.isVal} onClick={this.handleRegister} >회원가입</button>
-        {/* <form action="http://localhost:8080/BORABOT/Auth" method="POST">회원가입<br/> 
-            <input type="text" placeholder="email" name="email"/><br/>
-            <input type="password" placeholder="비밀번호" name="password"/><br/>
-            <input type="submit" value="회원가입"/>
-        </form><br/> */}
+        <form action="http://localhost:8080/BORABOT/Register" method="POST">회원가입<br/> 
+            <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
+            <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)} value={this.state.password}/><br/>
+            <input disabled={this.state.isVal} type="submit" value="회원가입" onClick={this.handleRegister}/>
+        </form><br/>
       </div>      
     );
   }

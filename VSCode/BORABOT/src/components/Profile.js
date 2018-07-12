@@ -102,16 +102,4 @@ class Profile extends Component {
           );
       }
 }
-export default connect(
-    (state) => ({
-        form: state.auth.getIn(['profile', 'form']),
-        error: state.auth.getIn(['profile', 'error']),
-        exists: state.auth.getIn(['profile', 'exists']),
-        result: state.auth.get('result')
-    }),
-    (dispatch) => ({
-        AuthActions: bindActionCreators(authActions, dispatch),
-        UserActions: bindActionCreators(userActions, dispatch)
-    }),
-
-)(Profile);
+export default Profile;

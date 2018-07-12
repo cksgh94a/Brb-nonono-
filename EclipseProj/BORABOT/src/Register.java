@@ -34,9 +34,12 @@ public class Register extends HttpServlet {
 	    // 회원가입 정보 DB에 저장
 		CustomerElement aInfo = new CustomerElement(request.getParameter("email"), request.getParameter("password"));
 //        aInfo.insertDB();
-		System.out.println(request.getParameter("email")+request.getParameter("password"));
         
-		response.sendRedirect("/BORABOT");
+//		response.sendRedirect("/BORABOT");
+		
+		// 프론트 테스트용
+		System.out.println(request.getParameter("email")+request.getParameter("password"));
+		response.sendRedirect("http://localhost:3000/");
 	}
 
 }
