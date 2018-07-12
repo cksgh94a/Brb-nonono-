@@ -12,7 +12,6 @@ class App extends Component {
     super(props);
     this.state = {
       id : "cksgh94a",
-      listJ: new Array()
     };
 
   }
@@ -26,7 +25,7 @@ class App extends Component {
         <div className="one"><NowTrading id = {this.state.id}/></div>
         <div className="three"><ChartSelect/></div>
         <div className="four"><WalletInfo/></div>
-        {/* <div className="five"><Sales id = {this.state.id} /></div> */}
+        <div className="five"><Sales id = {this.state.id} /></div>
       </div>
       </div>
       <Register/><Login/>
