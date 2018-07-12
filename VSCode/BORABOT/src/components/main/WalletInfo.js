@@ -26,7 +26,7 @@ const exchange_registered = [
     },
 ]
 
-const bittrex = require('../node.bittrex.api');
+const bittrex = require('../../node.bittrex.api');
 bittrex.options({ 
   'apikey' : exchange_registered[0].API_KEY, 
   'apisecret' : exchange_registered[0].SECRET_KEY, 
