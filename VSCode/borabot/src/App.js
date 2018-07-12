@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { Route } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import Initial from './components/initial/Initial';
 import Main from './components/main/Main';
 
@@ -10,8 +10,10 @@ class App extends Component {
 
     return (
       <div>
-        <Route exact path="/" component={Initial}/>
-        <Route path="/main" component={Main}/>
+        <Switch>
+          <Route path="/main" component={Main}/>          
+          <Route path="/" component={Initial}/>
+        </Switch>
         {/* <Main/> */}
       </div>
     );
