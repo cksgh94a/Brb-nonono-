@@ -4,18 +4,8 @@ import ChartSelect from './ChartSelect';
 import Sales from './Sales';
 import NowTrading from './NowTrading';
 import WalletInfo from './WalletInfo';
-import Login from '../initial/Login';
-import Register from '../initial/Register';
 
 class Main extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      id : "cksgh94a",
-    };
-
-  }
-
   render() {
 
     return (
@@ -28,7 +18,6 @@ class Main extends Component {
         <div className="five"><Sales/></div>
       </div>
       </div>
-      <Register/><Login/>
       </div>
     );
   }

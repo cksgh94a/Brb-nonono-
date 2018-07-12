@@ -15,4 +15,3 @@ class Initial extends Component {
 }
 
 export default Initial;
-

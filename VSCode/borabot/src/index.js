@@ -1,29 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import Root from './Root';
 import registerServiceWorker from './registerServiceWorker';
-import {AppContainer} from 'react-hot-loader';
+import { AppContainer } from 'react-hot-loader';
+import './index.css';
 
-const rootEl = document.getElementById('root');
-
-ReactDOM.render(
-    <AppContainer>
-        <App />
-    </AppContainer>,
-    rootEl
-);
-
-if (module.hot) {
-    module.hot.accept('./App', () => {
-        const NextApp = require('./App').default; // eslint-disable-line global-require
-        ReactDOM.render(
-            <AppContainer>
-                <NextApp />
-            </AppContainer>,
-            rootEl
-        );
-    });
-}
-
+ReactDOM.render(<Root />, document.getElementById('root'));
 registerServiceWorker();
+
+// const render = Component => {
+//   ReactDOM.render(
+//     <AppContainer>
+//       <Component />
+//     </AppContainer>,
+//     document.getElementById('root')
+//   )
+// }
+
+// render(Root)
+
+
+// if (module.hot) {
+//   module.hot.accept('./Root', () => { render(Root) })
+// }
+
+
+// registerServiceWorker();
