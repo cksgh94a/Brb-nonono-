@@ -25,3 +25,5 @@ if (module.hot) {
         );
     });
 }
+
+registerServiceWorker();
