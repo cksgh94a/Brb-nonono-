@@ -2,16 +2,17 @@ import React, { Component } from 'react';
 import Login from './Login';
 import Register from './Register';
 
-class Header extends Component {
+class Initial extends Component {
 
   render() {
     return (
         <div>
-            HI
+            <Login/>
+            <Register/>
         </div>
     );
   }
 }
 
-export default Header;
+export default Initial;
 
