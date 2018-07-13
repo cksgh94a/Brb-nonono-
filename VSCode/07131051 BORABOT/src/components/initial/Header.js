@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import Main from '../main/Main';
 
 class Header extends Component {
 
   render() {
     return (
         <div>
-            HI
+            <Link to path="/main" component={Main}>Borabot</Link>
         </div>
     );
   }
