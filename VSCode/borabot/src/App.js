@@ -11,25 +11,44 @@ import Login from './initial/Login';
 import Register from './initial/Register';
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state={
+      email:'',
+      menu:0
+    }
+  }
   render() {
-    return (
-      <div>
-        <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-          <div>
-            <Header/>
-            <Switch>
-              <Route path="/main" component={Main}/>
-              <Route path="/profile" component={Profile}/>
-              <Route path="/backtesting" component={BackTesting}/>
-              <Route path="/board" component={Board}/>
-              <Route path="/login" component={Login}/>
-              <Route path="/register" component={Register}/>
-              <Route path="/" component={Initial}/>
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </div>
-    );
+    if(this.state.menu==0){
+      return <div><Header/><Main/></div>
+    }
+    else if(this.state.menu==1){
+      return <div><Header/><Register/></div>
+    }
+    else if(this.state.menu==2){
+      return <div><Header/><Login/></div>
+    }
+    else {
+      return <div><Header/>??</div>
+    }
+    // return (
+    //   <div>
+    //     <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+    //       <div>
+    //         <Header/>
+    //         <Switch>
+    //           <Route path="/main" component={Main}/>
+    //           <Route path="/profile" component={Profile}/>
+    //           <Route path="/backtesting" component={BackTesting}/>
+    //           <Route path="/board" component={Board}/>
+    //           <Route path="/login" component={Login}/>
+    //           <Route path="/register" component={Register}/>
+    //           <Route path="/" component={Initial}/>
+    //         </Switch>
+    //       </div>
+    //     </BrowserRouter>
+    //   </div>
+    // );
   }
 }
 

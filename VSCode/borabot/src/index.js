@@ -5,27 +5,6 @@ import App from './App.js';
 
 import registerServiceWorker from './registerServiceWorker';
 
-// ReactDOM.render(<App />, document.getElementById('root'));
-// registerServiceWorker();
-
-
-// const render = Component => {
-//     ReactDOM.render(
-//       <AppContainer>
-//         <Component />
-//       </AppContainer>,
-//       document.getElementById('root')
-//     )
-//   }
-  
-//   render(App)
-    
-//   if (module.hot) {
-//     module.hot.accept('./App', () => { render(App) })
-//   }
-    
-//   registerServiceWorker();
-
   
 const rootEl = document.getElementById('root');
 
@@ -47,3 +26,4 @@ if (module.hot) {
         );
     });
 }
+  registerServiceWorker();

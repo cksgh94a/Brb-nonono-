@@ -66,7 +66,7 @@ public class Login extends HttpServlet {
 		}
 		
 		// 로그인 버튼 후 화면 지정
-		response.sendRedirect("/BORABOT");
+		response.sendRedirect("/main");
 	}
 
 }

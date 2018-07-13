@@ -36,8 +36,8 @@ class Login extends Component {
     return (
       <div>
         {/* <form onSubmit={(e)=>this.handleLogin(e)} onChange={(e=>this.handleChange(e))}>Login<br/> */}
-        {/* <form action="Login" method="POST">Login<br/> */}
-        <form action="http://localhost:8080/BORABOT/Login" method="POST">Login<br/>
+        {/* <form action="http://localhost:8080/BORABOT/Login" method="POST">Login<br/> */}
+        <form action="Login" method="POST">Login<br/>
             <input type="text" placeholder="email" name="email"/><br/>
             <input type="password" placeholder="비밀번호" name="password"/><br/>
             <input type="submit" value="로그인"/>

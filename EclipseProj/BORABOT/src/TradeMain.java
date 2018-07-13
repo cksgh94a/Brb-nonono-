@@ -66,8 +66,8 @@ public class TradeMain extends HttpServlet {
 
         if (tInfo.getStatus() == true) {	// 거래 시작 (DB에 거래 정보 입력)
             tInfo.insertDB();
-//		    TradeMain bot = new TradeMain(tInfo);
-//		    bot.start(); 
+            TradeBot trade = new TradeBot(tInfo);
+            trade.main();
         }
     
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
