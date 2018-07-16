@@ -46,17 +46,16 @@ class Register extends Component {
       password: encrypt(this.state.password, key)
     })
 
-    var param = {
-      a: 1,
-      b: 2
-    }
+    var param = 'email=this.state.password&password=dsfwe';
     axios({
           method: 'post',
           url: 'Register',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
           },
-          data: param
+          data: param,
+          email: 'asdf',
+          'email': 'dsgwqetwq'
         })
 
     // var bodyFormData = new FormData();

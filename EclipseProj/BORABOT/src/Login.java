@@ -48,16 +48,16 @@ public class Login extends HttpServlet {
 		ResultSet rs = DB.Query(selectSql, "select"); 
 		
 		String pwd= "";
-		try {
-			while(rs.next()) {
-				pwd = rs.getString("password");
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		}		
-		
-		// 5. DB 사용후 clean()을 이용하여 정리
-		DB.clean();	
+//		try {
+//			while(rs.next()) {
+//				pwd = rs.getString("password");
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();			
+//		}		
+//		
+//		// 5. DB 사용후 clean()을 이용하여 정리
+//		DB.clean();	
 		
 		if(password.equals(pwd)) {
 			// 세션에 사용자 정보 저장
