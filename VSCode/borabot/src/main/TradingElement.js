@@ -11,6 +11,7 @@ class TradingElement extends Component {
     handleStopbtn = () => {
       alert(this.props.name + " 거래를 중지하시겠습니까?");
       var jsonStop = {"id" : this.props.id, "name" : this.props.name, "status" : false, "index" : this.props.key};
+
     //   mainHandle.send(JSON.stringify(jsonStop));
     }
     

@@ -49,7 +49,7 @@ public class NowTrading extends HttpServlet {
 		
         HttpSession session = request.getSession();
 
-    	ArrayList<TradingElement> nT = new ArrayList<TradingElement>();
+    	ArrayList<ElementTrading> nT = new ArrayList<ElementTrading>();
     	nT.clear();
     	
     	//테스트용 트레이딩 정보
@@ -65,7 +65,7 @@ public class NowTrading extends HttpServlet {
 		try {
 			while(rs.next()) {
 				if (rs.getBoolean("status")) {
-					TradingElement tE = new TradingElement(
+					ElementTrading tE = new ElementTrading(
 						rs.getString("bot_name")+email,
 						rs.getString("coin"),
 						rs.getString("exchange_name"),

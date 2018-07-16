@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class DoAuth
@@ -32,14 +33,13 @@ public class Register extends HttpServlet {
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    // 회원가입 정보 DB에 저장
-		CustomerElement aInfo = new CustomerElement(request.getParameter("email"), request.getParameter("password"));
+		ElementCustomer aInfo = new ElementCustomer(request.getParameter("email"), request.getParameter("password"));
 //        aInfo.insertDB();
-        
-//		response.sendRedirect("/BORABOT");
-		
-		// 프론트 테스트용
-		System.out.println(request.getParameter("email")+request.getParameter("password"));
-		response.sendRedirect("/");
+
+        System.out.println(request.getSession().getId());
+        System.out.println(request.getParameter("email")+request.getParameter("password"));
+		// 회원가입 버튼 후 화면 지정
+//		response.sendRedirect("/");	
 	}
 
 }

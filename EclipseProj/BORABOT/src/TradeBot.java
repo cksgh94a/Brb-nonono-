@@ -13,7 +13,7 @@ class TradeBot {
 	private String botName;
 	private String strategyName;
 	
-	public TradeBot(TradingElement t) {
+	public TradeBot(ElementTrading t) {
 		this.exchange = t.getExchange();
 		this.coin_target = t.getCoin();
 		this.email = t.getEmail();

@@ -35,27 +35,15 @@ public class TradeMain extends HttpServlet {
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 
-	    // 값 테스트용
-//		String botname = request.getParameter("botname");
-//		String coin = request.getParameter("coin");
-//		String exchange = request.getParameter("exchange");
-//		String strategy = request.getParameter("strategy");
-//		double asset = Double.parseDouble(request.getParameter("asset"));
-//		boolean status = Boolean.valueOf(request.getParameter("status")).booleanValue();
-//		System.out.println(botname);
-//		System.out.println(coin);
-//		System.out.println(exchange);
-//		System.out.println(strategy);
-//		System.out.println(asset);
-
 		long period = Long.parseLong(request.getParameter("period"));
 
         HttpSession session = request.getSession();
         
 		// period 아직 미완
-		TradingElement tInfo = new TradingElement(
+		ElementTrading tInfo = new ElementTrading(
 				(String) session.getAttribute("email"),
-				Boolean.valueOf(request.getParameter("status")).booleanValue(),
+				Boolean.valueOf(request.getParameter("status")),
+//				Boolean.valueOf(request.getParameter("status")).booleanValue(),
 				request.getParameter("botname"),
 				request.getParameter("coin"),
 				request.getParameter("exchange"),
@@ -73,7 +61,7 @@ public class TradeMain extends HttpServlet {
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     		DB.Query(String.format(
-    				"update trade set status=0, end_date=\'%s\' where email=\'%s\' and bot_name=\'%s\' and status=1" ,
+    				"update trade set status=0, end_date=\'%s\' where email=\'%s\' and bot_name=\'%s\'" ,
         			dateFormat.format(new Date()), tInfo.getEmail(), tInfo.getName()), "insert");		
     		DB.clean();		
         }
