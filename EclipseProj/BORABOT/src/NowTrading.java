@@ -89,16 +89,9 @@ public class NowTrading extends HttpServlet {
     	String ntJson = gson.toJson(nT);
 		   	
 
+		System.out.println("나트 + " + session.getId());
+
 		PrintWriter out = response.getWriter();
 		out.print(ntJson);
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }

@@ -40,19 +40,27 @@ class Register extends Component {
   }
 
   handleRegister = (e) => {
-    this.setState({
-      password: encrypt(this.state.password, key)
-    })
+    // this.setState({
+    //   password: encrypt(this.state.password, key)
+    // })
+
+    fetch('Register'              // 서버용
+      , {credentials: 'include'} // 서버용 
+      , {email: this.state.email, password: this.state.password}
+      )
   }
 
   render() {
     return (
       <div>
-        <form action="Register" method="POST">회원가입<br/> 
-            <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
-            <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)} value={this.state.password}/><br/>
-            <input disabled={this.state.isVal} type="submit" value="회원가입" onClick={this.handleRegister}/>
-        </form><br/>
+        {/* <form action="Register" method="POST">회원가입<br/> 
+          <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
+          <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)} value={this.state.password}/><br/>
+          <input disabled={this.state.isVal} type="submit" value="회원가입" onClick={this.handleRegister}/>
+        </form><br/> */}
+          <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
+          <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)}/><br/>
+          <button disabled={this.state.isVal} onClick={this.handleRegister}>회원가입</button>      
       </div>      
     );
   }

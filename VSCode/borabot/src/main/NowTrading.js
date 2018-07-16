@@ -27,17 +27,22 @@ class NowTrading extends Component {
         )
     }
 
+    reload = () => {
+        window.location.reload(true); // 새로고침
+    }
+
     render() {
         return(
             <div >
-            <div className = "NowTrading-elementList">
-                {this.state.listE.map((nt, i) => {
-                    return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 
-                        coin = {nt.coin} exchange = {nt.exchange}
-                        profit = {nt.profit} strategy = {nt.strategy} key = {i}
-                                />);
-                })}
-            </div>
+                <input onClick={this.reload}>새로고침</input>
+                <div className = "NowTrading-elementList">
+                    {this.state.listE.map((nt, i) => {
+                        return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 
+                            coin = {nt.coin} exchange = {nt.exchange}
+                            profit = {nt.profit} strategy = {nt.strategy} key = {i}
+                                    />);
+                    })}
+                </div>
             </div>
         );
     }

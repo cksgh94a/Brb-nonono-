@@ -47,18 +47,10 @@ public class Status extends HttpServlet {
 		statusInfo.put("status", (Boolean) session.getAttribute("status"));	// 서버용
 //		statusInfo.put("email", "cksgh94a@gmail.com");	// 개발용
 //		statusInfo.put("status", true);	// 개발용
-		
+
+		System.out.println("스테이터스 + " + session.getId());
 		
 		PrintWriter out = response.getWriter();
 		out.print(statusInfo.toJSONString());
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		doGet(request, response);
-	}
-
 }
