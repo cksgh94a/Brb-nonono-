@@ -39,7 +39,7 @@ public class Register extends HttpServlet {
 		
 		// 프론트 테스트용
 		System.out.println(request.getParameter("email")+request.getParameter("password"));
-		response.sendRedirect("http://localhost:3000/");
+		response.sendRedirect("/");
 	}
 
 }

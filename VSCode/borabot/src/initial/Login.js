@@ -20,7 +20,7 @@ class Login extends Component {
     
     alert(password);
     
-    fetch('http://45.120.65.65/Login', {method: 'post'})
+    fetch('LogInOut', {method: 'post'})
     .then(res => res.json())
     .then(
         (result) => {
@@ -35,9 +35,9 @@ class Login extends Component {
   render() {
     return (
       <div>
-        <form onSubmit={(e)=>this.handleLogin(e)} onChange={(e=>this.handleChange(e))}>Login<br/>
+        {/* <form onSubmit={(e)=>this.handleLogin(e)} onChange={(e=>this.handleChange(e))}>Login<br/> */}
         {/* <form action="http://localhost:8080/BORABOT/Login" method="POST">Login<br/> */}
-        {/* <form action="Login" method="POST">Login<br/> */}
+        <form action="LogInOut" method="POST">Login<br/>
             <input type="text" placeholder="email" name="email"/><br/>
             <input type="password" placeholder="비밀번호" name="password"/><br/>
             <input type="submit" value="로그인"/>

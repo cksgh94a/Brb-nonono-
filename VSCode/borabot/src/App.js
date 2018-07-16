@@ -11,44 +11,72 @@ import Login from './initial/Login';
 import Register from './initial/Register';
 
 class App extends Component {
-  // constructor(){
-  //   super();
-  //   this.state={
-  //     email:'',
-  //     menu:0
-  //   }
-  // }
+  constructor(){
+    super();
+    this.state={
+      email:'',
+      status:false
+    }
+  }
+  
+  componentDidMount() {
+    // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ            
+    // fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
+    fetch('Status'              // 서버용
+    , {credentials: 'include'} // 서버용 
+    )
+    .then(res => res.json())
+    .then(
+      (result) => {
+          this.setState({
+            email: result.email,
+            status: result.status
+          })
+      }
+    )
+
+  }
+
   render() {
-    // if(this.state.menu==0){
-    //   return <div><Header/><Main/></div>
-    // }
-    // else if(this.state.menu==1){
-    //   return <div><Header/><Register/></div>
-    // }
-    // else if(this.state.menu==2){
-    //   return <div><Header/><Login/></div>
-    // }
-    // else {
-    //   return <div><Header/>??</div>
-    // }
-    return (
-      <div>
-        <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-          <div>
-            <Header/>
-            <Switch>
-              <Route path="/main" component={Main}/>
-              <Route path="/profile" component={Profile}/>
-              <Route path="/backtesting" component={BackTesting}/>
-              <Route path="/board" component={Board}/>
-              <Route path="/login" component={Login}/>
-              <Route path="/register" component={Register}/>
-              <Route path="/" component={Initial}/>
-            </Switch>
-          </div>
-        </BrowserRouter>
-      </div>
-    );
+    console.log(this.state.email);
+    console.log(this.state.status);
+    if(this.state.status){
+      return (
+        <div>
+          <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+            <div>
+              <Header/>
+              <Switch>
+                <Route path="/main" component={Main}/>
+                <Route path="/profile" component={Profile}/>
+                <Route path="/backtesting" component={BackTesting}/>
+                <Route path="/board" component={Board}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/register" component={Register}/>
+                <Route path="/" component={Initial}/>
+              </Switch>
+            </div>
+          </BrowserRouter>
+        </div>
+      );
+    }
+    
+    else{
+      return (
+        <div>
+          <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+            <div>
+              <Header/>
+              <Switch>
+                <Route path="/login" component={Login}/>
+                <Route path="/register" component={Register}/>
+                <Route path="/" component={Initial}/>
+              </Switch>
+            </div>
+          </BrowserRouter>
+        </div>
+      );
+    }
   }
 }
 

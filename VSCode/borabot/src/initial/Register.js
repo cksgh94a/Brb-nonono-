@@ -48,7 +48,7 @@ class Register extends Component {
   render() {
     return (
       <div>
-        <form action="http://localhost:8080/BORABOT/Register" method="POST">회원가입<br/> 
+        <form action="Register" method="POST">회원가입<br/> 
             <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
             <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)} value={this.state.password}/><br/>
             <input disabled={this.state.isVal} type="submit" value="회원가입" onClick={this.handleRegister}/>

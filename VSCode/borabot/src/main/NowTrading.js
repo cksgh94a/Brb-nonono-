@@ -13,9 +13,9 @@ class NowTrading extends Component {
     }
     componentDidMount() {
         // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ            
-        fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
-        // fetch('NowTrading'              // 서버용
-        // , {credentials: 'include'} // 서버용 
+        // fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
+        fetch('NowTrading'              // 서버용
+        , {credentials: 'include'} // 서버용 
         )
         .then(res => res.json())
         .then(

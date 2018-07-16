@@ -78,7 +78,7 @@ public class TradeMain extends HttpServlet {
     		DB.clean();		
         }
 
-		response.sendRedirect("/BORABOT");
+		response.sendRedirect("/");
 	}
 
 	/**

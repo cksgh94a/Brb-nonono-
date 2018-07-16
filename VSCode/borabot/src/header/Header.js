@@ -3,14 +3,19 @@ import { Link } from 'react-router-dom';
 
 class Header extends Component {
 
+  HandleLogOut = () => {
+    fetch('LogInOut', {method: 'get'}).then()
+  }
+
   render() {
     return (
         <div>
-          <Link to="/main">Borabot</Link>
-          <Link to="/board">Board</Link>
-          <Link to="/backtesting">BackTesting</Link>
-          <Link to="/profile">Profile</Link>
-          <Link to="/">Init</Link>
+          <Link to="/main">Borabot</Link>============
+          <Link to="/board">Board</Link>============
+          <Link to="/backtesting">BackTesting</Link>============
+          <Link to="/profile">Profile</Link>============
+          <Link to="/">Init</Link>========================
+          <button onClick={this.HandleLogOut}>로그아웃</button>
         </div>
     );
   }

@@ -41,7 +41,7 @@ public class NowTrading extends HttpServlet {
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-	    // cors 해결?? 아닌듯
+	    // cors 해결?? 아닌듯 (서버 올리면 불필요일듯)
 //	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
 //        response.setHeader("Access-Control-Max-Age", "3600");
 //        response.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
