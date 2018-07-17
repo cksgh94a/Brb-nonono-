@@ -40,21 +40,10 @@ public class NowTrading extends HttpServlet {
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
-	    
-	    // cors 해결?? 아닌듯 (서버 올리면 불필요일듯)
-//	    response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
-//        response.setHeader("Access-Control-Max-Age", "3600");
-//        response.setHeader("Access-Control-Allow-Headers", "origin, content-type, accept, x-requested-with");
-//        response.setHeader("Access-Control-Allow-Origin", "*");
-		
         HttpSession session = request.getSession();
 
     	ArrayList<ElementTrading> nT = new ArrayList<ElementTrading>();
     	nT.clear();
-    	
-    	//테스트용 트레이딩 정보
-//    	nT.add(new TradingElement("s", "s", "s", 1.1, "s", new Date(), new Date(), 1.1));
-//    	nT.add(new TradingElement("s", "s", "s", 2.2, "s", new Date(), new Date(), 2.2));
     	
     	// DB에서 현재 거래 정보 가져옴
     	String email = (String) session.getAttribute("email");
@@ -66,7 +55,7 @@ public class NowTrading extends HttpServlet {
 			while(rs.next()) {
 				if (rs.getBoolean("status")) {
 					ElementTrading tE = new ElementTrading(
-						rs.getString("bot_name")+email,
+						rs.getString("bot_name"),
 						rs.getString("coin"),
 						rs.getString("exchange_name"),
 						rs.getDouble("start_asset"),

@@ -33,7 +33,7 @@ class NowTrading extends Component {
                 <button onClick={this.reload}>새로고침</button>
                 <div className = "NowTrading-elementList">
                     {this.state.listE.map((nt, i) => {
-                        return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 
+                        return (<TradingElement name = {nt.name} endDate = {nt.endDate} 
                             coin = {nt.coin} exchange = {nt.exchange}
                             profit = {nt.profit} strategy = {nt.strategy} key = {i}
                                     />);

@@ -7,52 +7,6 @@ const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
 
 class Sales extends Component {
-  constructor(props) {
-    super(props);
-    this.state={
-      status:true,
-      botname:'',
-      coin:'',
-      exchange:'',
-      asset:'',
-      strategy:'',
-      period:'',
-    }
-  }
-
-  handleChange = (e) => {  
-    if(e.target.name === "botname"){
-      this.setState({
-        botname: e.target.value
-      })
-    }
-    else if(e.target.name === "coin"){
-      this.setState({
-        coin: e.target.value
-      })
-    }
-    else if(e.target.name === "exchange"){
-      this.setState({
-        exchange: e.target.value
-      })
-    }
-    else if(e.target.name === "asset"){
-      this.setState({
-        asset: e.target.value
-      })
-    }
-    else if(e.target.name === "strategy"){
-      this.setState({
-        strategy: e.target.value
-      })
-    }
-    else if(e.target.name === "period"){
-      this.setState({
-        period: e.target.value
-      })
-    }
-  }  
-
   handleStartbtn = () => {
     // var sName = document.getElementById("SL_nameInputbox").value;
     // var sPrice = document.getElementById("SL_priceInputbox").value;
@@ -81,19 +35,25 @@ class Sales extends Component {
     // 웹소켓으로 textMessage객체의 값을 보낸다.
     // mainHandle.send(JSON.stringify(jsonStart));
 
-    let alertMsg = this.state.botname + '\n' + this.state.exchange + '\n' + this.state.strategy + '\n' + this.state.asset + '\n' + this.state.period +  '\n이 맞습니까?';
+    let alertMsg = document.getElementById('botname').value + '\n' + 
+    document.getElementById('coin').value + '\n' + 
+    document.getElementById('exchange').value + '\n' + 
+    document.getElementById('asset').value + '\n' + 
+    document.getElementById('strategy').value + '\n' + 
+    document.getElementById('period').value + '\n' + 
+     +  '\n이 맞습니까?';
 
     alert(alertMsg);
 
     axios.post( 
       'TradeMain', 
       'status='+true+
-      '&botname='+this.state.botname+
-      '&coin='+this.state.coin+
-      '&exchange='+this.state.exchange+
-      '&asset='+this.state.asset+
-      '&strategy='+this.state.status+
-      '&period='+this.state.period,
+      '&botname='+document.getElementById('botname').value+
+      '&coin='+document.getElementById('coin').value+
+      '&exchange='+document.getElementById('exchange').value+
+      '&asset='+document.getElementById('asset').value+
+      '&strategy='+document.getElementById('strategy').value+
+      '&period='+document.getElementById('period').value,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
   }
@@ -102,26 +62,26 @@ class Sales extends Component {
     return (
       <div>        
         <h4 className="Sales-color">Sales configuration</h4>
-        <input className="Sales-input" placeholder="이름" name="botname" onChange={(e)=>this.handleChange(e)}/><br/>
-        <select className="Sales-box" size='1' name="coin" onChange={(e)=>this.handleChange(e)}>
+        <input className="Sales-input" placeholder="이름" id="botname"/><br/>
+        <select className="Sales-box" size='1' id="coin">
           {coinList.map((coin, i) => {
-            return (<option key={i}> {coin} </option>)
+            return (<option key={i} value={coin}> {coin} </option>)
           })}
         </select><br/>
-        <select className="Sales-box" size='1' name="exchange" onChange={(e)=>this.handleChange(e)}>
+        <select className="Sales-box" size='1' id="exchange">
           {exchangeList.map((exchange, i) => {
-            return (<option key={i}> {exchange} </option>)
+            return (<option key={i} value={exchange}> {exchange} </option>)
           })
           }
         </select><br/>
-        <select className="Sales-box" size='1' name="strategy" onChange={(e)=>this.handleChange(e)}>
+        <select className="Sales-box" size='1' id="strategy">
           <option>bollingerPatternNaked</option>
           <option>Bollingertrade</option>
           <option>trendFollowing</option>
           <option>patterNakedTrade</option>
         </select><br/>
-        <input className="Sales-input" placeholder="금액 (원)" name="asset" onChange={(e)=>this.handleChange(e)}/><br/>
-        <input className="Sales-input" placeholder="거래 기간 (일)" name="period" onChange={(e)=>this.handleChange(e)}/><br/>
+        <input className="Sales-input" placeholder="금액 (원)" id="asset"/><br/>
+        <input className="Sales-input" placeholder="거래 기간 (일)" id="period"/><br/>
         <button onClick={this.handleStartbtn}>거래 시작</button>
       </div>
     );

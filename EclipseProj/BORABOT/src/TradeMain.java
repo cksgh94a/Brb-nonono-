@@ -52,7 +52,7 @@ public class TradeMain extends HttpServlet {
 		
 		
 
-        if (tInfo.getStatus() == true) {	// 거래 시작 (DB에 거래 정보 입력)
+        if (tInfo.getStatus()) {	// 거래 시작 (DB에 거래 정보 입력)
             tInfo.insertDB();
             TradeBot trade = new TradeBot(tInfo);
             trade.main();

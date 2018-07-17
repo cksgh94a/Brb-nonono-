@@ -16,7 +16,7 @@ class App extends Component {
     super();
     this.state={
       email:'',
-      status:false
+      status:true
     }
   }
   
@@ -31,7 +31,7 @@ class App extends Component {
     .catch( response => { console.log('err\n'+response); } ); // ERROR
     
     if(this.state.status){
-      window.location = "/main";
+      // window.location = "/main";
     }
   }
 
