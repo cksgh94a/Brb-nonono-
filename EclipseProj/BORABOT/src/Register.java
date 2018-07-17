@@ -34,12 +34,9 @@ public class Register extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 	    // 회원가입 정보 DB에 저장
 		ElementCustomer aInfo = new ElementCustomer(request.getParameter("email"), request.getParameter("password"));
-//        aInfo.insertDB();
+        aInfo.insertDB();
 
         System.out.println(request.getSession().getId());
-        System.out.println(request.getParameter("email")+request.getParameter("password"));
-		// 회원가입 버튼 후 화면 지정
-//		response.sendRedirect("/");	
+        System.out.println(request.getParameter("email")+request.getParameter("password"));	
 	}
-
 }

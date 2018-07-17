@@ -43,11 +43,14 @@ class Register extends Component {
   
 
   handleRegister = (e) => {
+
     axios.post( 
       'Register', 
       'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
       { 'Content-Type': 'application/x-www-form-urlencoded' }
      )
+     
+     window.location = "/";
   }
 
   render() {

@@ -46,17 +46,7 @@ class Login extends Component {
       'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
       { 'Content-Type': 'application/x-www-form-urlencoded' }
      )
-    
-    // fetch('Login', {method: 'post'})
-    // .then(res => res.json())
-    // .then(
-    //     (result) => {
-    //         this.setState({
-    //             listE: result
-    //         })
-    //     }
-    // )
-
+     window.location = "/main";
   }
 
   render() {

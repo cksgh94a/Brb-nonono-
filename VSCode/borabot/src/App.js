@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import axios from 'axios';
 
 import Header from './header/Header';
 import Initial from './initial/Initial';
@@ -23,19 +24,19 @@ class App extends Component {
     // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ            
     // fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
     
-    // fetch('Status'              // 서버용
-    // , {credentials: 'include'} // 서버용 
-    // )
-    // .then(res => res.json())
-    // .then(
-    //   (result) => {
-    //       this.setState({
-    //         email: result.email,
-    //         status: result.status
-    //       })
-    //   }
-    // )
-
+    axios.get('Status')
+    .then(res => res.json())
+    .then(
+      (result) => {
+        console.log(result)
+          // this.setState({
+          //   email: result.email,
+          //   status: result.status
+          // })
+      }
+    )
+    
+    // window.location = "/main";
   }
 
   render() {
