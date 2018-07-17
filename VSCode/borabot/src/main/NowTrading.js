@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import axios from 'axios';
+
 import './NowTrading.css';
 import TradingElement from './TradingElement';
-
 
 class NowTrading extends Component {
     constructor(props) {
@@ -12,19 +13,14 @@ class NowTrading extends Component {
         };
     }
     componentDidMount() {
-        // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ            
-        // fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
-        fetch('NowTrading'              // 서버용
-        , {credentials: 'include'} // 서버용 
-        )
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    listE: result
-                })
-            }
-        )
+        
+        axios.get('NowTrading')
+        .then( response => {
+        this.setState({
+            listE: response.data
+            })
+        }) 
+        .catch( response => { console.log('err\n'+response); } ); // ERROR
     }
 
     reload = () => {
@@ -34,7 +30,7 @@ class NowTrading extends Component {
     render() {
         return(
             <div >
-                {/* <input onClick={this.reload}>새로고침</input> */}
+                <button onClick={this.reload}>새로고침</button>
                 <div className = "NowTrading-elementList">
                     {this.state.listE.map((nt, i) => {
                         return (<TradingElement id = {this.props.id} name = {nt.name} endDate = {nt.endDate} 

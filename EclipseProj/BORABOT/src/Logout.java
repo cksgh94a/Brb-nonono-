@@ -33,7 +33,6 @@ public class Logout extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 	    
 		HttpSession session = request.getSession();		
-		System.out.println("로그아웃 + " + session.getId());
 		
 		session.invalidate();
 		response.sendRedirect("/");						

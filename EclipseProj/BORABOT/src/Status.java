@@ -45,9 +45,7 @@ public class Status extends HttpServlet {
 		JSONObject statusInfo = new JSONObject();
 		statusInfo.put("email", (String) session.getAttribute("email"));	
 		statusInfo.put("status", (Boolean) session.getAttribute("status"));	
-		
-		System.out.println("스테이터스 : " + (String) session.getAttribute("email")+" "+(Boolean) session.getAttribute("status"));
-		
+				
 		PrintWriter out = response.getWriter();
 		out.print(statusInfo.toJSONString());
 	}

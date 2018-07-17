@@ -20,23 +20,19 @@ class App extends Component {
     }
   }
   
-  componentDidMount() {
-    // 이대로 하면 서버 올렸을 때 origin 같아서 cors 안생김 세션 다른거 상관 ㄴㄴ            
-    // fetch('http://localhost:8080/BORABOT/NowTrading' // vscode용 + 크롬 cors
-    
+  componentDidMount() {    
     axios.get('Status')
-    .then(res => res.json())
-    .then(
-      (result) => {
-        console.log(result)
-          // this.setState({
-          //   email: result.email,
-          //   status: result.status
-          // })
-      }
-    )
+    .then( response => {
+      this.setState({
+        email: response.data.email,
+        status: response.data.status
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
     
-    // window.location = "/main";
+    if(this.state.status){
+      window.location = "/main";
+    }
   }
 
   render() {

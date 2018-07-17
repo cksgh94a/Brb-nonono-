@@ -41,8 +41,6 @@ public class Login extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		System.out.println("로그인 : " + email + " " + password);
-
 	    // DB의 사용자 비밀번호를 받아와서 비교
 		String selectSql = String.format("SELECT password from customer where email=\'%s\'", email);
 				
@@ -63,7 +61,6 @@ public class Login extends HttpServlet {
 		if(password.equals(pwd)) {
 			// 세션에 사용자 정보 저장
 			HttpSession session = request.getSession();
-			System.out.println("로그인 + " + session.getId());
 			session.setAttribute("email", email);	
 			session.setAttribute("status", true);		
 		}

@@ -35,8 +35,5 @@ public class Register extends HttpServlet {
 	    // 회원가입 정보 DB에 저장
 		ElementCustomer aInfo = new ElementCustomer(request.getParameter("email"), request.getParameter("password"));
         aInfo.insertDB();
-
-        System.out.println(request.getSession().getId());
-        System.out.println(request.getParameter("email")+request.getParameter("password"));	
 	}
 }

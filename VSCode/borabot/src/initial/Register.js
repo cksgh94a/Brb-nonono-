@@ -39,8 +39,7 @@ class Register extends Component {
         isVal: false
       })
     }
-  }
-  
+  }  
 
   handleRegister = (e) => {
 
