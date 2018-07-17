@@ -43,44 +43,6 @@ public class DB {
 		System.out.println(API_KEY + " && " + Secret_KEY);
 	}
 	
-//	// DB Query 함수
-//	static private Connection con = null;
-//	static private Statement stmt = null;
-//	static private ResultSet rs = null; //ResultSet 객체 선언
-//
-//	static public ResultSet Query(String Sql, String INSSEL) {
-//		
-//		// 드라이버 로드
-//	    try {	
-//	        Class.forName("com.mysql.cj.jdbc.Driver");
-//	
-//	    } catch (ClassNotFoundException e) {
-//	       System.out.println(e.getMessage());
-//	    }
-//		
-//	    try {	
-//	    	// DB 접속
-//	    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
-//	        con = DriverManager.getConnection(url,"root","1111");	
-//	
-//	        stmt = con.createStatement();
-//	        
-//	        // INSERT문
-//	        if (INSSEL == "insert") {
-//				stmt.executeUpdate(Sql);
-//	        }
-//	        // SELECT문
-//	        else if (INSSEL == "select"){
-//				rs = stmt.executeQuery(Sql);	        	
-//	        } else { System.out.println("데이터베이스 구문 오류!"); }
-//
-//	        	        
-//	    } catch (SQLException se) {
-//            se.printStackTrace();
-//        } 
-//        return rs;	
-//	}
-	
 	// DB Query 함수
 	static private Connection con = null;
 	static private Statement stmt = null;
@@ -91,31 +53,30 @@ public class DB {
 		// 드라이버 로드
 	    try {	
 	        Class.forName("com.mysql.cj.jdbc.Driver");
-
-		    try {	
-		    	// DB 접속
-		    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
-		        con = DriverManager.getConnection(url,"root","1111");	
-		
-		        stmt = con.createStatement();
-		        
-		        // INSERT문
-		        if (INSSEL == "insert") {
-					stmt.executeUpdate(Sql);
-		        }
-		        // SELECT문
-		        else if (INSSEL == "select"){
-					rs = stmt.executeQuery(Sql);	        	
-		        } else { System.out.println("데이터베이스 구문 오류!"); }
-
-		        	        
-		    } catch (SQLException se) {
-	            se.printStackTrace();
-	        } 
 	    } catch (ClassNotFoundException e) {
-	       System.out.println(e.getMessage());
+	    	System.out.println(e.getMessage()+"드라이버 로드 실패");	    
 	    }
 		
+	    try {	
+	    	// DB 접속
+	    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
+	        con = DriverManager.getConnection(url,"root","1111");	
+	
+	        stmt = con.createStatement();
+	        
+	        // INSERT문
+	        if (INSSEL == "insert") {
+				stmt.executeUpdate(Sql);
+	        }
+	        // SELECT문
+	        else if (INSSEL == "select"){
+				rs = stmt.executeQuery(Sql);	        	
+	        } else { System.out.println("데이터베이스 구문 오류!"); }
+
+	        	        
+	    } catch (SQLException se) {
+            se.printStackTrace();
+        } 
         return rs;	
 	}
 	

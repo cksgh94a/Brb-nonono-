@@ -77,9 +77,6 @@ public class NowTrading extends HttpServlet {
     	Gson gson = new Gson();
     	String ntJson = gson.toJson(nT);
 		   	
-
-		System.out.println("나트 + " + session.getId());
-
 		PrintWriter out = response.getWriter();
 		out.print(ntJson);
 	}

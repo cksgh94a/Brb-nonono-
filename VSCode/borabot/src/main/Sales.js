@@ -65,12 +65,12 @@ class Sales extends Component {
         <input className="Sales-input" placeholder="이름" id="botname"/><br/>
         <select className="Sales-box" size='1' id="coin">
           {coinList.map((coin, i) => {
-            return (<option key={i} value={coin}> {coin} </option>)
+            return (<option key={i}> {coin} </option>)
           })}
         </select><br/>
         <select className="Sales-box" size='1' id="exchange">
           {exchangeList.map((exchange, i) => {
-            return (<option key={i} value={exchange}> {exchange} </option>)
+            return (<option key={i}> {exchange} </option>)
           })
           }
         </select><br/>
