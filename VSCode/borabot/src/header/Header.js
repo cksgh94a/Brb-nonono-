@@ -16,6 +16,7 @@ class Header extends Component {
           <Link to="/board">Board</Link>============
           <Link to="/backtesting">BackTesting</Link>============
           <Link to="/profile">Profile</Link>============
+          <Link to="/algorithm">Algorithm</Link>============
           <Link to="/">Init</Link>========================
           <button onClick={this.HandleLogOut}>로그아웃</button>
         </div>

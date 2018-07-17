@@ -79,22 +79,22 @@ class Profile extends Component {
 
   render() {
     return (
-        <div>
+      <div>
         <h4>개인 정보</h4>
         <input placeholder="이름" id="name"/><br/>
         <input placeholder="전화번호" id="phoneNumber"/><br/>
         <button onClick={this.handlePersonal}>수정</button>
         <h4>거래소 정보</h4>
         <select id="exchange">
-          <option>빗썸</option>
-          <option>코인원</option>
-          <option>비트렉스</option>
-          <option>바이낸스</option>
+          <option>bitthumb</option>
+          <option>bittrex</option>
+          <option>coinone</option>
+          <option>binance</option>
         </select><br/>
         <input placeholder="API Key" id="APIKEY"/><br/>
         <input placeholder="Secret Key" id="secretKEY"/><br/>
         <button onClick={this.handleExchage}>수정</button>
-        </div>
+      </div>
     );
   }
 }

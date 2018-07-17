@@ -36,12 +36,12 @@ class Sales extends Component {
     // mainHandle.send(JSON.stringify(jsonStart));
 
     let alertMsg = document.getElementById('botname').value + '\n' + 
-    document.getElementById('coin').value + '\n' + 
-    document.getElementById('exchange').value + '\n' + 
-    document.getElementById('asset').value + '\n' + 
-    document.getElementById('strategy').value + '\n' + 
-    document.getElementById('period').value + '\n' + 
-     +  '\n이 맞습니까?';
+      document.getElementById('coin').value + '\n' + 
+      document.getElementById('exchange').value + '\n' + 
+      document.getElementById('asset').value + '\n' + 
+      document.getElementById('strategy').value + '\n' + 
+      document.getElementById('period').value + '\n' + 
+       +  '\n이 맞습니까?';
 
     alert(alertMsg);
 
