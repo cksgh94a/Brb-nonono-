@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 
 class Header extends Component {
 
   HandleLogOut = () => {
-    fetch('Logout'              // 서버용
-    , {credentials: 'include'} // 서버용 
-    ) 
+    axios.get( 'Logout' )
+
+    // fetch('Logout'              // 서버용
+    // , {credentials: 'include'} // 서버용 
+    // ) 
 
     window.location = "/";
   }

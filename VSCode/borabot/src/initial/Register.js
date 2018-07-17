@@ -40,59 +40,19 @@ class Register extends Component {
       })
     }
   }
+  
 
   handleRegister = (e) => {
-    this.setState({
-      password: encrypt(this.state.password, key)
-    })
-
-    var param = 'email=this.state.password&password=dsfwe';
-    axios({
-          method: 'post',
-          url: 'Register',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          data: param,
-          email: 'asdf',
-          'email': 'dsgwqetwq'
-        })
-
-    // var bodyFormData = new FormData();
-    // bodyFormData.set('email', 'Fred');
-    // axios({
-    //   method: 'post',
-    //   url: 'Register',
-    //   data: bodyFormData,
-    //   config: { headers: {'Content-Type': 'application/x-www-form-urlencoded' }}
-    //   })
-
-    // axios.post('/Register', {
-    //     'email': this.state.email,
-    //     'password':this.state.email
-    // })
-  
-  
-    // var json = new Object();
-    // json.email = this.state.email;
-    // json.password = this.state.password;
-
-    // fetch('Register', {
-    //   credentials: 'include',
-    //   method: 'post',
-    //   body: JSON.stringify(json)
-    // })
+    axios.post( 
+      'Register', 
+      'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
+      { 'Content-Type': 'application/x-www-form-urlencoded' }
+     )
   }
 
   render() {
     return (
       <div>
-        {/* <form action="Register" method="POST">회원가입<br/> 
-          <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
-          <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)} value={this.state.password}/><br/>
-          <input disabled={this.state.isVal} type="submit" value="회원가입" onClick={this.handleRegister}/>
-        </form> */}
-
           <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
           <input type="password" placeholder="비밀번호" name="password"onChange={(e)=>this.handleChange(e)}/><br/>
           <button disabled={this.state.isVal} onClick={this.handleRegister}>회원가입</button>      
