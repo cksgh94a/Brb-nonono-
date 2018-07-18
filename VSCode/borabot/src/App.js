@@ -10,7 +10,7 @@ import Board from './board/Board';
 import BackTesting from './backTesting/BackTesting';
 import Login from './initial/Login';
 import Register from './initial/Register';
-import Algorithm from './algorithm/Algorithm';
+import Strategy from './strategy/Strategy';
 
 class App extends Component {
   constructor(){
@@ -52,7 +52,7 @@ class App extends Component {
                 <Route path="/board" component={Board}/>
                 <Route path="/login" component={Login}/>
                 <Route path="/register" component={Register}/>
-                <Route path="/algorithm" component={Algorithm}/>
+                <Route path="/strategy" component={Strategy}/>
                 <Route path="/" component={Initial}/>
               </Switch>
             </div>
