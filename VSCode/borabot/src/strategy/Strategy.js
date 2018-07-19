@@ -62,11 +62,6 @@ class Algorithm extends Component {
       this.setState({
         serverStrategyList: response.data
       })
-      // console.log(response.data)
-      // response.data.map((e,i) => {
-      //   console.log(e.name)
-      //   console.log(e.data)
-      // })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
@@ -156,7 +151,7 @@ class Algorithm extends Component {
 
     if(this.state.savedCnt === 0) {
       this.setState({
-        buttonVal: true,
+        buttonVal: false,
         indicatorList: this.state.indicatorList.concat(this.state.selectedIndicator),
         savedCnt: this.state.savedCnt + 1,
         jsonString: '"'+this.state.savedCnt+'":'+JSON.stringify(this.state.selectedIndicator)
@@ -173,25 +168,43 @@ class Algorithm extends Component {
   }
 
   handleLoad = (e) => {
-    this.setState({
-      buttonVal: true,
-    })
-    this.state.serverStrategyList.map((s, i) => {
-      if(e.target.value === s.name) {
-        this.setState({
-          selectedStrategy: JSON.parse(s.data)
-        })
-        console.log(this.state.selectedStrategy.indicatorList)
-        
-        console.log(this.state.jsonString)
-      }
-    })
+    // 새로 만들기 선택하면 기존에 만든 것 초기화
+    if(e.target.value === '새로 만들기'){
+      this.setState({
+        name: '',
+        selectedIndicator: RSI, // 설정된 지표
+        defaultIndicator: defaultRSI, // 설정된 지표의 기본값
+        calculate: 'or', // 연산 방법
+        buyC:0, // 구매 기준
+        sellC:0,  // 판매 기준
+  
+        indicatorList: [],  // 설정된 지표 리스트
+        expList: [],  // 지표 연산 방법 리스트
+        savedCnt: 0,  // 설정된 지표 개수
+        jsonString:'', // 서버에 보내기 위한 json
+        buttonVal: false
+      })
+    } else{
+      this.setState({
+        buttonVal: true
+      })
+      this.state.serverStrategyList.map((s, i) => {
+        if(e.target.value === s.name) {
+          this.setState({
+            selectedStrategy: JSON.parse(s.data)
+          })
+          console.log(this.state.selectedStrategy.indicatorList)
+          
+          console.log(this.state.jsonString)
+        }
+      })
+    }
   }
   
   handleComplete = () => {
-
     var send = '{"indicatorList":{'+this.state.jsonString+'},"buyCriteria":'+this.state.buyC+',"sellCriteria":'+this.state.sellC+',"expList":"'+this.state.expList+'"}'
 
+    // DB에 새로운 전략 저장
     axios.post(
       'Strategy', 
       'name='+this.state.name+'&data='+send, 
@@ -204,6 +217,7 @@ class Algorithm extends Component {
       <div>
         <h4>불러오기</h4>
         <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)}>
+          <option>새로 만들기</option>
           {
             this.state.serverStrategyList.map((e, i) => {
             return (<option key={i}> {e.name} </option>)
@@ -255,7 +269,7 @@ class Algorithm extends Component {
         <button disabled={this.state.buttonVal} onClick={this.handleSave}>저장</button>
 
         <h4>저장된 항목</h4>
-        {this.state.buttonVal === true ? 
+        {this.state.buttonVal === false ? 
           (Object.keys(JSON.parse('{'+this.state.jsonString+'}')).map((idc, i) => {
             return (<div key={i}>
               <b>{JSON.parse('{'+this.state.jsonString+'}')[idc].indicator}</b><br/>

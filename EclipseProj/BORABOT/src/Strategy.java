@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,14 +30,12 @@ public class Strategy extends HttpServlet {
      */
     public Strategy() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
 		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
@@ -60,7 +57,6 @@ public class Strategy extends HttpServlet {
 				jObject.put("data", rs.getString("strategy_content"));
 				jObject.put("name", rs.getString("strategy_name"));
 				jArray.add(jObject);
-				System.out.println(jArray);
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();			
@@ -68,7 +64,7 @@ public class Strategy extends HttpServlet {
 		
 		// 5. DB 사용후 clean()을 이용하여 정리
 		DB.clean();
-		
+
 		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());
 	}
@@ -76,9 +72,7 @@ public class Strategy extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
@@ -89,8 +83,6 @@ public class Strategy extends HttpServlet {
 	    String email = (String) session.getAttribute("email"); 
 		String name = request.getParameter("name");
 		String data = request.getParameter("data");		
-
-		System.out.println(data);
 		
 		String insertSql = String.format("INSERT INTO custom_strategy (email, strategy_name, strategy_content) VALUES('"
 				+email+"', '"+name+"', '"+data+"')");
