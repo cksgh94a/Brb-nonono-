@@ -20,8 +20,8 @@ import java.sql.*;
 public class tradingBot {
 	
 	//From DB
-	private static String API_KEY = "68c761b96fb41cceb9366e145f6b161c";
-	private static String Secret_KEY = "8f0d6ad5a93ca501061e73e18811bf3c";
+	private static String API_KEY = "8615ae2296b94e91a7703364ed223abd";
+	private static String Secret_KEY = "33be781743984f57ac4dfe5cc114dfbd";
 	
 	//From frontend
 	private static String exchange;
@@ -91,6 +91,7 @@ public class tradingBot {
 			base = "krw";
 		}
 		
+		System.out.println(coin);
 		//trade DB insert!
 		double initialCoinNum = exAPIobj.getBalance(coin);
 		double initialBalance = exAPIobj.getBalance(base);
@@ -172,6 +173,8 @@ public class tradingBot {
 
 		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
 		String strategySettingJson="";
+		
+		System.out.println(settingSelectSql);
 		try {
 			ResultSet rsTemp = DB.Query(settingSelectSql, "select");
 			if(rsTemp.next()) {
@@ -220,16 +223,16 @@ public class tradingBot {
 				}
 				else if(indicator.equals("gdCross")) {
 					
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 					
 					indicatorCalcer[i] = new gdCross(longd, shortd, mT, crypt, exchange, coin, base, interval);
 				}
 				else if(indicator.equals("gdVCross")) {
 					
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 					
 					indicatorCalcer[i] = new gdVCross(longd, shortd, mT, crypt, exchange, coin, base, interval);
@@ -292,7 +295,7 @@ public class tradingBot {
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName+ " 이 초기 오류로 종료되었습니다.";
 					String subject = "보라봇 " + botName + " 종료 알람";
-					SendMail.sendEmail(email, subject, content);
+//					SendMail.sendEmail(email, subject, content);
 					return;
 				}
 				

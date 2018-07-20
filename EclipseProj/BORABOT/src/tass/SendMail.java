@@ -51,7 +51,7 @@ public class SendMail {
             // 이메일 헤더
             msg.setHeader("content-Type", "text/html");        
             //메일보내기
-            javax.mail.Transport.send(msg);
+//            javax.mail.Transport.send(msg);
              
         }catch (AddressException addr_e) {
             addr_e.printStackTrace();

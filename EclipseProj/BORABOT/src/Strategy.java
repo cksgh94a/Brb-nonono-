@@ -54,6 +54,8 @@ public class Strategy extends HttpServlet {
 		try {
 			while(rs.next()) {
 				JSONObject jObject = new JSONObject();
+//				System.out.println(rs.getString("strategy_content"));
+//				System.out.println(rs.getString("strategy_name"));
 				jObject.put("data", rs.getString("strategy_content"));
 				jObject.put("name", rs.getString("strategy_name"));
 				jArray.add(jObject);

@@ -120,7 +120,7 @@ public class BithumbAPI implements exAPI{
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
-		//System.out.println(result);
+		System.out.println(result);
 		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
 		JsonObject data = ohlc_json.get("data").getAsJsonObject();
 		double balance = data.get("available_krw").getAsDouble();

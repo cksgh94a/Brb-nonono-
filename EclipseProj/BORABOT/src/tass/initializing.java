@@ -27,15 +27,15 @@ public class initializing {
 	
 	// websocket 통신으로 받아오는 부분
 	// 동시에  db저장(INSERT INTO trade VALUES(); )
-	private static String email = "dirtyrobot00@gmail.com";
+	private static String email = "test";
 	private static String botName = "mybo12t";
 	private static String exchange = "bithumb";
 	private static String coin = "ltc";
 	private static String base = "krw";
-	private static String strategyName = "johnbur1";
-	private static int interval = 300;
+	private static String strategyName = "으갸갸갸갸";
+	private static int interval = 1800;
 	private static String startDate = "2018-07-18T00:00:00.000";
-	private static String endDate = "2018-06-19T14:25:00";
+	private static String endDate = "2018-07-22T14:25:00";
 	
 	// 매매량 세팅
 	private static String buySetting = "buyAll";
@@ -54,7 +54,7 @@ public class initializing {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		//new BackTesting(email, exchange, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting,  priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).backTestRun();
+//		new BackTesting(email, exchange, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting, 10000000, priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).backTestRun();
 		new tradingBot(email, exchange, botName, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting,  priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).botStart();
 		
 		
