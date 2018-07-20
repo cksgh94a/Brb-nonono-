@@ -49,13 +49,19 @@ public class BackTesting {
 	private double initialCoin = 0;
 	
 	
-	String returnMessage = "";
-	String returnDetailMessage = "";
+	private String returnMessage = "";
+	private String returnDetailMessage = "";
+	private String returnResult = "";
+	boolean flag = false;
+
+	public String getReturnMsg() { return returnMessage+returnResult; }
+	public String getReturnDetailMsg() { return returnDetailMessage; }
+	public boolean getFlag() { return flag; }
 	
 	//크립토
 	private static CryptowatchAPI crypt = new CryptowatchAPI(20, 60);
 	
-	public BackTesting(String email, String exchange, String coin, String base, int interval, String startDate, String endDate, String strategyName, String buyingSetting, String sellingSetting, double priceBuyUnit, double priceSellUnit, double numBuyUnit, double numSellUnit, int error) {
+	public BackTesting(String email, String exchange, String coin, String base, int interval, String startDate, String endDate, String strategyName, String buyingSetting, String sellingSetting, double nowCash, double priceBuyUnit, double priceSellUnit, double numBuyUnit, double numSellUnit, int error) {
 		
 		// 앞단에서 받아오는 내용
 		this.exchange = exchange;
@@ -75,7 +81,7 @@ public class BackTesting {
 		this.priceSellUnit = priceSellUnit;
 		this.numSellUnit = numSellUnit;
 		
-		this.nowCash = initialCash;
+		this.nowCash = nowCash;
 		this.nowCoin = initialCoin;
 	}
 	
@@ -207,10 +213,10 @@ public class BackTesting {
 				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("period").getAsInt();
 			}
 			else if(indicatorListJs.get(i+"").getAsJsonObject().get("indicator").getAsString().equals("gdCross")) {
-				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("period").getAsInt();
+				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("longD").getAsInt();
 			}
 			else if(indicatorListJs.get(i+"").getAsJsonObject().get("indicator").getAsString().equals("gdVCross")) {
-				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("period").getAsInt();
+				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("longD").getAsInt();
 			}
 			else if(indicatorListJs.get(i+"").getAsJsonObject().get("indicator").getAsString().equals("StochOsc")) {
 				tempPeriod = indicatorListJs.get(i+"").getAsJsonObject().get("n").getAsInt() + indicatorListJs.get(i+"").getAsJsonObject().get("m").getAsInt() + indicatorListJs.get(i+"").getAsJsonObject().get("t").getAsInt() - 2;
@@ -279,19 +285,19 @@ public class BackTesting {
 				}
 				else if(indicator.equals("gdCross")) {
 					
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 					
-					indicatorCalcer[i] = new gdCross_bt(longd, shortd, mT, crypt, exchange, coin, base, interval, hHLCVArr, maxPeriod-longd ,maxPeriod);
+					indicatorCalcer[i] = new gdCross_bt(longd, shortd, mT, crypt, exchange, coin, base, interval, hHLCVArr, maxPeriod-longd+1 ,maxPeriod);
 				}
 				else if(indicator.equals("gdVCross")) {
 					
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 					
-					indicatorCalcer[i] = new gdVCross_bt(longd, shortd, mT, crypt, exchange, coin, base, interval, hHLCVArr, maxPeriod-longd ,maxPeriod);
+					indicatorCalcer[i] = new gdVCross_bt(longd, shortd, mT, crypt, exchange, coin, base, interval, hHLCVArr, maxPeriod-longd+1 ,maxPeriod);
 				}
 				else if(indicator.equals("MFI")) {
 					
@@ -492,7 +498,7 @@ public class BackTesting {
 		double finalAsset = (hHLCVArr[hHLCVArr.length-1][2] * nowCoin + nowCash);
 		double profit = ( (finalAsset - initialCash) / initialCash);
 		
-		String returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit;
+		returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit;
 		System.out.println(returnResult);
 		
 		//System.out.println("---결과---\n" + returnMessage);

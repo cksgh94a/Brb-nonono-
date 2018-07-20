@@ -34,6 +34,8 @@ public class gdCross_bt implements calcIndicator_bt {
 		this.meanType = mT;
 		this.HLCVArr = hArr;
 		this.phArr = IndicatorFunction_bt.toPriceHistory(hArr);
+		this.initialStart = initialStart;
+		this.initialEnd = initialEnd;
 		
 		double[] longTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		double[] shortTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart+(longd-shortd), initialEnd);

@@ -1,12 +1,16 @@
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.json.simple.JSONObject;
 
 import backtest.BackTesting;
 
@@ -37,7 +41,7 @@ public class BackTest extends HttpServlet {
 		
 		System.out.println(request.getParameter("buySetting"));
 		
-		new BackTesting((String) session.getAttribute("email"),
+		BackTesting bt = new BackTesting((String) session.getAttribute("email"),
 				request.getParameter("exchange"),
 				request.getParameter("coin"),
 				request.getParameter("base"),
@@ -47,7 +51,17 @@ public class BackTest extends HttpServlet {
 				request.getParameter("strategyName"),
 				request.getParameter("buyingSetting"),
 				request.getParameter("sellingSetting"),
-				0.0, 0.0, 0.0, 0.0, 0).backTestRun();
+				Double.parseDouble(request.getParameter("nowCash")),				
+				0.0, 0.0, 0.0, 0.0, 0);
+		bt.backTestRun();
+
+		while(bt.getFlag()) {}
+		JSONObject resBT = new JSONObject();
+		resBT.put("ReturnDetailMessage", bt.getReturnDetailMsg());	
+		resBT.put("ReturnMessage", bt.getReturnMsg());	
+
+		PrintWriter out = response.getWriter();
+		out.print(resBT.toJSONString());		
 	}
 
 }

@@ -7,7 +7,7 @@ var CCI = { indicator:'CCI', weight:1, period:20, buyIndex:-100, sellIndex:100 }
 var gdCross = { indicator:'gdCross', weight:1, longD:26, shortD:9, mT:1 }
 var gdVCross = { indicator:'gdVCross', weight:1, longD:26, shortD:9, mT:1}
 var MFI = { indicator:'MFI', weight:1, period:14, buyIndex:0, sellIndex:0 }
-var StochOsc = { indicator:'StochOsc', weight:1, n:0, m:0, t:0 }
+var StochOsc = { indicator:'StochOsc', weight:1, n:15, m:5, t:3 }
 var VolumeRatio = { indicator:'VolumeRatio', weight:1, period:20, buyIndex:70, sellIndex:350 }
 var pCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
 
@@ -18,7 +18,7 @@ var defaultCCI = { indicator:'CCI', weight:1, period:20, buyIndex:-100, sellInde
 var defaultgdCross = { indicator:'gdCross', weight:1, longD:26, shortD:9, mT:1 }
 var defaultgdVCross = { indicator:'gdVCross', weight:1, longD:26, shortD:9, mT:1}
 var defaultMFI = { indicator:'MFI', weight:1, period:14, buyIndex:0, sellIndex:0 }
-var defaultStochOsc = { indicator:'StochOsc', weight:1, n:0, m:0, t:0 }
+var defaultStochOsc = { indicator:'StochOsc', weight:1, n:15, m:5, t:3 }
 var defaultVolumeRatio = { indicator:'VolumeRatio', weight:1, period:20, buyIndex:70, sellIndex:350 }
 var defaultpCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
 
@@ -188,14 +188,11 @@ class Algorithm extends Component {
       this.setState({
         buttonVal: true
       })
-      this.state.serverStrategyList.map((s, i) => {
+      this.state.serverStrategyList.map((s) => {
         if(e.target.value === s.name) {
           this.setState({
             selectedStrategy: JSON.parse(s.data)
           })
-          console.log(this.state.selectedStrategy.indicatorList)
-          
-          console.log(this.state.jsonString)
         }
       })
     }

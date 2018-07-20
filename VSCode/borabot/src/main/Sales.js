@@ -5,43 +5,63 @@ import './Sales.css';
 
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
+const baseList = ["krw", "usd"]
+const intervalList = ["300", "1800", "3600", "21600", "43200", "86400"]
+
+const today = new Date();
+
+const yearList = [today.getFullYear(), today.getFullYear()-1]
+const monthList = []
+const dayList = []
+const hourList = []
+
+for(var i=1;i<=31;i++){
+  if(i<=12) monthList.push(i)
+  dayList.push(i)
+  if(i<=24) hourList.push(i-1)  
+}
 
 class Sales extends Component {
+  constructor(){
+    super();
+    this.state={
+      serverStrategyList:[],
+    }
+  }
+
+  componentDidMount() {
+    axios.get( 'Strategy' )
+    .then( response => {
+      this.setState({
+        serverStrategyList: response.data
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
   handleStartbtn = () => {
-    // var sName = document.getElementById("SL_nameInputbox").value;
-    // var sPrice = document.getElementById("SL_priceInputbox").value;
-    // var sDeadline = document.getElementById("SL_deadlineInputbox").value;
 
-    // let SL_coinSelectbox = document.getElementById("SL_coinSelectbox");
-    // var sCoin = SL_coinSelectbox.options[SL_coinSelectbox.selectedIndex].text;
-
-    // let SL_exchangeSelectbox = document.getElementById("SL_exchangeSelectbox");
-    // var sExchange = SL_exchangeSelectbox.options[SL_exchangeSelectbox.selectedIndex].text;
-
-    // let SL_strategySelectbox = document.getElementById("SL_strategySelectbox");
-    // var sStrategy = SL_strategySelectbox.options[SL_strategySelectbox.selectedIndex].text;
+    var now = new Date();
     
-    // var jsonStart = {
-    //   "id" : this.props.id,
-    //   "name" : document.getElementById("SL_nameInputbox").value,
-    //   "status" : true,
-    //   "coin" : sCoin,
-    //   "exchange" : sExchange,
-    //   "strategy" : sStrategy,
-    //   "price" : sPrice,
-    //   "startDate" : new Date(),
-    //   "period": sDeadline
-    // };
-    // 웹소켓으로 textMessage객체의 값을 보낸다.
-    // mainHandle.send(JSON.stringify(jsonStart));
+    var startDate = now.getFullYear()+'-'+
+    ("0"+(now.getMonth()+1)).slice(-2)+'-'+
+    ("0"+now.getDate()).slice(-2)+'T'+
+    ("0"+now.getHours()).slice(-2)+':00:00.000'
+
+    var endDate = document.getElementById('endYear').value+'-'+
+    ("0"+document.getElementById('endMonth').value).slice(-2)+'-'+
+    ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
+    ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
 
     let alertMsg = document.getElementById('botname').value + '\n' + 
-      document.getElementById('coin').value + '\n' + 
-      document.getElementById('exchange').value + '\n' + 
-      document.getElementById('asset').value + '\n' + 
-      document.getElementById('strategy').value + '\n' + 
-      document.getElementById('period').value + '\n' + 
-       +  '\n이 맞습니까?';
+      document.getElementById('exchange').value + '\n' +
+      document.getElementById('coin').value + '\n' +
+      document.getElementById('base').value + '\n' +
+      document.getElementById('interval').value+ '\n' + 
+      document.getElementById('strategy').value+ '\n' +
+      document.getElementById('buyingSetting').value+ '\n' +
+      document.getElementById('sellingSetting').value+ '\n' +
+      endDate+ '\n' +
+      '\n이 맞습니까?';
 
     alert(alertMsg);
 
@@ -49,11 +69,15 @@ class Sales extends Component {
       'TradeMain', 
       'status='+true+
       '&botname='+document.getElementById('botname').value+
-      '&coin='+document.getElementById('coin').value+
       '&exchange='+document.getElementById('exchange').value+
-      '&asset='+document.getElementById('asset').value+
-      '&strategy='+document.getElementById('strategy').value+
-      '&period='+document.getElementById('period').value,
+      '&coin='+document.getElementById('coin').value+
+      '&base='+document.getElementById('base').value+ 
+      '&interval='+document.getElementById('interval').value+
+      '&strategyName='+document.getElementById('strategy').value+
+      '&buyingSetting='+document.getElementById('buyingSetting').value+
+      '&sellingSetting='+document.getElementById('sellingSetting').value+
+      '&startDate='+startDate+
+      '&endDate='+endDate,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
   }
@@ -62,26 +86,59 @@ class Sales extends Component {
     return (
       <div>        
         <h4 className="Sales-color">Sales configuration</h4>
-        <input className="Sales-input" placeholder="이름" id="botname"/><br/>
-        <select className="Sales-box" size='1' id="coin">
-          {coinList.map((coin, i) => {
-            return (<option key={i}> {coin} </option>)
-          })}
-        </select><br/>
-        <select className="Sales-box" size='1' id="exchange">
+        <input placeholder="이름" id="botname"/><br/>
+        거래소 : <select id="exchange">
           {exchangeList.map((exchange, i) => {
             return (<option key={i}> {exchange} </option>)
           })
           }
         </select><br/>
-        <select className="Sales-box" size='1' id="strategy">
-          <option>bollingerPatternNaked</option>
-          <option>Bollingertrade</option>
-          <option>trendFollowing</option>
-          <option>patterNakedTrade</option>
+        코인 : <select id="coin">
+          {coinList.map((coin, i) => {
+            return (<option key={i}> {coin} </option>)
+          })}
         </select><br/>
-        <input className="Sales-input" placeholder="금액 (원)" id="asset"/><br/>
-        <input className="Sales-input" placeholder="거래 기간 (일)" id="period"/><br/>
+        기축통화 : <select id="base">
+          {baseList.map((base, i) => {
+            return (<option key={i}> {base} </option>)
+          })}
+        </select><br/>
+        거래 간격 : <select id="interval">
+          {intervalList.map((int, i) => {
+            return (<option key={i}> {int} </option>)
+          })}
+        </select><br/>
+        전략 : <select id="strategy">
+          {this.state.serverStrategyList.map((s, i) => {
+            return (<option key={i}> {s.name} </option>)
+          })}
+        </select><br/>        
+        구매 설정 : <select id="buyingSetting">
+            <option key={i}> buyAll </option>
+        </select><br/>
+        판매 설정 : <select id="sellingSetting">
+            <option key={i}> sellAll </option>
+        </select><br/>
+        종료일 : <select id="endYear">
+          {yearList.map((e, i) => {
+            return (<option key={i} selected={e === today.getFullYear()}> {e} </option>)
+          })}
+        </select>년
+        <select id="endMonth">
+          {monthList.map((e, i) => {
+            return (<option key={i} selected={e === today.getMonth()+1}> {e} </option>)
+          })}
+        </select>월
+        <select id="endDay">
+          {dayList.map((e, i) => {        
+            return (<option key={i} selected={e === today.getDate()}> {e} </option>)    
+          })}
+        </select>일
+        <select id="endHour">
+          {hourList.map((e, i) => {
+            return (<option key={i} selected={e === today.getHours()}> {e} </option>)
+          })}
+        </select>시<br/>
         <button onClick={this.handleStartbtn}>거래 시작</button>
       </div>
     );

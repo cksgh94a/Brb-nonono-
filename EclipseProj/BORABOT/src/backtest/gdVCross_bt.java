@@ -34,6 +34,8 @@ public class gdVCross_bt implements calcIndicator_bt {
 		this.meanType = mT;
 		this.HLCVArr = hArr;
 		this.phArr = IndicatorFunction_bt.toVolumeHistory(hArr);
+		this.initialEnd = initialEnd;
+		this.initialStart = initialStart;
 		
 		double[] longTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		double[] shortTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart+(longd-shortd), initialEnd);
