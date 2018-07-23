@@ -1,7 +1,7 @@
 package backtest;
 
 import exchangeAPI.CryptowatchAPI;
-import tass.DB;
+import servlet.DB;
 import Indicator.*;
 
 import java.sql.ResultSet;
@@ -170,12 +170,14 @@ public class BackTesting {
 		// String strategySettingJson = rs.get(1);
 		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
 		String strategySettingJson="";
+		
+		DB useDB = new DB();
 		try {
-			ResultSet rsTemp = DB.Query(settingSelectSql, "select");
+			ResultSet rsTemp = useDB.Query(settingSelectSql, "select");
 			if(rsTemp.next()) {
 				strategySettingJson = rsTemp.getString(1);
 			}
-			DB.clean();
+			useDB.clean();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}

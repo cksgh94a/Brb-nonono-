@@ -2,6 +2,7 @@ package tass;
 
 
 import exchangeAPI.*;
+import servlet.DB;
 import Indicator.*;
 
 import java.time.LocalDate;
@@ -118,77 +119,79 @@ public class tradingBot {
 		useDB.Query(initialTradeSql, "insert");
 		
 		//테스트를 위해 만든 JSON객체
-		Gson gson = new Gson();
-		
-		JsonObject indicators = new JsonObject();
-		
-		JsonObject indicatorSetting = new JsonObject();
-		indicatorSetting.addProperty("indicator", "BollingerBand");
-		indicatorSetting.addProperty("weight", 1);
-		indicatorSetting.addProperty("period", 12);
-		indicatorSetting.addProperty("mul", 3);
-		indicators.add("0", gson.toJsonTree(indicatorSetting));
-		
-		JsonObject indicatorSetting1 = new JsonObject();
-		indicatorSetting1.addProperty("indicator", "CCI");
-		indicatorSetting1.addProperty("weight", 1);
-		indicatorSetting1.addProperty("period", "20");
-		indicatorSetting1.addProperty("buyIndex", "70");
-		indicatorSetting1.addProperty("sellIndex", "30");
-		indicators.add("1", gson.toJsonTree(indicatorSetting1));
-		
-		JsonObject indicatorSetting2 = new JsonObject();
-		indicatorSetting2.addProperty("indicator", "RSI");
-		indicatorSetting2.addProperty("weight", 1);
-		indicatorSetting2.addProperty("period", "20");
-		indicatorSetting2.addProperty("buyIndex", "70");
-		indicatorSetting2.addProperty("sellIndex", "30");
-		indicators.add("2", gson.toJsonTree(indicatorSetting2));
-		
-		JsonObject indicatorSetting3 = new JsonObject();
-		indicatorSetting3.addProperty("indicator", "StochOsc");
-		indicatorSetting3.addProperty("weight", 1);
-		indicatorSetting3.addProperty("period", "20");
-		indicatorSetting3.addProperty("n", "15");
-		indicatorSetting3.addProperty("m", "5");
-		indicatorSetting3.addProperty("t", "3");
-		indicators.add("3", gson.toJsonTree(indicatorSetting3));
-		
-		JsonObject indicatorSetting4 = new JsonObject();
-		indicatorSetting4.addProperty("indicator", "CCI");
-		indicatorSetting4.addProperty("weight", 1);
-		indicatorSetting4.addProperty("period", "20");
-		indicatorSetting4.addProperty("buyIndex", "70");
-		indicatorSetting4.addProperty("sellIndex", "30");
-		indicators.add("4", gson.toJsonTree(indicatorSetting4));
-		
-		JsonObject indicatorSetting5 = new JsonObject();
-		indicatorSetting5.addProperty("indicator", "CCI");
-		indicatorSetting5.addProperty("weight", 1);
-		indicatorSetting5.addProperty("period", "20");
-		indicatorSetting5.addProperty("buyIndex", "70");
-		indicatorSetting5.addProperty("sellIndex", "30");
-		indicators.add("5", gson.toJsonTree(indicatorSetting5));
-		
-		JsonObject indicatorSetting6 = new JsonObject();
-		indicatorSetting6.addProperty("indicator", "CCI");
-		indicatorSetting6.addProperty("weight", 1);
-		indicatorSetting6.addProperty("period", "20");
-		indicatorSetting6.addProperty("buyIndex", "70");
-		indicatorSetting6.addProperty("sellIndex", "30");
-		indicators.add("6", gson.toJsonTree(indicatorSetting6));
-		
-		JsonObject jsobj = new JsonObject();
-		jsobj.add("indicatorList", gson.toJsonTree(indicators));
-		jsobj.addProperty("buyCriteria", 1);
-		jsobj.addProperty("sellCriteria", -1);
-		jsobj.addProperty("expList", "and,or,and,or,or,or");
+//		Gson gson = new Gson();
+//		
+//		JsonObject indicators = new JsonObject();
+//		
+//		JsonObject indicatorSetting = new JsonObject();
+//		indicatorSetting.addProperty("indicator", "BollingerBand");
+//		indicatorSetting.addProperty("weight", 1);
+//		indicatorSetting.addProperty("period", 12);
+//		indicatorSetting.addProperty("mul", 3);
+//		indicators.add("0", gson.toJsonTree(indicatorSetting));
+//		
+//		JsonObject indicatorSetting1 = new JsonObject();
+//		indicatorSetting1.addProperty("indicator", "CCI");
+//		indicatorSetting1.addProperty("weight", 1);
+//		indicatorSetting1.addProperty("period", "20");
+//		indicatorSetting1.addProperty("buyIndex", "70");
+//		indicatorSetting1.addProperty("sellIndex", "30");
+//		indicators.add("1", gson.toJsonTree(indicatorSetting1));
+//		
+//		JsonObject indicatorSetting2 = new JsonObject();
+//		indicatorSetting2.addProperty("indicator", "RSI");
+//		indicatorSetting2.addProperty("weight", 1);
+//		indicatorSetting2.addProperty("period", "20");
+//		indicatorSetting2.addProperty("buyIndex", "70");
+//		indicatorSetting2.addProperty("sellIndex", "30");
+//		indicators.add("2", gson.toJsonTree(indicatorSetting2));
+//		
+//		JsonObject indicatorSetting3 = new JsonObject();
+//		indicatorSetting3.addProperty("indicator", "StochOsc");
+//		indicatorSetting3.addProperty("weight", 1);
+//		indicatorSetting3.addProperty("period", "20");
+//		indicatorSetting3.addProperty("n", "15");
+//		indicatorSetting3.addProperty("m", "5");
+//		indicatorSetting3.addProperty("t", "3");
+//		indicators.add("3", gson.toJsonTree(indicatorSetting3));
+//		
+//		JsonObject indicatorSetting4 = new JsonObject();
+//		indicatorSetting4.addProperty("indicator", "CCI");
+//		indicatorSetting4.addProperty("weight", 1);
+//		indicatorSetting4.addProperty("period", "20");
+//		indicatorSetting4.addProperty("buyIndex", "70");
+//		indicatorSetting4.addProperty("sellIndex", "30");
+//		indicators.add("4", gson.toJsonTree(indicatorSetting4));
+//		
+//		JsonObject indicatorSetting5 = new JsonObject();
+//		indicatorSetting5.addProperty("indicator", "CCI");
+//		indicatorSetting5.addProperty("weight", 1);
+//		indicatorSetting5.addProperty("period", "20");
+//		indicatorSetting5.addProperty("buyIndex", "70");
+//		indicatorSetting5.addProperty("sellIndex", "30");
+//		indicators.add("5", gson.toJsonTree(indicatorSetting5));
+//		
+//		JsonObject indicatorSetting6 = new JsonObject();
+//		indicatorSetting6.addProperty("indicator", "CCI");
+//		indicatorSetting6.addProperty("weight", 1);
+//		indicatorSetting6.addProperty("period", "20");
+//		indicatorSetting6.addProperty("buyIndex", "70");
+//		indicatorSetting6.addProperty("sellIndex", "30");
+//		indicators.add("6", gson.toJsonTree(indicatorSetting6));
+//		
+//		JsonObject jsobj = new JsonObject();
+//		jsobj.add("indicatorList", gson.toJsonTree(indicators));
+//		jsobj.addProperty("buyCriteria", 1);
+//		jsobj.addProperty("sellCriteria", -1);
+//		jsobj.addProperty("expList", "and,or,and,or,or,or");
 		// 														      제일중요, expList를 꼭 빼내야 한다! from strategySetting!
 		// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ **************************** ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 		
-		String strategySettingJson1 = gson.toJson(jsobj);
-
+//		String strategySettingJson1 = gson.toJson(jsobj);
+		
+		
 		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
+		
 		String strategySettingJson="";
 		
 		try {
@@ -313,6 +316,7 @@ public class tradingBot {
 				
 			}
 		}
+		useDB.clean();
 		
 		//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 		// 												스레드 부분!
@@ -323,6 +327,8 @@ public class tradingBot {
 			public void run() {
 				
 				int trigger = 1;
+				
+				DB useDB = new DB();
 				
 				// 시간 체크 //
 				LocalDateTime now = LocalDateTime.now();
@@ -338,8 +344,7 @@ public class tradingBot {
 					double total = numOfNowCoin * ticker + balanceOfNow;
 					
 					String sql = String.format("UPDATE trade SET status=0, last_asset = %s, last_coin_number = %s, last_balance = %s WHERE email = \"%s\" and bot_name = \"%s\" ", total, numOfNowCoin, balanceOfNow, email, botName);
-					DB.Query(sql, "insert");
-					DB.clean();
+					useDB.Query(sql, "insert");
 					//---moduel---//
 					
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -357,11 +362,10 @@ public class tradingBot {
 				String tradeSQL = String.format("SELECT status FROM trade WHERE email = \"%s\" and bot_name = \"%s\" ", email, botName);
 				String nowStatus="";
 				try {
-					ResultSet rsTemp = DB.Query(tradeSQL, "select");
+					ResultSet rsTemp = useDB.Query(tradeSQL, "select");
 					if(rsTemp.next()) {
 						nowStatus = rsTemp.getString(1);
 					}
-					DB.clean();
 				} catch(Exception e) {
 					e.printStackTrace();
 				}
@@ -376,8 +380,7 @@ public class tradingBot {
 					double total = numOfNowCoin * ticker + balanceOfNow;
 					
 					String sql = String.format("UPDATE trade SET status=0, last_asset = %s, last_coin_number = %s, last_balance = %s WHERE email = \"%s\" and bot_name = \"%s\" ", total, numOfNowCoin, balanceOfNow, email, botName);
-					DB.Query(sql, "insert");
-					DB.clean();
+					useDB.Query(sql, "insert");
 					//---moduel---//
 					
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -429,8 +432,7 @@ public class tradingBot {
 							double total = numOfNowCoin * ticker + balanceOfNow;
 							
 							String sql = String.format("UPDATE trade SET status=0, last_asset = %s, last_coin_number = %s, last_balance = %s WHERE email = \"%s\" and bot_name = \"%s\" ", total, numOfNowCoin, balanceOfNow, email, botName);
-							DB.Query(sql, "insert");
-							DB.clean();
+							useDB.Query(sql, "insert");
 							//---moduel---//
 							
 							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
@@ -478,8 +480,7 @@ public class tradingBot {
 							
 							String sql = String.format("INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s)", email, botName, exchange, currentTime, 1, coin+base, ticker, numOfSalingCoin, total, balanceOfNow, numOfNowCoin );
 							System.out.println(sql);
-							DB.Query(sql, "insert");
-							DB.clean();
+							useDB.Query(sql, "insert");
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 구매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							String subject = "보라봇 " + botName + " 구매 알람!";
@@ -518,8 +519,7 @@ public class tradingBot {
 							
 							String sql = String.format("INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s)", email, botName, exchange, currentTime, -1, coin+base, ticker, numOfSalingCoin, total, balanceOfNow, numOfNowCoin );
 							System.out.println(sql);
-							DB.Query(sql, "insert");
-							DB.clean();
+							useDB.Query(sql, "insert");
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 판매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							String subject = "보라봇 " + botName + " 판매 알람!";
@@ -536,14 +536,14 @@ public class tradingBot {
 						
 							String sql = String.format("INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s)", email, botName, exchange, currentTime, 0, coin+base, ticker, 0, total, balanceOfNow, numOfNowCoin );
 							System.out.println(sql);
-							DB.Query(sql, "insert");
-							DB.clean();
+							useDB.Query(sql, "insert");
 						}
 						
 					System.out.println("\n");
 					
 					}
 				}
+				useDB.clean();
 			}
 		};
 		

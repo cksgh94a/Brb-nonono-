@@ -24,6 +24,13 @@ class NowTrading extends Component {
     }
 
     reload = () => {
+        axios.get('NowTrading')
+        .then( response => {
+        this.setState({
+            listE: response.data
+            })
+        }) 
+        .catch( response => { console.log('err\n'+response); } ); // ERROR
         this.forceUpdate(); // 새로고침
     }
 

@@ -35,8 +35,8 @@ public class TradeMain extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 
         HttpSession session = request.getSession();
-        
-        if(Boolean.valueOf(request.getParameter("status")))            
+
+        if(Boolean.valueOf(request.getParameter("status")))
             new tradingBot((String) session.getAttribute("email"),
             		request.getParameter("exchange"),
             		request.getParameter("botname"),

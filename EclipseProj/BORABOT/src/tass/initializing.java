@@ -42,10 +42,10 @@ public class initializing {
 	private static String sellSetting = "sellAll";
 	
 	//optional
-	private static double priceBuyUnit;
-	private static double priceSellUnit;
-	private static double numBuyUnit;
-	private static double numSellUnit;
+	private static double priceBuyUnit = 0.0;
+	private static double priceSellUnit = 0.0;
+	private static double numBuyUnit = 0.0;
+	private static double numSellUnit = 0.0;
 	
 	//errorHandle : 1 => 대기
 	//				0 => shutdown
