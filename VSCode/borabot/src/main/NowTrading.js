@@ -6,14 +6,13 @@ import TradingElement from './TradingElement';
 
 class NowTrading extends Component {
     constructor(props) {
-       super(props);
+        super(props);
 
         this.state = {
             listE: []
         };
     }
-    componentDidMount() {
-        
+    componentDidMount() {        
         axios.get('NowTrading')
         .then( response => {
         this.setState({
