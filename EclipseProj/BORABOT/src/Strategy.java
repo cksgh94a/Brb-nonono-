@@ -43,19 +43,16 @@ public class Strategy extends HttpServlet {
 	    
 		HttpSession session = request.getSession();
 		
-
-
 		JSONArray jArray = new JSONArray();
 
 		String selectSql = String.format("SELECT * from custom_strategy where email=\'%s\'", (String) session.getAttribute("email"));
-
-		ResultSet rs = DB.Query(selectSql, "select"); 
+		
+		DB useDB = new DB();
+		ResultSet rs = useDB.Query(selectSql, "select"); 
 		
 		try {
 			while(rs.next()) {
 				JSONObject jObject = new JSONObject();
-//				System.out.println(rs.getString("strategy_content"));
-//				System.out.println(rs.getString("strategy_name"));
 				jObject.put("data", rs.getString("strategy_content"));
 				jObject.put("name", rs.getString("strategy_name"));
 				jArray.add(jObject);
@@ -65,7 +62,7 @@ public class Strategy extends HttpServlet {
 		}		
 		
 		// 5. DB 사용후 clean()을 이용하여 정리
-		DB.clean();
+		useDB.clean();
 
 		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());
@@ -88,8 +85,10 @@ public class Strategy extends HttpServlet {
 		
 		String insertSql = String.format("INSERT INTO custom_strategy (email, strategy_name, strategy_content) VALUES('"
 				+email+"', '"+name+"', '"+data+"')");
-		DB.Query(insertSql, "insert");		
-		DB.clean();		
+
+		DB useDB = new DB();
+		useDB.Query(insertSql, "insert");		
+		useDB.clean();		
 	}
 
 }

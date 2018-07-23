@@ -31,9 +31,6 @@ class App extends Component {
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
     
-    // if(this.state.status){
-    //   window.location = "/main";
-    // }
   }
 
   render() {

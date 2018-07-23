@@ -43,14 +43,16 @@ class Sales extends Component {
     var now = new Date();
     
     var startDate = now.getFullYear()+'-'+
-    ("0"+(now.getMonth()+1)).slice(-2)+'-'+
-    ("0"+now.getDate()).slice(-2)+'T'+
-    ("0"+now.getHours()).slice(-2)+':00:00.000'
+      ("0"+(now.getMonth()+1)).slice(-2)+'-'+
+      ("0"+now.getDate()).slice(-2)+'T'+
+      ("0"+now.getHours()).slice(-2)+':'+
+      ("0"+now.getMinutes()).slice(-2)+':'+
+      ("0"+now.getSeconds()).slice(-2)+'.000'
 
     var endDate = document.getElementById('endYear').value+'-'+
-    ("0"+document.getElementById('endMonth').value).slice(-2)+'-'+
-    ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
-    ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
+      ("0"+document.getElementById('endMonth').value).slice(-2)+'-'+
+      ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
+      ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
 
     let alertMsg = document.getElementById('botname').value + '\n' + 
       document.getElementById('exchange').value + '\n' +

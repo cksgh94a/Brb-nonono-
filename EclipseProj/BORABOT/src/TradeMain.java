@@ -34,7 +34,7 @@ public class TradeMain extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 
         HttpSession session = request.getSession();
-        System.out.println(request.getParameter("strategyName"));
+        
         if(Boolean.valueOf(request.getParameter("status")))            
             new tradingBot((String) session.getAttribute("email"),
             		request.getParameter("exchange"),
@@ -46,16 +46,16 @@ public class TradeMain extends HttpServlet {
             		request.getParameter("endDate"),
             		request.getParameter("strategyName"),
             		request.getParameter("buyingSetting"),
-            		request.getParameter("selliingSetting"),
+            		request.getParameter("sellingSetting"),
             		0.0, 0.0, 0.0, 0.0, 0).botStart();
-        
+
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
-    		DB.Query(String.format(
-    				"update trade set status=0, end_date=\'%s\' where email=\'%s\' and bot_name=\'%s\'" ,
-    				request.getParameter("endDate"),
+    		DB useDB = new DB();
+    		useDB.Query(String.format(
+    				"update trade set status=0 where email=\'%s\' and bot_name=\'%s\'" ,
     				(String) session.getAttribute("email"),
     				request.getParameter("botname")), "insert");		
-    		DB.clean();		
+    		useDB.clean();		
         }
 
 	}

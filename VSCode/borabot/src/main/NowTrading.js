@@ -24,7 +24,7 @@ class NowTrading extends Component {
     }
 
     reload = () => {
-        window.location.reload(true); // 새로고침
+        this.forceUpdate(); // 새로고침
     }
 
     render() {
@@ -33,9 +33,9 @@ class NowTrading extends Component {
                 <button onClick={this.reload}>새로고침</button>
                 <div className = "NowTrading-elementList">
                     {this.state.listE.map((nt, i) => {
-                        return (<TradingElement name = {nt.name} endDate = {nt.endDate} 
-                            coin = {nt.coin} exchange = {nt.exchange}
-                            profit = {nt.profit} strategy = {nt.strategy} key = {i}
+                        return (<TradingElement name = {nt.bot_name} endDate = {nt.end_date} 
+                            coin = {nt.coin} exchange = {nt.exchange_name}
+                            profit = {nt.profit} strategy = {nt.strategy_name} key = {i}
                                     />);
                     })}
                 </div>

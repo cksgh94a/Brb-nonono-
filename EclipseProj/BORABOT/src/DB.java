@@ -14,9 +14,10 @@ public class DB {
 		String selectSql = String.format("SELECT API_KEY, "
 				+ "Secret_KEY FROM APIKEY WHERE _ID = \"%s\" and exchangeName = \"%s\" ;", "dirtyrobot00", "bithumb");
 
+		DB useDB = new DB();
 		
 		// 2-1. SELECT문은 ResultSet rs를 useDB.Query(쿼리문, "select")로 생성 후 필요한 값 추출
-		ResultSet rs = DB.Query(selectSql, "select");
+		ResultSet rs = useDB.Query(selectSql, "select");
 		try {
 			while(rs.next()) {  
 				API_KEY = rs.getString("API_KEY");
@@ -32,23 +33,23 @@ public class DB {
 				"dirtyrobot00", "test", "btc", "bithumb", "123123123", "321321321", "bollingerPatternNaked", dateFormat.format(new Date()), "", dateFormat.format(new Date()));
 				
 		// 2-2. INSERT문의 경우 useDB.Query(쿼리문, "select")로 DB에 입력
-		DB.Query(insertSql, "insert");		
+		useDB.Query(insertSql, "insert");		
 		
 
 	/* 공통
 	 * 3. DB 사용후 clean()을 이용하여 정리
 	 * */
-		DB.clean();
+		useDB.clean();
 		
 		System.out.println(API_KEY + " && " + Secret_KEY);
 	}
 	
 	// DB Query 함수
-	static private Connection con = null;
-	static private Statement stmt = null;
-	static private ResultSet rs = null; //ResultSet 객체 선언
+	private Connection con = null;
+	private Statement stmt = null;
+	private ResultSet rs = null; //ResultSet 객체 선언
 
-	static public ResultSet Query(String Sql, String INSSEL) {
+	public ResultSet Query(String Sql, String INSSEL) {
 		
 		// 드라이버 로드
 	    try {	
@@ -80,7 +81,7 @@ public class DB {
         return rs;	
 	}
 	
-	static public void clean() {
+	public void clean() {
 
 		try {
 			if(rs !=null) { rs.close(); }

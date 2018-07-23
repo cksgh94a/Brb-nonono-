@@ -28,14 +28,14 @@ public class initializing {
 	// websocket 통신으로 받아오는 부분
 	// 동시에  db저장(INSERT INTO trade VALUES(); )
 	private static String email = "test";
-	private static String botName = "mybo12t";
+	private static String botName = "wqetqwet";
 	private static String exchange = "bithumb";
 	private static String coin = "ltc";
 	private static String base = "krw";
-	private static String strategyName = "으갸갸갸갸";
+	private static String strategyName = "test1";
 	private static int interval = 1800;
-	private static String startDate = "2018-07-18T00:00:00.000";
-	private static String endDate = "2018-07-22T14:25:00";
+	private static String startDate = "2018-07-23T00:00:00.000";
+	private static String endDate = "2018-07-27T14:25:00.000";
 	
 	// 매매량 세팅
 	private static String buySetting = "buyAll";

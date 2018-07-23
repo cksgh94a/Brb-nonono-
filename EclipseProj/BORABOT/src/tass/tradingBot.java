@@ -1,5 +1,6 @@
 package tass;
 
+
 import exchangeAPI.*;
 import Indicator.*;
 
@@ -11,6 +12,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+
+import javax.servlet.http.HttpSession;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
@@ -73,6 +76,21 @@ public class tradingBot {
 	public void botStart() {
 		
 		final exAPI exAPIobj;
+
+	    // DB의 사용자 key를 받아옴
+		String selectSql = String.format("SELECT api_key, secret_key from customer_key where email=\'%s\' and exchange_name=\'%s\'", email, exchange);
+
+		DB useDB = new DB();
+		ResultSet rs = useDB.Query(selectSql, "select"); 
+		
+		try {
+			while(rs.next()) {
+				API_KEY = rs.getString("api_key");
+				Secret_KEY = rs.getString("secret_key");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}		
 		
 		if(exchange.equals("bithumb")) {
 			exAPIobj = (exAPI) new BithumbAPI(API_KEY, Secret_KEY);
@@ -97,8 +115,7 @@ public class tradingBot {
 		double initialBalance = exAPIobj.getBalance(base);
 		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1000으로 표시(null)
 		String initialTradeSql = String.format(" INSERT INTO trade VALUES( \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s )", email, botName, exchange, coin, base, strategyName, interval, startDate, endDate, buyingSetting, sellingSetting, priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, buyCriteria, sellCriteria, 1, initialBalance, initialCoinNum, -1000, -1 , -1 );
-		DB.Query(initialTradeSql, "insert");
-		DB.clean();
+		useDB.Query(initialTradeSql, "insert");
 		
 		//테스트를 위해 만든 JSON객체
 		Gson gson = new Gson();
@@ -174,18 +191,14 @@ public class tradingBot {
 		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
 		String strategySettingJson="";
 		
-		System.out.println(settingSelectSql);
 		try {
-			ResultSet rsTemp = DB.Query(settingSelectSql, "select");
+			ResultSet rsTemp = useDB.Query(settingSelectSql, "select");
 			if(rsTemp.next()) {
 				strategySettingJson = rsTemp.getString(1);
 			}
-			DB.clean();
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-
-		System.out.println("json test"+strategySettingJson);
 		
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(strategySettingJson);
@@ -290,8 +303,7 @@ public class tradingBot {
 					// timer를 실행하기 이전에 그냥 리턴해버리므로 걍 봇이 종료되는거임
 					// DB 상태 0으로 전환 , trans_log는 업데이트 ㄴㄴ
 					String sql = String.format("UPDATE trade SET status=0 WHERE email = \"%s\" and bot_name = \"%s\" ", email, botName);
-					DB.Query(sql, "insert");
-					DB.clean();
+					useDB.Query(sql, "insert");
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName+ " 이 초기 오류로 종료되었습니다.";
 					String subject = "보라봇 " + botName + " 종료 알람";
@@ -472,7 +484,7 @@ public class tradingBot {
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							String subject = "보라봇 " + botName + " 구매 알람!";
 							String content = String.format("%s \n 보라봇이 코인 %s 을 %s개 시장가로 매수주문 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
-							SendMail.sendEmail(email, subject, content);
+//							SendMail.sendEmail(email, subject, content);
 							
 						}
 						else if(fin <= sellCriteria) { // 매도 시그널!
