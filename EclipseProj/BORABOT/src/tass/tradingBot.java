@@ -2,8 +2,8 @@ package tass;
 
 
 import exchangeAPI.*;
-import servlet.DB;
 import Indicator.*;
+import base.DB;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -310,7 +310,7 @@ public class tradingBot {
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName+ " 이 초기 오류로 종료되었습니다.";
 					String subject = "보라봇 " + botName + " 종료 알람";
-//					SendMail.sendEmail(email, subject, content);
+					SendMail.sendEmail(email, subject, content);
 					return;
 				}
 				
@@ -485,7 +485,7 @@ public class tradingBot {
 							//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
 							String subject = "보라봇 " + botName + " 구매 알람!";
 							String content = String.format("%s \n 보라봇이 코인 %s 을 %s개 시장가로 매수주문 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
-//							SendMail.sendEmail(email, subject, content);
+							SendMail.sendEmail(email, subject, content);
 							
 						}
 						else if(fin <= sellCriteria) { // 매도 시그널!

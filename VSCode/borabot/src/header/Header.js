@@ -15,8 +15,9 @@ class Header extends Component {
           <Link to="/main">Borabot</Link>============
           <Link to="/board">Board</Link>============
           <Link to="/backtesting">BackTesting</Link>============
-          <Link to="/profile">Profile</Link>============
           <Link to="/strategy">Strategy</Link>============
+          <Link to="/log">Log</Link>============
+          <Link to="/profile">Profile</Link>============
           <button onClick={this.HandleLogOut}>로그아웃</button>
         </div>
     );
@@ -24,4 +25,3 @@ class Header extends Component {
 }
 
 export default Header;
-

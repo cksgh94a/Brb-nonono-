@@ -44,14 +44,6 @@ class Algorithm extends Component {
 
       serverStrategyList:[],
       selectedStrategy:'',
-
-      // 앞단 테스트용
-      // serverStrategyList:[{'data':
-      // '{"indicatorList":{"0":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"1":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"2":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70}},"buyCriteria":0,"sellCriteria":0,"expList":"or,or"}','name':''},
-      // {'data':'{"indicatorList":{"0":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"1":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"2":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"3":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70}},"buyCriteria":0,"sellCriteria":0,"expList":"or,or,or"}','name':'52134'},
-      // {'data':'{"indicatorList":{"0":{"indicator":"gdCross","weight":1,"longD":26,"shortD":9,"mT":1},"1":{"indicator":"BollingerBand","weight":1,"period":20,"mul":2},"2":{"indicator":"pCorr","weight":1,"period":15,"cor":0},"3":{"indicator":"MFI","weight":1,"period":14,"buyIndex":0,"sellIndex":0},"4":{"indicator":"VolumeRatio","weight":1,"period":20,"buyIndex":70,"sellIndex":350}},"buyCriteria":0,"sellCriteria":0,"expList":"and,and,and,or"}','name':'ㅅㅁㄴㅇ'}], // 서버 DB에 존재하는 전략
-      // selectedStrategy:JSON.parse('{"indicatorList":{"0":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"1":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70},"2":{"indicator":"RSI","weight":1,"period":14,"buyIndex":30,"sellIndex":70}},"buyCriteria":0,"sellCriteria":0,"expList":"or,or"}'),
-
       buttonVal: false
     }
   }
@@ -270,59 +262,59 @@ class Algorithm extends Component {
           (Object.keys(JSON.parse('{'+this.state.jsonString+'}')).map((idc, i) => {
             return (<div key={i}>
               <b>{JSON.parse('{'+this.state.jsonString+'}')[idc].indicator}</b><br/>
-              <input value={"weight: "+JSON.parse('{'+this.state.jsonString+'}')[idc].weight} disabled/>
+              <input value={"weight: "+JSON.parse('{'+this.state.jsonString+'}')[idc].weight} readOnly/>
               {JSON.parse('{'+this.state.jsonString+'}')[idc].period !== undefined && 
-                (<input value={"period: "+JSON.parse('{'+this.state.jsonString+'}')[idc].period} disabled/>)}
+                (<input value={"period: "+JSON.parse('{'+this.state.jsonString+'}')[idc].period} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].buyIndex} disabled/>)}
+                (<input value={"buyIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].buyIndex} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].sellIndex} disabled/>)}
+                (<input value={"sellIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].sellIndex} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].mul !== undefined && 
-                (<input value={"mul: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mul} disabled/>)}
+                (<input value={"mul: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mul} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].longD !== undefined && 
-                (<input value={"longD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].longD} disabled/>)}
+                (<input value={"longD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].longD} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].shortD !== undefined && 
-                (<input value={"shortD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].shortD} disabled/>)}
+                (<input value={"shortD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].shortD} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].mT !== undefined && 
-                (<input value={"mT: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mT} disabled/>)}
+                (<input value={"mT: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mT} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].n !== undefined && 
-                (<input value={"n: "+JSON.parse('{'+this.state.jsonString+'}')[idc].n} disabled/>)}
+                (<input value={"n: "+JSON.parse('{'+this.state.jsonString+'}')[idc].n} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].m !== undefined && 
-                (<input value={"m: "+JSON.parse('{'+this.state.jsonString+'}')[idc].m} disabled/>)}
+                (<input value={"m: "+JSON.parse('{'+this.state.jsonString+'}')[idc].m} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].t !== undefined && 
-                (<input value={"t: "+JSON.parse('{'+this.state.jsonString+'}')[idc].t} disabled/>)}
+                (<input value={"t: "+JSON.parse('{'+this.state.jsonString+'}')[idc].t} readOnly/>)}
               {JSON.parse('{'+this.state.jsonString+'}')[idc].cor !== undefined && 
-                (<input value={"cor: "+JSON.parse('{'+this.state.jsonString+'}')[idc].cor} disabled/>)}<br/>
+                (<input value={"cor: "+JSON.parse('{'+this.state.jsonString+'}')[idc].cor} readOnly/>)}<br/>
               {i !== this.state.savedCnt-1 &&
-                (<button disabled>{this.state.expList[i]}</button>)}
+                (<button disabled>{this.state.expList[i]}</button>)} 
             </div>);
           })) :
           (Object.keys(this.state.selectedStrategy.indicatorList).map((idc, i) => {
             return (<div key={i}>
               <b>{this.state.selectedStrategy.indicatorList[idc].indicator}</b><br/>
-              <input value={"weight: "+this.state.selectedStrategy.indicatorList[idc].weight} disabled/>
+              <input value={"weight: "+this.state.selectedStrategy.indicatorList[idc].weight} readOnly/>
               {this.state.selectedStrategy.indicatorList[idc].period !== undefined && 
-                (<input value={"period: "+this.state.selectedStrategy.indicatorList[idc].period} disabled/>)}
+                (<input value={"period: "+this.state.selectedStrategy.indicatorList[idc].period} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+this.state.selectedStrategy.indicatorList[idc].buyIndex} disabled/>)}
+                (<input value={"buyIndex: "+this.state.selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+this.state.selectedStrategy.indicatorList[idc].sellIndex} disabled/>)}
+                (<input value={"sellIndex: "+this.state.selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].mul !== undefined && 
-                (<input value={"mul: "+this.state.selectedStrategy.indicatorList[idc].mul} disabled/>)}
+                (<input value={"mul: "+this.state.selectedStrategy.indicatorList[idc].mul} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].longD !== undefined && 
-                (<input value={"longD: "+this.state.selectedStrategy.indicatorList[idc].longD} disabled/>)}
+                (<input value={"longD: "+this.state.selectedStrategy.indicatorList[idc].longD} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].shortD !== undefined && 
-                (<input value={"shortD: "+this.state.selectedStrategy.indicatorList[idc].shortD} disabled/>)}
+                (<input value={"shortD: "+this.state.selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].mT !== undefined && 
-                (<input value={"mT: "+this.state.selectedStrategy.indicatorList[idc].mT} disabled/>)}
+                (<input value={"mT: "+this.state.selectedStrategy.indicatorList[idc].mT} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].n !== undefined && 
-                (<input value={"n: "+this.state.selectedStrategy.indicatorList[idc].n} disabled/>)}
+                (<input value={"n: "+this.state.selectedStrategy.indicatorList[idc].n} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].m !== undefined && 
-                (<input value={"m: "+this.state.selectedStrategy.indicatorList[idc].m} disabled/>)}
+                (<input value={"m: "+this.state.selectedStrategy.indicatorList[idc].m} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].t !== undefined && 
-                (<input value={"t: "+this.state.selectedStrategy.indicatorList[idc].t} disabled/>)}
+                (<input value={"t: "+this.state.selectedStrategy.indicatorList[idc].t} readOnly/>)}
               {this.state.selectedStrategy.indicatorList[idc].cor !== undefined && 
-                (<input value={"cor: "+this.state.selectedStrategy.indicatorList[idc].cor} disabled/>)}<br/>
+                (<input value={"cor: "+this.state.selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
               {i !== this.state.selectedStrategy.expList.split(',').length &&
                 (<button disabled>{this.state.selectedStrategy.expList.split(',')[i]}</button>)}
             </div>);

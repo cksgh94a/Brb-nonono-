@@ -11,6 +11,7 @@ import BackTesting from './backTesting/BackTesting';
 import Login from './initial/Login';
 import Register from './initial/Register';
 import Strategy from './strategy/Strategy';
+import Log from './log/Log'
 
 class App extends Component {
   constructor(){
@@ -46,6 +47,7 @@ class App extends Component {
                 <Route path="/backtesting" component={BackTesting}/>
                 <Route path="/board" component={Board}/>
                 <Route path="/login" component={Login}/>
+                <Route path="/log" component={Log}/>
                 <Route path="/register" component={Register}/>
                 <Route path="/strategy" component={Strategy}/>
                 <Route path="/" component={Initial}/>
