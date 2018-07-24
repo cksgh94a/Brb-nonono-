@@ -61,10 +61,11 @@ class Log extends Component {
         <input value="거래 신호 시간" readOnly/><input value="매매 행동" readOnly/><input value="개당 코인 가격" readOnly/>
         <input value="코인 매매 수량" readOnly/><input value="현재 보유 현금" readOnly/><input value="현재 보유 코인수" readOnly/>
         {this.state.serverLogList.map((l, i) => {
-          return (<input value="test"/>)
-          // return ((<input value={l.trans_time} readOnly/>)(<input value={l.sales_action} readOnly/>)(<input value={l.coin_price} readOnly/>)
-          //   (<input value={l.coin_intent} readOnly/>)(<input value={l.now_balance} readOnly/>)(<input value={l.now_coin_number} readOnly/>)
-          //   )
+          return (<div><input value={l.trans_time} readOnly/>{l.sales_action === "1" ?
+            (<input value={"구매"} readOnly/>) :(<input value={"판매"} readOnly/>)}
+            <input value={l.coin_price} readOnly/><input value={l.coin_intent} readOnly/>
+            <input value={l.now_balance} readOnly/><input value={l.now_coin_number} readOnly/>
+            </div>)
           })}
       </div>
     );

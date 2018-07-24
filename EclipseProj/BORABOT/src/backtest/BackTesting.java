@@ -82,7 +82,7 @@ public class BackTesting {
 		this.numSellUnit = numSellUnit;
 		
 		this.nowCash = nowCash;
-		this.nowCoin = initialCoin;
+		this.initialCash = nowCash;
 	}
 	
 	public void backTestRun() {
@@ -500,6 +500,7 @@ public class BackTesting {
 		double finalAsset = (hHLCVArr[hHLCVArr.length-1][2] * nowCoin + nowCash);
 		double profit = ( (finalAsset - initialCash) / initialCash);
 		
+		System.out.println(finalAsset + " " + initialCash);
 		returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit;
 		System.out.println(returnResult);
 		

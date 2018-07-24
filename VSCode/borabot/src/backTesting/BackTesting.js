@@ -179,7 +179,7 @@ class BackTesting extends Component {
         {this.state.isResulted && 
           (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}
         <br/>{this.state.isResulted && 
-          (<textarea style ={{height: 500, width:1000 }} readOnly value={this.state.text}/>)}
+          (<textarea style ={{height: 500, width:1000, scroll:true}} readOnly value={this.state.text}/>)}
       </div>
     );
   }

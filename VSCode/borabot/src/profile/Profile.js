@@ -55,10 +55,6 @@ class Profile extends Component {
         api_key: response.data.binance.api_key,
         secret_key: response.data.binance.secret_key
       }
-      console.log(response.data)
-      console.log(response.data.name)
-      console.log(bitthumb)
-      console.log(coinone)
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }

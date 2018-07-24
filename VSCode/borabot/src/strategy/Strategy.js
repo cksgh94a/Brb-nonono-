@@ -76,18 +76,6 @@ class Algorithm extends Component {
     })
   }
 
-  // 현재 선택된 연산 방법 state 변화
-  handleOr = () => {
-    this.setState({
-      calculate: 'or'
-    })
-  }
-  handleAnd = () => {
-    this.setState({
-      calculate: 'and'
-    })
-  }
-
   // 설정한 지표 저장 및 리스트, json 저장
   handleSave = (e) => {
 
@@ -228,10 +216,6 @@ class Algorithm extends Component {
           })
         }
         </select>
-        {this.state.savedCnt !== 0 &&
-          (<button onClick={this.handleOr}>or</button>)}
-        {this.state.savedCnt !== 0 &&
-          (<button onClick={this.handleAnd}>and</button>)}<br/>
         <input placeholder={"weight: "+this.state.selectedIndicator.weight} id="weight"/>
         {this.state.selectedIndicator.period !== undefined && 
           (<input placeholder={"period: "+this.state.selectedIndicator.period} id="period"/>)}
