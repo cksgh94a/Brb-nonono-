@@ -109,5 +109,4 @@ public class Log extends HttpServlet {
 		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());
 	}
-
 }
