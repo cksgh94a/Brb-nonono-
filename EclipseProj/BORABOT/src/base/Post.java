@@ -41,15 +41,23 @@ public class Post extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 
         HttpSession session = request.getSession();
-        
-		String insertSql = String.format("INSERT INTO board VALUES('"
-				+session.getAttribute("email")+"', '"
-				+request.getParameter("content")+"', '"
-				+request.getParameter("post_time")+"', '"
-				+request.getParameter("title")+"')");
+        String sql = "";
+        if(request.getParameter("action") == "write") 
+    		sql = String.format("INSERT INTO board VALUES('"
+    				+session.getAttribute("email")+"', '"
+    				+request.getParameter("content")+"', '"
+    				+request.getParameter("post_time")+"', '"
+    				+request.getParameter("title")+"')");
+        else if(request.getParameter("action") == "modify") 
+			sql = String.format("INSERT INTO board VALUES('"
+					+session.getAttribute("email")+"', '"
+					+request.getParameter("content")+"', '"
+					+request.getParameter("post_time")+"', '"
+					+request.getParameter("title")+"')");
+        else System.out.println("Post 오류!!!");        
 		
 		DB useDB = new DB();
-		useDB.Query(insertSql, "insert");
+		useDB.Query(sql, "insert");
 		
 		useDB.clean();
 	}
