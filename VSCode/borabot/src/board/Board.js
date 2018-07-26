@@ -9,24 +9,24 @@ class Board extends Component {
   constructor(){
     super();
     this.state={
-      post: true,
+      post: false,
       post_num: 0,
       write: false
     }
   }
 
   componentDidMount() {
-    axios.get( 'board' )
+    axios.get( 'Board' )
     .then( response => {
       boardList= response.data
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
-  selectPost = () => {
+  selectPost = (i) => {
     this.setState({
       post: true,
-      post_num: 0, // map으로 돌릴 때 인자로 post num을
+      post_num: boardList[i].post_num, // map으로 돌릴 때 인자로 post num을
       write: false
     })
   }
@@ -54,20 +54,22 @@ class Board extends Component {
           : <table>
             <thead>
               <tr>
-                <th colSpan="5" className="text-right">List</th>
+                <th colSpan="4" className="text-right">List</th>
               </tr>
               <tr>
                 <th>No</th><th>Title</th><th>Author</th><th>Date</th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td onClick={this.selectPost}>title</td>
-                <td>author</td>
-                <td>date</td>
-                <td><button>글 삭제</button></td>
-              </tr>
+              {
+                boardList.map((p, i) => {
+                return (<tr>
+                  <td>{p.post_num}</td>
+                  <td><a>{p.title}</a></td>
+                  <td>{p.email}</td>
+                  <td>{p.post_time}</td>
+                </tr>)
+              })}
               <button onClick={this.writePost}>글 쓰기</button>
             </tbody>
           </table>}

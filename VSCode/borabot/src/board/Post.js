@@ -22,11 +22,13 @@ class Post extends Component {
     else{ // 글 보기     
       this.setState({
         modify: false,
-        post_num: this.props.post_num
       })
 
       // 해당 게시물 내용 불러오기
-      axios.get( '/board' )
+      axios.get(
+        'Post',
+        'post_num='+this.props.post_num,
+        { 'Content-Type': 'application/x-www-form-urlencoded' } )
       .then( response => {
       }) 
       .catch( response => { console.log('err\n'+response)}); // ERROR
@@ -129,7 +131,7 @@ class Post extends Component {
           {
             this.state.comment.map((c, i) => {
             return (<div>댓글 작성자 : {c.email}<input readOnly>{c.content}</input>
-            {c.writer && <button onClick={(i) => this.deleteComment(i)}>댓글 삭제</button>}
+            {c.writer && <button onClick={this.deleteComment(i)}>댓글 삭제</button>}
             </div>)
           })}
         </div>}
