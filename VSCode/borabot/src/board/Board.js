@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Post from './Post';
-
-var boardList=[];
 
 class Board extends Component {
   constructor(){
@@ -11,14 +8,22 @@ class Board extends Component {
     this.state={
       post: false,
       post_num: 0,
+      boardList: [],
       write: false
     }
   }
 
   componentDidMount() {
+    this.getBoard()
+  }
+
+  getBoard = () => {
+    console.log('getBoard')
     axios.get( 'Board' )
     .then( response => {
-      boardList= response.data
+      this.setState({
+        boardList: response.data
+      })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
@@ -26,7 +31,7 @@ class Board extends Component {
   selectPost = (i) => {
     this.setState({
       post: true,
-      post_num: boardList[i].post_num, // map으로 돌릴 때 인자로 post num을
+      post_num: this.state.boardList[i].post_num, // map으로 돌릴 때 인자로 post num을
       write: false
     })
   }
@@ -34,14 +39,17 @@ class Board extends Component {
   moveList = () => {
     this.setState({
       post: false,
-      write: false
+      write: false,
+      post_num: 0
     })
+    this.getBoard()
   }
 
   writePost = () => {
     this.setState({
       post: true,
-      write: true
+      write: true,
+      post_num: 0
     })
   }
 
@@ -62,10 +70,10 @@ class Board extends Component {
             </thead>
             <tbody>
               {
-                boardList.map((p, i) => {
+                this.state.boardList.map((p, i) => {
                 return (<tr>
                   <td>{p.post_num}</td>
-                  <td><a>{p.title}</a></td>
+                  <td onClick={()=>this.selectPost(i)} style={{cursor:"pointer"}}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
                   <td>{p.email}</td>
                   <td>{p.post_time}</td>
                 </tr>)

@@ -33,7 +33,7 @@ class BackTesting extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     axios.get( 'Strategy' )
     .then( response => {
       this.setState({

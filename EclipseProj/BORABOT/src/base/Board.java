@@ -43,7 +43,7 @@ public class Board extends HttpServlet {
 		JSONArray jArray = new JSONArray();
     	
     	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT email, post_time, title, post_num from board");
+		String selectSql = String.format("SELECT email, post_time, title, post_num, comment_count from board");
 
 		DB useDB = new DB();
 		
@@ -56,6 +56,7 @@ public class Board extends HttpServlet {
 				jObject.put("post_time", rs.getString("post_time"));
 				jObject.put("title", rs.getString("title"));
 				jObject.put("post_num", rs.getString("post_num"));
+				jObject.put("comment_count", rs.getString("comment_count"));
 
 				jArray.add(jObject);
 			}

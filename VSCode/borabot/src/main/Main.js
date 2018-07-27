@@ -7,7 +7,6 @@ import WalletInfo from './WalletInfo';
 
 class Main extends Component {
   render() {
-
     return (
       <div>
       <div className="App">

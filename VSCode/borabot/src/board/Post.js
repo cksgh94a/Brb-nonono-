@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 class Post extends Component {
@@ -8,6 +7,7 @@ class Post extends Component {
     this.state={
       modify: false,
       post: {},
+      // post: {writer:false,title:"test11",email:"qwe",content:"test111test111test111test111test111test111test111test111test111\n\ntest111test111test111test111test111test111test111\n\n\n\n\n\n\n\n\n\n\n\n\n\ntest111test111test111test111test111test111test111test111test111test111test111test111test111"},
       comment:[]
     }
   }
@@ -24,15 +24,32 @@ class Post extends Component {
         modify: false,
       })
 
-      // 해당 게시물 내용 불러오기
+      // 해당 게시물과 댓글 불러오기
       axios.get(
-        'Post',
-        'post_num='+this.props.post_num,
+        'Post?post_num='+this.props.post_num,
         { 'Content-Type': 'application/x-www-form-urlencoded' } )
       .then( response => {
+        this.setState({
+          post: response.data
+        })
       }) 
       .catch( response => { console.log('err\n'+response)}); // ERROR
+
+      document.getElementById("content").value = this.state.post.content
+      this.getComment()
     }
+  }
+
+  getComment = () => {
+    axios.get(
+      'Comment?post_num='+this.props.post_num,
+      { 'Content-Type': 'application/x-www-form-urlencoded' } )
+    .then( response => {
+      this.setState({
+        comment: response.data
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response)}); // ERROR
   }
 
   enrollPost = () => { 
@@ -45,8 +62,8 @@ class Post extends Component {
         ("0"+now.getMinutes()).slice(-2)+':'+
         ("0"+now.getSeconds()).slice(-2)+'.000'
 
+      // 저장/수정에 따라 전송되는 정보를 다르게
       var params
-
       if(this.props.write){
         params = 'action=write'+
           '&title='+document.getElementById('title').value+
@@ -56,16 +73,16 @@ class Post extends Component {
         params = 'action=modify'+
           '&post_num='+this.props.post_num+
           '&title='+document.getElementById('title').value+
-          '&content='+document.getElementById('content').value+
-          '&post_time='+post_time
-      } else console.log('응??????')
+          '&content='+document.getElementById('content').value
+      }
 
       axios.post( 
         'Post', params,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
-
       alert('저장되었습니다.')
+      
+      window.location = "/board"; // 삭제 완료 후 다시 게시판 목록으로
     }
   }
 
@@ -82,10 +99,11 @@ class Post extends Component {
       axios.post( 
         'Post', 
         'action=delete'+
-        '&post_num='+this.state.post_num,
+        '&post_num='+this.props.post_num,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       alert('삭제되었습니다.')
+      window.location = "/board"; // 삭제 완료 후 다시 게시판 목록으로
     }
   }
 
@@ -101,38 +119,40 @@ class Post extends Component {
     axios.post( 
       'Comment', 
       'action=enroll'+
+      '&post_num='+this.props.post_num+
       '&comment='+document.getElementById('comment').value+
       '&comment_time='+comment_time,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
+    this.getComment()
   }
 
   deleteComment = (i) => {
     axios.post( 
       'Comment', 
       'action=delete'+
-      '&post_num='+document.getElementById('comment').value+
+      '&post_num='+this.props.post_num+
       '&comment_time='+this.state.comment[i].comment_time,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
+    this.getComment()
   }
 
   render() {
     return (
       <div>
-        title: <input id="title" readOnly={!this.props.write && !this.state.modify}>{this.state.post.title}</input><br/>
-        <textarea id="content" style={{height:500, width:"70%", resize:"none"}} readOnly={!this.props.write && !this.state.modify}>{this.state.post.content}</textarea><br/>
+        title: <input id="title" value={this.state.post.title} readOnly={!this.props.write && !this.state.modify}/><br/>
+        <textarea id="content" style={{height:500, width:"70%", resize:"none"}} readOnly={!this.props.write && !this.state.modify}/><br/>
         {(this.props.write || this.state.modify) && <button onClick={this.enrollPost}>저장</button>}
-        {this.state.post.writer && <button onClick={this.deletePost}>삭제</button>}
         {(!this.props.write && !this.state.modify) && <div>
-          <button onClick={this.modifyPost}>수정</button><br/>
+          {this.state.post.writer && <div><button onClick={this.modifyPost}>수정</button><button onClick={this.deletePost}>삭제</button></div>}
           <input id="comment" placeholder="댓글을 입력하세요"></input >
           <button onClick={this.enrollComment}>댓글 등록</button>
           {
             this.state.comment.map((c, i) => {
-            return (<div>댓글 작성자 : {c.email}<input readOnly>{c.content}</input>
-            {c.writer && <button onClick={this.deleteComment(i)}>댓글 삭제</button>}
-            </div>)
+            return (<div>댓글 작성자 : {c.email}<input value={c.comment} readOnly></input> : {c.comment_time }
+              {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}
+              </div>)
           })}
         </div>}
       </div>

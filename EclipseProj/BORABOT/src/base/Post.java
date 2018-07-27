@@ -40,24 +40,20 @@ public class Post extends HttpServlet {
 	    
         HttpSession session = request.getSession();
 
-		JSONArray jArray = new JSONArray();
-    	
     	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT email, content, title where post_num=\'%s\' from board", request.getParameter("post_num"));
+		String selectSql = String.format("SELECT email, content, title from board where post_num=%s", request.getParameter("post_num"));
 
 		DB useDB = new DB();
 		
 		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
+		JSONObject jObject = new JSONObject();
 		try {
 			while(rs.next()) {
-				JSONObject jObject = new JSONObject();
 				jObject.put("email", rs.getString("email"));
 				jObject.put("title", rs.getString("title"));
 				jObject.put("content", rs.getString("content"));
 				jObject.put("writer", rs.getString("email").equals(session.getAttribute("email")));
-
-				jArray.add(jObject);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();			
@@ -67,7 +63,7 @@ public class Post extends HttpServlet {
 		useDB.clean();
 
 		PrintWriter out = response.getWriter();
-		out.print(jArray.toJSONString());
+		out.print(jObject.toJSONString());
 	}
 
 	/**
@@ -81,25 +77,26 @@ public class Post extends HttpServlet {
         HttpSession session = request.getSession();
         
         String sql = "";
-        
-        if(request.getParameter("action").equals("write")) 
-    		sql = String.format("INSERT INTO board (email, content, post_time, title)VALUES('"
+
+		DB useDB = new DB();
+		
+        if(request.getParameter("action").equals("write")) {
+    		sql = String.format("INSERT INTO board (email, content, post_time, title, comment_count)VALUES('"
     				+session.getAttribute("email")+"', '"
     				+request.getParameter("content")+"', '"
     				+request.getParameter("post_time")+"', '"
-    				+request.getParameter("title")+"')");
-        else if(request.getParameter("action").equals("modify")) 
-			sql = String.format("INSERT INTO board VALUES('"
-					+session.getAttribute("email")+"', '"
-					+request.getParameter("content")+"', '"
-					+request.getParameter("post_time")+"', '"
-					+request.getParameter("title")+"')");
-        else System.out.println("Post 오류!!");        
-		
-		DB useDB = new DB();
-		useDB.Query(sql, "insert");
-		
-		useDB.clean();
+    				+request.getParameter("title")+"', 0)");
+    		useDB.Query(sql, "insert");    		
+        } else if(request.getParameter("action").equals("modify")) {		// 수정 부분 만들어야
+			sql = String.format("update board set title=\'%s\' where post_num=%s", request.getParameter("title"), request.getParameter("post_num"));
+			useDB.Query(sql, "insert");
+			sql = String.format("update board set content=\'%s\' where post_num=%s", request.getParameter("content"), request.getParameter("post_num"));
+			useDB.Query(sql, "insert");
+        } else if(request.getParameter("action").equals("delete")) {
+			sql = String.format("delete from board where post_num=%s", request.getParameter("post_num"));
+			useDB.Query(sql, "insert");			
+        } else System.out.println("Post 오류!!");        
+		useDB.clean();		
 	}
 
 }
