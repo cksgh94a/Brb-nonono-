@@ -12,7 +12,7 @@ class Post extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     // 글 작성
     if(this.props.write === 'write'){ 
       this.setState({
@@ -34,11 +34,10 @@ class Post extends Component {
         })
       }) 
       .catch( response => { console.log('err\n'+response)}); // ERROR
-
-      document.getElementById("content").value = this.state.post.content
-      this.getComment()
     }
   }
+
+  componentDidMount() { if(this.props.write !== 'write') this.getComment() }
 
   getComment = () => {
     axios.get(
@@ -82,7 +81,7 @@ class Post extends Component {
       )
       alert('저장되었습니다.')
       
-      window.location = "/board"; // 삭제 완료 후 다시 게시판 목록으로
+      window.location = "/board"; // 저장 완료 후 다시 게시판 목록으로
     }
   }
 
@@ -92,6 +91,25 @@ class Post extends Component {
         modify: true
       })
     }
+  }
+
+  handleModify = (e, h) => {
+    if(h==='title'){
+      this.setState({
+        post:{
+          title: e.target.value,
+          content: this.state.post.content
+        }
+      })
+    } else{
+      this.setState({
+        post:{
+          title: this.state.post.title,
+          content: e.target.value
+        }
+      })
+    }
+    
   }
 
   deletePost = () => {
@@ -124,25 +142,39 @@ class Post extends Component {
       '&comment_time='+comment_time,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
-    this.getComment()
+    .then( response => {
+      this.setState({
+        comment: response.data
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response)}); // ERROR
+
+    document.getElementById('comment').value = ''
   }
 
   deleteComment = (i) => {
-    axios.post( 
-      'Comment', 
-      'action=delete'+
-      '&post_num='+this.props.post_num+
-      '&comment_time='+this.state.comment[i].comment_time,
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
-    this.getComment()
+    if(this.state.comment.length>0){
+      axios.post( 
+        'Comment', 
+        'action=delete'+
+        '&post_num='+this.props.post_num+
+        '&comment_time='+this.state.comment[i].comment_time,
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        this.setState({
+          comment: response.data
+        })
+      }) 
+      .catch( response => { console.log('err\n'+response)}); // ERROR
+    }
   }
 
   render() {
     return (
       <div>
-        title: <input id="title" value={this.state.post.title} readOnly={!this.props.write && !this.state.modify}/><br/>
-        <textarea id="content" style={{height:500, width:"70%", resize:"none"}} readOnly={!this.props.write && !this.state.modify}/><br/>
+        title: <input id="title" value={this.state.post.title} onChange={(e, h='title') => this.handleModify(e, h)} readOnly={!this.props.write && !this.state.modify}/><br/>
+        <textarea id="content" value={this.state.post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}} readOnly={!this.props.write && !this.state.modify}/><br/>
         {(this.props.write || this.state.modify) && <button onClick={this.enrollPost}>저장</button>}
         {(!this.props.write && !this.state.modify) && <div>
           {this.state.post.writer && <div><button onClick={this.modifyPost}>수정</button><button onClick={this.deletePost}>삭제</button></div>}

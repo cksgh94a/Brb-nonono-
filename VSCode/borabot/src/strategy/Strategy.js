@@ -186,7 +186,13 @@ class Algorithm extends Component {
       'Strategy', 
       'name='+this.state.name+'&data='+send, 
       { 'Content-Type': 'application/x-www-form-urlencoded' }
-     )
+    )
+    .then( response => {
+      this.setState({
+        serverStrategyList: response.data
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   render() {

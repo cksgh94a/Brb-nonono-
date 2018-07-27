@@ -90,6 +90,8 @@ public class Strategy extends HttpServlet {
 		DB useDB = new DB();
 		useDB.Query(insertSql, "insert");		
 		useDB.clean();		
+		
+		doGet(request, response);
 	}
 
 }

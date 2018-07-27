@@ -107,6 +107,8 @@ public class Comment extends HttpServlet {
 	    } else System.out.println("Post 오류!!");
 		
 		useDB.clean();
+		
+		doGet(request,response);
 	}
 
 }
