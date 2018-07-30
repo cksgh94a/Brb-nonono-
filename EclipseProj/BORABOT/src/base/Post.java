@@ -93,6 +93,8 @@ public class Post extends HttpServlet {
 			sql = String.format("update board set content=\'%s\' where post_num=%s", request.getParameter("content"), request.getParameter("post_num"));
 			useDB.Query(sql, "insert");
         } else if(request.getParameter("action").equals("delete")) {
+			sql = String.format("delete from comment where post_num=%s", request.getParameter("post_num"));
+			useDB.Query(sql, "insert");			
 			sql = String.format("delete from board where post_num=%s", request.getParameter("post_num"));
 			useDB.Query(sql, "insert");			
         } else System.out.println("Post 오류!!");        

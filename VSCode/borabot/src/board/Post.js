@@ -182,7 +182,7 @@ class Post extends Component {
           <button onClick={this.enrollComment}>댓글 등록</button>
           {
             this.state.comment.map((c, i) => {
-            return (<div>댓글 작성자 : {c.email}<input value={c.comment} readOnly></input> : {c.comment_time }
+            return (<div>{c.email} <input value={c.comment} readOnly></input> : {c.comment_time }
               {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}
               </div>)
           })}

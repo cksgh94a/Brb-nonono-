@@ -40,35 +40,47 @@ public class Board extends HttpServlet {
 	    
         HttpSession session = request.getSession();
 
+        JSONObject jObject = new JSONObject();
 		JSONArray jArray = new JSONArray();
     	
-    	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT email, post_time, title, post_num, comment_count from board");
+    	// DB에서 요청한 페이지의 게시불 정보 가져옴
+		String selectSql = String.format("SELECT email, post_time, title, post_num, comment_count from board ORDER BY post_num DESC limit %s,10",
+				((Integer.parseInt(request.getParameter("pageNum"))-1)*10));
 
 		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
+		ResultSet rs = useDB.Query(selectSql, "select");		
 		try {
 			while(rs.next()) {
-				JSONObject jObject = new JSONObject();
-				jObject.put("email", rs.getString("email"));
-				jObject.put("post_time", rs.getString("post_time"));
-				jObject.put("title", rs.getString("title"));
-				jObject.put("post_num", rs.getString("post_num"));
-				jObject.put("comment_count", rs.getString("comment_count"));
+				JSONObject sObject = new JSONObject();
+				sObject.put("email", rs.getString("email"));
+				sObject.put("post_time", rs.getString("post_time"));
+				sObject.put("title", rs.getString("title"));
+				sObject.put("post_num", rs.getString("post_num"));
+				sObject.put("comment_count", rs.getString("comment_count"));
 
-				jArray.add(jObject);
+				jArray.add(sObject);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();			
-		}		
+		}
+		useDB.clean();
 		
-		// 5. DB 사용후 clean()을 이용하여 정리
+		jObject.put("postList", jArray);
+		
+		selectSql = String.format("SELECT count(*) from board");
+		rs = useDB.Query(selectSql, "select");		
+		try {
+			while(rs.next()) {
+				jObject.put("count", rs.getString("count(*)"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}
 		useDB.clean();
 
 		PrintWriter out = response.getWriter();
-		out.print(jArray.toJSONString());
+		out.print(jObject.toJSONString());
 	}
 
 	/**

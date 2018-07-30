@@ -52,7 +52,6 @@ public class initializing {
 	private static int errorHandling = 0;
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
 //		new BackTesting(email, exchange, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting, 10000000, priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).backTestRun();
 		new tradingBot(email, exchange, botName, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting,  priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).botStart();
