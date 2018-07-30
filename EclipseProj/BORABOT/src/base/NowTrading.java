@@ -49,11 +49,10 @@ public class NowTrading extends HttpServlet {
     	// DB에서 현재 거래 정보 가져옴
 		String selectSql = String.format("SELECT * from trade where email=\'%s\'", (String) session.getAttribute("email"));
 
-		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
 		try {
+			DB useDB = new DB();		
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+		
 			while(rs.next()) {
 				if (rs.getBoolean("status")) {
 					JSONObject jObject = new JSONObject();
@@ -69,12 +68,12 @@ public class NowTrading extends HttpServlet {
 					jArray.add(jObject);
 				}
 			}
+		
+			// 5. DB 사용후 clean()을 이용하여 정리
+			useDB.clean();
 		} catch (SQLException e) {
 			e.printStackTrace();			
 		}		
-		
-		// 5. DB 사용후 clean()을 이용하여 정리
-		useDB.clean();
 
 		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());

@@ -1,6 +1,7 @@
 package base;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -48,33 +49,41 @@ public class Register extends HttpServlet {
 	    else {
 	    	if(session.getAttribute("key").equals(request.getParameter("key"))) {
 	    	    // 회원가입 정보 DB에 저장
-	    		String insertSql = String.format("INSERT INTO customer (email, password) VALUES('"
-	    				+request.getParameter("email")+"', '"+request.getParameter("password")+"')");
-	    		
-	    		DB useDB = new DB();
-	    		useDB.Query(insertSql, "insert");
+	    
+	    		try {
+		    		String insertSql = String.format("INSERT INTO customer (email, password) VALUES('"
+		    				+request.getParameter("email")+"', '"+request.getParameter("password")+"')");
+		    		
+		    		DB useDB = new DB();
+		    		useDB.Query(insertSql, "insert");
 
-	    		String insertSql2 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-	    				+request.getParameter("email")+"', 'bitthumb')");
+		    		String insertSql2 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
+		    				+request.getParameter("email")+"', 'bitthumb')");
 
-	    		useDB.Query(insertSql2, "insert");
+		    		useDB.Query(insertSql2, "insert");
 
-	    		String insertSql3 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-	    				+request.getParameter("email")+"', 'bittrex')");
+		    		String insertSql3 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
+		    				+request.getParameter("email")+"', 'bittrex')");
 
-	    		useDB.Query(insertSql3, "insert");
+		    		useDB.Query(insertSql3, "insert");
 
-	    		String insertSql4 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-	    				+request.getParameter("email")+"', 'coinone')");
+		    		String insertSql4 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
+		    				+request.getParameter("email")+"', 'coinone')");
 
-	    		useDB.Query(insertSql4, "insert");
+		    		useDB.Query(insertSql4, "insert");
 
-	    		String insertSql5 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-	    				+request.getParameter("email")+"', 'binance')");
+		    		String insertSql5 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
+		    				+request.getParameter("email")+"', 'binance')");
 
-	    		useDB.Query(insertSql5, "insert");
-	    		
-	    		useDB.clean();
+		    		useDB.Query(insertSql5, "insert");
+		    		
+		    		useDB.clean();	  
+		    		result = "complete";
+	    		} catch (SQLException e) {
+	    			if(e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class)
+	    				result = "dupError";
+	    			else e.printStackTrace();
+	    		}
 	    	}
 	    	else result = "authError";
 	    }
@@ -87,7 +96,7 @@ public class Register extends HttpServlet {
 
 class TempKey {
     
-    private boolean lowerCheck;
+    private boolean lowerCheck;	
     private int size;
     
     public String getKey(int size, boolean lowerCheck) {

@@ -18,15 +18,12 @@ public class DB {
 		DB useDB = new DB();
 		
 		// 2-1. SELECT문은 ResultSet rs를 useDB.Query(쿼리문, "select")로 생성 후 필요한 값 추출
-		ResultSet rs = useDB.Query(selectSql, "select");
 		try {
+		ResultSet rs = useDB.Query(selectSql, "select");
 			while(rs.next()) {  
 				API_KEY = rs.getString("API_KEY");
 				Secret_KEY = rs.getString("Secret_KEY");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		}
 		
 	// INSERT, UPDATE문
 		// 1-2. INSERT 쿼리문 String 생성
@@ -35,6 +32,9 @@ public class DB {
 				
 		// 2-2. INSERT문의 경우 useDB.Query(쿼리문, "select")로 DB에 입력
 		useDB.Query(insertSql, "insert");		
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}
 		
 
 	/* 공통
@@ -50,7 +50,7 @@ public class DB {
 	private Statement stmt = null;
 	private ResultSet rs = null; //ResultSet 객체 선언
 
-	public ResultSet Query(String Sql, String INSSEL) {
+	public ResultSet Query(String Sql, String INSSEL) throws SQLException {
 		
 		// 드라이버 로드
 	    try {	
@@ -59,26 +59,22 @@ public class DB {
 	    	System.out.println(e.getMessage()+"드라이버 로드 실패");	    
 	    }
 		
-	    try {	
-	    	// DB 접속
-	    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
-	        con = DriverManager.getConnection(url,"root","1111");	
-	
-	        stmt = con.createStatement();
-	        
-	        // INSERT문
-	        if (INSSEL == "insert") {
-				stmt.executeUpdate(Sql);
-	        }
-	        // SELECT문
-	        else if (INSSEL == "select"){
-				rs = stmt.executeQuery(Sql);	        	
-	        } else { System.out.println("데이터베이스 구문 오류!"); }
+    	// DB 접속
+    	String url = "jdbc:mysql://localhost:3306/borabot?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
+        con = DriverManager.getConnection(url,"root","1111");	
+
+        stmt = con.createStatement();
+        
+        // INSERT문
+        if (INSSEL == "insert") {
+			stmt.executeUpdate(Sql);
+        }
+        // SELECT문
+        else if (INSSEL == "select"){
+			rs = stmt.executeQuery(Sql);	        	
+        } else { System.out.println("데이터베이스 구문 오류!"); }
 
 	        	        
-	    } catch (SQLException se) {
-            se.printStackTrace();
-        } 
         return rs;	
 	}
 	

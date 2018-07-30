@@ -41,21 +41,21 @@ public class Login extends HttpServlet {
 
 	    // DB의 사용자 비밀번호를 받아와서 비교
 		String selectSql = String.format("SELECT password from customer where email=\'%s\'", email);
-				
-		DB useDB = new DB();
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
 		String pwd= "";
 		try {
-			while(rs.next()) {
-				pwd = rs.getString("password");
-			}
+			DB useDB = new DB();
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+			
+				while(rs.next()) {
+					pwd = rs.getString("password");
+				}
+			
+			// 5. DB 사용후 clean()을 이용하여 정리
+			useDB.clean();	
 		} catch (SQLException e) {
 			e.printStackTrace();			
 		}		
-		
-		// 5. DB 사용후 clean()을 이용하여 정리
-		useDB.clean();	
 		
 		if(password.equals(pwd)) {
 			// 세션에 사용자 정보 저장

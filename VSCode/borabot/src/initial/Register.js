@@ -82,7 +82,7 @@ class Register extends Component {
 
   handleRegister = (e) => {
     // 회원가입 조건 검증
-    if(this.state.isVal){
+    // if(this.state.isVal){
       axios.post( 
         'Register', 
         'auth='+false+
@@ -91,12 +91,21 @@ class Register extends Component {
         '&key='+document.getElementById('key').value, 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
+      .then( response => {
+        if(response.data === 'dupError') alert('이미 존재하는 계정입니다.')
+        else if(response.data === 'authError') alert('잘못된 인증키입니다.')
+        else if(response.data === 'complete') {
+          alert('회원가입이 완료되었습니다.')
+          window.location = "/";
+        }
+        else alert(response.data)
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR
        
-      window.location = "/";
-    }
-    else{
-      alert('양식을 확인해주세요')
-    }
+    // }
+    // else{
+    //   alert('양식을 확인해주세요')
+    // }
   }
 
   render() {
