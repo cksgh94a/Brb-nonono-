@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import crypto from 'crypto';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { login } from '../actions';
 
 var key = "tHis_iS_pRivaTe_Key";
 const encrypt = (err, key) => {
@@ -40,13 +43,25 @@ class Login extends Component {
     }
   }
 
+
+
   handleLogin = (e) => {
     axios.post( 
       'Login', 
       'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
       { 'Content-Type': 'application/x-www-form-urlencoded' }
-     )
-     window.location = "/main";
+    )
+    .then( response => {
+      if(response.data === 'emailError') alert('존재하지 않는 계정입니다.')
+      else if(response.data === 'pwError') alert('비밀번호가 일치하지 않습니다.')
+      else if(response.data === 'complete') {
+        this.props.onLogin()
+        window.location = "/main";
+      } 
+      else alert(response.data)
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
+
   }
 
   render() {
@@ -59,6 +74,14 @@ class Login extends Component {
     );
   }
 }
+
+let mapDispatchToProps = (dispatch) => {
+    return {
+        onLogin: () => dispatch(login())
+    }
+}
+
+Login = connect(undefined, mapDispatchToProps)(Login);
 
 export default Login;
 

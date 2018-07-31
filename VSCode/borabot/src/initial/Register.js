@@ -82,7 +82,7 @@ class Register extends Component {
 
   handleRegister = (e) => {
     // 회원가입 조건 검증
-    // if(this.state.isVal){
+    if(this.state.isVal){
       axios.post( 
         'Register', 
         'auth='+false+
@@ -102,10 +102,10 @@ class Register extends Component {
       }) 
       .catch( response => { console.log('err\n'+response); } ); // ERROR
        
-    // }
-    // else{
-    //   alert('양식을 확인해주세요')
-    // }
+    }
+    else{
+      alert('양식을 확인해주세요')
+    }
   }
 
   render() {

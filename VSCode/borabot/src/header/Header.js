@@ -5,8 +5,11 @@ import axios from 'axios';
 class Header extends Component {
 
   HandleLogOut = () => {
-    axios.get( 'Logout')
-    window.location = "/";
+    if(window.confirm('로그아웃하시겠습니까?')){
+      axios.get( 'Logout')
+      window.location = "/";
+      alert('로그아웃되었습니다..')
+    }
   }
 
   render() {

@@ -2,6 +2,7 @@ package base;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
@@ -42,27 +43,31 @@ public class Login extends HttpServlet {
 	    // DB의 사용자 비밀번호를 받아와서 비교
 		String selectSql = String.format("SELECT password from customer where email=\'%s\'", email);
 
+		String result="";
+		
 		String pwd= "";
 		try {
 			DB useDB = new DB();
 			ResultSet rs = useDB.Query(selectSql, "select"); 
 			
-				while(rs.next()) {
-					pwd = rs.getString("password");
-				}
+				if(rs.next()) {					
+					if(password.equals(rs.getString("password"))) {
+						// 세션에 사용자 정보 저장
+						HttpSession session = request.getSession();
+						session.setAttribute("email", email);	
+						session.setAttribute("status", true);		
+						result = "complete";
+					} else result = "pwError";
+				} else result = "emailError";
 			
 			// 5. DB 사용후 clean()을 이용하여 정리
 			useDB.clean();	
 		} catch (SQLException e) {
 			e.printStackTrace();			
 		}		
-		
-		if(password.equals(pwd)) {
-			// 세션에 사용자 정보 저장
-			HttpSession session = request.getSession();
-			session.setAttribute("email", email);	
-			session.setAttribute("status", true);		
-		}
+	    
+		PrintWriter out = response.getWriter();
+		out.print(result);
 	}
 
 }

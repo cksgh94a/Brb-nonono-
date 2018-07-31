@@ -38,6 +38,7 @@ class Sales extends Component {
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
+
   handleStartbtn = () => {
 
     var now = new Date();
@@ -65,23 +66,28 @@ class Sales extends Component {
       endDate+ '\n' +
       '\n이 맞습니까?';
 
+    if(window.confirm(alertMsg)){
+      axios.post( 
+        'TradeMain', 
+        'status='+true+
+        '&botname='+document.getElementById('botname').value+
+        '&exchange='+document.getElementById('exchange').value+
+        '&coin='+document.getElementById('coin').value+
+        '&base='+document.getElementById('base').value+ 
+        '&interval='+document.getElementById('interval').value+
+        '&strategyName='+document.getElementById('strategy').value+
+        '&buyingSetting='+document.getElementById('buyingSetting').value+
+        '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&startDate='+startDate+
+        '&endDate='+endDate,
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      alert('거래가 시작되었습니다.')
+    } else alert('취소되었습니다.')
+
+
     alert(alertMsg);
 
-    axios.post( 
-      'TradeMain', 
-      'status='+true+
-      '&botname='+document.getElementById('botname').value+
-      '&exchange='+document.getElementById('exchange').value+
-      '&coin='+document.getElementById('coin').value+
-      '&base='+document.getElementById('base').value+ 
-      '&interval='+document.getElementById('interval').value+
-      '&strategyName='+document.getElementById('strategy').value+
-      '&buyingSetting='+document.getElementById('buyingSetting').value+
-      '&sellingSetting='+document.getElementById('sellingSetting').value+
-      '&startDate='+startDate+
-      '&endDate='+endDate,
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
   }
 
   render() {
