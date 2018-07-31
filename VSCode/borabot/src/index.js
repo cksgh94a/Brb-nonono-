@@ -5,14 +5,14 @@ import { createStore } from 'redux';
 import { Provider  } from 'react-redux';
 
 import App from './App.js';
-import logInOut from './reducers';
+import reducers from './reducers';
 import { loadState, saveState } from './reducers/localStorage';
 
 import registerServiceWorker from './registerServiceWorker';
 
 
 const persistedState = loadState();
-const store = createStore(logInOut,persistedState);
+const store = createStore(reducers, persistedState);
 
 store.subscribe(() => {
   saveState(store.getState())

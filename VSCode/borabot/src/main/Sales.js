@@ -84,10 +84,6 @@ class Sales extends Component {
       )
       alert('거래가 시작되었습니다.')
     } else alert('취소되었습니다.')
-
-
-    alert(alertMsg);
-
   }
 
   render() {

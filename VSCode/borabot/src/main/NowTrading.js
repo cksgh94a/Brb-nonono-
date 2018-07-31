@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 import './NowTrading.css';
-import TradingElement from './TradingElement';
 
 class NowTrading extends Component {
   constructor(props) {
@@ -15,15 +14,15 @@ class NowTrading extends Component {
   componentDidMount() {    
     axios.get('NowTrading')
     .then( response => {
-    this.setState({
-      listE: response.data
+      this.setState({
+        listE: response.data
       })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   handleStopbtn = (nt) => {
-    alert(this.props.name + " 거래를 중지하시겠습니까?");
+    alert(nt.bot_name + " 거래를 중지하시겠습니까?");
 
     axios.post( 
       'TradeMain', 
@@ -36,8 +35,8 @@ class NowTrading extends Component {
   reload = () => {
     axios.get('NowTrading')
     .then( response => {
-    this.setState({
-      listE: response.data
+      this.setState({
+        listE: response.data
       })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR

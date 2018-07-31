@@ -2,6 +2,7 @@ package base;
 
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -51,12 +52,16 @@ public class TradeMain extends HttpServlet {
             		0.0, 0.0, 0.0, 0.0, 0).botStart();
 
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
-    		DB useDB = new DB();
-    		useDB.Query(String.format(
-    				"update trade set status=0 where email=\'%s\' and bot_name=\'%s\'" ,
-    				(String) session.getAttribute("email"),
-    				request.getParameter("botname")), "insert");		
-    		useDB.clean();		
+    		try {
+        		DB useDB = new DB();
+        		useDB.Query(String.format(
+        				"update trade set status=0 where email=\'%s\' and bot_name=\'%s\'" ,
+        				(String) session.getAttribute("email"),
+        				request.getParameter("botname")), "insert");		
+        		useDB.clean();
+    		} catch(SQLException se) {
+    			se.printStackTrace();
+    		}
         }
 
 	}

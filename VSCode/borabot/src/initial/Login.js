@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { login } from '../actions';
+import { login } from '../reducers/logInOut';
 
 var key = "tHis_iS_pRivaTe_Key";
 const encrypt = (err, key) => {
@@ -43,9 +43,10 @@ class Login extends Component {
     }
   }
 
-
-
   handleLogin = (e) => {
+
+    // this.props.onLogin()
+
     axios.post( 
       'Login', 
       'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
@@ -76,9 +77,9 @@ class Login extends Component {
 }
 
 let mapDispatchToProps = (dispatch) => {
-    return {
-        onLogin: () => dispatch(login())
-    }
+  return {
+    onLogin: () => dispatch(login())
+  }
 }
 
 Login = connect(undefined, mapDispatchToProps)(Login);

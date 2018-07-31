@@ -46,10 +46,10 @@ public class Log extends HttpServlet {
 		String selectSql = String.format("SELECT DISTINCT bot_name, exchange_name, coin from trans_log where email=\'%s\'", (String) session.getAttribute("email"));
 
 		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+		
 			while(rs.next()) {
 				JSONObject jObject = new JSONObject();
 				jObject.put("bot_name", rs.getString("bot_name"));
@@ -85,10 +85,10 @@ public class Log extends HttpServlet {
 				(String) session.getAttribute("email"),request.getParameter("bot_name"));
 
 		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+		
 			while(rs.next()) {
 				JSONObject jObject = new JSONObject();
 				jObject.put("trans_time", rs.getString("trans_time"));
