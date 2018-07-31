@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
 const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
@@ -23,24 +24,12 @@ class BackTesting extends Component {
   constructor(){
     super();
     this.state={
-      serverStrategyList:[],
-
       isResulted:false,
       text:'',
 
       ReturnDetailMessage:'',
       ReturnMessage:''
     }
-  }
-
-  componentWillMount() {
-    axios.get( 'Strategy' )
-    .then( response => {
-      this.setState({
-        serverStrategyList: response.data
-      })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   handleStartbtn = () => {
@@ -89,11 +78,6 @@ class BackTesting extends Component {
     }
   }
 
-  resize = (obj) => {
-    obj.style.height = "1px";
-    obj.style.height = (12+obj.scrollHeight)+"px";
-  }
-
   render() {
     return (
       <div>        
@@ -120,7 +104,7 @@ class BackTesting extends Component {
           })}
         </select><br/>
         전략 : <select id="strategy">
-          {this.state.serverStrategyList.map((s, i) => {
+          {this.props.strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
         </select><br/>        
@@ -184,6 +168,14 @@ class BackTesting extends Component {
     );
   }
 }
+
+let mapStateToProps = (state) => {
+  return {
+    strategyList: state.strategy.strategyList
+  };
+}
+
+BackTesting = connect(mapStateToProps)(BackTesting);
 
 export default BackTesting;
 

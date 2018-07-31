@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
 import './Sales.css';
 
@@ -22,25 +23,8 @@ for(var i=1;i<=31;i++){
 }
 
 class Sales extends Component {
-  constructor(){
-    super();
-    this.state={
-      serverStrategyList:[],
-    }
-  }
-
-  componentDidMount() {
-    axios.get( 'Strategy' )
-    .then( response => {
-      this.setState({
-        serverStrategyList: response.data
-      })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
-  }
 
   handleStartbtn = () => {
-
     var now = new Date();
     
     var startDate = now.getFullYear()+'-'+
@@ -113,7 +97,7 @@ class Sales extends Component {
           })}
         </select><br/>
         전략 : <select id="strategy">
-          {this.state.serverStrategyList.map((s, i) => {
+          {this.props.strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
         </select><br/>        
@@ -149,5 +133,13 @@ class Sales extends Component {
   }
 
 }
+
+let mapStateToProps = (state) => {
+  return {
+    strategyList: state.strategy.strategyList
+  };
+}
+
+Sales = connect(mapStateToProps)(Sales);
 
 export default Sales;

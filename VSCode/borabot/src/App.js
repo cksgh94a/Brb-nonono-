@@ -13,7 +13,9 @@ import Login from './initial/Login';
 import Register from './initial/Register';
 import Strategy from './strategy/Strategy';
 import Log from './log/Log'
+
 import { login, logout } from './reducers/logInOut';
+import { storeStrategy } from './reducers/strategy';
 
 class App extends Component {
   componentDidMount() {    
@@ -24,9 +26,16 @@ class App extends Component {
       else this.props.onLogout()
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR    
+    
+    axios.get( 'Strategy' )
+    .then( response => {
+      this.props.onStoreStrategy(response.data)
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   render() {
+    console.log(this.props.strategyList)
     return (
       <div>
         <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
@@ -57,13 +66,15 @@ class App extends Component {
 let mapDispatchToProps = (dispatch) => {
   return {
     onLogin: () => dispatch(login()),
-    onLogout: () => dispatch(logout())
+    onLogout: () => dispatch(logout()),
+    onStoreStrategy: () => dispatch(storeStrategy())
   }
 }
 
 let mapStateToProps = (state) => {
   return {
-    login: state.logInOut.login
+    login: state.logInOut.login,
+    strategyList: state.strategy.strategyList
   };
 }
 

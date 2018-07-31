@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
+
+import { storeStrategy } from '../reducers/strategy';
 
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
@@ -42,20 +45,9 @@ class Algorithm extends Component {
       savedCnt: 0,  // 설정된 지표 개수
       jsonString:'', // 서버에 보내기 위한 json
 
-      serverStrategyList:[],
       selectedStrategy:'',
       buttonVal: false
     }
-  }
-
-  componentDidMount() {
-    axios.get( 'Strategy' )
-    .then( response => {
-      this.setState({
-        serverStrategyList: response.data
-      })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   // 지표 select box 변화에 따른 현재 선택된 지표와 기본값 state 변화
@@ -168,7 +160,7 @@ class Algorithm extends Component {
       this.setState({
         buttonVal: true
       })
-      this.state.serverStrategyList.map((s) => {
+      this.props.strategyList.map((s) => {
         if(e.target.value === s.name) {
           this.setState({
             selectedStrategy: JSON.parse(s.data)
@@ -188,21 +180,20 @@ class Algorithm extends Component {
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
     .then( response => {
-      this.setState({
-        serverStrategyList: response.data
-      })
+      this.props.onStoreStrategy(response.data)
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   render() {
+    console.log(this.props.strategyList)
     return (
       <div>
         <h4>불러오기</h4>
         <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)}>
           <option>새로 만들기</option>
           {
-            this.state.serverStrategyList.map((e, i) => {
+            this.props.strategyList.map((e, i) => {
             return (<option key={i}> {e.name} </option>)
           })
         }
@@ -315,5 +306,19 @@ class Algorithm extends Component {
     );
   }
 }
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onStoreStrategy: () => dispatch(storeStrategy())
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    strategyList: state.strategy.strategyList
+  };
+}
+
+Algorithm = connect(mapStateToProps, mapDispatchToProps)(Algorithm);
 
 export default Algorithm;
