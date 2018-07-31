@@ -1,6 +1,6 @@
 const sS = 'storeStrategy';
 
-export function storeStrategy(value) {
+export function setStrategy(value) {
 	return {
 		type: sS,
 		strategyList: value

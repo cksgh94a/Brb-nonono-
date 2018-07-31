@@ -44,9 +44,9 @@ public class Profile extends HttpServlet {
 		String keySql = String.format("SELECT * from customer_key where email=\'%s\'", (String) session.getAttribute("email"));
 
 		DB useDB = new DB();
-		ResultSet rsP = useDB.Query(profileSql, "select"); 	
-
 		try {
+			ResultSet rsP = useDB.Query(profileSql, "select"); 	
+
 			while(rsP.next()) {
 				jsonObject.put("name", rsP.getString("name"));
 				jsonObject.put("phone_number", rsP.getString("phone_number"));
@@ -57,9 +57,9 @@ public class Profile extends HttpServlet {
 		
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();
-
-		ResultSet rsK = useDB.Query(keySql, "select"); 		
+		
 		try {
+			ResultSet rsK = useDB.Query(keySql, "select"); 
 			while(rsK.next()) {
 				JSONObject subObject = new JSONObject();
 				subObject.put("api_key", rsK.getString("api_key"));
@@ -89,30 +89,32 @@ public class Profile extends HttpServlet {
 	    
 		HttpSession session = request.getSession();
 	    
-		
-	    if(Boolean.valueOf(request.getParameter("profile"))) {
-			String updateSql = String.format("update customer set name='"+request.getParameter("name")+
-					"', phone_number='"+request.getParameter("phone_number")+
-					"' where email='"+session.getAttribute("email")+"'");
-			
-			DB useDB = new DB();
-			useDB.Query(updateSql, "insert");
-			
-			useDB.clean();	    	
-	    }
-	    
-	    else {
-			String updateSql = String.format("update customer_key set api_key='"+request.getParameter("api_key")+
-					"', secret_key='"+request.getParameter("secret_key")+
-					"' where email='"+session.getAttribute("email")+
-					"' and exchange_name='"+request.getParameter("exchange_name")+"'");
-
-			DB useDB = new DB();
-			useDB.Query(updateSql, "insert");
-			
-			useDB.clean();	    	
-	    	
-	    }
+		try {
+		    if(Boolean.valueOf(request.getParameter("profile"))) {
+				String updateSql = String.format("update customer set name='"+request.getParameter("name")+
+						"', phone_number='"+request.getParameter("phone_number")+
+						"' where email='"+session.getAttribute("email")+"'");
+				
+				DB useDB = new DB();
+				useDB.Query(updateSql, "insert");
+				
+				useDB.clean();	    	
+		    }
+		    
+		    else {
+				String updateSql = String.format("update customer_key set api_key='"+request.getParameter("api_key")+
+						"', secret_key='"+request.getParameter("secret_key")+
+						"' where email='"+session.getAttribute("email")+
+						"' and exchange_name='"+request.getParameter("exchange_name")+"'");
+	
+				DB useDB = new DB();
+				useDB.Query(updateSql, "insert");
+				
+				useDB.clean();	    
+		    }
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
 	    
 	}
 

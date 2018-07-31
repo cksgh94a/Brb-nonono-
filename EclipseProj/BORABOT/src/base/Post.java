@@ -44,11 +44,11 @@ public class Post extends HttpServlet {
 		String selectSql = String.format("SELECT email, content, title from board where post_num=%s", request.getParameter("post_num"));
 
 		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
 
 		JSONObject jObject = new JSONObject();
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+
 			while(rs.next()) {
 				jObject.put("email", rs.getString("email"));
 				jObject.put("title", rs.getString("title"));
@@ -79,25 +79,29 @@ public class Post extends HttpServlet {
         String sql = "";
 
 		DB useDB = new DB();
+		try {
+	        if(request.getParameter("action").equals("write")) {
+	    		sql = String.format("INSERT INTO board (email, content, post_time, title, comment_count)VALUES('"
+	    				+session.getAttribute("email")+"', '"
+	    				+request.getParameter("content")+"', '"
+	    				+request.getParameter("post_time")+"', '"
+	    				+request.getParameter("title")+"', 0)");
+	    		useDB.Query(sql, "insert");    		
+	        } else if(request.getParameter("action").equals("modify")) {		// 수정 부분 만들어야
+				sql = String.format("update board set title=\'%s\' where post_num=%s", request.getParameter("title"), request.getParameter("post_num"));
+				useDB.Query(sql, "insert");
+				sql = String.format("update board set content=\'%s\' where post_num=%s", request.getParameter("content"), request.getParameter("post_num"));
+				useDB.Query(sql, "insert");
+	        } else if(request.getParameter("action").equals("delete")) {
+				sql = String.format("delete from comment where post_num=%s", request.getParameter("post_num"));
+				useDB.Query(sql, "insert");			
+				sql = String.format("delete from board where post_num=%s", request.getParameter("post_num"));
+				useDB.Query(sql, "insert");			
+	        } else System.out.println("Post 오류!!");
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
 		
-        if(request.getParameter("action").equals("write")) {
-    		sql = String.format("INSERT INTO board (email, content, post_time, title, comment_count)VALUES('"
-    				+session.getAttribute("email")+"', '"
-    				+request.getParameter("content")+"', '"
-    				+request.getParameter("post_time")+"', '"
-    				+request.getParameter("title")+"', 0)");
-    		useDB.Query(sql, "insert");    		
-        } else if(request.getParameter("action").equals("modify")) {		// 수정 부분 만들어야
-			sql = String.format("update board set title=\'%s\' where post_num=%s", request.getParameter("title"), request.getParameter("post_num"));
-			useDB.Query(sql, "insert");
-			sql = String.format("update board set content=\'%s\' where post_num=%s", request.getParameter("content"), request.getParameter("post_num"));
-			useDB.Query(sql, "insert");
-        } else if(request.getParameter("action").equals("delete")) {
-			sql = String.format("delete from comment where post_num=%s", request.getParameter("post_num"));
-			useDB.Query(sql, "insert");			
-			sql = String.format("delete from board where post_num=%s", request.getParameter("post_num"));
-			useDB.Query(sql, "insert");			
-        } else System.out.println("Post 오류!!");        
 		useDB.clean();		
 	}
 

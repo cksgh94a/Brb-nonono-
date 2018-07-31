@@ -46,10 +46,10 @@ public class Comment extends HttpServlet {
 		String selectSql = String.format("SELECT * from comment where post_num=\'%s\'", request.getParameter("post_num"));
 
 		DB useDB = new DB();
-		
-		ResultSet rs = useDB.Query(selectSql, "select"); 
-		
+
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select"); 
+		
 			while(rs.next()) {
 				JSONObject jObject = new JSONObject();
 				jObject.put("email", rs.getString("email"));
@@ -83,28 +83,32 @@ public class Comment extends HttpServlet {
 
 		DB useDB = new DB();
 
-        if(request.getParameter("action").equals("enroll")) {
-    		// comment DB에 입력
-    		sql = String.format("INSERT INTO comment (email, post_num, comment, comment_time)VALUES('"
-    				+session.getAttribute("email")+"', '"
-    				+request.getParameter("post_num")+"', '"
-    				+request.getParameter("comment")+"', '"
-    				+request.getParameter("comment_time")+"')");
-    		useDB.Query(sql, "insert");
-
-    		// board DB의 댓글 개수 증가
-    		sql = String.format("update board set comment_count=comment_count+1 where post_num=%s", request.getParameter("post_num"));
-    		useDB.Query(sql, "insert");
-	    } else if(request.getParameter("action").equals("delete")) {
-			sql = String.format("delete from comment where post_num=%s and comment_time=\'%s\'",
-					request.getParameter("post_num"),
-					request.getParameter("comment_time"));
-			useDB.Query(sql, "insert");			
-    		// board DB의 댓글 개수 감소
-			
-    		sql = String.format("update board set comment_count=comment_count-1 where post_num=%s", request.getParameter("post_num"));
-    		useDB.Query(sql, "insert");
-	    } else System.out.println("Post 오류!!");
+		try {
+	        if(request.getParameter("action").equals("enroll")) {
+	    		// comment DB에 입력
+	    		sql = String.format("INSERT INTO comment (email, post_num, comment, comment_time)VALUES('"
+	    				+session.getAttribute("email")+"', '"
+	    				+request.getParameter("post_num")+"', '"
+	    				+request.getParameter("comment")+"', '"
+	    				+request.getParameter("comment_time")+"')");
+	    		useDB.Query(sql, "insert");
+	
+	    		// board DB의 댓글 개수 증가
+	    		sql = String.format("update board set comment_count=comment_count+1 where post_num=%s", request.getParameter("post_num"));
+	    		useDB.Query(sql, "insert");
+		    } else if(request.getParameter("action").equals("delete")) {
+				sql = String.format("delete from comment where post_num=%s and comment_time=\'%s\'",
+						request.getParameter("post_num"),
+						request.getParameter("comment_time"));
+				useDB.Query(sql, "insert");			
+	    		// board DB의 댓글 개수 감소
+				
+	    		sql = String.format("update board set comment_count=comment_count-1 where post_num=%s", request.getParameter("post_num"));
+	    		useDB.Query(sql, "insert");
+		    } else System.out.println("Post 오류!!");
+		} catch (SQLException se) {
+			se.printStackTrace();
+		}
 		
 		useDB.clean();
 		

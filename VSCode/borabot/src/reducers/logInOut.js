@@ -1,6 +1,5 @@
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
-// export const SET_DIFF = 'SET_DIFF';
 
 export function login() {
 	return {

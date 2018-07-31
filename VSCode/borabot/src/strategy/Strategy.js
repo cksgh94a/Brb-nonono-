@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { storeStrategy } from '../reducers/strategy';
+import { setStrategy } from '../reducers/strategy';
 
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
@@ -309,7 +309,7 @@ class Algorithm extends Component {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    onStoreStrategy: () => dispatch(storeStrategy())
+    onStoreStrategy: (value) => dispatch(setStrategy(value))
   }
 }
 

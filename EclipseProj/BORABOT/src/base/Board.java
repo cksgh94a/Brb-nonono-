@@ -48,9 +48,9 @@ public class Board extends HttpServlet {
 				((Integer.parseInt(request.getParameter("pageNum"))-1)*10));
 
 		DB useDB = new DB();
-
-		ResultSet rs = useDB.Query(selectSql, "select");		
+		
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select");	
 			while(rs.next()) {
 				JSONObject sObject = new JSONObject();
 				sObject.put("email", rs.getString("email"));
@@ -68,9 +68,9 @@ public class Board extends HttpServlet {
 		
 		jObject.put("postList", jArray);
 		
-		selectSql = String.format("SELECT count(*) from board");
-		rs = useDB.Query(selectSql, "select");		
+		selectSql = String.format("SELECT count(*) from board");	
 		try {
+			ResultSet rs = useDB.Query(selectSql, "select");	
 			while(rs.next()) {
 				jObject.put("count", rs.getString("count(*)"));
 			}
