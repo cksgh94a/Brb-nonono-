@@ -39,7 +39,7 @@ public class TradeMain extends HttpServlet {
 
         if(Boolean.valueOf(request.getParameter("status")))
             new tradingBot((String) session.getAttribute("email"),
-            		request.getParameter("exchange"),
+            		request.getParameter("exchange").toLowerCase(),
             		request.getParameter("botname"),
             		request.getParameter("coin"),
             		request.getParameter("base"),

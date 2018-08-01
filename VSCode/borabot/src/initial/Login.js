@@ -45,7 +45,7 @@ class Login extends Component {
 
   handleLogin = (e) => {
 
-    // this.props.onLogin()
+    // this.props.onLogin() // 앞단 테스트용 로그인 통과
 
     axios.post( 
       'Login', 
@@ -57,7 +57,7 @@ class Login extends Component {
       else if(response.data === 'pwError') alert('비밀번호가 일치하지 않습니다.')
       else if(response.data === 'complete') {
         this.props.onLogin()
-        window.location = "/main";
+        window.location = "/";
       } 
       else alert(response.data)
     }) 

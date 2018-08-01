@@ -2,11 +2,6 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
-const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
-const baseList = ["krw", "usd"]
-const intervalList = ["300", "1800", "3600", "21600", "43200", "86400"]
-
 const today = new Date();
 
 const yearList = [today.getFullYear(), today.getFullYear()-1]
@@ -20,15 +15,49 @@ for(var i=1;i<=31;i++){
   if(i<=24) hourList.push(i-1)  
 }
 
+const periodLimit = [ "1일", "1주일", "15일", "3개월", "3개월", "3개월" ]
+
 class BackTesting extends Component {
   constructor(){
     super();
     this.state={
+      exchangeIndex: 0,
+      baseIndex: 0,
+      
       isResulted:false,
       text:'',
 
       ReturnDetailMessage:'',
       ReturnMessage:''
+    }
+  }
+
+  handleIndex = () => {
+    this.setState({
+      exchangeIndex: document.getElementById('exchange').selectedIndex,
+      baseIndex: document.getElementById('base').selectedIndex
+    })
+  }
+
+  dateValidate = (sD, eD) =>{
+    var diff = new Date(eD) - new Date(sD)
+    switch(document.getElementById('interval').value) {
+      case "5분":
+        if( diff > 0 && diff < 1*24*60*60*1000 )
+          return true
+        else return false
+      case "30분":
+        if( diff > 0 && diff < 7*24*60*60*1000 )
+          return true
+        else return false
+      case "1시간":
+        if( diff > 0 && diff < 15*24*60*60*1000 )
+          return true
+        else return false
+      default:
+        if( diff > 0 && diff < 90*24*60*60*1000 )
+          return true
+        else return false
     }
   }
 
@@ -42,28 +71,35 @@ class BackTesting extends Component {
     ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
     ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
 
-    axios.post( 
-      'BackTest', 
-      'exchange='+document.getElementById('exchange').value+
-      '&coin='+document.getElementById('coin').value+
-      '&base='+document.getElementById('base').value+ 
-      '&interval='+document.getElementById('interval').value+
-      '&strategyName='+document.getElementById('strategy').value+
-      '&buyingSetting='+document.getElementById('buyingSetting').value+
-      '&sellingSetting='+document.getElementById('sellingSetting').value+
-      '&startDate='+startDate+
-      '&endDate='+endDate+
-      '&nowCash='+document.getElementById('nowCash').value,
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
-    .then( response => {
-      this.setState({
-        isResulted: true,
-        ReturnDetailMessage: response.data.ReturnDetailMessage,
-        ReturnMessage: response.data.ReturnMessage
-      })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
+    if(this.dateValidate(startDate, endDate)){
+      axios.post( 
+        'BackTest', 
+        'exchange='+document.getElementById('exchange').value+
+        '&coin='+document.getElementById('coin').value+
+        '&base='+document.getElementById('base').value+ 
+        '&interval='+this.props.intervalList.value[document.getElementById('interval').selectedIndex]+
+        '&strategyName='+document.getElementById('strategy').value+
+        '&buyingSetting='+document.getElementById('buyingSetting').value+
+        '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&startDate='+startDate+
+        '&endDate='+endDate+
+        '&nowCash='+document.getElementById('nowCash').value,
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        this.setState({
+          isResulted: true,
+          ReturnDetailMessage: response.data.ReturnDetailMessage,
+          ReturnMessage: response.data.ReturnMessage,
+          text: response.data.ReturnMessage
+        })
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR
+    } else alert(
+      document.getElementById('interval').value +
+      ' 간격의 거래는 ' +
+      periodLimit[document.getElementById('interval').selectedIndex] +
+      ' 이내의 기간으로 설정해주세요.')
   }
 
   handleResult = (e) => {
@@ -82,24 +118,24 @@ class BackTesting extends Component {
     return (
       <div>        
         <h4 >Back Testing</h4>
-        거래소 : <select id="exchange">
-          {exchangeList.map((exchange, i) => {
-            return (<option key={i}> {exchange} </option>)
+        거래소 : <select id="exchange" onChange={this.handleIndex}>
+          {this.props.exchangeList.map((exchange, index) => {
+            return (<option key={index} > {exchange} </option>)
           })
           }
         </select><br/>
-        코인 : <select id="coin">
-          {coinList.map((coin, i) => {
-            return (<option key={i}> {coin} </option>)
-          })}
-        </select><br/>
-        기축통화 : <select id="base">
-          {baseList.map((base, i) => {
+        기축통화 : <select id="base" onChange={this.handleIndex}>
+          {this.props.exchange[this.state.exchangeIndex].baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
+        코인 : <select id="coin">
+          {this.props.exchange[this.state.exchangeIndex].coin[this.state.baseIndex].list.map((coin, i) => {
+            return (<option key={i}> {coin} </option>)
+          })}
+        </select><br/>
         거래 간격 : <select id="interval">
-          {intervalList.map((int, i) => {
+          {this.props.intervalList.display.map((int, i) => {
             return (<option key={i}> {int} </option>)
           })}
         </select><br/>
@@ -171,7 +207,10 @@ class BackTesting extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    strategyList: state.strategy.strategyList
+    strategyList: state.strategy.strategyList,
+    exchangeList: state.exchange.exchangeList,
+    exchange: state.exchange.exchange,
+    intervalList: state.exchange.intervalList
   };
 }
 

@@ -42,7 +42,7 @@ public class BackTest extends HttpServlet {
 		System.out.println(request.getParameter("buySetting"));
 		
 		BackTesting bt = new BackTesting((String) session.getAttribute("email"),
-				request.getParameter("exchange"),
+				request.getParameter("exchange").toLowerCase(),
 				request.getParameter("coin"),
 				request.getParameter("base"),
 				Integer.parseInt(request.getParameter("interval")),

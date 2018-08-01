@@ -396,7 +396,7 @@ public class BackTesting {
 						}
 						else {
 							//System.out.println("일정가 구매 - fail : 잔액부족");
-							returnMessage +=  date+"\n"+"일정가 구매 - fail : 잔액부족"+"\n";
+//							returnMessage +=  date+"\n"+"일정가 구매 - fail : 잔액부족"+"\n";
 							returnDetailMessage += "일정가 구매 - fail : 잔액부족\n";
 							continue;
 						}
@@ -410,7 +410,7 @@ public class BackTesting {
 						}
 						else {
 							//System.out.println("일정수 구매 - fail : 잔액부족");
-							returnMessage +=  date+"\n"+"일정수 구매 - fail : 잔액부족"+"\n";
+//							returnMessage +=  date+"\n"+"일정수 구매 - fail : 잔액부족"+"\n";
 							returnDetailMessage += "일정수 구매 - fail : 잔액부족\n";
 							continue;
 						}
@@ -423,10 +423,10 @@ public class BackTesting {
 				}
 				else {
 					//System.out.println("구매 - no money!");
-					returnMessage += date+"\n구매 - no money!"+"\n";
+//					returnMessage += date+"\n구매 - no money!"+"\n";
 					returnDetailMessage += "\n구매 - no money!"+"\n";
 				}
-				returnMessage += "--------------------------------------------------------------\n";
+//				returnMessage += "--------------------------------------------------------------\n";
 			}
 			
 			
@@ -449,7 +449,7 @@ public class BackTesting {
 						}
 						else {
 							//System.out.println("일정가 판매 - fail : 코인부족");
-							returnMessage += "일정가 판매 - fail : 코인부족"+"\n";
+//							returnMessage += "일정가 판매 - fail : 코인부족"+"\n";
 							returnDetailMessage += "일정가 판매 - fail : 코인부족"+"\n";
 							continue;
 						}
@@ -465,7 +465,7 @@ public class BackTesting {
 						}
 						else {
 							//System.out.println("일정수 판매 - fail : 코인부족");
-							returnMessage += "일정수 판매 - fail : 코인부족"+"\n";
+//							returnMessage += "일정수 판매 - fail : 코인부족"+"\n";
 							returnDetailMessage += "일정수 판매 - fail : 코인부족\n";
 							continue;
 						}
@@ -479,11 +479,11 @@ public class BackTesting {
 				}
 				else {
 					//System.out.println("판매 - no coin!");
-					returnMessage+= date+"\n판매 - no coin!"+"\n";
+//					returnMessage+= date+"\n판매 - no coin!"+"\n";
 					returnDetailMessage += "판매 - no coin!"+"\n";
 				}
 				
-				returnMessage += "--------------------------------------------------------------\n";
+//				returnMessage += "--------------------------------------------------------------\n";
 			}
 			else {
 				//대기
@@ -498,10 +498,10 @@ public class BackTesting {
 		System.out.println("\n		<<상세결과>>\n" + returnDetailMessage);
 		
 		double finalAsset = (hHLCVArr[hHLCVArr.length-1][2] * nowCoin + nowCash);
-		double profit = ( (finalAsset - initialCash) / initialCash);
+		double profit = ( (finalAsset - initialCash) / initialCash) * 100.0;
 		
 		System.out.println(finalAsset + " " + initialCash);
-		returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit;
+		returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit + "%";
 		System.out.println(returnResult);
 		
 		//System.out.println("---결과---\n" + returnMessage);

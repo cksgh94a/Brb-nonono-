@@ -10,7 +10,6 @@ class Header extends Component {
     if(window.confirm('로그아웃하시겠습니까?')){
       axios.get( 'Logout')
       this.props.onLogout()
-      alert('로그아웃되었습니다..')
     }
   }
 

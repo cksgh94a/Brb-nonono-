@@ -20,9 +20,7 @@ class Register extends Component {
 
       eVal: true, // 이메일 유효성
       pVal: true,  // 비밀번호 유효성
-      ppVal: true,
-      
-      isVal: false
+      ppVal: true
     }
   }
 
@@ -82,7 +80,7 @@ class Register extends Component {
 
   handleRegister = (e) => {
     // 회원가입 조건 검증
-    if(this.state.isVal){
+    if(this.state.eVal && this.state.pVal && this.state.ppVal){
       axios.post( 
         'Register', 
         'auth='+false+

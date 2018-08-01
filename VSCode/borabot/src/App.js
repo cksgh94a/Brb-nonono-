@@ -35,7 +35,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.props)
     return (
       <div>
         <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>

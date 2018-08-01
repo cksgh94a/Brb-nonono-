@@ -4,11 +4,6 @@ import { connect } from 'react-redux';
 
 import './Sales.css';
 
-const exchangeList = ["bithumb", "bittrex", "binance", "korbit", "coinone"]
-const coinList = ["btc", "eth", "btg", "xrp", "eos", "ltc", "dog", "etc", "qtum"]
-const baseList = ["krw", "usd"]
-const intervalList = ["300", "1800", "3600", "21600", "43200", "86400"]
-
 const today = new Date();
 
 const yearList = [today.getFullYear(), today.getFullYear()-1]
@@ -18,11 +13,26 @@ const hourList = []
 
 for(var i=1;i<=31;i++){
   if(i<=12) monthList.push(i)
-  dayList.push(i)
+  dayList.push(i) 
   if(i<=24) hourList.push(i-1)  
 }
 
 class Sales extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      exchangeIndex: 0,
+      baseIndex: 0
+    };
+  }
+
+  handleIndex = () => {
+    this.setState({
+      exchangeIndex: document.getElementById('exchange').selectedIndex,
+      baseIndex: document.getElementById('base').selectedIndex
+    })
+  }
 
   handleStartbtn = () => {
     var now = new Date();
@@ -58,7 +68,7 @@ class Sales extends Component {
         '&exchange='+document.getElementById('exchange').value+
         '&coin='+document.getElementById('coin').value+
         '&base='+document.getElementById('base').value+ 
-        '&interval='+document.getElementById('interval').value+
+        '&interval='+this.props.intervalList.value[document.getElementById('interval').selectedIndex]+
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+document.getElementById('buyingSetting').value+
         '&sellingSetting='+document.getElementById('sellingSetting').value+
@@ -75,24 +85,24 @@ class Sales extends Component {
       <div>        
         <h4 className="Sales-color">Sales configuration</h4>
         <input placeholder="이름" id="botname"/><br/>
-        거래소 : <select id="exchange">
-          {exchangeList.map((exchange, i) => {
-            return (<option key={i}> {exchange} </option>)
+        거래소 : <select id="exchange" onChange={this.handleIndex}>
+          {this.props.exchangeList.map((exchange, index) => {
+            return (<option key={index} > {exchange} </option>)
           })
           }
         </select><br/>
-        코인 : <select id="coin">
-          {coinList.map((coin, i) => {
-            return (<option key={i}> {coin} </option>)
-          })}
-        </select><br/>
-        기축통화 : <select id="base">
-          {baseList.map((base, i) => {
+        기축통화 : <select id="base" onChange={this.handleIndex}>
+          {this.props.exchange[this.state.exchangeIndex].baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
+        코인 : <select id="coin">
+          {this.props.exchange[this.state.exchangeIndex].coin[this.state.baseIndex].list.map((coin, i) => {
+            return (<option key={i}> {coin} </option>)
+          })}
+        </select><br/>
         거래 간격 : <select id="interval">
-          {intervalList.map((int, i) => {
+          {this.props.intervalList.display.map((int, i) => {
             return (<option key={i}> {int} </option>)
           })}
         </select><br/>
@@ -136,7 +146,10 @@ class Sales extends Component {
 
 let mapStateToProps = (state) => {
   return {
-    strategyList: state.strategy.strategyList
+    strategyList: state.strategy.strategyList,
+    exchangeList: state.exchange.exchangeList,
+    exchange: state.exchange.exchange,
+    intervalList: state.exchange.intervalList
   };
 }
 

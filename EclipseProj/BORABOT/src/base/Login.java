@@ -50,15 +50,15 @@ public class Login extends HttpServlet {
 			DB useDB = new DB();
 			ResultSet rs = useDB.Query(selectSql, "select"); 
 			
-				if(rs.next()) {					
-					if(password.equals(rs.getString("password"))) {
-						// 세션에 사용자 정보 저장
-						HttpSession session = request.getSession();
-						session.setAttribute("email", email);	
-						session.setAttribute("status", true);		
-						result = "complete";
-					} else result = "pwError";
-				} else result = "emailError";
+			if(rs.next()) {					
+				if(password.equals(rs.getString("password"))) {
+					// 세션에 사용자 정보 저장
+					HttpSession session = request.getSession();
+					session.setAttribute("email", email);	
+					session.setAttribute("status", true);		
+					result = "complete";
+				} else result = "pwError";
+			} else result = "emailError";
 			
 			// 5. DB 사용후 clean()을 이용하여 정리
 			useDB.clean();	

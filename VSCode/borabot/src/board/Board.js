@@ -15,7 +15,7 @@ class Board extends Component {
     }
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.getBoard(1)
   }
 
