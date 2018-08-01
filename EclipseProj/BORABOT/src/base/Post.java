@@ -41,7 +41,7 @@ public class Post extends HttpServlet {
         HttpSession session = request.getSession();
 
     	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT email, content, title from board where post_num=%s", request.getParameter("post_num"));
+		String selectSql = String.format("SELECT email, content, title, post_time from board where post_num=%s", request.getParameter("post_num"));
 
 		DB useDB = new DB();
 
@@ -53,6 +53,7 @@ public class Post extends HttpServlet {
 				jObject.put("email", rs.getString("email"));
 				jObject.put("title", rs.getString("title"));
 				jObject.put("content", rs.getString("content"));
+				jObject.put("post_time", rs.getString("post_time"));
 				jObject.put("writer", rs.getString("email").equals(session.getAttribute("email")));
 			}
 		} catch (SQLException e) {

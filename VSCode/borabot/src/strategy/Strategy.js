@@ -29,7 +29,7 @@ var indicatorList = [RSI, BollingerBand, CCI, gdCross, gdVCross, MFI, StochOsc, 
 var defaultIndicatorList = [defaultRSI, defaultBollingerBand, defaultCCI, defaultgdCross, defaultgdVCross, defaultMFI, defaultStochOsc, defaultVolumeRatio, defaultpCorr]
 
 
-class Algorithm extends Component {
+class Strategy extends Component {
   constructor(){
     super();
     this.state={
@@ -52,14 +52,14 @@ class Algorithm extends Component {
 
   // 지표 select box 변화에 따른 현재 선택된 지표와 기본값 state 변화
   handleIndicator = (e) => {
-    indicatorList.map((idc, i) => {
+    indicatorList.map((idc) => {
       if(idc.indicator === e.target.value){
         this.setState({
           selectedIndicator: idc
         })
       }
     })
-    defaultIndicatorList.map((didc, i) => {
+    defaultIndicatorList.map((didc) => {
       if(didc.indicator === e.target.value){
         this.setState({
           defaultIndicator: didc
@@ -70,71 +70,72 @@ class Algorithm extends Component {
 
   // 설정한 지표 저장 및 리스트, json 저장
   handleSave = (e) => {
+    const { selectedIndicator, jsonString, savedCnt, expList, defaultIndicator, calculate } = this.state
 
     // 현재 설정된 지표 세부 설정 저장
-    if(document.getElementById('weight').value === '') this.state.selectedIndicator.weight = this.state.defaultIndicator.weight
-    else this.state.selectedIndicator.weight = document.getElementById('weight').value
+    if(document.getElementById('weight').value === '') selectedIndicator.weight = defaultIndicator.weight
+    else selectedIndicator.weight = document.getElementById('weight').value
 
-    if(this.state.selectedIndicator.period === undefined) {}
-    else if(document.getElementById('period').value === '') this.state.selectedIndicator.period = this.state.defaultIndicator.period
-    else this.state.selectedIndicator.period = document.getElementById('period').value
+    if(selectedIndicator.period === undefined) {}
+    else if(document.getElementById('period').value === '') selectedIndicator.period = defaultIndicator.period
+    else selectedIndicator.period = document.getElementById('period').value
 
-    if(this.state.selectedIndicator.buyIndex === undefined) {}
-    else if(document.getElementById('buyIndex').value === '') this.state.selectedIndicator.buyIndex = this.state.defaultIndicator.buyIndex
-    else this.state.selectedIndicator.buyIndex = document.getElementById('buyIndex').value
+    if(selectedIndicator.buyIndex === undefined) {}
+    else if(document.getElementById('buyIndex').value === '') selectedIndicator.buyIndex = defaultIndicator.buyIndex
+    else selectedIndicator.buyIndex = document.getElementById('buyIndex').value
 
-    if(this.state.selectedIndicator.sellIndex === undefined) {}
-    else if(document.getElementById('sellIndex').value === '') this.state.selectedIndicator.sellIndex = this.state.defaultIndicator.sellIndex
-    else this.state.selectedIndicator.sellIndex = document.getElementById('sellIndex').value
+    if(selectedIndicator.sellIndex === undefined) {}
+    else if(document.getElementById('sellIndex').value === '') selectedIndicator.sellIndex = defaultIndicator.sellIndex
+    else selectedIndicator.sellIndex = document.getElementById('sellIndex').value
 
-    if(this.state.selectedIndicator.mul === undefined) {}
-    else if(document.getElementById('mul').value === '') this.state.selectedIndicator.mul = this.state.defaultIndicator.mul
-    else this.state.selectedIndicator.mul = document.getElementById('mul').value
+    if(selectedIndicator.mul === undefined) {}
+    else if(document.getElementById('mul').value === '') selectedIndicator.mul = defaultIndicator.mul
+    else selectedIndicator.mul = document.getElementById('mul').value
 
-    if(this.state.selectedIndicator.longD === undefined) {}
-    else if(document.getElementById('longD').value === '') this.state.selectedIndicator.longD = this.state.defaultIndicator.longD
-    else this.state.selectedIndicator.longD = document.getElementById('longD').value
+    if(selectedIndicator.longD === undefined) {}
+    else if(document.getElementById('longD').value === '') selectedIndicator.longD = defaultIndicator.longD
+    else selectedIndicator.longD = document.getElementById('longD').value
 
-    if(this.state.selectedIndicator.shortD === undefined) {}
-    else if(document.getElementById('shortD').value === '') this.state.selectedIndicator.shortD = this.state.defaultIndicator.shortD
-    else this.state.selectedIndicator.shortD = document.getElementById('shortD').value
+    if(selectedIndicator.shortD === undefined) {}
+    else if(document.getElementById('shortD').value === '') selectedIndicator.shortD = defaultIndicator.shortD
+    else selectedIndicator.shortD = document.getElementById('shortD').value
 
-    if(this.state.selectedIndicator.mT === undefined) {}
-    else if(document.getElementById('mT').value === '') this.state.selectedIndicator.mT = this.state.defaultIndicator.mT
-    else this.state.selectedIndicator.mT = document.getElementById('mT').value
+    if(selectedIndicator.mT === undefined) {}
+    else if(document.getElementById('mT').value === '') selectedIndicator.mT = defaultIndicator.mT
+    else selectedIndicator.mT = document.getElementById('mT').value
 
-    if(this.state.selectedIndicator.n === undefined) {}
-    else if(document.getElementById('n').value === '') this.state.selectedIndicator.n = this.state.defaultIndicator.n
-    else this.state.selectedIndicator.n = document.getElementById('n').value
+    if(selectedIndicator.n === undefined) {}
+    else if(document.getElementById('n').value === '') selectedIndicator.n = defaultIndicator.n
+    else selectedIndicator.n = document.getElementById('n').value
 
-    if(this.state.selectedIndicator.m === undefined) {}
-    else if(document.getElementById('m').value === '') this.state.selectedIndicator.m = this.state.defaultIndicator.m
-    else this.state.selectedIndicator.m = document.getElementById('m').value
+    if(selectedIndicator.m === undefined) {}
+    else if(document.getElementById('m').value === '') selectedIndicator.m = defaultIndicator.m
+    else selectedIndicator.m = document.getElementById('m').value
 
-    if(this.state.selectedIndicator.t === undefined) {}
-    else if(document.getElementById('t').value === '') this.state.selectedIndicator.t = this.state.defaultIndicator.t
-    else this.state.selectedIndicator.t = document.getElementById('t').value
+    if(selectedIndicator.t === undefined) {}
+    else if(document.getElementById('t').value === '') selectedIndicator.t = defaultIndicator.t
+    else selectedIndicator.t = document.getElementById('t').value
 
-    if(this.state.selectedIndicator.cor === undefined) {}
-    else if(document.getElementById('cor').value === '') this.state.selectedIndicator.cor = this.state.defaultIndicator.cor
-    else this.state.selectedIndicator.cor = document.getElementById('cor').value
+    if(selectedIndicator.cor === undefined) {}
+    else if(document.getElementById('cor').value === '') selectedIndicator.cor = defaultIndicator.cor
+    else selectedIndicator.cor = document.getElementById('cor').value
 
-    var tempJson = this.state.jsonString
+    var tempJson = jsonString
 
-    if(this.state.savedCnt === 0) {
+    if(savedCnt === 0) {
       this.setState({
         buttonVal: false,
-        indicatorList: this.state.indicatorList.concat(this.state.selectedIndicator),
-        savedCnt: this.state.savedCnt + 1,
-        jsonString: '"'+this.state.savedCnt+'":'+JSON.stringify(this.state.selectedIndicator)
+        indicatorList: indicatorList.concat(selectedIndicator),
+        savedCnt: savedCnt + 1,
+        jsonString: '"'+savedCnt+'":'+JSON.stringify(selectedIndicator)
       })
     } else {
       this.setState({
         name: document.getElementById('name').value,
-        indicatorList: this.state.indicatorList.concat(this.state.selectedIndicator),
-        expList: this.state.expList.concat(this.state.calculate),
-        savedCnt: this.state.savedCnt + 1,
-        jsonString: tempJson+',"'+this.state.savedCnt+'":'+JSON.stringify(this.state.selectedIndicator)
+        indicatorList: indicatorList.concat(selectedIndicator),
+        expList: expList.concat(calculate),
+        savedCnt: savedCnt + 1,
+        jsonString: tempJson+',"'+savedCnt+'":'+JSON.stringify(selectedIndicator)
       })
     }
   }
@@ -171,22 +172,30 @@ class Algorithm extends Component {
   }
   
   handleComplete = () => {
-    var send = '{"indicatorList":{'+this.state.jsonString+'},"buyCriteria":'+this.state.buyC+',"sellCriteria":'+this.state.sellC+',"expList":"'+this.state.expList+'"}'
-
-    // DB에 새로운 전략 저장
-    axios.post(
-      'Strategy', 
-      'name='+this.state.name+'&data='+send, 
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
-    .then( response => {
-      this.props.onStoreStrategy(response.data)
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
+    // 항목 검증
+    if(this.state.name === null) {
+      alert('전략 이름을 입력하세요')
+      return
+    }
+    
+    if(window.confirm("전략을 저장하시겠습니까?")){
+      var send = '{"indicatorList":{'+this.state.jsonString+'},"buyCriteria":'+this.state.buyC+',"sellCriteria":'+this.state.sellC+',"expList":"'+this.state.expList+'"}'
+  
+      // DB에 새로운 전략 저장
+      axios.post(
+        'Strategy', 
+        'name='+this.state.name+'&data='+send, 
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        this.props.onStoreStrategy(response.data)
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR로
+    }
   }
 
   render() {
-    console.log(this.props.strategyList)
+    const { selectedIndicator, buttonVal, jsonString, savedCnt, expList, selectedStrategy } = this.state
     return (
       <div>
         <h4>불러오기</h4>
@@ -213,95 +222,95 @@ class Algorithm extends Component {
           })
         }
         </select>
-        <input placeholder={"weight: "+this.state.selectedIndicator.weight} id="weight"/>
-        {this.state.selectedIndicator.period !== undefined && 
-          (<input placeholder={"period: "+this.state.selectedIndicator.period} id="period"/>)}
-        {this.state.selectedIndicator.buyIndex !== undefined && 
-          (<input placeholder={"buyIndex: "+this.state.selectedIndicator.buyIndex} id="buyIndex"/>)}
-        {this.state.selectedIndicator.sellIndex !== undefined && 
-          (<input placeholder={"sellIndex: "+this.state.selectedIndicator.sellIndex} id="sellIndex"/>)}
-        {this.state.selectedIndicator.mul !== undefined && 
-          (<input placeholder={"mul: "+this.state.selectedIndicator.mul} id="mul"/>)}
-        {this.state.selectedIndicator.longD !== undefined && 
-          (<input placeholder={"longD: "+this.state.selectedIndicator.longD} id="longD"/>)}
-        {this.state.selectedIndicator.shortD !== undefined && 
-          (<input placeholder={"shortD: "+this.state.selectedIndicator.shortD} id="shortD"/>)}
-        {this.state.selectedIndicator.mT !== undefined && 
-          (<input placeholder={"mT: "+this.state.selectedIndicator.mT} id="mT"/>)}
-        {this.state.selectedIndicator.n !== undefined && 
-          (<input placeholder={"n: "+this.state.selectedIndicator.n} id="n"/>)}
-        {this.state.selectedIndicator.m !== undefined && 
-          (<input placeholder={"m: "+this.state.selectedIndicator.m} id="m"/>)}
-        {this.state.selectedIndicator.t !== undefined && 
-          (<input placeholder={"t: "+this.state.selectedIndicator.t} id="t"/>)}
-        {this.state.selectedIndicator.cor !== undefined && 
-          (<input placeholder={"cor: "+this.state.selectedIndicator.cor} id="cor"/>)}
-        <button disabled={this.state.buttonVal} onClick={this.handleSave}>저장</button>
+        <input placeholder={"weight: "+selectedIndicator.weight} id="weight"/>
+        {selectedIndicator.period !== undefined && 
+          (<input placeholder={"period: "+selectedIndicator.period} id="period"/>)}
+        {selectedIndicator.buyIndex !== undefined && 
+          (<input placeholder={"buyIndex: "+selectedIndicator.buyIndex} id="buyIndex"/>)}
+        {selectedIndicator.sellIndex !== undefined && 
+          (<input placeholder={"sellIndex: "+selectedIndicator.sellIndex} id="sellIndex"/>)}
+        {selectedIndicator.mul !== undefined && 
+          (<input placeholder={"mul: "+selectedIndicator.mul} id="mul"/>)}
+        {selectedIndicator.longD !== undefined && 
+          (<input placeholder={"longD: "+selectedIndicator.longD} id="longD"/>)}
+        {selectedIndicator.shortD !== undefined && 
+          (<input placeholder={"shortD: "+selectedIndicator.shortD} id="shortD"/>)}
+        {selectedIndicator.mT !== undefined && 
+          (<input placeholder={"mT: "+selectedIndicator.mT} id="mT"/>)}
+        {selectedIndicator.n !== undefined && 
+          (<input placeholder={"n: "+selectedIndicator.n} id="n"/>)}
+        {selectedIndicator.m !== undefined && 
+          (<input placeholder={"m: "+selectedIndicator.m} id="m"/>)}
+        {selectedIndicator.t !== undefined && 
+          (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
+        {selectedIndicator.cor !== undefined && 
+          (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
+        <button disabled={buttonVal} onClick={this.handleSave}>저장</button>
 
         <h4>저장된 항목</h4>
-        {this.state.buttonVal === false ? 
-          (Object.keys(JSON.parse('{'+this.state.jsonString+'}')).map((idc, i) => {
+        {buttonVal === false ? 
+          (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
             return (<div key={i}>
-              <b>{JSON.parse('{'+this.state.jsonString+'}')[idc].indicator}</b><br/>
-              <input value={"weight: "+JSON.parse('{'+this.state.jsonString+'}')[idc].weight} readOnly/>
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].period !== undefined && 
-                (<input value={"period: "+JSON.parse('{'+this.state.jsonString+'}')[idc].period} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].buyIndex} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+JSON.parse('{'+this.state.jsonString+'}')[idc].sellIndex} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].mul !== undefined && 
-                (<input value={"mul: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mul} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].longD !== undefined && 
-                (<input value={"longD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].longD} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].shortD !== undefined && 
-                (<input value={"shortD: "+JSON.parse('{'+this.state.jsonString+'}')[idc].shortD} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].mT !== undefined && 
-                (<input value={"mT: "+JSON.parse('{'+this.state.jsonString+'}')[idc].mT} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].n !== undefined && 
-                (<input value={"n: "+JSON.parse('{'+this.state.jsonString+'}')[idc].n} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].m !== undefined && 
-                (<input value={"m: "+JSON.parse('{'+this.state.jsonString+'}')[idc].m} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].t !== undefined && 
-                (<input value={"t: "+JSON.parse('{'+this.state.jsonString+'}')[idc].t} readOnly/>)}
-              {JSON.parse('{'+this.state.jsonString+'}')[idc].cor !== undefined && 
-                (<input value={"cor: "+JSON.parse('{'+this.state.jsonString+'}')[idc].cor} readOnly/>)}<br/>
-              {i !== this.state.savedCnt-1 &&
-                (<button disabled>{this.state.expList[i]}</button>)} 
+              <b>{JSON.parse('{'+jsonString+'}')[idc].indicator}</b><br/>
+              <input value={"weight: "+JSON.parse('{'+jsonString+'}')[idc].weight} readOnly/>
+              {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && 
+                (<input value={"period: "+JSON.parse('{'+jsonString+'}')[idc].period} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && 
+                (<input value={"buyIndex: "+JSON.parse('{'+jsonString+'}')[idc].buyIndex} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && 
+                (<input value={"sellIndex: "+JSON.parse('{'+jsonString+'}')[idc].sellIndex} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && 
+                (<input value={"mul: "+JSON.parse('{'+jsonString+'}')[idc].mul} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && 
+                (<input value={"longD: "+JSON.parse('{'+jsonString+'}')[idc].longD} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && 
+                (<input value={"shortD: "+JSON.parse('{'+jsonString+'}')[idc].shortD} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && 
+                (<input value={"mT: "+JSON.parse('{'+jsonString+'}')[idc].mT} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && 
+                (<input value={"n: "+JSON.parse('{'+jsonString+'}')[idc].n} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && 
+                (<input value={"m: "+JSON.parse('{'+jsonString+'}')[idc].m} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && 
+                (<input value={"t: "+JSON.parse('{'+jsonString+'}')[idc].t} readOnly/>)}
+              {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && 
+                (<input value={"cor: "+JSON.parse('{'+jsonString+'}')[idc].cor} readOnly/>)}<br/>
+              {i !== savedCnt-1 &&
+                (<button disabled>{expList[i]}</button>)} 
             </div>);
           })) :
-          (Object.keys(this.state.selectedStrategy.indicatorList).map((idc, i) => {
+          (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
             return (<div key={i}>
-              <b>{this.state.selectedStrategy.indicatorList[idc].indicator}</b><br/>
-              <input value={"weight: "+this.state.selectedStrategy.indicatorList[idc].weight} readOnly/>
-              {this.state.selectedStrategy.indicatorList[idc].period !== undefined && 
-                (<input value={"period: "+this.state.selectedStrategy.indicatorList[idc].period} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+this.state.selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+this.state.selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].mul !== undefined && 
-                (<input value={"mul: "+this.state.selectedStrategy.indicatorList[idc].mul} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].longD !== undefined && 
-                (<input value={"longD: "+this.state.selectedStrategy.indicatorList[idc].longD} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].shortD !== undefined && 
-                (<input value={"shortD: "+this.state.selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].mT !== undefined && 
-                (<input value={"mT: "+this.state.selectedStrategy.indicatorList[idc].mT} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].n !== undefined && 
-                (<input value={"n: "+this.state.selectedStrategy.indicatorList[idc].n} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].m !== undefined && 
-                (<input value={"m: "+this.state.selectedStrategy.indicatorList[idc].m} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].t !== undefined && 
-                (<input value={"t: "+this.state.selectedStrategy.indicatorList[idc].t} readOnly/>)}
-              {this.state.selectedStrategy.indicatorList[idc].cor !== undefined && 
-                (<input value={"cor: "+this.state.selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
-              {i !== this.state.selectedStrategy.expList.split(',').length &&
-                (<button disabled>{this.state.selectedStrategy.expList.split(',')[i]}</button>)}
+              <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
+              <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
+              {selectedStrategy.indicatorList[idc].period !== undefined && 
+                (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
+                (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
+                (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].mul !== undefined && 
+                (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].longD !== undefined && 
+                (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].shortD !== undefined && 
+                (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].mT !== undefined && 
+                (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].n !== undefined && 
+                (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].m !== undefined && 
+                (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].t !== undefined && 
+                (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
+              {selectedStrategy.indicatorList[idc].cor !== undefined && 
+                (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
+              {i !== selectedStrategy.expList.split(',').length &&
+                (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
             </div>);
           }))
         }
-        <button disabled={this.state.buttonVal} onClick={this.handleComplete}>완료</button>
+        <button disabled={buttonVal} onClick={this.handleComplete}>완료</button>
       </div>
     );
   }
@@ -319,6 +328,6 @@ let mapStateToProps = (state) => {
   };
 }
 
-Algorithm = connect(mapStateToProps, mapDispatchToProps)(Algorithm);
+Strategy = connect(mapStateToProps, mapDispatchToProps)(Strategy);
 
-export default Algorithm;
+export default Strategy;

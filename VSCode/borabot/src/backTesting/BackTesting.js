@@ -62,6 +62,12 @@ class BackTesting extends Component {
   }
 
   handleStartbtn = () => {
+    // 항목 검증
+    if(document.getElementById('nowCash').value === '') {
+      alert('시작 금액을 입력하세요')
+      return
+    }
+
     var startDate = document.getElementById('startYear').value+'-'+
     ("0"+document.getElementById('startMonth').value).slice(-2)+'-'+
     ("0"+document.getElementById('startDay').value).slice(-2)+'T'+
@@ -115,32 +121,34 @@ class BackTesting extends Component {
   }
 
   render() {
+    const { exchangeList, exchange , intervalList , strategyList } = this.props
+    const { exchangeIndex, baseIndex,isResulted, text } = this.state
     return (
       <div>        
         <h4 >Back Testing</h4>
         거래소 : <select id="exchange" onChange={this.handleIndex}>
-          {this.props.exchangeList.map((exchange, index) => {
+          {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange} </option>)
           })
           }
         </select><br/>
         기축통화 : <select id="base" onChange={this.handleIndex}>
-          {this.props.exchange[this.state.exchangeIndex].baseList.map((base, i) => {
+          {exchange[exchangeIndex].baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
         코인 : <select id="coin">
-          {this.props.exchange[this.state.exchangeIndex].coin[this.state.baseIndex].list.map((coin, i) => {
+          {exchange[exchangeIndex].coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
         </select><br/>
         거래 간격 : <select id="interval">
-          {this.props.intervalList.display.map((int, i) => {
+          {intervalList.display.map((int, i) => {
             return (<option key={i}> {int} </option>)
           })}
         </select><br/>
         전략 : <select id="strategy">
-          {this.props.strategyList.map((s, i) => {
+          {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
         </select><br/>        
@@ -194,12 +202,12 @@ class BackTesting extends Component {
         시작 금액 : <input placeholder="시작 금액" id="nowCash"/><br/>
         <button onClick={this.handleStartbtn}>백테스팅 시작</button>
         <h4 >결과</h4>
-        {this.state.isResulted && 
+        {isResulted && 
           (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
-        {this.state.isResulted && 
+        {isResulted && 
           (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}
-        <br/>{this.state.isResulted && 
-          (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={this.state.text}/>)}
+        <br/>{isResulted && 
+          (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)}
       </div>
     );
   }

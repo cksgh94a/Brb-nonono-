@@ -36,28 +36,26 @@ class App extends Component {
 
   render() {
     return (
-      <div>
-        <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-          <div>
-            <Header/>
-            {this.props.login ? 
-              <Switch>
-                <Route path="/profile" component={Profile}/>
-                <Route path="/backtesting" component={BackTesting}/>
-                <Route path="/board" component={Board}/>
-                <Route path="/log" component={Log}/>
-                <Route path="/strategy" component={Strategy}/>
-                <Route path="/" component={Main}/>
-              </Switch> :
-              <Switch>
-                <Route path="/login" component={Login}/>
-                <Route path="/register" component={Register}/>
-                <Route path="/" component={Initial}/>
-              </Switch>
-            }
-          </div>
-        </BrowserRouter>
-      </div>
+      <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
+        <div>
+          <Header/>
+          {this.props.login ? 
+            <Switch>
+              <Route path="/profile" component={Profile}/>
+              <Route path="/backtesting" component={BackTesting}/>
+              <Route path="/board" component={Board}/>
+              <Route path="/log" component={Log}/>
+              <Route path="/strategy" component={Strategy}/>
+              <Route path="/" component={Main}/>
+            </Switch> :
+            <Switch>
+              <Route path="/login" component={Login}/>
+              <Route path="/register" component={Register}/>
+              <Route path="/" component={Initial}/>
+            </Switch>
+          }
+        </div>
+      </BrowserRouter>
     );
   }
 }

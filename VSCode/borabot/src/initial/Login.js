@@ -43,26 +43,28 @@ class Login extends Component {
     }
   }
 
-  handleLogin = (e) => {
-
-    // this.props.onLogin() // 앞단 테스트용 로그인 통과
-
-    axios.post( 
-      'Login', 
-      'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
-    .then( response => {
-      if(response.data === 'emailError') alert('존재하지 않는 계정입니다.')
-      else if(response.data === 'pwError') alert('비밀번호가 일치하지 않습니다.')
-      else if(response.data === 'complete') {
-        this.props.onLogin()
-        window.location = "/";
-      } 
-      else alert(response.data)
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
-
+  handleLogin = () => {
+    (this.state.email !== null && this.state.password !== null) ?    
+      axios.post( 
+        'Login', 
+        'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        if(response.data === 'emailError') alert('존재하지 않는 계정입니다.')
+        else if(response.data === 'pwError') alert('비밀번호가 일치하지 않습니다.')
+        else if(response.data === 'complete') {
+          this.props.onLogin()
+          window.location = "/";
+        } 
+        else alert(response.data)
+      }) 
+      .catch( response => { console.log('err\n'+response); } ) : // ERROR
+      alert('양식을 확인해주세요')
+  }
+  
+  handleLoginT = () => {
+    this.props.onLogin()
   }
 
   render() {
@@ -71,6 +73,7 @@ class Login extends Component {
         <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
         <input type="password" placeholder="비밀번호" name="password" onChange={(e)=>this.handleChange(e)}/><br/>
         <button onClick={this.handleLogin}>로그인</button>      
+        <button onClick={this.handleLoginT}>테스트용</button>      
       </div>      
     );
   }

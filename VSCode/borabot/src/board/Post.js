@@ -7,7 +7,6 @@ class Post extends Component {
     this.state={
       modify: false,
       post: {},
-      // post: {writer:false,title:"test11",email:"qwe",content:"test111test111test111test111test111test111test111test111test111\n\ntest111test111test111test111test111test111test111\n\n\n\n\n\n\n\n\n\n\n\n\n\ntest111test111test111test111test111test111test111test111test111test111test111test111test111"},
       comment:[]
     }
   }
@@ -52,6 +51,17 @@ class Post extends Component {
   }
 
   enrollPost = () => { 
+    // 항목 검증
+    if(document.getElementById('title').value === '') {
+      alert('제목을 입력하세요')
+      return
+    }
+    if(document.getElementById('content').value === '') {
+      alert('내용을 입력하세요')
+      return
+    }
+
+    // 저장 확인
     if(window.confirm("글을 저장하시겠습니까?")){
       var now = new Date();
       var post_time = now.getFullYear()+'-'+
@@ -126,6 +136,12 @@ class Post extends Component {
   }
 
   enrollComment = () => {
+    // 항목 검증
+    if(document.getElementById('comment').value === '') {
+      alert('댓글을 입력하세요')
+      return
+    }
+    
     var now = new Date();
     var comment_time = now.getFullYear()+'-'+
       ("0"+(now.getMonth()+1)).slice(-2)+'-'+
@@ -171,17 +187,23 @@ class Post extends Component {
   }
 
   render() {
+    const { write } = this.props
+    const { post, modify, comment} = this.state
     return (
       <div>
-        title: <input id="title" value={this.state.post.title} onChange={(e, h='title') => this.handleModify(e, h)} readOnly={!this.props.write && !this.state.modify}/><br/>
-        <textarea id="content" value={this.state.post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}} readOnly={!this.props.write && !this.state.modify}/><br/>
-        {(this.props.write || this.state.modify) && <button onClick={this.enrollPost}>저장</button>}
-        {(!this.props.write && !this.state.modify) && <div>
-          {this.state.post.writer && <div><button onClick={this.modifyPost}>수정</button><button onClick={this.deletePost}>삭제</button></div>}
+        {write || modify
+        ? <div><input id="title" value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/></div>
+        : <div><h3>{post.title}</h3>
+          {post.email} | {post.post_time}</div>
+        }
+        <textarea id="content" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}} readOnly={!write && !modify}/><br/>
+        {(write || modify) && <button onClick={this.enrollPost}>저장</button>}
+        {(!write && !modify) && <div>
+          {post.writer && <div><button onClick={this.modifyPost}>수정</button><button onClick={this.deletePost}>삭제</button></div>}
           <input id="comment" placeholder="댓글을 입력하세요"></input >
           <button onClick={this.enrollComment}>댓글 등록</button>
           {
-            this.state.comment.map((c, i) => {
+            comment.map((c, i) => {
             return (<div>{c.email} <input value={c.comment} readOnly></input> : {c.comment_time }
               {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}
               </div>)

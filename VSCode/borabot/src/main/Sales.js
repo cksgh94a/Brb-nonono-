@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
+
 import './Sales.css';
 
 const today = new Date();
@@ -23,8 +26,13 @@ class Sales extends Component {
 
     this.state = {
       exchangeIndex: 0,
-      baseIndex: 0
+      baseIndex: 0,
+      selectedDay: new Date()
     };
+  }
+
+  handleDayChange = (day) => {
+    this.setState({ selectedDay: day });
   }
 
   handleIndex = () => {
@@ -44,10 +52,20 @@ class Sales extends Component {
       ("0"+now.getMinutes()).slice(-2)+':'+
       ("0"+now.getSeconds()).slice(-2)+'.000'
 
-    var endDate = document.getElementById('endYear').value+'-'+
-      ("0"+document.getElementById('endMonth').value).slice(-2)+'-'+
-      ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
+    var endDate = this.state.selectedDay.getFullYear()+'-'+
+      ("0"+this.state.selectedDay.getMonth()+1).slice(-2)+'-'+
+      ("0"+this.state.selectedDay.getDate()).slice(-2)+'T'+
       ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
+
+    if(document.getElementById('botname').value === ''){
+      alert('😆 당신의 지갑을 풍족하게 해줄 귀여운 봇의 이름을 지어주세요 😆')
+      return
+    }
+
+    if(new Date(endDate) - now < 0){
+      alert('😆 거래 종료를 과거에 할 순 없어요 😆')
+      return
+    }
 
     let alertMsg = document.getElementById('botname').value + '\n' + 
       document.getElementById('exchange').value + '\n' +
@@ -81,33 +99,35 @@ class Sales extends Component {
   }
 
   render() {
+    const { exchangeList, exchange, intervalList, strategyList } = this.props
+    const { exchangeIndex, baseIndex } = this.state
     return (
       <div>        
         <h4 className="Sales-color">Sales configuration</h4>
         <input placeholder="이름" id="botname"/><br/>
         거래소 : <select id="exchange" onChange={this.handleIndex}>
-          {this.props.exchangeList.map((exchange, index) => {
+          {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange} </option>)
           })
           }
         </select><br/>
         기축통화 : <select id="base" onChange={this.handleIndex}>
-          {this.props.exchange[this.state.exchangeIndex].baseList.map((base, i) => {
+          {exchange[exchangeIndex].baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
         코인 : <select id="coin">
-          {this.props.exchange[this.state.exchangeIndex].coin[this.state.baseIndex].list.map((coin, i) => {
+          {exchange[exchangeIndex].coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
         </select><br/>
         거래 간격 : <select id="interval">
-          {this.props.intervalList.display.map((int, i) => {
+          {intervalList.display.map((int, i) => {
             return (<option key={i}> {int} </option>)
           })}
         </select><br/>
         전략 : <select id="strategy">
-          {this.props.strategyList.map((s, i) => {
+          {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
         </select><br/>        
@@ -117,21 +137,8 @@ class Sales extends Component {
         판매 설정 : <select id="sellingSetting">
             <option key={i}> sellAll </option>
         </select><br/>
-        종료일 : <select id="endYear">
-          {yearList.map((e, i) => {
-            return (<option key={i} selected={e === today.getFullYear()}> {e} </option>)
-          })}
-        </select>년
-        <select id="endMonth">
-          {monthList.map((e, i) => {
-            return (<option key={i} selected={e === today.getMonth()+1}> {e} </option>)
-          })}
-        </select>월
-        <select id="endDay">
-          {dayList.map((e, i) => {        
-            return (<option key={i} selected={e === today.getDate()}> {e} </option>)    
-          })}
-        </select>일
+        종료일 : 
+        <DayPickerInput onDayChange={this.handleDayChange} />
         <select id="endHour">
           {hourList.map((e, i) => {
             return (<option key={i} selected={e === today.getHours()}> {e} </option>)
