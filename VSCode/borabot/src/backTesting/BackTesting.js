@@ -2,18 +2,14 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
+import DayPickerInput from 'react-day-picker/DayPickerInput';
+import 'react-day-picker/lib/style.css';
+
 const today = new Date();
 
-const yearList = [today.getFullYear(), today.getFullYear()-1]
-const monthList = []
-const dayList = []
 const hourList = []
 
-for(var i=1;i<=31;i++){
-  if(i<=12) monthList.push(i)
-  dayList.push(i)
-  if(i<=24) hourList.push(i-1)  
-}
+for(var i=1;i<=24;i++) hourList.push(i-1) 
 
 const periodLimit = [ "1일", "1주일", "15일", "3개월", "3개월", "3개월" ]
 
@@ -23,10 +19,12 @@ class BackTesting extends Component {
     this.state={
       exchangeIndex: 0,
       baseIndex: 0,
-      
+      startDay: '',
+      endDay: '',
+      nowCash:'',
+
       isResulted:false,
       text:'',
-
       ReturnDetailMessage:'',
       ReturnMessage:''
     }
@@ -36,6 +34,20 @@ class BackTesting extends Component {
     this.setState({
       exchangeIndex: document.getElementById('exchange').selectedIndex,
       baseIndex: document.getElementById('base').selectedIndex
+    })
+  }
+
+  handleDayChange = (day, se) => {
+    se === 'start' ?
+    this.setState({ startDay: day })
+    :
+    this.setState({ endDay: day })
+  }
+
+  handleCash = (e) => {
+    !isNaN(e.target.value) && this.setState({
+      nowCash:e.target.value
+      // nowCash:Number(e.target.value).toLocaleString('en')  // 3자리마다 , 찍는건데 숫자 형식이 아니라 안됨
     })
   }
 
@@ -68,14 +80,18 @@ class BackTesting extends Component {
       return
     }
 
-    var startDate = document.getElementById('startYear').value+'-'+
-    ("0"+document.getElementById('startMonth').value).slice(-2)+'-'+
-    ("0"+document.getElementById('startDay').value).slice(-2)+'T'+
-    ("0"+document.getElementById('startHour').value).slice(-2)+':00:00.000'
-    var endDate = document.getElementById('endYear').value+'-'+
-    ("0"+document.getElementById('endMonth').value).slice(-2)+'-'+
-    ("0"+document.getElementById('endDay').value).slice(-2)+'T'+
-    ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
+    console.log(this.state.startDay)
+    console.log(this.state.endDay)
+
+    const { startDay, endDay } = this.state
+    var startDate = startDay.getFullYear()+'-'+
+      ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
+      ("0"+startDay.getDate()).slice(-2)+'T'+
+      ("0"+document.getElementById('startHour').value).slice(-2)+':00:00.000'
+    var endDate = endDay.getFullYear()+'-'+
+      ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
+      ("0"+endDay.getDate()).slice(-2)+'T'+
+      ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
 
     if(this.dateValidate(startDate, endDate)){
       axios.post( 
@@ -83,7 +99,7 @@ class BackTesting extends Component {
         'exchange='+document.getElementById('exchange').value+
         '&coin='+document.getElementById('coin').value+
         '&base='+document.getElementById('base').value+ 
-        '&interval='+this.props.intervalList.value[document.getElementById('interval').selectedIndex]+
+        '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+document.getElementById('buyingSetting').value+
         '&sellingSetting='+document.getElementById('sellingSetting').value+
@@ -121,30 +137,30 @@ class BackTesting extends Component {
   }
 
   render() {
-    const { exchangeList, exchange , intervalList , strategyList } = this.props
+    const { exchangeList, intervalList , strategyList } = this.props
     const { exchangeIndex, baseIndex,isResulted, text } = this.state
     return (
       <div>        
         <h4 >Back Testing</h4>
         거래소 : <select id="exchange" onChange={this.handleIndex}>
           {exchangeList.map((exchange, index) => {
-            return (<option key={index} > {exchange} </option>)
+            return (<option key={index} > {exchange.key} </option>)
           })
           }
         </select><br/>
         기축통화 : <select id="base" onChange={this.handleIndex}>
-          {exchange[exchangeIndex].baseList.map((base, i) => {
+          {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
         코인 : <select id="coin">
-          {exchange[exchangeIndex].coin[baseIndex].list.map((coin, i) => {
+          {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
         </select><br/>
         거래 간격 : <select id="interval">
-          {intervalList.display.map((int, i) => {
-            return (<option key={i}> {int} </option>)
+          {intervalList.map((int, i) => {
+            return (<option key={i}> {int.key} </option>)
           })}
         </select><br/>
         전략 : <select id="strategy">
@@ -158,48 +174,22 @@ class BackTesting extends Component {
         판매 설정 : <select id="sellingSetting">
             <option key={i}> sellAll </option>
         </select><br/>
-        시작일 : <select id="startYear">
-          {yearList.map((e, i) => {
-            return (<option key={i} selected={e === today.getFullYear()}> {e} </option>)
-          })}
-        </select>년
-        <select id="startMonth">
-          {monthList.map((e, i) => {
-            return (<option key={i} selected={e === today.getMonth()+1}> {e} </option>)
-          })}
-        </select>월
-        <select id="startDay">
-          {dayList.map((e, i) => {
-            return (<option key={i} selected={e === today.getDate()}> {e} </option>)
-          })}
-        </select>일
+        시작일 :
+        <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'start')} />
         <select id="startHour">
           {hourList.map((e, i) => {
             return (<option key={i} selected={e === today.getHours()}> {e} </option>)
           })}
         </select>시
         <br/>  
-        종료일 : <select id="endYear">
-          {yearList.map((e, i) => {
-            return (<option key={i} selected={e === today.getFullYear()}> {e} </option>)
-          })}
-        </select>년
-        <select id="endMonth">
-          {monthList.map((e, i) => {
-            return (<option key={i} selected={e === today.getMonth()+1}> {e} </option>)
-          })}
-        </select>월
-        <select id="endDay">
-          {dayList.map((e, i) => {        
-            return (<option key={i} selected={e === today.getDate()}> {e} </option>)    
-          })}
-        </select>일
+        종료일 :
+        <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'end')} />
         <select id="endHour">
           {hourList.map((e, i) => {
             return (<option key={i} selected={e === today.getHours()}> {e} </option>)
           })}
         </select>시<br/>
-        시작 금액 : <input placeholder="시작 금액" id="nowCash"/><br/>
+        시작 금액 : <input id="nowCash" placeholder="시작 금액을 입력하세요" value={this.state.nowCash} onChange={this.handleCash}/><br/>
         <button onClick={this.handleStartbtn}>백테스팅 시작</button>
         <h4 >결과</h4>
         {isResulted && 
@@ -217,7 +207,6 @@ let mapStateToProps = (state) => {
   return {
     strategyList: state.strategy.strategyList,
     exchangeList: state.exchange.exchangeList,
-    exchange: state.exchange.exchange,
     intervalList: state.exchange.intervalList
   };
 }

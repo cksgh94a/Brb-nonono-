@@ -37,8 +37,8 @@ class Strategy extends Component {
       selectedIndicator: RSI, // 설정된 지표
       defaultIndicator: defaultRSI, // 설정된 지표의 기본값
       calculate: 'or', // 연산 방법
-      buyC:0, // 구매 기준
-      sellC:0,  // 판매 기준
+      buyC: '', // 구매 기준
+      sellC: '',  // 판매 기준
 
       indicatorList: [],  // 설정된 지표 리스트
       expList: [],  // 지표 연산 방법 리스트
@@ -66,6 +66,48 @@ class Strategy extends Component {
         })
       }
     })
+  }
+
+  handleLoad = (e) => {
+    // 새로 만들기 선택하면 기존에 만든 것 초기화
+    if(e.target.value === '새로 만들기'){
+      this.setState({
+        name: '',
+        selectedIndicator: RSI, // 설정된 지표
+        defaultIndicator: defaultRSI, // 설정된 지표의 기본값
+        calculate: 'or', // 연산 방법
+        buyC:0, // 구매 기준
+        sellC:0,  // 판매 기준
+  
+        indicatorList: [],  // 설정된 지표 리스트
+        expList: [],  // 지표 연산 방법 리스트
+        savedCnt: 0,  // 설정된 지표 개수
+        jsonString:'', // 서버에 보내기 위한 json
+        buttonVal: false
+      })
+    } else{
+      this.setState({
+        buttonVal: true
+      })
+      this.props.strategyList.map((s) => {
+        if(e.target.value === s.name) {
+          this.setState({
+            selectedStrategy: JSON.parse(s.data)
+          })
+        }
+      })
+    }
+  }
+
+  handleCriteria = (e, bs) => {
+    !isNaN(e.target.value) && 
+      (bs === 'buy')
+        ? this.setState({
+          buyC:e.target.value
+        })
+        : this.setState({
+          sellC:e.target.value
+        })
   }
 
   // 설정한 지표 저장 및 리스트, json 저장
@@ -139,42 +181,19 @@ class Strategy extends Component {
       })
     }
   }
-
-  handleLoad = (e) => {
-    // 새로 만들기 선택하면 기존에 만든 것 초기화
-    if(e.target.value === '새로 만들기'){
-      this.setState({
-        name: '',
-        selectedIndicator: RSI, // 설정된 지표
-        defaultIndicator: defaultRSI, // 설정된 지표의 기본값
-        calculate: 'or', // 연산 방법
-        buyC:0, // 구매 기준
-        sellC:0,  // 판매 기준
-  
-        indicatorList: [],  // 설정된 지표 리스트
-        expList: [],  // 지표 연산 방법 리스트
-        savedCnt: 0,  // 설정된 지표 개수
-        jsonString:'', // 서버에 보내기 위한 json
-        buttonVal: false
-      })
-    } else{
-      this.setState({
-        buttonVal: true
-      })
-      this.props.strategyList.map((s) => {
-        if(e.target.value === s.name) {
-          this.setState({
-            selectedStrategy: JSON.parse(s.data)
-          })
-        }
-      })
-    }
-  }
   
   handleComplete = () => {
     // 항목 검증
-    if(this.state.name === null) {
+    if(this.state.name === '') {
       alert('전략 이름을 입력하세요')
+      return
+    }
+    if(this.state.buyC === '') {
+      alert('구매 기준치를 입력하세요')
+      return
+    }
+    if(this.state.sellC === '') {
+      alert('판매 기준치를 입력하세요')
       return
     }
     
@@ -211,8 +230,8 @@ class Strategy extends Component {
         전략 이름 : <input placeholder="이름" id="name"/>
         <h4>거래 세팅</h4>
 
-        구매 기준치 : <input placeholder="구매 기준치" id="buyWeight"/>
-        판매 기준치 : <input placeholder="판매 기준치" id="sellWeight"/>
+        구매 기준치 : <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} onChange={(e) => this.handleCriteria(e, 'buy')}/>
+        판매 기준치 : <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} onChange={(e) => this.handleCriteria(e, 'sell')}/>
 
         <h4>지표 세팅</h4>
         <select id="indicator" onChange={(e)=>this.handleIndicator(e)}>

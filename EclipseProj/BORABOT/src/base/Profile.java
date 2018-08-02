@@ -57,18 +57,20 @@ public class Profile extends HttpServlet {
 		
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();
-		
+
+		JSONObject eObject = new JSONObject();
 		try {
 			ResultSet rsK = useDB.Query(keySql, "select"); 
 			while(rsK.next()) {
 				JSONObject subObject = new JSONObject();
 				subObject.put("api_key", rsK.getString("api_key"));
 				subObject.put("secret_key", rsK.getString("secret_key"));
-				jsonObject.put(rsK.getString("exchange_name"), subObject);
+				eObject.put(rsK.getString("exchange_name"), subObject);
 				}
 		} catch (SQLException e) {
 			e.printStackTrace();			
-		}		
+		}
+		jsonObject.put("exchangeKey", eObject);
 		
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();

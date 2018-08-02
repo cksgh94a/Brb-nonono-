@@ -23,7 +23,7 @@ class Post extends Component {
         modify: false,
       })
 
-      // 해당 게시물과 댓글 불러오기
+      // 해당 게시물 불러오기
       axios.get(
         'Post?post_num='+this.props.post_num,
         { 'Content-Type': 'application/x-www-form-urlencoded' } )
@@ -36,8 +36,10 @@ class Post extends Component {
     }
   }
 
+  // 게시물 불러온 뒤에 댓글 불러오기
   componentDidMount() { if(this.props.write !== 'write') this.getComment() }
 
+  // 댓글 불러오는 함수
   getComment = () => {
     axios.get(
       'Comment?post_num='+this.props.post_num,
@@ -50,6 +52,7 @@ class Post extends Component {
     .catch( response => { console.log('err\n'+response)}); // ERROR
   }
 
+  // 글 저장 버튼
   enrollPost = () => { 
     // 항목 검증
     if(document.getElementById('title').value === '') {
@@ -85,6 +88,7 @@ class Post extends Component {
           '&content='+document.getElementById('content').value
       }
 
+      // 서버에 전송
       axios.post( 
         'Post', params,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -95,6 +99,7 @@ class Post extends Component {
     }
   }
 
+  // 글 수정 버튼
   modifyPost = () => { 
     if(window.confirm("글을 수정하시겠습니까?")){
       this.setState({
@@ -103,6 +108,7 @@ class Post extends Component {
     }
   }
 
+  // 글 수정 함수
   handleModify = (e, h) => {
     if(h==='title'){
       this.setState({
@@ -122,6 +128,7 @@ class Post extends Component {
     
   }
 
+  // 글 삭제 버튼
   deletePost = () => {
     if(window.confirm("글을 삭제하시겠습니까?")){
       axios.post( 
@@ -135,6 +142,7 @@ class Post extends Component {
     }
   }
 
+  // 댓글 등록 버튼
   enrollComment = () => {
     // 항목 검증
     if(document.getElementById('comment').value === '') {
@@ -168,6 +176,7 @@ class Post extends Component {
     document.getElementById('comment').value = ''
   }
 
+  // 댓글 삭제 버튼
   deleteComment = (i) => {
     if(this.state.comment.length>0){
       axios.post( 
@@ -189,6 +198,14 @@ class Post extends Component {
   render() {
     const { write } = this.props
     const { post, modify, comment} = this.state
+
+    // 앞단 테스트용 - 글쓰기 클릭해서 포스트 확인 ========================================================================================== //
+    // const write = false
+    // const modify = false
+    // const post = {"writer":false,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
+    // const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
+    // ================================================================================================================================ //
+
     return (
       <div>
         {write || modify
@@ -202,11 +219,11 @@ class Post extends Component {
           {post.writer && <div><button onClick={this.modifyPost}>수정</button><button onClick={this.deletePost}>삭제</button></div>}
           <input id="comment" placeholder="댓글을 입력하세요"></input >
           <button onClick={this.enrollComment}>댓글 등록</button>
-          {
-            comment.map((c, i) => {
-            return (<div>{c.email} <input value={c.comment} readOnly></input> : {c.comment_time }
-              {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}
-              </div>)
+          { comment.map((c, i) => {              
+            return (<div style={{border:"1px solid"}}>
+              <b>{c.email}</b>  <small>{c.comment_time}</small> {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}<br/>
+              {c.comment}
+            </div>)
           })}
         </div>}
       </div>

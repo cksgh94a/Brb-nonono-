@@ -36,12 +36,19 @@ const BINANCE = {
 }
 
 const Exchange = {
-	exchangeList: [ "BITHUMB", "COINONE", "BINANCE" ],
-	exchange: [ BITHUMB, COINONE, BINANCE ],
-  intervalList: {
-    display: [ "5분", "30분", "1시간", "6시간", "12시간", "24시간"],
-    value: ["300", "1800", "3600", "21600", "43200", "86400"]
-  }
+	exchangeList: [ 
+    { key: "BITHUMB", value: BITHUMB },
+    { key: "COINONE", value: COINONE },
+    { key: "BINANCE", value: BINANCE }
+  ],
+  intervalList: [
+    { key: "5분", value: "300" },
+    { key: "30분", value: "1800" },
+    { key: "1시간", value: "3600" },
+    { key: "6시간", value: "21600" },
+    { key: "12시간", value: "43200" },
+    { key: "24시간", value: "86400" }
+  ]
 };
 
 export const exchange = (state = Exchange, action) => {

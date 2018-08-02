@@ -4,7 +4,7 @@ import './Main.css';
 import ChartSelect from './ChartSelect';
 import Sales from './Sales';
 import NowTrading from './NowTrading';
-import WalletInfo from './WalletInfo';
+// import WalletInfo from './WalletInfo';
 
 class Main extends Component {
   render() {
@@ -13,7 +13,7 @@ class Main extends Component {
         <div className="wrapper">
           <div className="one"><NowTrading/></div>
           <div className="three"><ChartSelect/></div>
-          <div className="four"><WalletInfo/></div>
+          {/* <div className="four"><WalletInfo/></div> */}
           <div className="five"><Sales/></div>
         </div>
       </div>

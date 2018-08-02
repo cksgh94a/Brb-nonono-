@@ -7,9 +7,11 @@ class Board extends Component {
     super();
     this.state={
       post: false,  // true : 게시물 작성, 보기, false : 목록 표시
+      write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
+
       post_num: 0,  // 현재 선택된 게시물 번호
       postList: [], // 현재 선택된 페이지의 10개의 게시물 리스트
-      write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
+
       pageNum:1,  // 현재 선택된 페이지 번호
       pageNumList: [] // 게시물의 전체 페이지 리스트
     }
@@ -24,7 +26,7 @@ class Board extends Component {
     axios.get( 'Board?pageNum='+i )
     .then( response => {
       var pNL = []  // state에 저장할 페이지리스트 생성
-      for(var i = 1; i <= response.data.count/10+1; i++){
+      for(var i = 1; i <= (response.data.count-1)/10+1; i++){
         pNL.push(i)
       }
       this.setState({
@@ -123,7 +125,7 @@ class Board extends Component {
                   <a onClick={() => this.selectPage(pageNumList.length)}> &gt;&gt;</a>
                 </td>
               </tr>
-              <button onClick={this.writePost}>글 쓰기</button>
+              <tr><td colSpan="4"><button onClick={this.writePost}>글 쓰기</button></td></tr>
             </tbody>
           </table>}
       </div>

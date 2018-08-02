@@ -59,8 +59,7 @@ public class Log extends HttpServlet {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();			
-		}		
-		
+		}				
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();
 
@@ -78,35 +77,52 @@ public class Log extends HttpServlet {
 
         HttpSession session = request.getSession();
 
+        JSONObject jObject = new JSONObject();
 		JSONArray jArray = new JSONArray();
     	
     	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\'",
-				(String) session.getAttribute("email"),request.getParameter("bot_name"));
+		String selectSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\' ORDER BY trans_time DESC limit %s,10",
+				(String) session.getAttribute("email"),request.getParameter("bot_name"), ((Integer.parseInt(request.getParameter("pageNum"))-1)*10));
 
+//		String selectSql = String.format("SELECT email, post_time, title, post_num, comment_count from board ORDER BY post_num DESC limit %s,10",
+//				((Integer.parseInt(request.getParameter("pageNum"))-1)*10));
+		
 		DB useDB = new DB();
 
 		try {
 			ResultSet rs = useDB.Query(selectSql, "select"); 
 		
 			while(rs.next()) {
-				JSONObject jObject = new JSONObject();
-				jObject.put("trans_time", rs.getString("trans_time"));
-				jObject.put("sales_action", rs.getString("sales_action"));
-				jObject.put("coin_price", rs.getString("coin_price"));
-				jObject.put("coin_intent", rs.getString("coin_intent"));
-				jObject.put("now_balance", rs.getString("now_balance"));
-				jObject.put("now_coin_number", rs.getString("now_coin_number"));
-				jArray.add(jObject);
+				JSONObject sObject = new JSONObject();
+				sObject.put("trans_time", rs.getString("trans_time"));
+				sObject.put("sales_action", rs.getString("sales_action"));
+				sObject.put("coin_price", rs.getString("coin_price"));
+				sObject.put("coin_intent", rs.getString("coin_intent"));
+				sObject.put("now_balance", rs.getString("now_balance"));
+				sObject.put("now_coin_number", rs.getString("now_coin_number"));
+				
+				jArray.add(sObject);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();			
-		}		
-		
+		}				
 		// 5. DB 사용후 clean()을 이용하여 정리
+		useDB.clean();
+		jObject.put("logList", jArray);
+		
+		selectSql = String.format("SELECT count(*) from trans_log where email=\'%s\' and bot_name=\'%s\'",
+				(String) session.getAttribute("email"),request.getParameter("bot_name"));	
+		try {
+			ResultSet rs = useDB.Query(selectSql, "select");	
+			while(rs.next()) {
+				jObject.put("count", rs.getString("count(*)"));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();			
+		}
 		useDB.clean();
 
 		PrintWriter out = response.getWriter();
-		out.print(jArray.toJSONString());
+		out.print(jObject.toJSONString());
 	}
 }

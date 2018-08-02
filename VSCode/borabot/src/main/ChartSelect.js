@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
+
 import './ChartSelect.css';
 
 const coinList = [
@@ -160,7 +162,15 @@ class ChartSelect extends Component {
 
     return (
       <div className="ChartSelect">
-        <select id="CS_coinSelectbox" size='1' onChange={this.handleCoinSelect} style={{ marginRight: 10 }}>
+      <TradingViewWidget
+        symbol="BITTREX:BTCUSD"
+        theme={Themes.DARK}
+        locale="kr"
+        BarStyles={BarStyles.POINT_AND_FIGURE}
+        interval
+        // autosize
+      />
+        {/* <select id="CS_coinSelectbox" size='1' onChange={this.handleCoinSelect} style={{ marginRight: 10 }}>
           {coinList.map((coin, i) => {
             return (<option key={i}>{coin.name}</option>);
           })}
@@ -187,7 +197,7 @@ class ChartSelect extends Component {
         <p style={{ color: 'white', fontSize: '15px' }}>
           {this.state.content}
         </p>
-        <img src="https://media.coindesk.com/uploads/2017/11/Bitcoin-daily.png" style={{ width: '800px', height: '450px' }} />
+        <img src="https://media.coindesk.com/uploads/2017/11/Bitcoin-daily.png" style={{ width: '800px', height: '450px' }} /> */}
 
 
 

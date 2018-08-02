@@ -8,7 +8,7 @@ export function setStrategy(value) {
 }
 
 const Strategy = {
-	strategyList: []
+		strategyList: []
 };
 
 export const strategy = (state = Strategy, action) => {
