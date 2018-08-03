@@ -1,18 +1,31 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react'
 
 import Login from './Login';
+import Register from './Register';
+// import FindInfo from './FindInfo';
 
 class Initial extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      action: 'login' // 사용자 접근 상태 (login, register, findInfo)
+    };
+  }
+
+  handleAction = (a) => {
+    this.setState({ action: a })
+  }
 
   render() {
-    return (
-        <div>
-            <Login/><br/><br/>
-            회원이 아니십니까?
-            <Link to="/register">회원가입</Link>
-        </div>
-    );
+    switch(this.state.action){
+      case 'register':
+        return <Register/>
+      // case 'findInfo':
+      //   return <FindInfo/>
+      default:
+        return <Login action={this.state.action} handleAction={this.handleAction}/>
+    }
   }
 }
 

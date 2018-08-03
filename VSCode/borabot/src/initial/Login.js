@@ -23,6 +23,12 @@ class Login extends Component {
     }
   }
 
+  handleAction = (a) => {
+    a === 'r'
+    ? this.props.handleAction('register')
+    : this.props.handleAction('findInfo')
+  }
+
   handleChange = (e) => {  
     if(e.target.placeholder === "email"){
       this.setState({
@@ -72,8 +78,10 @@ class Login extends Component {
       <div>
         <input type="text" placeholder="email" name="email" onChange={(e)=>this.handleChange(e)}/><br/>
         <input type="password" placeholder="비밀번호" name="password" onChange={(e)=>this.handleChange(e)}/><br/>
-        <button onClick={this.handleLogin}>로그인</button>      
-        <button onClick={this.handleLoginT}>테스트용</button>      
+        <button onClick={this.handleLogin}>로그인</button>
+        <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
+        <button onClick={()=>this.handleAction('r')}>회원가입</button>
+        <button onClick={()=>this.handleAction('f')}>아이디/비밀번호 찾기</button>
       </div>      
     );
   }

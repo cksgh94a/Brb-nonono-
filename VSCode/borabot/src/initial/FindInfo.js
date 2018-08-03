@@ -11,7 +11,7 @@ const encrypt = (err, key) => {
   return encipheredpw;
 }
 
-class Register extends Component {
+class FindInfo extends Component {
   constructor(props) {
     super(props);
     this.state={
@@ -124,11 +124,10 @@ class Register extends Component {
         {!this.state.ppVal && <a>비밀번호가 다릅니다.</a>}<br/><br/>
 
         <button onClick={this.handleRegister}>회원가입</button>
-        {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}
       </div>      
     );
   }
 }
 
-export default Register;
+export default FindInfo;
 
