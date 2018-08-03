@@ -100,7 +100,7 @@ class Strategy extends Component {
   }
 
   handleCriteria = (e, bs) => {
-    !isNaN(e.target.value) && 
+    if(!isNaN(e.target.value)){
       (bs === 'buy')
         ? this.setState({
           buyC:e.target.value
@@ -108,6 +108,7 @@ class Strategy extends Component {
         : this.setState({
           sellC:e.target.value
         })
+    }
   }
 
   // 설정한 지표 저장 및 리스트, json 저장

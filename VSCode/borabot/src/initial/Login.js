@@ -46,7 +46,7 @@ class Login extends Component {
   handleLogin = () => {
     (this.state.email !== null && this.state.password !== null) ?    
       axios.post( 
-        'Login', 
+        'LogInOut', 
         'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )

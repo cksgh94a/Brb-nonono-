@@ -16,16 +16,30 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class DoLogin
  */
-@WebServlet("/Login")
-public class Login extends HttpServlet {
+@WebServlet("/LogInOut")
+public class LogInOut extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public Login() {
+    public LogInOut() {
         super();
     }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 데이터 인코딩 설정
+	    request.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html;charset=utf-8");
+	    
+		HttpSession session = request.getSession();		
+		
+		session.invalidate();
+		response.sendRedirect("/");						
+	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)

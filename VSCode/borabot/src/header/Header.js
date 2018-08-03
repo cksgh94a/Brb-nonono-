@@ -8,7 +8,7 @@ import { logout } from '../reducers/logInOut';
 class Header extends Component {
   HandleLogOut = () => {
     if(window.confirm('로그아웃하시겠습니까?')){
-      axios.get( 'Logout')
+      axios.get( 'LogInOut')
       this.props.onLogout()
     }
   }

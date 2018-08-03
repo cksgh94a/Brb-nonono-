@@ -56,31 +56,27 @@ public class Register extends HttpServlet {
 		    		
 		    		DB useDB = new DB();
 		    		useDB.Query(insertSql, "insert");
-
-		    		String insertSql2 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-		    				+request.getParameter("email")+"', 'bitthumb')");
+		    		
+		    		// BITHUMB, COINONE, BINANCE 거래소 개인 정보 레코드 생성 (키는 미입력->프로필에서 직접 입력)
+		    		String insertSql2 = String.format("INSERT INTO customer_key (email,exchange_name, api_key, secret_key) VALUES('"
+		    				+request.getParameter("email")+"', 'BITHUMB', '', '')");
 
 		    		useDB.Query(insertSql2, "insert");
 
-		    		String insertSql3 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-		    				+request.getParameter("email")+"', 'bittrex')");
+		    		String insertSql3 = String.format("INSERT INTO customer_key (email,exchange_name, api_key, secret_key) VALUES('"
+		    				+request.getParameter("email")+"', 'COINONE', '', '')");
 
 		    		useDB.Query(insertSql3, "insert");
 
-		    		String insertSql4 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-		    				+request.getParameter("email")+"', 'coinone')");
+		    		String insertSql4 = String.format("INSERT INTO customer_key (email,exchange_name, api_key, secret_key) VALUES('"
+		    				+request.getParameter("email")+"', 'BINANCE', '', '')");
 
 		    		useDB.Query(insertSql4, "insert");
-
-		    		String insertSql5 = String.format("INSERT INTO customer_key (email,exchange_name) VALUES('"
-		    				+request.getParameter("email")+"', 'binance')");
-
-		    		useDB.Query(insertSql5, "insert");
 		    		
 		    		useDB.clean();	  
 		    		result = "complete";
 	    		} catch (SQLException e) {
-	    			if(e.getClass() == java.sql.SQLIntegrityConstraintViolationException.class)
+	    			if(e.getErrorCode() == 1062)
 	    				result = "dupError";
 	    			else e.printStackTrace();
 	    		}

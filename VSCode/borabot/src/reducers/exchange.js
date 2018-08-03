@@ -2,6 +2,21 @@
 // 거래소 정보 저장 state (거래 생성, 백테스팅에 사용)
 // =============================================
 
+const BINANCE = {
+  name: 'BINANCE',
+  baseList: [ "BTC", "USDT"],
+  coin: [
+    {
+      base: "BTC",
+      list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST","VEN", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
+    },
+    {
+      base: "USDT",
+      list: [ "BCC", "BNB", "BTC", "ETH", "LTC", "NEO", "ADA", "EOS", "IOTA", "TUSD", "XLM", "XRP", "ICX", "ONT" ]
+    }
+  ]
+}
+
 const BITHUMB = {
   name: 'BITHUMB',
   baseList: [ "KRW"],
@@ -24,26 +39,11 @@ const COINONE = {
   ]
 }
 
-const BINANCE = {
-  name: 'BINANCE',
-  baseList: [ "BTC", "USDT"],
-  coin: [
-    {
-      base: "BTC",
-      list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST","VEN", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
-    },
-    {
-      base: "USDT",
-      list: [ "BCC", "BNB", "BTC", "ETH", "LTC", "NEO", "ADA", "EOS", "IOTA", "TUSD", "XLM", "XRP", "ICX", "ONT" ]
-    }
-  ]
-}
-
 const Exchange = {
 	exchangeList: [ 
     { key: "BITHUMB", value: BITHUMB },
-    { key: "COINONE", value: COINONE },
-    { key: "BINANCE", value: BINANCE }
+    { key: "BINANCE", value: BINANCE },
+    { key: "COINONE", value: COINONE }
   ],
   intervalList: [
     { key: "5분", value: "300" },
