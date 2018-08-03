@@ -1,3 +1,8 @@
+// ====================
+// 로그인 상태 저장 state
+// ====================
+
+
 const LOGIN = 'LOGIN';
 const LOGOUT = 'LOGOUT';
 
@@ -14,8 +19,8 @@ export function logout() {
 }
 
 const LoginStatus = {
-  email: '',
-  login: false
+	email: '',
+	login: false
 };
 
 export const logInOut = (state = LoginStatus, action) => {

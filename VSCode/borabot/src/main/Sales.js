@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
+import { setSales } from '../reducers/sales';
+
 import './Sales.css';
 
 const hourList = []
@@ -16,8 +18,6 @@ class Sales extends Component {
     super(props);
 
     this.state = {
-      exchangeIndex: 0,
-      baseIndex: 0,
       selectedDay: new Date()
     };
   }
@@ -27,10 +27,14 @@ class Sales extends Component {
   }
 
   handleIndex = () => {
-    this.setState({
+    this.props.onSetSales({
+      sales: true,
       exchangeIndex: document.getElementById('exchange').selectedIndex,
-      baseIndex: document.getElementById('base').selectedIndex
+      baseIndex: document.getElementById('base').selectedIndex,
+      coinIndex: document.getElementById('coin').selectedIndex,
+      intervalIndex: document.getElementById('interval').selectedIndex
     })
+    console.log(this.props.sales)
   }
 
   handleStartbtn = () => {
@@ -59,11 +63,9 @@ class Sales extends Component {
       ("0"+now.getMinutes()).slice(-2)+':'+
       ("0"+now.getSeconds()).slice(-2)+'.000'
 
+    const { exchange, base, coin, interval } = this.props
     let alertMsg = document.getElementById('botname').value + '\n' + 
-      document.getElementById('exchange').value + '\n' +
-      document.getElementById('coin').value + '\n' +
-      document.getElementById('base').value + '\n' +
-      document.getElementById('interval').value+ '\n' + 
+      exchange + '\n' + base + '\n' + coin + '\n' + interval.key + '\n' +
       document.getElementById('strategy').value+ '\n' +
       document.getElementById('buyingSetting').value+ '\n' +
       document.getElementById('sellingSetting').value+ '\n' +
@@ -75,10 +77,7 @@ class Sales extends Component {
         'TradeMain', 
         'status='+true+
         '&botname='+document.getElementById('botname').value+
-        '&exchange='+document.getElementById('exchange').value+
-        '&coin='+document.getElementById('coin').value+
-        '&base='+document.getElementById('base').value+ 
-        '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
+        '&exchange='+exchange+'&coin='+coin+'&base='+base+'&interval='+interval.value+
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+document.getElementById('buyingSetting').value+
         '&sellingSetting='+document.getElementById('sellingSetting').value+
@@ -92,7 +91,7 @@ class Sales extends Component {
 
   render() {
     const { exchangeList, intervalList, strategyList } = this.props
-    const { exchangeIndex, baseIndex } = this.state
+    const { exchangeIndex, baseIndex } = this.props.sales
 
     return (
       <div>        
@@ -109,12 +108,12 @@ class Sales extends Component {
             return (<option key={i}> {base} </option>)
           })}
         </select><br/>
-        코인 : <select id="coin">
+        코인 : <select id="coin" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
         </select><br/>
-        거래 간격 : <select id="interval">
+        거래 간격 : <select id="interval" onChange={this.handleIndex}>
           {intervalList.map((int, i) => {
             return (<option key={i}> {int.key} </option>)
           })}
@@ -144,14 +143,22 @@ class Sales extends Component {
 
 }
 
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onSetSales: (value) => dispatch(setSales(value))
+  }
+}
+
 let mapStateToProps = (state) => {
   return {
     strategyList: state.strategy.strategyList,
     exchangeList: state.exchange.exchangeList,
-    intervalList: state.exchange.intervalList
+    intervalList: state.exchange.intervalList,
+
+    sales: state.sales
   };
 }
 
-Sales = connect(mapStateToProps)(Sales);
+Sales = connect(mapStateToProps, mapDispatchToProps)(Sales);
 
 export default Sales;

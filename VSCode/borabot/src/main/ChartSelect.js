@@ -1,209 +1,95 @@
 import React, { Component } from 'react';
 import TradingViewWidget, { Themes, BarStyles } from 'react-tradingview-widget';
+import { connect } from 'react-redux';
 
+import { setChart } from '../reducers/sales';
 import './ChartSelect.css';
 
-const coinList = [
-  {
-    name: "ETH",
-    img: "eth_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "BTC",
-    img: "btc_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "BTG",
-    img: "btg_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "XRP",
-    img: "xrp_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "TRX",
-    img: "trx_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "LTC",
-    img: "ltc_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "DCT",
-    img: "dct_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "ETC",
-    img: "etc_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  },
-  {
-    name: "QTUM",
-    img: "qtum_img.jpg",
-    link_whitepaper: "https://whitepaperbtc.com"
-  }
-]
-
-const exchangeList = [
-  {
-    name: "BITTREX",
-    //link?
-  },
-  {
-    name: "BITHUMB"
-  },
-  {
-    name: "BINANCE"
-  },
-  {
-    name: "KORBIT"
-  },
-  {
-    name: "COINONE"
-  }
-]
-
-const unitList = [
-  "5m", "10m", "15m", "30m", "1h", "6h", "1d", "1w", "1m", "1y"
-]
-
 class ChartSelect extends Component {
+  constructor(props) {
+    super(props);
 
-  state = {
-    coin: coinList[0],
-    exchange: exchangeList[0],
-    unit: '5m',
-    content: 'The base of this index is BTC, so there is no index of BTC-BTC. \n Choose another Cryptocurrency to display proper marketorder.'
+    this.state = {
+      exchangeIndex: 0,
+      baseIndex: 0,
+      coinIndex: 0,
+      intervalIndex: 0
+    };
   }
 
-  componentDidMount() {
-    this._call_API();
-  }
-
-  _call_API = () => {
-
-    let base = 'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-'
-    let addr = base.concat(this.state.coin.name);
-    fetch(addr)
-      .then(response => response.json())
-      .then(json => {
-        // Do what you want with your data
-        this.setState({
-          ...this.state.unit,
-          content: (JSON.stringify(json.result[0]))
-        })
-      })
-      .catch(err => console.log(err));
-
-  }
-
-  handleCoinSelect = () => {
-
-    let e = document.getElementById("CS_coinSelectbox");
-    let selected_coin = coinList[e.options[e.selectedIndex].index];
-    this.setState({
-      coin: selected_coin,
-      ...this.state.content,
+  handleIndex = () => {
+    this.props.onSetChart({
+      sales: false
     })
-
-    let base = 'https://bittrex.com/api/v1.1/public/getmarketsummary?market=btc-'
-    let addr = base.concat(selected_coin.name);
-    console.log(selected_coin.name + "->" + addr);
-    fetch(addr)
-      .then(response => response.json())
-      .then(json => {
-        // Do what you want with your data
-        this.setState({
-          ...this.state.unit,
-          content: (JSON.stringify(json.result[0]))
-        })
-      })
-      .catch(err => console.log(err));
-  }
-
-  handleExchangeSelect = () => {
-
-    let e = document.getElementById("CS_exchangeSelectbox");
-    let selected_exchange = exchangeList[e.options[e.selectedIndex].index];
-
     this.setState({
-      coin: this.state.coin,
-      exchange: selected_exchange,
-      ...this.state.content
+      exchangeIndex: document.getElementById('exchange').selectedIndex,
+      baseIndex: document.getElementById('base').selectedIndex,
+      coinIndex: document.getElementById('coin').selectedIndex,
+      intervalIndex: document.getElementById('interval').selectedIndex
     })
-  }
-
-  handleUnitSelect = () => {
-    let e = document.getElementById("CS_unitSelectbox");
-    let selected_unit = unitList[e.options[e.selectedIndex].index];
-
-    this.setState({
-      ...this.state.exchange,
-      unit: selected_unit,
-      content: this.state.content
-    })
-  }
-
-  // 컴포넌트 간 props 및 state 체인지
-  handleSwtichRequest = () => {
-
-    const newState = this.props;
-
+    console.log(document.getElementById('interval').selectedIndex)
+    console.log(this.state)
   }
 
   render() {
+    const { exchangeList, intervalList, sales } = this.props
+    var { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales
+    sales.sales
+    ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales
+    : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state
 
+    console.log(sales.sales, exchangeIndex, baseIndex, coinIndex, intervalIndex)
     return (
       <div className="ChartSelect">
+      거래소 : <select id="exchange" onChange={this.handleIndex}>
+        {exchangeList.map((exchange, index) => {
+          return (<option key={index} > {exchange.key} </option>)
+        })
+        }
+      </select>
+      기축통화 : <select id="base" onChange={this.handleIndex}>
+        {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
+          return (<option key={i}> {base} </option>)
+        })}
+      </select>
+      코인 : <select id="coin" onChange={this.handleIndex}>
+        {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
+          return (<option key={i}> {coin} </option>)
+        })}
+      </select>
+      거래 간격 : <select id="interval" onChange={this.handleIndex}>
+        {intervalList.map((int, i) => {
+          return (<option key={i}> {int.key} </option>)
+        })}
+      </select>
       <TradingViewWidget
-        symbol="BITTREX:BTCUSD"
+        symbol={exchangeList[exchangeIndex].key+":"+exchangeList[exchangeIndex].value.coin[baseIndex].list[coinIndex]+exchangeList[exchangeIndex].value.baseList[baseIndex]}
         theme={Themes.DARK}
         locale="kr"
-        BarStyles={BarStyles.POINT_AND_FIGURE}
-        interval
-        // autosize
+        interval={intervalList[intervalIndex].value/60}
+        hide_top_toolbar
       />
-        {/* <select id="CS_coinSelectbox" size='1' onChange={this.handleCoinSelect} style={{ marginRight: 10 }}>
-          {coinList.map((coin, i) => {
-            return (<option key={i}>{coin.name}</option>);
-          })}
-        </select>
-
-
-        <select id="CS_exchangeSelectbox" size='1' onChange={this.handleExchangeSelect} style={{ marginRight: 10 }}>
-          {exchangeList.map((exchange, i) => {
-            return (<option key={i}> {exchange.name} </option>)
-          })
-          }          
-          </select>
-
-        <select id="CS_unitSelectbox" size='1' onChange={this.handleUnitSelect}>
-          {unitList.map((unit, i) => {
-            return(<option key = {i}> {unit} </option>)
-          })}
-        </select>
-
-        <p style={{ color: 'white' }}>
-          coin : {this.state.coin.name} --------- exchange : {this.state.exchange.name} --------- period unit : {this.state.unit}
-        </p>
-        <h3 style={{ color: 'white' }}>[ INDEX : MarketSummary of BTC-{this.state.coin.name} ]</h3>
-        <p style={{ color: 'white', fontSize: '15px' }}>
-          {this.state.content}
-        </p>
-        <img src="https://media.coindesk.com/uploads/2017/11/Bitcoin-daily.png" style={{ width: '800px', height: '450px' }} /> */}
-
-
-
       </div>
     );
   }
 }
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onSetChart: (value) => dispatch(setChart(value))
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    exchangeList: state.exchange.exchangeList,
+    intervalList: state.exchange.intervalList,
+
+    sales: state.sales
+  };
+}
+
+ChartSelect = connect(mapStateToProps, mapDispatchToProps)(ChartSelect);
+
 
 export default ChartSelect;
