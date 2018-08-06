@@ -44,11 +44,11 @@ class ChartSelect extends Component {
 
   render() {
     const { exchangeList, intervalList, sales } = this.props
-    let { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales
-    
+    let exchangeIndex = 0;  let baseIndex = 0;  let coinIndex = 0;  let intervalIndex = 0
+        
     sales.sales 
-    ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales // 거래 시작 화면에서 설정이 변경되면 차트는 해당 내용을 그림
-    : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
+      ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales // 거래 시작 화면에서 설정이 변경되면 차트는 해당 내용을 그림
+      : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
 
     return (
       <div className="ChartSelect" style={{color:"white"}}>

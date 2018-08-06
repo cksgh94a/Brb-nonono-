@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 
 import Login from './Login';
 import Register from './Register';
-// import FindInfo from './FindInfo';
+import FindInfo from './FindInfo';
 
 class Initial extends Component {
   constructor(props) {
@@ -21,8 +21,8 @@ class Initial extends Component {
     switch(this.state.action){
       case 'register':
         return <Register/>
-      // case 'findInfo':
-      //   return <FindInfo/>
+      case 'findInfo':
+        return <FindInfo/>
       default:
         return <Login action={this.state.action} handleAction={this.handleAction}/>
     }

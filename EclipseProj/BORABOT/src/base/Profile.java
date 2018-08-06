@@ -88,37 +88,63 @@ public class Profile extends HttpServlet {
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
-	    // 회원가입 정보 DB에 저장
 	    
 		HttpSession session = request.getSession();
-	    
+		
+		String result = "";
+		
 		try {
-		    if(Boolean.valueOf(request.getParameter("profile"))) {
-				String updateSql = String.format("update customer set name='"+request.getParameter("name")+
-						"', phone_number='"+request.getParameter("phone_number")+
-						"' where email='"+session.getAttribute("email")+"'");
-				
-				DB useDB = new DB();
-				useDB.Query(updateSql, "insert");
-				
-				useDB.clean();	    	
-		    }
-		    
-		    else {
-				String updateSql = String.format("update customer_key set api_key='"+request.getParameter("api_key")+
-						"', secret_key='"+request.getParameter("secret_key")+
-						"' where email='"+session.getAttribute("email")+
-						"' and exchange_name='"+request.getParameter("exchange_name")+"'");
-	
-				DB useDB = new DB();
-				useDB.Query(updateSql, "insert");
-				
-				useDB.clean();	    
-		    }
+			String updateSql = "";
+			DB useDB = new DB();
+			
+			switch(request.getParameter("item")) {
+				// 신상 정보 변경
+				case "profile":
+					updateSql = String.format("update customer set name='"+request.getParameter("name")+
+							"', phone_number='"+request.getParameter("phone_number")+
+							"' where email='"+session.getAttribute("email")+"'");
+					result = "complete";
+					break;
+				// 비밀번호 변경
+				case "password":
+					// DB에서 현재 비밀번호 가져옴
+					ResultSet rs = useDB.Query("select password from customer where email='"+session.getAttribute("email")+"'", "select");
+					String password = "";
+					if(rs.next()) password = rs.getString("password");
+					
+					if(!request.getParameter("old_password").equals(password)) result = "wrongError";	// 현재 비밀번호가 일치하지 않을 경우
+					else if(request.getParameter("password").equals(password)) result = "sameError";	// 새로운 비밀번호가 현재 비밀번호와 같은 경우
+					else {	// 정상적인 경우
+						updateSql = String.format("update customer set password='"+request.getParameter("password")+
+								"' where email='"+session.getAttribute("email")+"'");		
+						result = "complete";				
+					} 
+					break;
+				// 거래소 정보 변경
+				case "exchange":
+					updateSql = String.format("update customer_key set api_key='"+request.getParameter("api_key")+
+							"', secret_key='"+request.getParameter("secret_key")+
+							"' where email='"+session.getAttribute("email")+
+							"' and exchange_name='"+request.getParameter("exchange_name")+"'");
+					result = "complete";
+					break;
+				default:
+					break;
+			}
+			
+			// 정상적인 경우 DB를 수정하고 성공 메세지 전송
+			if(result == "complete") {
+				useDB.Query(updateSql, "insert");			
+				useDB.clean();
+				doGet(request, response);
+			}
+			else {	// 오류가 발생한 경우 오류 메세지 전송
+				PrintWriter out = response.getWriter();
+				out.print(result);
+			}   
 		} catch (SQLException se) {
 			se.printStackTrace();
 		}
-	    doGet(request, response);
 	}
 
 }

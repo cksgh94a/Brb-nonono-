@@ -21,13 +21,12 @@ store.subscribe(() => {
 const rootEl = document.getElementById('root');
 
 ReactDOM.render(
-  <div>
-    <AppContainer>
-      <Provider store = {store}>
-        <App />
-      </Provider>
-    </AppContainer>
-  </div>,
+  <AppContainer>
+    <Provider store = {store}>
+      <App />
+    </Provider>
+  </AppContainer>
+  ,
   rootEl
 );
 

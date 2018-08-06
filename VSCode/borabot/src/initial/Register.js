@@ -1,15 +1,5 @@
 import React, { Component } from 'react';
-import crypto from 'crypto';
 import axios from 'axios';
-
-var key = "tHis_iS_pRivaTe_Key";
-const encrypt = (err, key) => {
-  let cipher = crypto.createCipher('aes-256-cbc', key);
-  let encipheredpw = cipher.update(err, 'utf-8', 'hex');
-  // encipheredpw = cipher.setAutoPadding(auto_padding=true);
-  encipheredpw += cipher.final('hex');
-  return encipheredpw;
-}
 
 class Register extends Component {
   constructor(props) {
@@ -17,10 +7,11 @@ class Register extends Component {
     this.state={
       email: null,  
       password: null,
+      passwordC: null,
 
       eVal: true, // 이메일 유효성
-      pVal: true,  // 비밀번호 유효성
-      ppVal: true
+      pVal: true, // 비밀번호 유효성
+      ppVal: true // 비밀번호 일치 유효성
     }
   }
 
@@ -28,14 +19,9 @@ class Register extends Component {
     // 이메일 유효성 검사
     if(e.target.placeholder === "email"){
       if(e.target.value.match(/^([\w-]+(?:\.[\w-]+)*)@((?:[\w-]+\.)*\w[\w-]{0,66})\.([a-z]{2,6}(?:\.[a-z]{2})?)$/)){
-        this.setState({
-          email: e.target.value,
-          eVal: true
-        })        
+        this.setState({ email: e.target.value, eVal: true })        
       } else{
-        this.setState({
-          eVal: false
-        })
+        this.setState({ email: e.target.value, eVal: false })
       }
     }
 
@@ -43,28 +29,18 @@ class Register extends Component {
     else if(e.target.placeholder === "비밀번호"){
       if(e.target.value.match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,16}$/)
         && (e.target.value.length >= 8) && (e.target.value.length <= 16)) {
-        this.setState({
-          password: e.target.value,
-          pVal: true
-        })
+        this.setState({ password: e.target.value, pVal: true })
       } else{
-        this.setState({
-          pVal: false
-        })
+        this.setState({ password: e.target.value, pVal: false })
       }
-      console.log(this.state.password)
     }
 
     // 비밀번호 확인
     else if(e.target.placeholder === "비밀번호 확인"){
       if(this.state.password === e.target.value) {
-        this.setState({
-          ppVal: true
-        })
+        this.setState({ passwordC: e.target.value, ppVal: true })
       } else{
-        this.setState({
-          ppVal: false
-        })
+        this.setState({ passwordC: e.target.value, ppVal: false })
       }
     }    
   }  
@@ -85,7 +61,7 @@ class Register extends Component {
         'Register', 
         'auth='+false+
         '&email='+this.state.email+
-        '&password='+encrypt(this.state.password, key)+
+        '&password='+this.state.password+
         '&key='+document.getElementById('key').value, 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
@@ -107,21 +83,22 @@ class Register extends Component {
   }
 
   render() {
+    const { password, passwordC, pVal, ppVal } = this.state
     return (
       <div>
         이메일<br/>
-        <input placeholder="email" onChange={(e)=>this.handleChange(e)}/>
+        <input placeholder="email" onChange={this.handleChange}/>
         <button onClick={this.handleAuth}>인증키 발송</button><br/>
         {!this.state.eVal && <a>올바른 이메일 형식이 아닙니다.<br/></a>}<br/>
         인증키 입력<br/>
-        <input placeholder="인증키" id="key" onChange={(e)=>this.handleChange(e)}/><br/><br/>
+        <input placeholder="인증키" id="key" onChange={this.handleChange}/><br/><br/>
 
         비밀번호 ("영문(대소문자 구분), 숫자, 특수문자를 포함하여 8~16자")<br/>
-        <input type="password" placeholder="비밀번호" onChange={(e)=>this.handleChange(e)}/><br/>
-        {!this.state.pVal && <a>올바른 비밀번호 형식이 아닙니다.<br/></a>}<br/>
+        <input type="password" placeholder="비밀번호" onChange={this.handleChange}/><br/>
         비밀번호 확인<br/>
-        <input type="password" placeholder="비밀번호 확인" onChange={(e)=>this.handleChange(e)}/><br/>
-        {!this.state.ppVal && <a>비밀번호가 다릅니다.</a>}<br/><br/>
+        <input type="password" placeholder="비밀번호 확인" id="passwordC" onChange={this.handleChange}/><br/>
+        {((password !== '') && !pVal) && <a>올바른 비밀번호 형식이 아닙니다.<br/></a>}
+        {((passwordC !== '') && pVal && !ppVal) && <a>비밀번호가 다릅니다.<br/></a>}
 
         <button onClick={this.handleRegister}>회원가입</button>
         {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}

@@ -1,18 +1,8 @@
 import React, { Component } from 'react';
-import crypto from 'crypto';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
 import { login } from '../reducers/logInOut';
-
-var key = "tHis_iS_pRivaTe_Key";
-const encrypt = (err, key) => {
-  let cipher = crypto.createCipher('aes-256-cbc', key);
-  let encipheredpw = cipher.update(err, 'utf-8', 'hex');
-  // encipheredpw = cipher.setAutoPadding(auto_padding=true);
-  encipheredpw += cipher.final('hex');
-  return encipheredpw;
-}
 
 class Login extends Component {
   constructor(props) {
@@ -53,7 +43,7 @@ class Login extends Component {
     (this.state.email !== null && this.state.password !== null) ?    
       axios.post( 
         'LogInOut', 
-        'email='+this.state.email+'&password='+encrypt(this.state.password, key), 
+        'email='+this.state.email+'&password='+this.state.password, 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
@@ -81,7 +71,7 @@ class Login extends Component {
         <button onClick={this.handleLogin}>로그인</button>
         <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
         <button onClick={()=>this.handleAction('r')}>회원가입</button>
-        <button onClick={()=>this.handleAction('f')}>아이디/비밀번호 찾기</button>
+        <button onClick={()=>this.handleAction('f')}>비밀번호 찾기</button>
       </div>      
     );
   }
