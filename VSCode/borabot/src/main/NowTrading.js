@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import { selectTrading } from './reducers/sales';
+import { selectTrading } from '../reducers/sales';
 
 import './NowTrading.css';
 
@@ -35,8 +35,9 @@ class NowTrading extends Component {
     )
   }
 
-  handleLogbtn = (nt) => {
-    this.props.onSelectTrading(nt)
+  handleLogbtn = (name) => {
+    this.props.onSelectTrading(true, name)
+    window.location = "/log";
   }
 
   reload = () => {
@@ -60,7 +61,7 @@ class NowTrading extends Component {
         <div className = "NowTrading-element" >
           <b>{nt.bot_name}</b><br/>코인 : {nt.coin}<br/>거래소 : {nt.exchange_name}<br/>
           전략 : {nt.strategy_name}<br/>종료일 : {nt.end_date}<br/>수익률 : {nt.profit}%<br/>
-          <button id="Sale-log-btn" onClick={() => this.handleLogbtn(nt)}>거래 기록</button>
+          <button id="Sale-log-btn" onClick={() => this.handleLogbtn(nt.bot_name)}>거래 기록</button>
           <button id="Sale-stop-btn" onClick={() => this.handleStopbtn(nt)}>거래 종료</button>
         </div>);
       })}
@@ -71,7 +72,7 @@ class NowTrading extends Component {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    onSelectTrading: (value) => dispatch(selectTrading(value))
+    onSelectTrading: (tf, value) => dispatch(selectTrading(tf, value))
   }
 }
 

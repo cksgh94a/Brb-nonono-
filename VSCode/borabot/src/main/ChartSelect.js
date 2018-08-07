@@ -77,6 +77,7 @@ class ChartSelect extends Component {
         symbol={exchangeList[exchangeIndex].key+":"+exchangeList[exchangeIndex].value.coin[baseIndex].list[coinIndex]+exchangeList[exchangeIndex].value.baseList[baseIndex]}
         theme={Themes.DARK}
         locale="kr"
+        timezone="Asia/Seoul"
         // 트레이딩뷰에서 6시간과 12시간 데이터를 제공하지 않으므로 4시간으로 바꿔서 표시
         interval={((intervalList[intervalIndex].value/60 === 360) || (intervalList[intervalIndex].value/60 === 720))
           ? 240

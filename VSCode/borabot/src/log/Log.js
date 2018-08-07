@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { connect } from 'react-redux';
 
+import { selectTrading } from '../reducers/sales';
 
 class Log extends Component {
   constructor(){
     super();
     this.state={    
       
-      selectedTrade:'',
+      selectedTrade:{},
       tradeList: [],
       logList: [], // 현재 선택된 페이지의 10개의 로그 리스트
 
@@ -27,10 +29,23 @@ class Log extends Component {
       this.setState({
         tradeList: response.data
       })
+
+      this.props.selected &&
+        response.data.map((t, i) => {
+          if(t.bot_name === this.props.selectedTrading){
+            this.setState({
+              selectedTrade: t
+            })
+            this.getLog(t.bot_name, 1)
+            document.getElementById('botName').selectedIndex=i+1
+          }
+        })
     }) 
     .catch( response => { 
       console.log('err\n'+response); 
     }); // ERROR
+
+
   }
 
   handleChange = () => {
@@ -85,18 +100,7 @@ class Log extends Component {
           })}
         </select><br/>
         <h4>봇 기록</h4>        
-        거래소 : {selectedTrade.exchange_name}
-        | 코인 : {selectedTrade.coin}
-        {/* <input value="거래 신호 시간" readOnly/><input value="매매 행동" readOnly/><input value="개당 코인 가격" readOnly/>
-        <input value="코인 매매 수량" readOnly/><input value="현재 보유 현금" readOnly/><input value="현재 보유 코인수" readOnly/>
-        {logList.map((l, i) => {
-          return (<div><input value={l.trans_time} readOnly/>{l.sales_action === "1" ?
-            (<input value={"구매"} readOnly/>) :(<input value={"판매"} readOnly/>)}
-            <input value={l.coin_price} readOnly/><input value={l.coin_intent} readOnly/>
-            <input value={l.now_balance} readOnly/><input value={l.now_coin_number} readOnly/>
-            </div>)
-          })} */}
-          
+        거래소 : {selectedTrade.exchange_name} | 코인 : {selectedTrade.coin}
           <table >
           <thead><tr>
             <th>거래 신호 시간</th><th>매매 행동</th><th>개당 코인 가격</th><th>코인 매매 수량</th><th>현재 보유 현금</th><th>현재 보유 코인수</th>
@@ -140,6 +144,21 @@ class Log extends Component {
     );
   }
 }
+
+let mapDispatchToProps = (dispatch) => {
+  return {
+    onSelectTrading: (tf, value) => dispatch(selectTrading(tf, value))
+  }
+}
+
+let mapStateToProps = (state) => {
+  return {
+    selected: state.sales.selected,
+    selectedTrading: state.sales.selectedTrading
+  };
+}
+
+Log = connect(mapStateToProps, mapDispatchToProps)(Log);
 
 export default Log;
 
