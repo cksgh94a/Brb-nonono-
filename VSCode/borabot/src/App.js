@@ -4,15 +4,16 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 
 import Header from './header/Header';
-import Initial from './initial/Initial';
 import Main from './main/Main';
 import Profile from './profile/Profile';
 import Board from './board/Board';
 import BackTesting from './backTesting/BackTesting';
-import Login from './initial/Login';
-import Register from './initial/Register';
 import Strategy from './strategy/Strategy';
 import Log from './log/Log'
+
+import Login from './initial/Login';
+import Register from './initial/Register';
+import FindInfo from './initial/FindInfo';
 
 import { login, logout } from './reducers/logInOut';
 import { setStrategy } from './reducers/strategy';
@@ -37,9 +38,9 @@ class App extends Component {
   render() {
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-        <div>
-          <Header/>
-          {this.props.login ? 
+        {this.props.login
+        ? <div>
+            <Header/>
             <Switch>
               <Route path="/profile" component={Profile}/>
               <Route path="/backtesting" component={BackTesting}/>
@@ -47,14 +48,14 @@ class App extends Component {
               <Route path="/log" component={Log}/>
               <Route path="/strategy" component={Strategy}/>
               <Route path="/" component={Main}/>
-            </Switch> :
-            <Switch>
-              <Route path="/login" component={Login}/>
-              <Route path="/register" component={Register}/>
-              <Route path="/" component={Initial}/>
             </Switch>
-          }
-        </div>
+          </div>
+        : <Switch>
+            <Route path="/register" component={Register}/>
+            <Route path="/findInfo" component={FindInfo}/>
+            <Route path="/" component={Login}/>
+          </Switch>
+        }
       </BrowserRouter>
     );
   }

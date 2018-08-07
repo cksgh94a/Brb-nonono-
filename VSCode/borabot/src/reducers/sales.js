@@ -1,9 +1,10 @@
-// =================================================
-// 현재 거래 설정 저장 state (거래 시작, 차트 표시에 사용)
-// =================================================
+// ===================================================================
+// 현재 거래 설정 저장 state (거래 시작, 차트 표시, 진행 중인 거래 선택에 사용)
+// ===================================================================
 
 const sS = 'setSales';
 const sC = 'setChart';
+const sT = 'selectTrading';
 
 export function setSales(value) {
 	return {
@@ -23,12 +24,20 @@ export function setChart(value) {
 	};
 }
 
+export function selectTrading(value) {
+	return {
+		type: sT,
+		selectedTrading: value
+	};
+}
+
 const Sales = {
   sales: true,
   exchangeIndex: 0,
   baseIndex: 0,
   coinIndex: 0,
-  intervalIndex: 0
+	intervalIndex: 0,
+	selectedTrading: ''
 };
 
 export const sales = (state = Sales, action) => {
@@ -44,6 +53,10 @@ export const sales = (state = Sales, action) => {
 		case sC:
 			return Object.assign({}, state, {
         sales: action.sales
+			});
+		case sT:
+			return Object.assign({}, state, {
+        selectedTrading: action.selectedTrading
 			});
 		default:
 			return state;

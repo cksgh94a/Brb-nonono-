@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { login } from '../reducers/logInOut';
@@ -11,12 +12,6 @@ class Login extends Component {
       email: null,
       password: null
     }
-  }
-
-  handleAction = (a) => {
-    a === 'r'
-    ? this.props.handleAction('register')
-    : this.props.handleAction('findInfo')
   }
 
   handleChange = (e) => {  
@@ -59,6 +54,7 @@ class Login extends Component {
       alert('양식을 확인해주세요')
   }
   
+  // 앞단 개발용 임시 로그인
   handleLoginT = () => {
     this.props.onLogin()
   }
@@ -70,8 +66,8 @@ class Login extends Component {
         <input type="password" placeholder="비밀번호" name="password" onChange={(e)=>this.handleChange(e)}/><br/>
         <button onClick={this.handleLogin}>로그인</button>
         <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
-        <button onClick={()=>this.handleAction('r')}>회원가입</button>
-        <button onClick={()=>this.handleAction('f')}>비밀번호 찾기</button>
+        <Link to="/register"><button>회원가입</button></Link>
+        <Link to="/findInfo"><button>비밀번호 찾기</button></Link>
       </div>      
     );
   }
