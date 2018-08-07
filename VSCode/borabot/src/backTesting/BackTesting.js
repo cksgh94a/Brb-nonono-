@@ -39,14 +39,17 @@ class BackTesting extends Component {
     }
   }
 
-  handleIndex = () => {
+  handleIndex = (e) => {
+    (e.target.id === 'exchange')
+    && (document.getElementById('base').selectedIndex = 0,
+      document.getElementById('coin').selectedIndex = 0)
     this.setState({
       exchangeIndex: document.getElementById('exchange').selectedIndex,
       baseIndex: document.getElementById('base').selectedIndex
     })
   }
 
-  handleSetting = (e, bs) => {
+  handleSetting = (e) => {
     switch(e.target.value){
       case '전액구매':
         return( this.setState({ buyDetail: false }) )
@@ -78,7 +81,10 @@ class BackTesting extends Component {
   }
 
   dateValidate = (sD, eD) =>{
+    console.log(sD)
     var diff = new Date(eD) - new Date(sD)
+
+    console.log(diff)
     switch(document.getElementById('interval').value) {
       case "5분":
         if( diff > 0 && diff < 1*24*60*60*1000 )
@@ -106,18 +112,15 @@ class BackTesting extends Component {
       return
     }
 
-    console.log(this.state.startDay)
-    console.log(this.state.endDay)
-
     const { startDay, endDay } = this.state
     var startDate = startDay.getFullYear()+'-'+
       ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
       ("0"+startDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('startHour').value).slice(-2)+':00:00.000'
+      ("0"+document.getElementById('startHour').value).slice(1,3)+':00:00.000'
     var endDate = endDay.getFullYear()+'-'+
       ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
       ("0"+endDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('endHour').value).slice(-2)+':00:00.000'
+      ("0"+document.getElementById('endHour').value).slice(1,3)+':00:00.000'
 
     if(this.dateValidate(startDate, endDate)){
       axios.post( 
@@ -206,25 +209,25 @@ class BackTesting extends Component {
         <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'start')} />
         <select id="startHour">
           {hourList.map((e, i) => {
-            return (<option key={i} selected={e === today.getHours()}> {e} </option>)
+            return (<option key={i} selected={e === today.getHours()}> {e}시 </option>)
           })}
-        </select>시
+        </select>
         <br/>  
         종료일 :
         <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'end')} />
         <select id="endHour">
           {hourList.map((e, i) => {
-            return (<option key={i} selected={e === today.getHours()}> {e} </option>)
+            return (<option key={i} selected={e === today.getHours()}> {e}시 </option>)
           })}
-        </select>시<br/>
+        </select><br/>
         시작 금액 : <input id="nowCash" placeholder="시작 금액을 입력하세요" value={this.state.nowCash} onChange={this.handleCash}/><br/>
         <button onClick={this.handleStartbtn}>백테스팅 시작</button>
         <h4 >결과</h4>
         {isResulted && 
           (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
         {isResulted && 
-          (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}
-        <br/>{isResulted && 
+          (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}<br/>
+        {isResulted && 
           (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)}
       </div>
     );
