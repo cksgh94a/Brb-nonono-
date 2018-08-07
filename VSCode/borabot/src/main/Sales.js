@@ -13,12 +13,22 @@ import './Sales.css';
 const hourList = []
 for(var i=1;i<=24;i++) hourList.push(i-1)  
 
+// 구매, 판매 설정 리스트
+const buyingSetting = [ {key: '전액구매', value: 'buyAll'}, {key: '금액구매', value: 'buyCertainPrice'}, {key: '개수구매', value: 'buyCertainNum'} ]
+const sellingSetting = [ {key: '전액판매', value: 'sellAll'}, {key: '금액판매', value: 'sellCertainPrice'}, {key: '개수판매', value: 'sellCertainNum'} ]
+
+
 class Sales extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      selectedDay: new Date() // 선택한 날짜
+      selectedDay: new Date(), // 선택한 날짜
+      
+      buyDetail: false,
+      sellDetail: false,
+      buyUnit:'',
+      sellUnit:''
     };
   }
 
@@ -36,6 +46,24 @@ class Sales extends Component {
       coinIndex: document.getElementById('salesCoin').selectedIndex,
       intervalIndex: document.getElementById('salesInterval').selectedIndex
     })
+  }
+
+  handleSetting = (e) => {
+    switch(e.target.value){
+      case '전액구매':
+        return( this.setState({ buyDetail: false }) )
+      case '금액구매':
+        return( this.setState({ buyDetail: true, buyUnit: '원' }) )
+      case '개수구매':
+        return( this.setState({ buyDetail: true, buyUnit: '개' }) )
+      case '전액판매':
+        return( this.setState({ sellDetail: false }) )
+      case '금액판매':
+        return( this.setState({ sellDetail: true, sellUnit: '원' }) )
+      case '개수판매':
+        return( this.setState({ sellDetail: true, sellUnit: '개' }) )
+      default: break
+    }
   }
 
   // 거래 시작 버튼 클릭 시
@@ -75,7 +103,9 @@ class Sales extends Component {
       document.getElementById('salesInterval').value+ '\n' +
       document.getElementById('strategy').value+ '\n' +
       document.getElementById('buyingSetting').value+ '\n' +
+      document.getElementById('buyingDetail').value+ '\n' +
       document.getElementById('sellingSetting').value+ '\n' +
+      document.getElementById('sellingDetail').value+ '\n' +
       endDate+ '\n' +
       '\n이 맞습니까?';
 
@@ -92,6 +122,8 @@ class Sales extends Component {
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+document.getElementById('buyingSetting').value+
         '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&buyingDetail='+document.getElementById('buyingDetail').value+
+        '&sellingDetail='+document.getElementById('sellingDetail').value+
         '&startDate='+startDate+
         '&endDate='+endDate,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -133,13 +165,15 @@ class Sales extends Component {
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
-        </select><br/>        
-        구매 설정 : <select id="buyingSetting">
-            <option> buyAll </option>
         </select><br/>
-        판매 설정 : <select id="sellingSetting">
-            <option> sellAll </option>
-        </select><br/>
+        구매 설정 : <select id="buyingSetting" onChange={this.handleSetting}>
+          {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
+        </select>
+        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyUnit}<br/>
+        판매 설정 : <select id="sellingSetting" onChange={this.handleSetting}>
+          {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
+        </select>
+        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellUnit}<br/>
         종료일 : 
         <DayPickerInput onDayChange={this.handleDayChange} />
         <select id="endHour">

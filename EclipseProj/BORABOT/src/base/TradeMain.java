@@ -37,7 +37,34 @@ public class TradeMain extends HttpServlet {
 
         HttpSession session = request.getSession();
 
-        if(Boolean.valueOf(request.getParameter("status")))
+        if(Boolean.valueOf(request.getParameter("status"))) {
+        	// 거래 세부 설정
+        	double priceBuyUnit = 0.0;
+        	double priceSellUnit = 0.0;
+        	double numBuyUnit = 0.0;
+        	double numSellUnit = 0.0;
+        	        	
+        	switch(request.getParameter("buyingSetting")) {
+    	    	case "buyCertainPrice":
+    	    		priceBuyUnit = Double.parseDouble(request.getParameter("buyingDetail"));
+    	    		break;
+    	    	case "buyCertainNum":
+    	    		numBuyUnit = Double.parseDouble(request.getParameter("buyingDetail"));
+    	    		break;
+        		default: break;
+        	}
+        	
+        	switch(request.getParameter("buyingSetting")) {
+    	    	case "sellCertainPrice":
+    	    		priceSellUnit = Double.parseDouble(request.getParameter("sellingDetail"));
+    	    		break;
+    	    	case "sellCertainNum":
+    	    		numSellUnit = Double.parseDouble(request.getParameter("sellingDetail"));
+    	    		break;
+    			default: break;
+    		}
+        	
+        	// 거래 객체 생성
             new tradingBot((String) session.getAttribute("email"),
             		request.getParameter("exchange").toLowerCase(),
             		request.getParameter("botname"),
@@ -49,8 +76,8 @@ public class TradeMain extends HttpServlet {
             		request.getParameter("strategyName"),
             		request.getParameter("buyingSetting"),
             		request.getParameter("sellingSetting"),
-            		0.0, 0.0, 0.0, 0.0, 0).botStart();
-
+            		priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0).botStart();        	
+        }
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		try {
         		DB useDB = new DB();

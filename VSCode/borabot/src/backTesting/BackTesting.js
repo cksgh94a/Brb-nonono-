@@ -4,14 +4,18 @@ import { connect } from 'react-redux';
 
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
+import { deflate } from 'zlib';
 
 const today = new Date();
 
 const hourList = []
-
 for(var i=1;i<=24;i++) hourList.push(i-1) 
 
 const periodLimit = [ "1일", "1주일", "15일", "3개월", "3개월", "3개월" ]
+
+// 구매, 판매 설정 리스트
+const buyingSetting = [ {key: '전액구매', value: 'buyAll'}, {key: '금액구매', value: 'buyCertainPrice'}, {key: '개수구매', value: 'buyCertainNum'} ]
+const sellingSetting = [ {key: '전액판매', value: 'sellAll'}, {key: '금액판매', value: 'sellCertainPrice'}, {key: '개수판매', value: 'sellCertainNum'} ]
 
 class BackTesting extends Component {
   constructor(){
@@ -26,7 +30,12 @@ class BackTesting extends Component {
       isResulted:false,
       text:'',
       ReturnDetailMessage:'',
-      ReturnMessage:''
+      ReturnMessage:'',
+      
+      buyDetail: false,
+      sellDetail: false,
+      buyUnit:'',
+      sellUnit:''
     }
   }
 
@@ -37,11 +46,28 @@ class BackTesting extends Component {
     })
   }
 
+  handleSetting = (e, bs) => {
+    switch(e.target.value){
+      case '전액구매':
+        return( this.setState({ buyDetail: false }) )
+      case '금액구매':
+        return( this.setState({ buyDetail: true, buyUnit: '원' }) )
+      case '개수구매':
+        return( this.setState({ buyDetail: true, buyUnit: '개' }) )
+      case '전액판매':
+        return( this.setState({ sellDetail: false }) )
+      case '금액판매':
+        return( this.setState({ sellDetail: true, sellUnit: '원' }) )
+      case '개수판매':
+        return( this.setState({ sellDetail: true, sellUnit: '개' }) )
+      default: break
+    }
+  }
+
   handleDayChange = (day, se) => {
-    se === 'start' ?
-    this.setState({ startDay: day })
-    :
-    this.setState({ endDay: day })
+    se === 'start'
+    ? this.setState({ startDay: day })
+    : this.setState({ endDay: day })
   }
 
   handleCash = (e) => {
@@ -167,13 +193,15 @@ class BackTesting extends Component {
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
-        </select><br/>        
-        구매 설정 : <select id="buyingSetting">
-            <option key={i}> buyAll </option>
         </select><br/>
-        판매 설정 : <select id="sellingSetting">
-            <option key={i}> sellAll </option>
-        </select><br/>
+        구매 설정 : <select id="buyingSetting" onChange={this.handleSetting}>
+          {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
+        </select>
+        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyUnit}<br/>
+        판매 설정 : <select id="sellingSetting" onChange={this.handleSetting}>
+          {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
+        </select>
+        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellUnit}<br/>
         시작일 :
         <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'start')} />
         <select id="startHour">

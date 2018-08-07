@@ -9,9 +9,9 @@ class Register extends Component {
       password: null,
       passwordC: null,
 
-      eVal: true, // 이메일 유효성
-      pVal: true, // 비밀번호 유효성
-      ppVal: true // 비밀번호 일치 유효성
+      eVal: false, // 이메일 유효성
+      pVal: false, // 비밀번호 유효성
+      ppVal: false // 비밀번호 일치 유효성
     }
   }
 
@@ -84,12 +84,13 @@ class Register extends Component {
 
   render() {
     const { password, passwordC, pVal, ppVal } = this.state
+    console.log(password, pVal)
     return (
       <div>
         이메일<br/>
         <input placeholder="email" onChange={this.handleChange}/>
         <button onClick={this.handleAuth}>인증키 발송</button><br/>
-        {!this.state.eVal && <a>올바른 이메일 형식이 아닙니다.<br/></a>}<br/>
+        {!this.state.eVal && <text>올바른 이메일 형식이 아닙니다.<br/></text>}<br/>
         인증키 입력<br/>
         <input placeholder="인증키" id="key" onChange={this.handleChange}/><br/><br/>
 
@@ -97,8 +98,8 @@ class Register extends Component {
         <input type="password" placeholder="비밀번호" onChange={this.handleChange}/><br/>
         비밀번호 확인<br/>
         <input type="password" placeholder="비밀번호 확인" id="passwordC" onChange={this.handleChange}/><br/>
-        {((password !== '') && !pVal) && <a>올바른 비밀번호 형식이 아닙니다.<br/></a>}
-        {((passwordC !== '') && pVal && !ppVal) && <a>비밀번호가 다릅니다.<br/></a>}
+        {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.<br/></text>}
+        {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.<br/></text>}
 
         <button onClick={this.handleRegister}>회원가입</button>
         {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}

@@ -110,19 +110,18 @@ class Board extends Component {
               <tr>
                 <td colSpan="4">
                   { /* 첫 페이지, 이전 10 페이지 이동 버튼*/ }
-                  <a onClick={() => this.selectPage(1)}>&lt;&lt; </a>
-                  {pageNum>10 && <a onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}> &lt;</a>}
+                  <text onClick={() => this.selectPage(1)} style={{cursor:"pointer"}}>&lt;&lt; </text>
+                  {pageNum>10 && <text onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)} style={{cursor:"pointer"}}> &lt;</text>}
                   { // 현재 선택된 페이지의 근처 10개 페이지 표시
                   pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
                     return(<a key ={i} onClick={() => this.selectPage(p)}>
-                      {pageNum === p ? <b>  {p}  </b> : <span>  {p}  </span>}
+                      {pageNum === p ? <b style={{cursor:"pointer"}}>  {p}  </b> : <text style={{cursor:"pointer"}}>  {p}  </text>}
                     </a>)
                   })}
                   { /* 이후 10 페이지, 마지막 페이지 이동 버튼*/ }
                   {parseInt((pageNum-1)/10, 10) < parseInt((pageNumList.length-1)/10, 10) &&
-                    <a onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}>&gt;
-                  </a>}     
-                  <a onClick={() => this.selectPage(pageNumList.length)}> &gt;&gt;</a>
+                    <text onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)} style={{cursor:"pointer"}}>&gt;</text>}     
+                  <text onClick={() => this.selectPage(pageNumList.length)} style={{cursor:"pointer"}}> &gt;&gt;</text>
                 </td>
               </tr>
               <tr><td colSpan="4"><button onClick={this.writePost}>글 쓰기</button></td></tr>

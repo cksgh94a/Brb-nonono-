@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { pctDecChars } from '../../node_modules/uri-js';
 
 class Profile extends Component {
   constructor(){
@@ -154,6 +155,7 @@ class Profile extends Component {
   render() {
     const { exchangeList } = this.props
     const { selectedExchange, password, passwordC, pVal, ppVal } = this.state
+    console.log(passwordC)
     return (
       <div>
         <h4>개인 정보</h4>
@@ -164,8 +166,8 @@ class Profile extends Component {
         현재 비밀번호: <input id="oldPassword" type="password"/><br/>
         새로운 비밀번호: <input id="newPassword" type="password" onChange={this.handleValue}/><br/>
         비밀번호 확인: <input id="newPasswordConfirm" type="password" onChange={this.handleValue}/><br/>
-        {((password !== '') && !pVal) && <a>올바른 비밀번호 형식이 아닙니다.<br/></a>}
-        {((passwordC !== '') && pVal && !ppVal) && <a>비밀번호가 다릅니다.<br/></a>}
+        {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.<br/></text>}
+        {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.<br/></text>}
         <button id="modPassword" onClick={this.handleModPassword}>수정</button>
         <h4>거래소 정보</h4>
         <select id="exchange" onChange={this.handleExchange}>
