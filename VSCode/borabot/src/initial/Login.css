@@ -155,10 +155,10 @@
     margin-left: -113.5px;
 }
 
-/* input::-ms-input-placeholder { color: white; }
+input::-ms-input-placeholder { color: white; }
 input::-webkit-input-placeholder { color: white; } 
 
-input::-moz-placeholder { color: white; } */
+input::-moz-placeholder { color: white; }
 input:focus {
     outline: none;
   }

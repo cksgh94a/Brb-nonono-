@@ -21,7 +21,7 @@ class Alarm extends Component {
       })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
-    this.props.handleAlarm()
+    // this.props.handleAlarm()
   }
 
   render() {

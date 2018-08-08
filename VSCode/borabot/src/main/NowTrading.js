@@ -14,7 +14,7 @@ class NowTrading extends Component {
 
     this.state = {
       listE: [],
-      alarmCount: 0
+      alarmCount: '0'
     };
   }
 
@@ -34,7 +34,7 @@ class NowTrading extends Component {
     axios.post('Alarm')
     .then( response => {
       this.setState({
-        alarmCount: 0
+        alarmCount: '0'
       })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
@@ -71,12 +71,13 @@ class NowTrading extends Component {
     const { alarmCount } = this.state
     return(
       <div >
-        {alarmCount !== 0
+        {alarmCount !== '0'
         && <Popup
-            trigger={<button onClick={this.handleAlarm}> {alarmCount} </button>}
+            trigger={<button> {alarmCount} </button>}
             modal
+            onClose={this.handleAlarm}
             // closeOnDocumentClick
-          ><Alarm handleAlarm={this.handleAlarm}/></Popup>}
+          ><Alarm /></Popup>}
         
         <button onClick={this.reload}>새로고침</button>
         <div className = "NowTrading-elementList">
