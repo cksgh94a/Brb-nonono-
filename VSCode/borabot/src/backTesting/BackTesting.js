@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
-import { deflate } from 'zlib';
 
 const today = new Date();
 
@@ -40,9 +39,10 @@ class BackTesting extends Component {
   }
 
   handleIndex = (e) => {
-    (e.target.id === 'exchange')
-    && (document.getElementById('base').selectedIndex = 0,
-      document.getElementById('coin').selectedIndex = 0)
+    if (e.target.id === 'exchange'){
+      document.getElementById('base').selectedIndex = 0
+      document.getElementById('coin').selectedIndex = 0
+    } else if(e.target.id === 'base') document.getElementById('coin').selectedIndex = 0
     this.setState({
       exchangeIndex: document.getElementById('exchange').selectedIndex,
       baseIndex: document.getElementById('base').selectedIndex

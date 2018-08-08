@@ -9,7 +9,8 @@ class Log extends Component {
     super();
     this.state={    
       
-      selectedTrade:{},
+      selectedTrade: {},
+      selectedSalesAction: {},
       tradeList: [],
       logList: [], // 현재 선택된 페이지의 10개의 로그 리스트
 
@@ -27,16 +28,18 @@ class Log extends Component {
     axios.get( 'Log' )
     .then( response => {
       this.setState({
-        tradeList: response.data
+        tradeList: response.data,
+        pageNumList: [1]
       })
 
+      // 거래 현황에서 거래 기록을 눌렀을 경우
       this.props.selected &&
         response.data.map((t, i) => {
           if(t.bot_name === this.props.selectedTrading){
             this.setState({
               selectedTrade: t
             })
-            this.getLog(t.bot_name, 1)
+            this.getLog(t.bot_name, 1, '매수/매도')
             document.getElementById('botName').selectedIndex=i+1
           }
         })
@@ -44,26 +47,36 @@ class Log extends Component {
     .catch( response => { 
       console.log('err\n'+response); 
     }); // ERROR
-
-
   }
 
-  handleChange = () => {
-    this.setState({
-      selectedTrade: this.state.tradeList[document.getElementById('botName').selectedIndex-1]
-    })
-    this.getLog(this.state.tradeList[document.getElementById('botName').selectedIndex-1].bot_name, 1)
+  handleChange = (e) => {
+    if(e.target.id === 'botName' && document.getElementById('botName').selectedIndex !== 0){
+      this.setState({ selectedTrade: this.state.tradeList[document.getElementById('botName').selectedIndex-1] })
+      this.getLog(
+        this.state.tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
+        1,
+        '매수/매도'
+      )
+    } else {
+      document.getElementById('botName').selectedIndex !== 0
+      && this.getLog(
+          this.state.tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
+          1,
+          document.getElementById('salesAction').value
+        )
+    }
   }
 
-  getLog = (bn, i) => {
+  getLog = (bn, pN, sa) => {
     axios.post('Log', 
       'bot_name='+bn+
-      '&pageNum='+i,
+      '&pageNum='+pN+
+      '&sales_action='+sa,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
     .then( response => {
-      var pNL = []  // state에 저장할 페이지리스트 생성
-      for(var i = 1; i <= (response.data.count-1)/10+1; i++){
+      var pNL = [1]  // state에 저장할 페이지리스트 생성
+      for(var i = 2; i <= (response.data.count-1)/10+1; i++){
         pNL.push(i)
       }
       this.setState({
@@ -76,7 +89,8 @@ class Log extends Component {
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
   selectPage = (i) => {
-    var pn = 1  // 서버에 호출할 페이지 번호
+    console.log(i, this.state.pageNumList)
+    let pn = 1  // 서버에 호출할 페이지 번호
     if(i > this.state.pageNumList.length){
       pn = this.state.pageNumList.length
       this.setState({ pageNum: this.state.pageNumList.length })
@@ -84,20 +98,27 @@ class Log extends Component {
       pn = i
       this.setState({ pageNum: i })
     }
-    this.getLog(this.state.selectedTrade.bot_name, pn)
+    console.log(i, this.state.pageNumList.length, pn)
+    this.getLog(
+      this.state.selectedTrade.bot_name,
+      pn,
+      document.getElementById('salesAction').value
+    )
   }
 
   render() {
     const { tradeList, selectedTrade, logList, pageNum, pageNumList } = this.state
-    
     return (
       <div>
-        <h4>봇 선택</h4>        
-        봇 이름 : <select id="botName" onChange={this.handleChange}>
-          <option>선택하세요</option>
+        <h4>봇 선택</h4>
+        <select id="botName" onChange={this.handleChange}>
+          <option>봇 이름</option>
           {tradeList.map((t, i) => {
             return (<option key={i}> {t.bot_name} </option>)
           })}
+        </select><br/>
+        <select id="salesAction" onChange={this.handleChange}>
+          <option>매수/매도</option><option>매수</option><option>매도</option>
         </select><br/>
         <h4>봇 기록</h4>        
         거래소 : {selectedTrade.exchange_name} | 코인 : {selectedTrade.coin}
@@ -110,7 +131,7 @@ class Log extends Component {
             logList.map((l, i) => {
               return (<tr key={i}>
                 <td>{l.trans_time}</td>
-                <td>{l.sales_action === "1" ? ("구매") : ( "판매" )}</td>
+                <td>{l.sales_action === "1" ? ("매수") : ( "매도" )}</td>
                 <td>{l.coin_price}</td>
                 <td>{l.coin_intent}</td>
                 <td>{l.now_balance}</td>

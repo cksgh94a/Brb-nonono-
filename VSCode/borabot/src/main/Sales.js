@@ -38,7 +38,11 @@ class Sales extends Component {
   }
 
   // 거래 설정 값들의 인덱스 저장 (차트 표시용 인덱스)
-  handleIndex = () => {
+  handleIndex = (e) => {
+    if (e.target.id === 'salesExchange'){
+      document.getElementById('salesBase').selectedIndex = 0
+      document.getElementById('salesCoin').selectedIndex = 0
+    } else if(e.target.id === 'salesBase') document.getElementById('salesBase').selectedIndex = 0
     this.props.onSetSales({
       sales: true,
       exchangeIndex: document.getElementById('salesExchange').selectedIndex,

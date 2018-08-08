@@ -18,6 +18,8 @@ import FindInfo from './initial/FindInfo';
 import { login, logout } from './reducers/logInOut';
 import { setStrategy } from './reducers/strategy';
 
+import './App.css'
+
 class App extends Component {
   componentDidMount() {    
     // 세션의 현재 로그인 여부 확인
@@ -39,7 +41,7 @@ class App extends Component {
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
         {this.props.login
-        ? <div>
+        ? <div className="main">
             <Header/>
             <Switch>
               <Route path="/profile" component={Profile}/>
@@ -51,9 +53,9 @@ class App extends Component {
             </Switch>
           </div>
         : <Switch>
-            <Route path="/register" component={Register}/>
-            <Route path="/findInfo" component={FindInfo}/>
-            <Route path="/" component={Login}/>
+            <Route path="/register"><div className="main"><Register/></div></Route>
+            <Route path="/findInfo"><div className="main"><FindInfo/></div></Route>
+            <Route path="/"><div className="login"><Login/></div></Route>
           </Switch>
         }
       </BrowserRouter>

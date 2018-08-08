@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
-import { pctDecChars } from '../../node_modules/uri-js';
 
 class Profile extends Component {
   constructor(){

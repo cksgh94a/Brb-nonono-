@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import Popup from "reactjs-popup";
 
+import Alarm from './Alarm';
 import { selectTrading } from '../reducers/sales';
 
 import './NowTrading.css';
@@ -11,14 +13,28 @@ class NowTrading extends Component {
     super(props);
 
     this.state = {
-      listE: []
+      listE: [],
+      alarmCount: 0
     };
   }
+
   componentDidMount() {    
     axios.get('NowTrading')
     .then( response => {
       this.setState({
-        listE: response.data
+        listE: response.data.nowTradingList,
+        alarmCount: response.data.alarmCount
+      })
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
+  handleAlarm = () => {
+    console.log(this.state, this.props)
+    axios.post('Alarm')
+    .then( response => {
+      this.setState({
+        alarmCount: 0
       })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
@@ -52,19 +68,27 @@ class NowTrading extends Component {
   }
 
   render() {
+    const { alarmCount } = this.state
     return(
       <div >
-      <button onClick={this.reload}>새로고침</button>
-      <div className = "NowTrading-elementList">
-      {this.state.listE.map((nt, i) => {
-        return (
-        <div className = "NowTrading-element" >
-          <b>{nt.bot_name}</b><br/>코인 : {nt.coin}<br/>거래소 : {nt.exchange_name}<br/>
-          전략 : {nt.strategy_name}<br/>종료일 : {nt.end_date}<br/>수익률 : {nt.profit}%<br/>
-          <button id="Sale-log-btn" onClick={() => this.handleLogbtn(nt.bot_name)}>거래 기록</button>
-          <button id="Sale-stop-btn" onClick={() => this.handleStopbtn(nt)}>거래 종료</button>
-        </div>);
-      })}
+        {alarmCount !== 0
+        && <Popup
+            trigger={<button onClick={this.handleAlarm}> {alarmCount} </button>}
+            modal
+            // closeOnDocumentClick
+          ><Alarm handleAlarm={this.handleAlarm}/></Popup>}
+        
+        <button onClick={this.reload}>새로고침</button>
+        <div className = "NowTrading-elementList">
+        {this.state.listE.map((nt, i) => {
+          return (
+          <div className = "NowTrading-element" >
+            <b>{nt.bot_name}</b><br/>코인 : {nt.coin}<br/>거래소 : {nt.exchange_name}<br/>
+            전략 : {nt.strategy_name}<br/>종료일 : {nt.end_date}<br/>수익률 : {nt.profit}%<br/>
+            <button id="Sale-log-btn" onClick={() => this.handleLogbtn(nt.bot_name)}>거래 기록</button>
+            <button id="Sale-stop-btn" onClick={() => this.handleStopbtn(nt)}>거래 종료</button>
+          </div>);
+        })}
       </div></div>
     );
   }

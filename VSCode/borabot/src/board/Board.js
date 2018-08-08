@@ -25,8 +25,8 @@ class Board extends Component {
   getBoard = (i) => {
     axios.get( 'Board?pageNum='+i )
     .then( response => {
-      var pNL = []  // state에 저장할 페이지리스트 생성
-      for(var i = 1; i <= (response.data.count-1)/10+1; i++){
+      var pNL = [1]  // state에 저장할 페이지리스트 생성
+      for(var i = 2; i <= (response.data.count-1)/10+1; i++){
         pNL.push(i)
       }
       this.setState({

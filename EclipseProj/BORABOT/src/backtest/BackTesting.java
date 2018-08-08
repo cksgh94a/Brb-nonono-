@@ -1,8 +1,8 @@
 package backtest;
 
 import exchangeAPI.CryptowatchAPI;
+import DB.DB;
 import Indicator.*;
-import base.DB;
 
 import java.sql.ResultSet;
 import java.time.LocalDate;

@@ -2,8 +2,9 @@ package tass;
 
 
 import exchangeAPI.*;
+import DB.DB;
+import servlet.SendMail;
 import Indicator.*;
-import base.DB;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -21,8 +22,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.sql.*;
-
-import base.SendMail;
 
 public class tradingBot {
 	

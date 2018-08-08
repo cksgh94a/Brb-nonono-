@@ -10,6 +10,8 @@ import { loadState, saveState } from './reducers/localStorage';
 
 import registerServiceWorker from './registerServiceWorker';
 
+import './index.css';
+
 
 const persistedState = loadState();
 const store = createStore(reducers, persistedState);
@@ -32,7 +34,7 @@ ReactDOM.render(
 
 if (module.hot) {
   module.hot.accept('./App', () => {
-    const NextApp = require('./App').default; // eslint-disable-line global-require
+    const NextApp = require('./App').default; 
     ReactDOM.render(
       <AppContainer>
         <Provider store = {store}>

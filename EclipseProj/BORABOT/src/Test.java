@@ -1,6 +1,6 @@
 import java.sql.SQLException;
 
-import base.DB;
+import DB.DB;
 
 public class Test {
 
