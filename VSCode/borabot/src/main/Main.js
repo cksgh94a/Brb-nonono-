@@ -12,11 +12,12 @@ class Main extends Component {
     return (
       <div className="App">
         <div className="wrapper">
-          <div className = 'bg-one'>코인 추천</div>
+          <div className = 'bg-recommend'>코인 추천</div>
           <div className = 'bg-two'>거래 현황 </div>
-          <div className = 'bg-three'><NowTrading className = 'three-trading-obj'/></div>
+          <div className = 'bg-nowTrading'><NowTrading className = 'three-trading-obj'/></div>
           <div className = 'bg-chart'><ChartSelect/></div>
           <div className = 'bg-wallet'><WalletInfo/></div>
+          {/* <div className="four"><WalletInfo/></div> */}
           <div className = 'bg-transaction'><Sales/></div>
         </div>
       </div>
