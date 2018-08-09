@@ -81,7 +81,7 @@ class WalletInfo extends Component{
 	render() {
 		return(
 			<div className = "walletInfo-container">
-				<div style = {{marginTop : "20px", textAlign : "center" }}>
+			<div style = {{marginTop : "20px", textAlign : "center", fontSize : "18px", fontWeight : "bold" }}>
 						내 지갑
 				</div>
 

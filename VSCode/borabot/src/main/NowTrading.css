@@ -1,9 +1,10 @@
 @import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
 .NowTrading-elementList{
+    margin-top: 20px;
     overflow: scroll;
     margin-left: 0px;
-    height: 620px;
+    height: 760px;
 }
 
 .NowTrading-element{
@@ -19,6 +20,65 @@
     font-size: 14px;
 
 }
+
+.ntr-nowTradingHeadText{
+   
+    position: absolute;
+    width : 75px;
+    height: 24px;
+    top: 36px;
+    margin-top: -12px;
+    left: 20px;
+    font-family: 'nanum gothic';
+    font-size: 18px;
+    font-weight: bold;
+    
+}
+
+.ntr-nowTradingAlarm{
+    
+    position: absolute;
+    width: 32px;
+    height: 32px;
+
+    top : 36px;
+    margin-top: -16px;
+
+    left: 151px;
+    font-size: 18px;
+    font-family: 'nanum-gothic';
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.ntr-nowTradingAlarmCnt{
+
+    display:table-cell;
+    
+    
+}
+
+
+.ntr-nowTradingRefresh{
+    
+    position: absolute;
+    width: 28px;
+    height: 28px;
+
+    top : 36px;
+    margin-top: -14px; 
+
+    left: 193px;
+}
+
+.ntr-nowTradingHead{
+ 
+    width : 231px;
+    height: 72px ;
+    background-color: white;
+  }
 
 .ntr-obj-botname{
     position: relative;

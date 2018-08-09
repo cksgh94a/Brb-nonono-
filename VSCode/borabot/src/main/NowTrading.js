@@ -9,6 +9,8 @@ import { selectTrading } from '../reducers/sales';
 import './NowTrading.css';
 import logBtn from '../img/common/btn_01.png';
 import stopBtn from '../img/common/btn_02.png';
+import refreshBtn from '../img/common/re_01.png';
+import alarmImg from '../img/common/alert_01.png';
 
 class NowTrading extends Component {
   constructor(props) {
@@ -79,17 +81,24 @@ class NowTrading extends Component {
     const stopBtnImg  = {
       backgroundImage: `url(${stopBtn})`,
     }
+   
+    const alarmBg = {
+      backgroundImage : `url(${alarmImg})`,
+    }
     
     return(
       <div >
-        <Popup
-          trigger={<button> {alarmCount} </button>}
-          modal
-          onClose={this.handleAlarm}
-          // closeOnDocumentClick
-        ><Alarm /></Popup>
+        <div className = "ntr-nowTradingHead">
+        <text className="ntr-nowTradingHeadText">거래 현황</text>
+          <Popup
+            trigger={<div className = "ntr-nowTradingAlarm" style={alarmBg}> {alarmCount}  </div>}
+            modal
+            onClose={this.handleAlarm}
+            // closeOnDocumentClick
+          ><Alarm /></Popup>
+          <div className="ntr-nowTradingRefresh" onClick={this.reload}><img src = {refreshBtn}/></div>
+        </div>
         
-        <button onClick={this.reload}>새로고침</button>
         <div className = "NowTrading-elementList">
           {this.state.listE.map((nt, i) => {
             return (

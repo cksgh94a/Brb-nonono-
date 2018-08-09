@@ -9,6 +9,9 @@ import { setSales } from '../reducers/sales';
 
 import './Sales.css';
 
+import startBtn from '../img/common/btn_03.png';
+import calendar from '../img/common/calendar_01.png';
+
 // 시간 선택 리스트
 const hourList = []
 for(var i=1;i<=24;i++) hourList.push(i-1)  
@@ -152,43 +155,53 @@ class Sales extends Component {
           })}
         </select>
 
-          <select className='sales-select' id="salesBase" onChange={this.handleIndex}  >
+        <select className='sales-select' id="salesBase" onChange={this.handleIndex}  >
           {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
         </select>
+
         <select className='sales-select' id="salesCoin" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
         </select>
+
         <select className='sales-select' id="salesInterval" onChange={this.handleIndex}>
           {intervalList.map((int, i) => {
             return (<option key={i}> {int.key} </option>)
           })}
         </select>
+
         <select className='sales-select' id="strategy">
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
         </select>       
+
         <select className='sales-select' id="buyingSetting" onChange={this.handleSetting}>
           {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
         </select>
-        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+        <input className = 'input-buySetting' id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+
         <select className='sales-select' id="sellingSetting" onChange={this.handleSetting}>
           {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
         </select>
-        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
-       <div>
-          <DayPickerInput  onDayChange={this.handleDayChange} />
+        <input className = 'input-sellSetting' id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
+        
+       <div style = {{ maringTop : "12px", height : "42px"}}>
+          <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+            <DayPickerInput inputProps={{ style: { width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'} }} onDayChange={this.handleDayChange}/>
+            <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+          </div>
           <select id="endHour" className='select_hour'>
             {hourList.map((e, i) => {
-              return (<option key={i} selected={e === new Date().getHours()}> {e}시 </option>)
+              return (<option key={i} selected={e === new Date().getHours()}> &nbsp; {e} 시 </option>)
             })}
           </select>
        </div>
-        <button onClick={this.handleStartbtn}>거래 시작</button>
+       
+        <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
       </div>
     );
   }

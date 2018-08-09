@@ -12,24 +12,12 @@ class Main extends Component {
   render() {
     return (
       <div className="App">
-        {/* <div className="wrapper"> */}
-          <div className = 'bg-recommend'><CoinRecommend/></div>
-          <div className = 'bg-two'>거래 현황 </div>
-          <div className = 'bg-nowTrading'><NowTrading className = 'three-trading-obj'/></div>
-          <div className = 'bg-chart'><ChartSelect/></div>
-          <div className = 'bg-wallet'><WalletInfo/></div>
-          {/* <div className="four"><WalletInfo/></div> */}
-          <div className = 'bg-transaction'><Sales/></div>
-        {/* </div> */}
+        <div className = 'bg-recommend'><CoinRecommend/></div>
+        <div className = 'bg-nowTrading'><NowTrading className = 'three-trading-obj'/></div>
+        <div className = 'bg-chart'><ChartSelect/></div>
+        <div className = 'bg-wallet'><WalletInfo/></div>
+        <div className = 'bg-transaction'><Sales/></div>
       </div>
-      // <div className="App">
-      //   <div className="wrapper">
-      //     <div className="one"><NowTrading/></div>
-      //     <div className="three"><ChartSelect/></div>
-      //     {/* <div className="four"><WalletInfo/></div> */}
-      //     <div className="five"><Sales/></div>
-      //   </div>
-      // </div>
     );
   }
 }
