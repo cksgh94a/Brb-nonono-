@@ -41,16 +41,18 @@ class App extends Component {
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
         {this.props.login
-        ? <div className="main">
-            <Header/>
-            <Switch>
-              <Route path="/profile" component={Profile}/>
-              <Route path="/backtesting" component={BackTesting}/>
-              <Route path="/board" component={Board}/>
-              <Route path="/log" component={Log}/>
-              <Route path="/strategy" component={Strategy}/>
-              <Route path="/" component={Main}/>
-            </Switch>
+        ? <div style={{height:"100%"}}>
+            <div className = "header-location"><Header/></div>
+            <div className="main">
+              <Switch>
+                <Route path="/profile" component={Profile}/>
+                <Route path="/backtesting" component={BackTesting}/>
+                <Route path="/board" component={Board}/>
+                <Route path="/log" component={Log}/>
+                <Route path="/strategy" component={Strategy}/>
+                <Route path="/" component={Main}/>
+              </Switch>
+            </div>
           </div>
         : <Switch>
             <Route path="/register"><div className="main"><Register/></div></Route>

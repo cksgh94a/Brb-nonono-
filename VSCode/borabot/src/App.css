@@ -21,3 +21,9 @@
     background-repeat:   no-repeat;
     overflow: hidden;
 }
+
+.header-location{
+  position: absolute;
+  left: 200px;
+  top:20px;
+}
