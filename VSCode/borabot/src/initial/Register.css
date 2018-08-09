@@ -9,8 +9,8 @@
 
 .sign-windowBackground{
     
-    width : 525px;
-    height: 700px;
+    width : 505px;
+    height: 688px;
     position: relative;
     left : 50%;
     margin-left : -275px;
@@ -74,15 +74,9 @@
 
 .sign-auth-btn{
     
-    color: purple;
-    background: white;
-    border: 1px white solid;
-    height: 24px;
+    height: 22px;
     float: right;
-    width: 49px;
-    font-size: 17px;
-    text-align: center;
-    vertical-align: center;
+    width: 60px;
     margin-top: 10px;
     font-family : 'nanum gothic', sans-serif;
 }
@@ -252,6 +246,13 @@
     position: absolute;
     top: 30px;
     left: 270px;
+}
+
+.sign-email-key-img{
+    width: 24px;
+    height: 24px;
+    margin-left: 6px;
+    margin-top: 6px;
 }
 
 input::-ms-input-placeholder { color: white; }

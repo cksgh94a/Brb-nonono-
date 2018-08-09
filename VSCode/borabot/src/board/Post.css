@@ -1,0 +1,68 @@
+.post {
+    position: relative;
+    width: 820px;
+    height: 530px;
+}
+
+#title {
+    float: right;
+    width: 652px;
+    height: 48px;
+}
+
+#content {
+    float: right;
+    width: 650px;
+    height: 326px;
+    resize: none;
+
+}
+
+#saveButton {
+    position: relative;
+    float: right;
+    border: none;
+    background-color: #ffffff;
+}
+
+.post_table {
+    border-top: 1px #9646a0;
+}
+
+.post_table_title {
+    border-top: 1px solid #9646a0;
+    background-color: #f9f9f9;
+    font-style: bold #333333;
+    font-size: 12px;
+
+    position: relative;
+
+    text-align: left;
+
+    vertical-align: middle;
+}
+
+.post_table_title_1 {
+    padding-left: 30px;
+}
+
+.post_table_title_1, .post_table_title_2 {
+    border: 1px solid #e6e6e6;
+    border-left: none;
+}
+
+
+#listButton {
+    position: absolute;
+    margin-top: 30px;
+    margin-left: 299px;
+    float: right;
+    border: none;
+    background-color: #ffffff;
+}
+
+.post_save {
+    position: absolute;
+    margin-left: 590px;
+    margin-top: 30px;
+}

@@ -179,7 +179,7 @@ class Log extends Component {
           </table>
 
           <div className = "log-chooseBoxContainer">
-            { /* 첫 페이지, 이전 10 페이지 이동 버튼*/ }
+            { /* 이전 10 페이지 이동 버튼*/ }
             <div className = "log-chooseLeft" onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}> <img src = {toLeftBtn}/> </div>
             { // 현재 선택된 페이지의 근처 10개 페이지 표시
             pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
@@ -187,7 +187,7 @@ class Log extends Component {
                 {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
               </div>)
             })}
-            { /* 이후 10 페이지, 마지막 페이지 이동 버튼*/ }
+            { /* 이후 10 페이지 이동 버튼*/ }
             <div className = "log-chooseRight" onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}><img src = {toRightBtn}/></div>
           </div>
         </div>          

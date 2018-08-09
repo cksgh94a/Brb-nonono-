@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Post from './Post';
 
+import './Board.css';
+
 class Board extends Component {
   constructor(){
     super();
@@ -86,47 +88,69 @@ class Board extends Component {
   render() {
     const { post, post_num, write, postList, pageNum, pageNumList} = this.state
     return (
-      <div>
-        { // 게시물 작성/보기일 경우엔 게시물 표시, 아니면 목록 표시
-        post
-          ? <div><Post post_num={post_num} write={write}/>  
-          <button onClick={this.moveList}>목록으로</button></div>
+      <div class="board_total">
+        <div class="board">
+          { // 게시물 작성/보기일 경우엔 게시물 표시, 아니면 목록 표시
+          post
+          ? <div>
+              <div class="board_title">전략 공유 게시판</div>
+              <Post post_num={post_num} write={write}/>  
+              {/*목록버튼*/}
+              <button id="listButton" onClick={this.moveList}><img src={require('../img/common/btn_13.png')} /></button>
+            </div>
+
           : <table>
-            <thead><tr>
-              <th colSpan="4" className="text-right">전략 공유 게시판</th>
-            </tr><tr>
-              <th>No</th><th>Title</th><th>Author</th><th>Date</th>
-            </tr></thead>
-            <tbody>
-              { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
-              postList.map((p, i) => {
-                return (<tr key={i}>
-                  <td>{p.post_num}</td>
-                  <td onClick={() => this.selectPost(i)} style={{cursor:"pointer"}}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
-                  <td>{p.email}</td>
-                  <td>{p.post_time}</td>
-                </tr>)
-              })}
-              <tr>
-                <td colSpan="4">
-                  { /* 첫 페이지, 이전 10 페이지 이동 버튼*/ }
-                  <text onClick={() => this.selectPage(1)} style={{cursor:"pointer"}}>&lt;&lt; </text>
-                  {pageNum>10 && <text onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)} style={{cursor:"pointer"}}> &lt;</text>}
+              <thead>
+                <tr>
+                  <th colSpan="4" className="text-right">전략 공유 게시판</th>
+                </tr>
+                <div class="table_title">
+                  <tr>
+                    <div class="table_title_1">
+                      <th>No</th>
+                    </div>
+                    <div class="table_title_2">
+                      <th>제목</th>
+                    </div>
+                    <div class="table_title_3">
+                      <th>작성자</th>
+                    </div>
+                    <div class="table_title_4">
+                      <th>날짜</th>
+                    </div>
+                  </tr>
+                </div>
+              </thead>
+              <tbody>
+                <div class="board_contents">
+                  { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+                  postList.map((p, i) => {
+                    return (<tr key={i}>
+                      <td>{p.post_num}</td>
+                      <td onClick={() => this.selectPost(i)} style={{cursor:"pointer"}}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
+                      <td>{p.email}</td>
+                      <td>{p.post_time}</td>
+                    </tr>)
+                  })}
+                </div>
+              </tbody>
+              {/*저장버튼*/}
+              <button id="boardButton" onClick={this.writePost}><img src={require('../img/common/btn_11.png')} alt="btn_11" /></button>
+
+              <div class="board_page">
+                { /* 이전 10 페이지 이동 버튼*/ }
+                  <a onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}><img src={require('../img/common/pre_btn_01.png')}/></a>
                   { // 현재 선택된 페이지의 근처 10개 페이지 표시
                   pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
                     return(<a key ={i} onClick={() => this.selectPage(p)}>
-                      {pageNum === p ? <b style={{cursor:"pointer"}}>  {p}  </b> : <text style={{cursor:"pointer"}}>  {p}  </text>}
+                      {pageNum === p ? <b>  {p}  </b> : <span>  {p}  </span>}
                     </a>)
-                  })}
-                  { /* 이후 10 페이지, 마지막 페이지 이동 버튼*/ }
-                  {parseInt((pageNum-1)/10, 10) < parseInt((pageNumList.length-1)/10, 10) &&
-                    <text onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)} style={{cursor:"pointer"}}>&gt;</text>}     
-                  <text onClick={() => this.selectPage(pageNumList.length)} style={{cursor:"pointer"}}> &gt;&gt;</text>
-                </td>
-              </tr>
-              <tr><td colSpan="4"><button onClick={this.writePost}>글 쓰기</button></td></tr>
-            </tbody>
-          </table>}
+                  })}                
+                { /* 이후 10 페이지 이동 버튼*/ }
+                  <a onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}><img src={require('../img/common/next_btn_01.png')} /></a>
+              </div>
+            </table>}
+        </div>
       </div>
     );
   }

@@ -76,28 +76,30 @@ class Login extends Component {
     }
 
     return (
-      <div style = {windowBg}>
+      <div>
         <img src = {loginLogo} className = 'login-logo' />
+        <div style = {windowBg}>
+
+          <div className = "login-email-box">
+            <img src = {loginEmailImg} className = "login-email-img"/>
+            <input type="text" placeholder="아이디 (이메일)" onChange={this.handleChange} className = 'login-inputBox' />        
+          </div>
+
+          <div className = "login-password-box">
+            <img src = {loginPwImg} className = "login-pw-img"/>
+            <input type="password" placeholder="비밀번호" onChange={this.handleChange} className = 'login-inputBox' />
+          </div>
+
+          <div onClick={this.handleLogin} className='login-button' >
+            <img src = {loginBtn} />
+          </div>
+          <div className = "login-text" size = '18px'>회원이 아니신가요?</div>
+          <div className = "login-text2" size = '18px'>간단한 회원가입으로 보라봇을 이용해 보세요.</div>
+          <Link to="/register"><button className ="login-registerButton">회원가입</button></Link>
+          <Link to="/findInfo"><button className ="login-findButton">비밀번호 찾기</button></Link>
         
-        <div className = "login-email-box">
-          <img src = {loginEmailImg} className = "login-email-img"/>
-          <input type="text" placeholder="아이디 (이메일)" onChange={this.handleChange} className = 'login-inputBox' />        
+          <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
         </div>
-
-        <div className = "login-password-box">
-          <img src = {loginPwImg} className = "login-pw-img"/>
-          <input type="password" placeholder="비밀번호" onChange={this.handleChange} className = 'login-inputBox' />
-        </div>
-
-        <div onClick={this.handleLogin} className='login-button' >
-          <img src = {loginBtn} />
-        </div>
-        <div className = "login-text" size = '18px'>회원이 아니신가요?</div>
-        <div className = "login-text2" size = '18px'>간단한 회원가입으로 보라봇을 이용해 보세요.</div>
-        <Link to="/register"><button className ="login-registerButton">회원가입</button></Link>
-        <Link to="/findInfo"><button className ="login-findButton">비밀번호 찾기</button></Link>
-      
-        <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
       </div>
     );
   }
