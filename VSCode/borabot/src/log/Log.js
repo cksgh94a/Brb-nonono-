@@ -4,6 +4,14 @@ import { connect } from 'react-redux';
 
 import { selectTrading } from '../reducers/sales';
 
+import './log.css';
+import mainBackground from '../img/sign/sign_bg_01.png';
+import headBackground from '../img/sign/sign_bg_01.png';
+import toLeftBtn from '../img/common/pre_btn_01.png';
+import toRightBtn from '../img/common/next_btn_01.png';
+import onText from '../img/common/on_bg_01.png';
+import offText from '../img/common/off_bg_01.png';
+
 class Log extends Component {
   constructor(){
     super();
@@ -108,59 +116,81 @@ class Log extends Component {
 
   render() {
     const { tradeList, selectedTrade, logList, pageNum, pageNumList } = this.state
+    
+    const mainBgStyle = {
+      backgroundImage: `url(${mainBackground})`,
+    }
+
+    const theadBgStyle = {
+      backgroundImage : `url(${mainBackground})`,
+    }
+
+    const onTextBg = {
+      backgroundImage : `url(${onText})`,
+    }
+
+    const offTextBg = {
+      backgroundImage : `url(${offText})`,
+    }
+
     return (
-      <div>
-        <h4>봇 선택</h4>
-        <select id="botName" onChange={this.handleChange}>
-          <option>봇 이름</option>
-          {tradeList.map((t, i) => {
-            return (<option key={i}> {t.bot_name} </option>)
-          })}
-        </select><br/>
-        <select id="salesAction" onChange={this.handleChange}>
-          <option>매수/매도</option><option>매수</option><option>매도</option>
-        </select><br/>
-        <h4>봇 기록</h4>        
-        거래소 : {selectedTrade.exchange_name} | 코인 : {selectedTrade.coin}
-          <table >
-          <thead><tr>
-            <th>거래 신호 시간</th><th>매매 행동</th><th>개당 코인 가격</th><th>코인 매매 수량</th><th>현재 보유 현금</th><th>현재 보유 코인수</th>
-          </tr></thead>
-          <tbody>
-            { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
-            logList.map((l, i) => {
-              return (<tr key={i}>
-                <td>{l.trans_time}</td>
-                <td>{l.sales_action === "1" ? ("매수") : ( "매도" )}</td>
-                <td>{l.coin_price}</td>
-                <td>{l.coin_intent}</td>
-                <td>{l.now_balance}</td>
-                <td>{l.now_coin_number}</td>
-              </tr>)
+      <div style = {mainBgStyle} className = "log-bakcground" > 
+        <div className = "log-leftBox">
+          <div className = "log-botSelText">봇 선택</div>
+          <select id="botName" onChange={this.handleChange}>
+            <option>봇 이름</option>
+            {tradeList.map((t, i) => {
+              return (<option key={i}> {t.bot_name} </option>)
             })}
-            <tr>
-              <td colSpan="6">
-                { /* 첫 페이지, 이전 10 페이지 이동 버튼*/ }
-                <a onClick={() => this.selectPage(1)}>&lt;&lt; </a>
-                {pageNum>10 && <a onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}> &lt;</a>}
-                { // 현재 선택된 페이지의 근처 10개 페이지 표시
-                pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
-                  return(<a key ={i} onClick={() => this.selectPage(p)}>
-                    {pageNum === p ? <b>  {p}  </b> : <span>  {p}  </span>}
-                  </a>)
-                })}
-                { /* 이후 10 페이지, 마지막 페이지 이동 버튼*/ }
-                {parseInt((pageNum-1)/10, 10) < parseInt((pageNumList.length-1)/10, 10) &&
-                  <a onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}>&gt;
-                </a>}     
-                <a onClick={() => this.selectPage(pageNumList.length)}> &gt;&gt;</a>
-              </td>
-            </tr>
-            <tr>
-              <td colSpan="6"><button onClick={this.writePost}>글 쓰기</button></td>
-            </tr>
-          </tbody>
-        </table>
+          </select><br/>
+          <select id="salesAction" onChange={this.handleChange}>
+            <option>매수/매도</option><option>매수</option><option>매도</option>
+          </select><br/>
+          <h4>봇 기록</h4>        
+          거래소 : {selectedTrade.exchange_name}
+          | 코인 : {selectedTrade.coin}
+        </div>
+
+        <div className = "log-mainBox">
+          <div className = "log-botIndivText">일반봇1의 거래 기록</div>
+          <table className='log-tableContainer' >
+            <thead>
+              <th className='log-headTr'>거래 신호 시간</th>
+              <th className='log-headTr'>매매 행동</th>
+              <th className='log-headTr'>개당 코인 가격</th>
+              <th className='log-headTr'>코인 매매 수량</th>
+              <th className='log-headTr'>현재 보유 현금</th>
+              <th className='log-headTr'>현재 보유 코인수</th>
+            </thead>
+
+            <tbody className = 'log-tbodyContainer' >              
+              { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+              logList.map((l, i) => {
+                return (<tr key={i} style={{borderBottom : "1px solid"}} >
+                  <td className = 'log-td'>{l.trans_time}</td>
+                  <td className = 'log-td'>{l.sales_action === "1" ? ("매수") : ( "매도" )}</td>
+                  <td className = 'log-td'>{l.coin_price}</td>
+                  <td className = 'log-td'>{l.coin_intent}</td>
+                  <td className = 'log-td'>{l.now_balance}</td>
+                  <td className = 'log-td'>{l.now_coin_number}</td>
+                </tr>)
+              })}
+            </tbody>
+          </table>
+
+          <div className = "log-chooseBoxContainer">
+            { /* 첫 페이지, 이전 10 페이지 이동 버튼*/ }
+            <div className = "log-chooseLeft" onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}> <img src = {toLeftBtn}/> </div>
+            { // 현재 선택된 페이지의 근처 10개 페이지 표시
+            pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
+              return(<div  key ={i} onClick={() => this.selectPage(p)}>
+                {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
+              </div>)
+            })}
+            { /* 이후 10 페이지, 마지막 페이지 이동 버튼*/ }
+            <div className = "log-chooseRight" onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}><img src = {toRightBtn}/></div>
+          </div>
+        </div>          
       </div>
     );
   }

@@ -142,49 +142,52 @@ class Sales extends Component {
 
     return (
       <div style={{color:"grey"}}>        
-        <h4 className="Sales-color">Sales configuration</h4>
-        <input placeholder="이름" id="botname"/><br/>
-        거래소 : <select id="salesExchange" onChange={this.handleIndex}>
+        <h4 style={{textAlign : "center"}}>Sales configuration</h4>
+
+        <input placeholder="이름" id="botname" className = 'select-botName' size = '1'/>
+
+        <select className='sales-select' placeholder={'거래소'} id="salesExchange" onChange={this.handleIndex}  >
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
-          })
-          }
-        </select><br/>
-        기축통화 : <select id="salesBase" onChange={this.handleIndex}>
+          })}
+        </select>
+
+          <select className='sales-select' id="salesBase" onChange={this.handleIndex}  >
           {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
-        </select><br/>
-        코인 : <select id="salesCoin" onChange={this.handleIndex}>
+        </select>
+        <select className='sales-select' id="salesCoin" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
-        </select><br/>
-        거래 간격 : <select id="salesInterval" onChange={this.handleIndex}>
+        </select>
+        <select className='sales-select' id="salesInterval" onChange={this.handleIndex}>
           {intervalList.map((int, i) => {
             return (<option key={i}> {int.key} </option>)
           })}
-        </select><br/>
-        전략 : <select id="strategy">
+        </select>
+        <select className='sales-select' id="strategy">
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
-        </select><br/>
-        구매 설정 : <select id="buyingSetting" onChange={this.handleSetting}>
+        </select>       
+        <select className='sales-select' id="buyingSetting" onChange={this.handleSetting}>
           {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
         </select>
-        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyUnit}<br/>
-        판매 설정 : <select id="sellingSetting" onChange={this.handleSetting}>
+        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+        <select className='sales-select' id="sellingSetting" onChange={this.handleSetting}>
           {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
         </select>
-        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellUnit}<br/>
-        종료일 : 
-        <DayPickerInput onDayChange={this.handleDayChange} />
-        <select id="endHour">
-          {hourList.map((e, i) => {
-            return (<option key={i} selected={e === new Date().getHours()}> {e}시 </option>)
-          })}
-        </select><br/>
+        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
+       <div>
+          <DayPickerInput  onDayChange={this.handleDayChange} />
+          <select id="endHour" className='select_hour'>
+            {hourList.map((e, i) => {
+              return (<option key={i} selected={e === new Date().getHours()}> {e}시 </option>)
+            })}
+          </select>
+       </div>
         <button onClick={this.handleStartbtn}>거래 시작</button>
       </div>
     );

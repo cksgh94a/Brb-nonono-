@@ -102,81 +102,54 @@ class Register extends Component {
 
     console.log(password, pVal)
     return (
-        <div style={signWindow} className = 'sign-windowBackground' >
+      <div style={signWindow} className = 'sign-windowBackground' >
+      {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}
         <img src = {signLogo} className = 'sign-logo'/>
 
         <div className = 'sign-header'>회원가입</div>
        
         <div className = "sign-email-box">
-            <img src = {signEmailImg} className = "sign-email-img"/>
-            <input type="text" placeholder="email"  name="email" onChange={(e)=>this.handleChange(e)} className = 'sign-inputBox' />
-            <button onClick={this.handleAuth} className = 'sign-auth-btn'>인증</button>
-            
+          <img src = {signEmailImg} className = "sign-email-img"/>
+          <input type="text" placeholder="email" onChange={this.handleChange} className = 'sign-inputBox' />
+          <button onClick={this.handleAuth} className = 'sign-auth-btn'>인증</button>
         </div>
 
         <div className = 'sign-email-warning-text'>
-          {!this.state.eVal && <a>올바른 이메일 형식이 아닙니다.</a>}
+          {!this.state.eVal && <text>올바른 이메일 형식이 아닙니다.</text>}
         </div>
 
         <div className = "sign-authkey-box">
-            <img src = {signEmailImg} className = "sign-email-img"/>
-            <input type="text" placeholder="인증키 입력"  id="key" name="email" onChange={(e)=>this.handleChange(e)} className = 'sign-inputBox' />     
+          <img src = {signEmailImg} className = "sign-email-img"/>
+          <input type="text" id="key" placeholder="인증키 입력" onChange={this.handleChange} className = 'sign-inputBox' />     
         </div>
 
         <div className = "sign-password-box">
-            <img src = {signPwImg} className = "sign-password-img"/>
-            <input type="text" placeholder="비밀번호"  name="email" onChange={(e)=>this.handleChange(e)} className = 'sign-inputBox' />        
-            
-            
+          <img src = {signPwImg} className = "sign-password-img"/>
+          <input type="password" placeholder="비밀번호" onChange={this.handleChange} className = 'sign-inputBox' />
         </div>
         <text className = 'sign-password-text'>영문(대소문자 구분), 숫자, 특수문자를 포함하여 8~16자</text>
         <div className = "sign-password2-box">
-            <img src = {signPw2Img} className = "sign-password2-img"/>
-            <input type="text" placeholder="비밀번호 확인"  name="email" onChange={(e)=>this.handleChange(e)} className = 'sign-inputBox' />        
-            
+          <img src = {signPw2Img} className = "sign-password2-img"/>
+          <input type="password" placeholder="비밀번호 확인" onChange={this.handleChange} className = 'sign-inputBox' />        
         </div>
 
         <div className = 'sign-password-warning-text'>
-        {!this.state.pVal && <a>올바른 비밀번호 형식이 아닙니다.<br/></a>}  
-        {!this.state.ppVal && <a>비밀번호가 다릅니다.</a>}
+          {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.</text>}
+          {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.</text>}
         </div>
-
-        
-          <div className = 'sign-yakkwan-text'>
-            <img src = {signCheckBox} />&nbsp;이용약관, 개인정보보호정책에 동의합니다.
-          </div>
-        
-          <div className = 'sign-19-text'>
-           <img src = {signCheckBox}/>&nbsp;19세 이상입니다.
-          </div>
-    
-
-                    
-          <div className = 'sign-sign-btn' onClick={this.handleRegister}>
-            <img src = {signBtn}/>
-          </div>
-          
-          {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}
+      
+        <div className = 'sign-yakkwan-text'>
+          <img src = {signCheckBox}/>&nbsp;이용약관, 개인정보보호정책에 동의합니다.
+        </div>
+      
+        <div className = 'sign-19-text'>
+          <img src = {signCheckBox}/>&nbsp;19세 이상입니다.
+        </div>
+  
+        <div className = 'sign-sign-btn' onClick={this.handleRegister}>
+          <img src = {signBtn}/>
+        </div>
       </div>
-
-      // <div>
-      //   이메일<br/>
-      //   <input placeholder="email" onChange={this.handleChange}/>
-      //   <button onClick={this.handleAuth}>인증키 발송</button><br/>
-      //   {!this.state.eVal && <text>올바른 이메일 형식이 아닙니다.<br/></text>}<br/>
-      //   인증키 입력<br/>
-      //   <input placeholder="인증키" id="key" onChange={this.handleChange}/><br/><br/>
-
-      //   비밀번호 ("영문(대소문자 구분), 숫자, 특수문자를 포함하여 8~16자")<br/>
-      //   <input type="password" placeholder="비밀번호" onChange={this.handleChange}/><br/>
-      //   비밀번호 확인<br/>
-      //   <input type="password" placeholder="비밀번호 확인" id="passwordC" onChange={this.handleChange}/><br/>
-      //   {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.<br/></text>}
-      //   {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.<br/></text>}
-
-      //   <button onClick={this.handleRegister}>회원가입</button>
-      //   {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}
-      // </div>      
     );
   }
 }

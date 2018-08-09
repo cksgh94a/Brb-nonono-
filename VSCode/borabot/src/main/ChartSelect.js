@@ -3,6 +3,7 @@ import TradingViewWidget, { Themes } from 'react-tradingview-widget';
 import { connect } from 'react-redux';
 
 import { setChart } from '../reducers/sales';
+
 import './ChartSelect.css';
 
 class ChartSelect extends Component {
@@ -51,31 +52,33 @@ class ChartSelect extends Component {
       : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
 
     return (
-      <div className="ChartSelect" style={{color:"white"}}>
-      거래소 : <select id="chartExchange" onChange={this.handleIndex}>
-        {exchangeList.map((exchange, index) => {
-          return (<option key={index} > {exchange.key} </option>)
-        })
-        }
-      </select>
-      기축통화 : <select id="chartBase" onChange={this.handleIndex}>
-        {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
-          return (<option key={i}> {base} </option>)
-        })}
-      </select>
-      코인 : <select id="chartCoin" onChange={this.handleIndex}>
-        {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
-          return (<option key={i}> {coin} </option>)
-        })}
-      </select>
-      거래 간격 : <select id="chartInterval" onChange={this.handleIndex}>
-        {intervalList.map((int, i) => {
-          return (<option key={i}> {int.key} </option>)
-        })}
-      </select>
+      <div>
+        <div className = 'CS-selectingChart'>
+          ----------- 거래소 : <select id="chartExchange" onChange={this.handleIndex}>
+          {exchangeList.map((exchange, index) => {
+            return (<option key={index} > {exchange.key} </option>)
+          })
+          }
+        </select>
+        기축통화 : <select id="chartBase" onChange={this.handleIndex}>
+          {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
+            return (<option key={i}> {base} </option>)
+          })}
+        </select>
+        코인 : <select id="chartCoin" onChange={this.handleIndex}>
+          {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
+            return (<option key={i}> {coin} </option>)
+          })}
+        </select>
+        간격 : <select id="chartInterval" onChange={this.handleIndex}>
+          {intervalList.map((int, i) => {
+            return (<option key={i}> {int.key} </option>)
+          })}
+        </select>
+      </div>
       <TradingViewWidget
         symbol={exchangeList[exchangeIndex].key+":"+exchangeList[exchangeIndex].value.coin[baseIndex].list[coinIndex]+exchangeList[exchangeIndex].value.baseList[baseIndex]}
-        theme={Themes.DARK}
+        theme={Themes.LIGHT}
         locale="kr"
         timezone="Asia/Seoul"
         // 트레이딩뷰에서 6시간과 12시간 데이터를 제공하지 않으므로 4시간으로 바꿔서 표시

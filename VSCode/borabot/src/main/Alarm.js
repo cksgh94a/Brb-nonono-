@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 
-import { exchange } from '../reducers/exchange';
-import './Alarm.css'
+// import './Alarm.css'
 
 class Alarm extends Component {
   constructor(props) {

@@ -1,23 +1,71 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
 .NowTrading-elementList{
     overflow: scroll;
-    margin-left: 15px;
+    margin-left: 0px;
+    height: 620px;
 }
 
 .NowTrading-element{
-    width: 180px;
-    height: 130px;
-    background-color: #c0cbd4;
+    width: 238px;
+    height: 284px;
+    background-color: white;
     color: black;
-    margin-bottom: 3px;
-    font-size: 12px;
+    margin-bottom: 20px;
     overflow: hidden;
-    border-radius: 3%
+   
+    font-family: 'nanum gothic', sans-serif;
+    font-weight: 100;
+    font-size: 14px;
+
+}
+
+.ntr-obj-botname{
+    position: relative;
+    top:20px;
+    left:20px;
+    height: 15px;
+    font-family: 'nanum gothic';
+    font-size: 18px;
+    font-weight: bold;
+    color : #111111;
+}
+
+.ntr-obj-coin{
+    margin-top: 50px;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.ntr-obj-text{
+    margin-top: 15px;
+    margin-left: 20px;
+    font-size: 14px;
+}
+
+.ntr-obj-profit{
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.ntr-obj-logBtn{
+    width : 94;
+    height: 24;
+    margin-top : 30px;
+    margin-left: 20px;
+    float: left;
+}
+
+.ntr-obj-stopBtn{
+    width : 94;
+    height: 24;
+    margin-top : 30px;
+    margin-left: 10px;
+    float:left;
 }
 
 ::-webkit-scrollbar{
     color: transparent;
 }
 
-.NowTrading-text{
-    height: 10px;
-}
+
