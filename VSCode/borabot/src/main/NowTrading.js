@@ -82,14 +82,14 @@ class NowTrading extends Component {
     
     return(
       <div >
-        {/* <Popup
+        <Popup
           trigger={<button> {alarmCount} </button>}
           modal
           onClose={this.handleAlarm}
           // closeOnDocumentClick
         ><Alarm /></Popup>
         
-        <button onClick={this.reload}>새로고침</button> */}
+        <button onClick={this.reload}>새로고침</button>
         <div className = "NowTrading-elementList">
           {this.state.listE.map((nt, i) => {
             return (
@@ -102,7 +102,7 @@ class NowTrading extends Component {
                 <div className = 'ntr-obj-text' >종료일 <text style={{marginLeft : "8px", marginRight:"8px"}} >:</text> {nt.end_date}</div>
                 <div className = 'ntr-obj-text' >수익률 <text style={{marginLeft : "8px", marginRight:"8px"}}>  :</text> <text className = "ntr-obj-profit">{nt.profit}%</text></div>
 
-                <div id="Sale-stop-btn" className="ntr-obj-logBtn" onClick={() => this.handleStopbtn(nt.bot_name)}><img src = {logBtn}/></div>
+                <div id="Sale-stop-btn" className="ntr-obj-logBtn" onClick={() => this.handleLogbtn(nt.bot_name)}><img src = {logBtn}/></div>
                 <div id="Sale-stop-btn" className = "ntr-obj-stopBtn" onClick={() => this.handleStopbtn(nt)}><img src = {stopBtn}/></div>
 
               </div>);

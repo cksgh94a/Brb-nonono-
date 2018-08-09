@@ -12,6 +12,7 @@ import ContactModalContainer from './containers/ContactModalContainer';
 import ContactListContainer from './containers/ContactListContainer';
 
 
+
 class App extends Component {
 
     componentDidMount() {
@@ -31,7 +32,6 @@ class App extends Component {
                 <Header/>
                 <ViewSelectorContainer/>
                 
-                {/* view 값에 따라 다른 컨테이너를 보여준다 */}
                 <Container visible={view==='favorite'}>
                     <FavoriteListContainer/>
                 </Container>

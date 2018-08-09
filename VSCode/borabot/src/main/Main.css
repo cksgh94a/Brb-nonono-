@@ -44,37 +44,36 @@
    grid-gap: 0px;
    grid-auto-columns: auto;
    
- 
    grid-auto-rows: auto;
  }
  
  
  .bg-recommend{
-   width : 222px;
-   height: 108px;
+   width : 780px;
+   height: 72px;
    position: absolute;
    top: 106px;
-   left: 1478px;
+   left: 571px;
    background-color: white;
  }
  
- .bg-two{
+ .bg-nowTradingHead{
  
-   width : 238px;
+   width : 231px;
    height: 72px ;
    position: absolute;
-   left: 200px;
+   left: 320px;
    top: 106px;
    background-color: white;
  }
  
  .bg-nowTrading{
  
-   width: 238px;
-   height: 750px;
+   width: 231px;
+   height: 852px;
    position: absolute;
-   left: 200px;
-   top: 198px;
+   left: 320px;
+   top: 106px;
    border-color:white;
    border : 1.2px solid;
  
@@ -90,29 +89,31 @@
  
  .bg-chart{
    position: absolute;
-   top: 106px;
-   left: 458px;
+   top: 198px;
+   left: 571px;
    background-color: white; 
    border: 1.2px solid;
-   width : 1000px;
-   height: 700px;
+   width : 780px;
+   height: 760px;
  }
  
  .bg-wallet{
    position: absolute;
-   top: 234px;
-   left: 1478px;
+   top: 106px;
+   left: 1371px;
    width: 222px;
    height: 160px;
    background-color: white;
+   font-size: 14px;
+   font-family: 'nanum gothic'
  }
  
  .bg-transaction{
    position: absolute;
-   top: 414px;
-   left: 1478px;
+   top: 286px;
+   left: 1371px;
    width: 222px;
-   height: 500px;
+   height: 600px;
    background-color: white;
  }
  
@@ -184,7 +185,7 @@
  
  .header-location{
    position: absolute;
-   left: 200px;
+   left: 320px;
    top:20px;
  }
  

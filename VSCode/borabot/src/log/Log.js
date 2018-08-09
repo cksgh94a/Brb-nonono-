@@ -137,13 +137,13 @@ class Log extends Component {
       <div style = {mainBgStyle} className = "log-bakcground" > 
         <div className = "log-leftBox">
           <div className = "log-botSelText">봇 선택</div>
-          <select id="botName" onChange={this.handleChange}>
+          <select id="botName" className = "log-botSelect" onChange={this.handleChange}>
             <option>봇 이름</option>
             {tradeList.map((t, i) => {
               return (<option key={i}> {t.bot_name} </option>)
             })}
           </select><br/>
-          <select id="salesAction" onChange={this.handleChange}>
+          <select id="salesAction" className = "log-saleSelect" onChange={this.handleChange}>
             <option>매수/매도</option><option>매수</option><option>매도</option>
           </select><br/>
           <h4>봇 기록</h4>        

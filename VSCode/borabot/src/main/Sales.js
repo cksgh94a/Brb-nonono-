@@ -42,7 +42,7 @@ class Sales extends Component {
     if (e.target.id === 'salesExchange'){
       document.getElementById('salesBase').selectedIndex = 0
       document.getElementById('salesCoin').selectedIndex = 0
-    } else if(e.target.id === 'salesBase') document.getElementById('salesBase').selectedIndex = 0
+    } else if(e.target.id === 'salesBase') document.getElementById('salesCoin').selectedIndex = 0
     this.props.onSetSales({
       sales: true,
       exchangeIndex: document.getElementById('salesExchange').selectedIndex,

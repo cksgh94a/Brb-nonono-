@@ -31,7 +31,11 @@ class ChartSelect extends Component {
   }
   
   // 차트 선택 인덱스를 차트 데이터 인덱스로 설정
-  handleIndex = () => {
+  handleIndex = (e) => {
+    if (e.target.id === 'chartExchange'){
+      document.getElementById('chartBase').selectedIndex = 0
+      document.getElementById('chartCoin').selectedIndex = 0
+    } else if(e.target.id === 'chartBase') document.getElementById('chartCoin').selectedIndex = 0
     this.props.onSetChart({
       sales: false
     })
