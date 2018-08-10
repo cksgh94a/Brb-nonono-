@@ -14,8 +14,8 @@ import offText from '../img/common/off_bg_01.png';
 class Log extends Component {
   constructor(){
     super();
-    this.state={    
-      
+    this.state={
+
       selectedTrade: {},
       selectedSalesAction: {},
       tradeList: [],
@@ -27,11 +27,14 @@ class Log extends Component {
       // ================================================================================================================================ //
 
       pageNum:1,  // 현재 선택된 페이지 번호
-      pageNumList: [] // 게시물의 전체 페이지 리스트
+      pageNumList: [1] // 게시물의 전체 페이지 리스트
     }
   }
 
   componentDidMount() {
+    // console.log(this.props.location)
+    console.log(this.props.location.state.test)
+
     axios.get( 'Log' )
     .then( response => {
       this.setState({
@@ -56,18 +59,34 @@ class Log extends Component {
     }); // ERROR
   }
 
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  componentWillReceiveProps (nextProps) {
+    (this.props.location.key !== nextProps.location.key)
+    && this.setState({
+        selectedTrade: {},
+        logList: [],
+        pageNum:1,  // 현재 선택된 페이지 번호
+      })
+  }
+
   handleChange = (e) => {
-    if(e.target.id === 'botName' && document.getElementById('botName').selectedIndex !== 0){
-      this.setState({ selectedTrade: this.state.tradeList[document.getElementById('botName').selectedIndex-1] })
-      this.getLog(
-        this.state.tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
-        1,
-        '매수/매도'
-      )
+    const { tradeList } = this.state
+    if(e.target.id === 'botName'){  // 봇 이름 선택일 때
+      // 기본 인덱스 0일 때와 직접 봇을 부를 때
+      if ((document.getElementById('botName').selectedIndex-1) === 0){
+        this.setState({ logList: [] })
+      } else{
+        this.setState({ selectedTrade: tradeList[document.getElementById('botName').selectedIndex-1] })
+        this.getLog(
+          tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
+          1,
+          '매수/매도'
+        )
+      }
     } else {
       document.getElementById('botName').selectedIndex !== 0
       && this.getLog(
-          this.state.tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
+          tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
           1,
           document.getElementById('salesAction').value
         )
@@ -95,17 +114,21 @@ class Log extends Component {
   }
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
-  selectPage = (i) => {
-    console.log(i, this.state.pageNumList)
-    let pn = 1  // 서버에 호출할 페이지 번호
-    if(i > this.state.pageNumList.length){
-      pn = this.state.pageNumList.length
-      this.setState({ pageNum: this.state.pageNumList.length })
-    } else {
-      pn = i
-      this.setState({ pageNum: i })
-    }
-    console.log(i, this.state.pageNumList.length, pn)
+  selectPage = (fbn) => {
+    const { pageNum, pageNumList } = this.state
+    var pn = 1  // 서버에 호출할 페이지 번호
+
+    if(fbn === 'front'){
+      (pageNum > 10)
+      ? pn = pageNum -(pageNum-1)%10 -1
+      : pn = 1
+    } else if(fbn === 'back'){
+      (parseInt(pageNum/10, 10) !== parseInt(pageNumList.length/10, 10))
+      ? pn = pageNum -pageNum%10 +11
+      : pn = pageNumList.length
+    } else pn = fbn
+    
+    this.setState({ pageNum: pn })
     this.getLog(
       this.state.selectedTrade.bot_name,
       pn,
@@ -175,15 +198,15 @@ class Log extends Component {
 
           <div className = "log-chooseBoxContainer">
             { /* 이전 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseLeft" onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}> <img src = {toLeftBtn}/> </div>
+            <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
             { // 현재 선택된 페이지의 근처 10개 페이지 표시
-            pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
+            pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
               return(<div  key ={i} onClick={() => this.selectPage(p)}>
                 {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
               </div>)
             })}
             { /* 이후 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseRight" onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}><img src = {toRightBtn}/></div>
+            <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
           </div>
         </div>          
       </div>

@@ -23,7 +23,14 @@ class Header extends Component {
         <Link to="/board" className = 'header-board'>전략공유게시판</Link>
         <Link to="/backtesting" className = 'header-bt'>백테스팅</Link>
         <Link to="/strategy" className = 'header-strategy'>전략</Link>
-        <Link to="/log" className = 'header-log'>거래기록</Link>
+        <Link to={{
+          pathname: "/log",
+          state: {
+            test: true,
+            pppadsf: '퍄퍄퍄퍄'
+          }
+        }} className = 'header-log'
+        >거래기록</Link>
         <Link to="/profile" className = 'header-profile'>회원정보관리</Link>
         {this.props.login && <button onClick={this.HandleLogOut} className = 'header-logout'>로그아웃</button>}
       </div>

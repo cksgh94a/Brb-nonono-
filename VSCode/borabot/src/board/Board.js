@@ -19,7 +19,7 @@ class Board extends Component {
       // postList: [], // 현재 선택된 페이지의 10개의 게시물 리스트
 
       // pageNum:1,  // 현재 선택된 페이지 번호
-      // pageNumList: [] // 게시물의 전체 페이지 리스트
+      // pageNumList: [1] // 게시물의 전체 페이지 리스트
 
       // 앞단 테스트용 ============================================================================================================================= //
       post_num: 0,  // 현재 선택된 게시물 번호
@@ -32,6 +32,20 @@ class Board extends Component {
 
   componentWillMount() {
     this.getBoard(1)
+  }
+
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  componentWillReceiveProps (nextProps) {
+    if(this.props.location.key !== nextProps.location.key) {
+      this.setState({
+        post: false,  // true : 게시물 작성, 보기, false : 목록 표시
+        write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
+  
+        post_num: 0,  // 현재 선택된 게시물 번호  
+        pageNum:1,  // 현재 선택된 페이지 번호
+      })
+      this.getBoard(1)
+    }
   }
 
   // 처음 게시판을 보거나 페이지가 바뀌었을 때 호출하여 10개의 게시물을 불러오고 페이지리스트 갱신
@@ -52,8 +66,6 @@ class Board extends Component {
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
   selectPage = (fbn) => {
-    console.log(this.state.pageNum)
-
     const { pageNum, pageNumList } = this.state
     var pn = 1  // 서버에 호출할 페이지 번호
 
@@ -61,7 +73,6 @@ class Board extends Component {
       (pageNum > 10)
       ? pn = pageNum -(pageNum-1)%10 -1
       : pn = 1
-      console.log(pn)
     } else if(fbn === 'back'){
       (parseInt(pageNum/10, 10) !== parseInt(pageNumList.length/10, 10))
       ? pn = pageNum -pageNum%10 +11
@@ -149,7 +160,7 @@ class Board extends Component {
                 { /* 이전 10 페이지 이동 버튼*/ }
                 <div className = "table-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
                 { // 현재 선택된 페이지의 근처 10개 페이지 표시
-                pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
+                pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                   return(<div  key ={i} onClick={() => this.selectPage(p)}>
                     {pageNum === p ? <div style={onTextBg} className = "table-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "table-chooseNumber" >  {p}  </div>}
                   </div>)
@@ -159,54 +170,6 @@ class Board extends Component {
               </div>
             </div>
           }
-          {/* : <table>
-              <thead>
-                <tr>
-                  <th colSpan="4" className="text-right">전략 공유 게시판</th>
-                </tr>
-                <div class="table_title">
-                  <tr>
-                    <div class="table_title_1">
-                      <th>No</th>
-                    </div>
-                    <div class="table_title_2">
-                      <th>제목</th>
-                    </div>
-                    <div class="table_title_3">
-                      <th>작성자</th>
-                    </div>
-                    <div class="table_title_4">
-                      <th>날짜</th>
-                    </div>
-                  </tr>
-                </div>
-              </thead>
-              <tbody>
-                <div class="board_contents">
-                  { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
-                  postList.map((p, i) => {
-                    return (<tr key={i}>
-                      <td>{p.post_num}</td>
-                      <td onClick={() => this.selectPost(i)} style={{cursor:"pointer"}}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
-                      <td>{p.email}</td>
-                      <td>{p.post_time}</td>
-                    </tr>)
-                  })}
-                </div>
-              </tbody>
-              <button id="boardButton" onClick={this.writePost}><img src={require('../img/common/btn_11.png')} alt="btn_11" /></button>
-              
-              <div class="board_page">
-                  <a onClick={() => this.selectPage(parseInt((pageNum-11)/10,10)*10+10)}><img src={require('../img/common/pre_btn_01.png')}/></a>
-                  { // 현재 선택된 페이지의 근처 10개 페이지 표시
-                  pageNumList.slice(parseInt((pageNum-1)/10,10)*10, parseInt((pageNum-1)/10,10)*10+10).map((p, i) => {
-                    return(<a key ={i} onClick={() => this.selectPage(p)}>
-                      {pageNum === p ? <b>  {p}  </b> : <span>  {p}  </span>}
-                    </a>)
-                  })}                
-                  <a onClick={() => this.selectPage(parseInt((pageNum+9)/10,10)*10+1)}><img src={require('../img/common/next_btn_01.png')} /></a>
-              </div>
-            </table>} */}
         </div>
       </div>
     );
