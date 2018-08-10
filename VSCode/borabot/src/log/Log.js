@@ -6,7 +6,6 @@ import { selectTrading } from '../reducers/sales';
 
 import './log.css';
 import mainBackground from '../img/sign/sign_bg_01.png';
-import headBackground from '../img/sign/sign_bg_01.png';
 import toLeftBtn from '../img/common/pre_btn_01.png';
 import toRightBtn from '../img/common/next_btn_01.png';
 import onText from '../img/common/on_bg_01.png';
@@ -119,10 +118,6 @@ class Log extends Component {
     
     const mainBgStyle = {
       backgroundImage: `url(${mainBackground})`,
-    }
-
-    const theadBgStyle = {
-      backgroundImage : `url(${mainBackground})`,
     }
 
     const onTextBg = {

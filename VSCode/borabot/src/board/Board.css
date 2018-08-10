@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/earlyaccess/nanumgothic.css);
+
 .board_total {
     width: 1080px;
     top:25%;
@@ -21,23 +23,6 @@
     left: 0px; 
 }
 
-.board_contents {
-    border-bottom: 1px solid #f5f5f5;
-}
-
-
-tbody:hover{
-    background-color: #f5f5f5;
-}
-
-.text-right {
-    padding-top: 20px;
-    padding-bottom: 30px;
-    
-    font-style: bold #111111;
-    font-size: 24px;
-}
-
 .board_title {
     padding-top: 20px;
     padding-bottom: 30px;
@@ -45,52 +30,6 @@ tbody:hover{
     border: none;
     font-style: bold #111111;
     font-size: 24px;
-}
-
-.table_title {
-    border-top: 1px solid #9646a0;
-    border-bottom-style: 1px #e6e6e6;
-    background-color: #f9f9f9;
-    font-style: #333333;
-    font-size: 12px;
-    text-align: center;
-    height: 56px;
-    
-    display: table-cell;
-
-    vertical-align: middle;
-}
-
-.table_title_1 {
-    position: relative;
-    float: left;
-    padding-left: 30px;
-    font-style: #333333;
-    font-size: 12px;
-}
-
-.table_title_2 {
-    position: relative;
-    float: left;
-    padding-left: 233px;
-    font-style: #333333;
-    font-size: 12px;
-}
-
-.table_title_3 {
-    position: relative;
-    float: left;
-    padding-left: 256px;
-    font-style: #333333;
-    font-size: 12px;
-}
-
-.table_title_4 {
-    position: relative;
-    float: left;
-    padding-left: 110px;
-    font-style: #333333;
-    font-size: 12px;
 }
 
 /* 글쓰기 버튼 */
@@ -102,11 +41,6 @@ tbody:hover{
     padding-bottom: 80px;
 }
 
-
-.board_page {
-    
-}
-
 #listButton {
     position: absolute;
     margin-left: 299px;
@@ -115,4 +49,100 @@ tbody:hover{
     background-color: #ffffff;
 
     top: 79.4%;
+}
+
+
+
+
+.table-tableContainer{
+    width: 997px;
+    /* height: 536px; */
+    position: absolute;
+    left: 20px;
+    top : 100px;
+    border-spacing: 0px;
+    font-family: 'nanum gothic'
+}
+
+.table-theadContainer{
+    width: 997px;
+}
+
+.table-headTr{
+    
+    background-color: #f5f5f5;
+    border-top: 2px solid #9646a0;
+    font-size : '24px';
+    height: 56px;
+}
+
+.table-tbodyContainer{
+    text-align: center;
+}
+
+.table-td{
+    height: 48px;
+    border-bottom: 1px solid #e6e6e6;
+}
+
+.table-tr:hover{
+    background-color: #f5f5f5;
+} 
+
+.table-chooseBoxContainer{
+
+    position: absolute;
+    width: 398px;
+    height: 30px;
+    left: 50%;
+    margin-left: -199px;
+    top : 726px;
+    align-content: center;
+    align-items: center;
+
+}
+
+.table-chooseLeft{
+    float: left;
+    width: 30px;
+    height: 30px;
+    margin-right: 10px;
+}
+
+
+.table-chooseRight{
+    float: right;
+    width: 30px;
+    height: 30px;
+}
+
+.table-chooseNumber{
+    width: 30px;
+    height: 30px;
+
+    text-align: center;
+
+    float : left;
+    margin-right: 2px;
+
+    font-size: 15px;
+    font-family: sans-serif;
+    
+    color: black;
+}
+
+.table-chooseNumberSelected{
+
+    width: 30px;
+    height: 30px;
+
+    text-align: center;
+
+    float : left;
+    margin-right: 2px;
+
+    font-size: 15px;
+    font-family: sans-serif;
+    
+    color: white;
 }

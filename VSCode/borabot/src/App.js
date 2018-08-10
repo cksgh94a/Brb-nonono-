@@ -21,15 +21,30 @@ import { setStrategy } from './reducers/strategy';
 import './App.css'
 
 class App extends Component {
+  constructor(){
+    super();
+    this.state={
+      initLogin: false
+    }
+  }
+
   componentDidMount() {    
     // 세션의 현재 로그인 여부 확인
     axios.get('Status')
     .then( response => {
-      if(response.data.status) this.props.onLogin()
-      else this.props.onLogout()
+      if(response.data.status) {
+        this.props.onLogin()
+        this.setState({ initLogin: true })
+      }
+      else{
+        this.props.onLogout()
+        this.setState({ initLogin: false })
+      }
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR    
     
+
+
     axios.get( 'Strategy' )
     .then( response => {
       this.props.onSetStrategy(response.data)
@@ -37,10 +52,11 @@ class App extends Component {
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
-  render() {
+  render() { 
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
-        {this.props.login
+        {/* {this.state.initLogin // 실제용*/}
+        {true // 앞단 테스트
         ? <div style={{height:"100%"}}>
             <div className = "header-location"><Header/></div>
             <div className="main">

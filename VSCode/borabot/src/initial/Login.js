@@ -54,11 +54,6 @@ class Login extends Component {
       .catch( response => { console.log('err\n'+response); } ) : // ERROR
       alert('양식을 확인해주세요')
   }
-  
-  // 앞단 개발용 임시 로그인
-  handleLoginT = () => {
-    this.props.onLogin()
-  }
 
   render() {
 
@@ -97,8 +92,6 @@ class Login extends Component {
           <div className = "login-text2" size = '18px'>간단한 회원가입으로 보라봇을 이용해 보세요.</div>
           <Link to="/register"><button className ="login-registerButton">회원가입</button></Link>
           <Link to="/findInfo"><button className ="login-findButton">비밀번호 찾기</button></Link>
-        
-          <button onClick={this.handleLoginT}>테스트용</button><br/><br/>
         </div>
       </div>
     );
