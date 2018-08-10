@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
@@ -55,11 +56,6 @@ class NowTrading extends Component {
     )
   }
 
-  handleLogbtn = (name) => {
-    this.props.onSelectTrading(true, name)
-    window.location = "/log";
-  }
-
   reload = () => {
     axios.get('NowTrading')
     .then( response => {
@@ -111,7 +107,11 @@ class NowTrading extends Component {
                 <div className = 'ntr-obj-text' >종료일 <text style={{marginLeft : "8px", marginRight:"8px"}} >:</text> {nt.end_date}</div>
                 <div className = 'ntr-obj-text' >수익률 <text style={{marginLeft : "8px", marginRight:"8px"}}>  :</text> <text className = "ntr-obj-profit">{nt.profit}%</text></div>
 
-                <div id="Sale-stop-btn" className="ntr-obj-logBtn" onClick={() => this.handleLogbtn(nt.bot_name)}><img src = {logBtn}/></div>
+                <Link to={{
+                  pathname: "/log",
+                  bot_name: nt.bot_name,
+                  state: { bot_name: nt.bot_name }
+                }} id="Sale-stop-btn" className="ntr-obj-logBtn"><img src = {logBtn}/></Link> 
                 <div id="Sale-stop-btn" className = "ntr-obj-stopBtn" onClick={() => this.handleStopbtn(nt)}><img src = {stopBtn}/></div>
 
               </div>);
@@ -121,13 +121,5 @@ class NowTrading extends Component {
     );
   }
 }
-
-let mapDispatchToProps = (dispatch) => {
-  return {
-    onSelectTrading: (tf, value) => dispatch(selectTrading(tf, value))
-  }
-}
-
-NowTrading = connect(undefined, mapDispatchToProps)(NowTrading);
 
 export default NowTrading;

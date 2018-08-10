@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 import './Register.css';
@@ -103,9 +104,7 @@ class Register extends Component {
     console.log(password, pVal)
     return (
       <div>
-        
-        <img src = {signLogo} className = 'sign-logo' onClick={() => window.location = "/"}/>
-        {/* 메인 로고 누르면 로긴 화면으로 가자 <button onClick={() => window.location = "/"}>로그인 화면으로</button> */}
+        <Link to="/"><img src = {signLogo} className = 'sign-logo'/></Link>
         
         <div style={signWindow} className = 'sign-windowBackground' >
 

@@ -125,10 +125,10 @@ class Board extends Component {
     return (
       <div class="board_total">
         <div class="board">
+          <div class="board_title">전략 공유 게시판</div>
           { // 게시물 작성/보기일 경우엔 게시물 표시, 아니면 목록 표시
           post
           ? <div>
-              <div class="board_title">전략 공유 게시판</div>
               <Post post_num={post_num} write={write}/>  
               {/*목록버튼*/}
               <button id="listButton" onClick={this.moveList}><img src={require('../img/common/btn_13.png')} /></button>
@@ -155,6 +155,7 @@ class Board extends Component {
                   })}
                 </tbody>
               </table>
+              
 
               <div className = "table-chooseBoxContainer">
                 { /* 이전 10 페이지 이동 버튼*/ }
@@ -168,6 +169,8 @@ class Board extends Component {
                 { /* 이후 10 페이지 이동 버튼*/ }
                 <div className = "table-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
               </div>
+              {/*저장버튼*/}
+              <button id="boardButton" onClick={this.writePost}><img src={require('../img/common/btn_11.png')} alt="btn_11" /></button>
             </div>
           }
         </div>

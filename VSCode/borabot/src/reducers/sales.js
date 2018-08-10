@@ -4,7 +4,6 @@
 
 const sS = 'setSales';
 const sC = 'setChart';
-const sT = 'selectTrading';
 
 export function setSales(value) {
 	return {
@@ -24,23 +23,12 @@ export function setChart(value) {
 	};
 }
 
-export function selectTrading(tf, value) {
-	return {
-		type: sT,
-		selected: tf,
-		selectedTrading: value
-	};
-}
-
 const Sales = {
   sales: true,
   exchangeIndex: 0,
   baseIndex: 0,
   coinIndex: 0,
-	intervalIndex: 0,
-	
-	selected: false,	// 거래 현황의 버튼을 통해 들어왔는지 여부
-	selectedTrading: ''	// 거래 현황을 통해 들어온 거래 이름
+	intervalIndex: 0
 };
 
 export const sales = (state = Sales, action) => {
@@ -56,11 +44,6 @@ export const sales = (state = Sales, action) => {
 		case sC:
 			return Object.assign({}, state, {
         sales: action.sales
-			});
-		case sT:
-			return Object.assign({}, state, {
-				selected: action.selected,
-        selectedTrading: action.selectedTrading
 			});
 		default:
 			return state;

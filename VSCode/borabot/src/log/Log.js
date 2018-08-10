@@ -32,27 +32,22 @@ class Log extends Component {
   }
 
   componentDidMount() {
-    // console.log(this.props.location)
-    console.log(this.props.location.state.test)
-
     axios.get( 'Log' )
     .then( response => {
       this.setState({
         tradeList: response.data,
         pageNumList: [1]
       })
-
       // 거래 현황에서 거래 기록을 눌렀을 경우
-      this.props.selected &&
-        response.data.map((t, i) => {
-          if(t.bot_name === this.props.selectedTrading){
-            this.setState({
-              selectedTrade: t
-            })
-            this.getLog(t.bot_name, 1, '매수/매도')
-            document.getElementById('botName').selectedIndex=i+1
-          }
-        })
+      this.props.location.bot_name !== undefined
+      && response.data.map((t, i) => {
+        if(t.bot_name === this.props.location.bot_name){
+          this.setState({
+            selectedTrade: t
+          })
+          this.getLog(t.bot_name, 1, '매수/매도')
+          document.getElementById('botName').selectedIndex=i+1
+        }})
     }) 
     .catch( response => { 
       console.log('err\n'+response); 
@@ -62,11 +57,20 @@ class Log extends Component {
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
   componentWillReceiveProps (nextProps) {
     (this.props.location.key !== nextProps.location.key)
-    && this.setState({
-        selectedTrade: {},
-        logList: [],
-        pageNum:1,  // 현재 선택된 페이지 번호
-      })
+    && axios.get( 'Log' )
+      .then( response => {
+          this.setState({
+            tradeList: response.data,
+            selectedTrade: {},
+            logList: [],
+            pageNumList: [1],
+            pageNum:1,  // 현재 선택된 페이지 번호
+          })      
+          document.getElementById('botName').selectedIndex=0
+      }) 
+      .catch( response => { 
+        console.log('err\n'+response); 
+      }); // ERROR
   }
 
   handleChange = (e) => {
@@ -213,21 +217,6 @@ class Log extends Component {
     );
   }
 }
-
-let mapDispatchToProps = (dispatch) => {
-  return {
-    onSelectTrading: (tf, value) => dispatch(selectTrading(tf, value))
-  }
-}
-
-let mapStateToProps = (state) => {
-  return {
-    selected: state.sales.selected,
-    selectedTrading: state.sales.selectedTrading
-  };
-}
-
-Log = connect(mapStateToProps, mapDispatchToProps)(Log);
 
 export default Log;
 

@@ -36,8 +36,8 @@ class Login extends Component {
   }
 
   handleLogin = () => {
-    (this.state.email !== null && this.state.password !== null) ?    
-      axios.post( 
+    (this.state.email !== null && this.state.password !== null)
+    ? axios.post( 
         'LogInOut', 
         'email='+this.state.email+'&password='+this.state.password, 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -56,10 +56,6 @@ class Login extends Component {
   }
 
   render() {
-
-    const bgStyle = {
-      backgroundImage: `url(${backGround})`,
-    }
 
     const windowBg = {
       backgroundImage: `url(${loginWindow})`,

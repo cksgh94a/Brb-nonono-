@@ -5,8 +5,6 @@ import { connect } from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
-const today = new Date();
-
 const hourList = []
 for(var i=1;i<=24;i++) hourList.push(i-1) 
 
@@ -35,6 +33,39 @@ class BackTesting extends Component {
       sellDetail: false,
       buyUnit:'',
       sellUnit:''
+    }
+  }
+
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  componentWillReceiveProps (nextProps) {
+    if(this.props.location.key !== nextProps.location.key) {
+      this.setState({
+        exchangeIndex: 0,
+        baseIndex: 0,
+        startDay: '',
+        endDay: '',
+        nowCash:'',
+  
+        isResulted:false,
+        text:'',
+        ReturnDetailMessage:'',
+        ReturnMessage:'',
+        
+        buyDetail: false,
+        sellDetail: false,
+        buyUnit:'',
+        sellUnit:''
+      })
+      document.getElementById('exchange').selectedIndex = 0
+      document.getElementById('base').selectedIndex = 0
+      document.getElementById('coin').selectedIndex = 0
+      document.getElementById('interval').selectedIndex = 0
+      document.getElementById('buyingSetting').selectedIndex = 0
+      document.getElementById('sellingSetting').selectedIndex = 0
+      document.getElementById('startHour').selectedIndex = 0
+      document.getElementById('endHour').selectedIndex = 0
+      document.getElementById('buyingDetail').value = ''
+      document.getElementById('sellingDetail').value = ''
     }
   }
 
@@ -209,7 +240,7 @@ class BackTesting extends Component {
         <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'start')} />
         <select id="startHour">
           {hourList.map((e, i) => {
-            return (<option key={i} selected={e === today.getHours()}> {e}시 </option>)
+            return (<option key={i}> {e}시 </option>)
           })}
         </select>
         <br/>  
@@ -217,7 +248,7 @@ class BackTesting extends Component {
         <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'end')} />
         <select id="endHour">
           {hourList.map((e, i) => {
-            return (<option key={i} selected={e === today.getHours()}> {e}시 </option>)
+            return (<option key={i}> {e}시 </option>)
           })}
         </select><br/>
         시작 금액 : <input id="nowCash" placeholder="시작 금액을 입력하세요" value={this.state.nowCash} onChange={this.handleCash}/><br/>
