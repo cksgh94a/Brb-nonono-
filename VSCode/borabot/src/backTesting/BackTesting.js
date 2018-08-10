@@ -5,6 +5,11 @@ import { connect } from 'react-redux';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
+import './BackTesting.css';
+
+import startBtn from '../img/common/btn_08.png';
+import calendar from '../img/common/calendar_01.png';
+
 const hourList = []
 for(var i=1;i<=24;i++) hourList.push(i-1) 
 
@@ -112,10 +117,7 @@ class BackTesting extends Component {
   }
 
   dateValidate = (sD, eD) =>{
-    console.log(sD)
     var diff = new Date(eD) - new Date(sD)
-
-    console.log(diff)
     switch(document.getElementById('interval').value) {
       case "5분":
         if( diff > 0 && diff < 1*24*60*60*1000 )
@@ -147,11 +149,11 @@ class BackTesting extends Component {
     var startDate = startDay.getFullYear()+'-'+
       ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
       ("0"+startDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('startHour').value).slice(1,3)+':00:00.000'
+      ("0"+document.getElementById('startHour').value).slice(0,-1).slice(-2)+':00:00.000'
     var endDate = endDay.getFullYear()+'-'+
       ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
       ("0"+endDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('endHour').value).slice(1,3)+':00:00.000'
+      ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
 
     if(this.dateValidate(startDate, endDate)){
       axios.post( 
@@ -200,66 +202,112 @@ class BackTesting extends Component {
     const { exchangeList, intervalList , strategyList } = this.props
     const { exchangeIndex, baseIndex,isResulted, text } = this.state
     return (
-      <div>        
-        <h4 >Back Testing</h4>
-        거래소 : <select id="exchange" onChange={this.handleIndex}>
-          {exchangeList.map((exchange, index) => {
-            return (<option key={index} > {exchange.key} </option>)
-          })
-          }
-        </select><br/>
-        기축통화 : <select id="base" onChange={this.handleIndex}>
-          {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
-            return (<option key={i}> {base} </option>)
-          })}
-        </select><br/>
-        코인 : <select id="coin">
-          {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
-            return (<option key={i}> {coin} </option>)
-          })}
-        </select><br/>
-        거래 간격 : <select id="interval">
-          {intervalList.map((int, i) => {
-            return (<option key={i}> {int.key} </option>)
-          })}
-        </select><br/>
-        전략 : <select id="strategy">
-          {strategyList.map((s, i) => {
-            return (<option key={i}> {s.name} </option>)
-          })}
-        </select><br/>
-        구매 설정 : <select id="buyingSetting" onChange={this.handleSetting}>
-          {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
-        </select>
-        <input id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyUnit}<br/>
-        판매 설정 : <select id="sellingSetting" onChange={this.handleSetting}>
-          {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
-        </select>
-        <input id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellUnit}<br/>
-        시작일 :
-        <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'start')} />
-        <select id="startHour">
-          {hourList.map((e, i) => {
-            return (<option key={i}> {e}시 </option>)
-          })}
-        </select>
-        <br/>  
-        종료일 :
-        <DayPickerInput onDayChange={(day) => this.handleDayChange(day, 'end')} />
-        <select id="endHour">
-          {hourList.map((e, i) => {
-            return (<option key={i}> {e}시 </option>)
-          })}
-        </select><br/>
-        시작 금액 : <input id="nowCash" placeholder="시작 금액을 입력하세요" value={this.state.nowCash} onChange={this.handleCash}/><br/>
-        <button onClick={this.handleStartbtn}>백테스팅 시작</button>
-        <h4 >결과</h4>
-        {isResulted && 
-          (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
-        {isResulted && 
-          (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}<br/>
-        {isResulted && 
-          (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)}
+      <div>
+        {/* 거래 설정 영역 */}
+        <div className = 'bt-settingContainer'>          
+          <div className = 'bt-btSettingText'>백테스팅 설정</div>
+            {/* 거래소 선택 */}
+            <select className = "bt-select" id="exchange" onChange={this.handleIndex}>
+              {exchangeList.map((exchange, index) => {
+                return (<option key={index} > {exchange.key} </option>)
+              })}
+            </select><br/>
+            {/* 기축통화 선택 */}
+            <select id="base" className = "bt-select" onChange={this.handleIndex}>
+              {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
+                return (<option key={i}> {base} </option>)
+              })}
+            </select><br/>
+            {/* 코인 선택 */}
+            <select id="coin" className = "bt-select">
+              {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
+                return (<option key={i}> {coin} </option>)
+              })}
+            </select>
+            {/* 거래 간격 선택 */}
+            <select id="interval" className = "bt-select">
+              {intervalList.map((int, i) => {
+                return (<option key={i}> {int.key} </option>)
+              })}
+            </select>
+            {/* 전략 선택 */}
+            <select id="strategy" className = "bt-select">
+              {strategyList.map((s, i) => {
+                return (<option key={i}> {s.name} </option>)
+              })}
+            </select>
+            {/* 구매 설정 선택 */}
+            <select id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
+              {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
+            </select>
+            <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+            {/* 판매 설정 선택 */}
+            <select id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
+              {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
+            </select>
+            <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
+            {/* 시작일 선택 */}
+            <div style = {{ maringTop : "12px", height : "42px"}}>
+              <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                <DayPickerInput inputProps={{
+                  style: {
+                    width: '80px',
+                    marginTop : "20px",
+                    borderTop : 'transparent',
+                    borderLeft : 'transparent',
+                    borderRight : 'transparent',
+                    borderBottom : 'transparent'}
+                  }} onDayChange={(day) => this.handleDayChange(day, 'start')} />
+                <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+              </div>
+              {/* 시작 시간 선택 */}
+              <select className = "bt-select-hour" id="startHour">
+                {hourList.map((e, i) => {
+                  return (<option key={i}> {e}시 </option>)
+                })}
+              </select>
+            </div>
+            {/* 종료일 선택 */}
+            <div style = {{ maringTop : "12px", height : "42px"}}>
+              <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                <DayPickerInput inputProps={{
+                  style: {
+                    width: '80px',
+                    marginTop : "20px",
+                    borderTop : 'transparent',
+                    borderLeft : 'transparent',
+                    borderRight : 'transparent',
+                    borderBottom : 'transparent'}
+                  }} onDayChange={(day) => this.handleDayChange(day, 'end')} />
+                <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+              </div>
+              {/* 종료 시간 선택 */}
+              <select  className = "bt-select-hour" id="endHour">
+                {hourList.map((e, i) => {
+                  return (<option key={i}> {e}시 </option>)
+                })}
+              </select>
+              {/* 시작 금액 선택 */}
+              <input id="nowCash" placeholder="시작 금액을 입력하세요"  className = 'bt-startPrice' value={this.state.nowCash} onChange={this.handleCash}/><br/>
+            </div>            
+          {/* 시작 버튼 */}
+          <div className = 'bt-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
+        </div>
+
+        {/* 거래 결과 기록 영역 */}
+        <div className = 'bt-resultLogContainer'></div>
+
+        {/* 거래 결과 영역 */}
+        <div className = 'bt-resultWindow'>
+          <div style={{marginTop : '30px', marginLeft : '30px', fontSize : "24px", fontWeight:"bold"}}>백테스팅 결과</div>
+          <div style={{marginTop : '20px', marginLeft : '30px', width : "236px", borderBottom : '1px solid #9646a0'}} /> 
+          {/* {isResulted && 
+            (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
+          {isResulted && 
+            (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}<br/>
+          {isResulted && 
+            (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)} */}
+        </div>
       </div>
     );
   }

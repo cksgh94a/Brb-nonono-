@@ -1,8 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { connect } from 'react-redux';
-
-import { selectTrading } from '../reducers/sales';
 
 import './log.css';
 import mainBackground from '../img/sign/sign_bg_01.png';
