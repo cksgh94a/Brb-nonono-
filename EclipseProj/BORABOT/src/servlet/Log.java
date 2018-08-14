@@ -44,7 +44,7 @@ public class Log extends HttpServlet {
 		JSONArray jArray = new JSONArray();
     	
     	// DB에서 현재 거래 정보 가져옴
-		String selectSql = String.format("SELECT DISTINCT bot_name, exchange_name, coin from trans_log where email=\'%s\'", (String) session.getAttribute("email"));
+		String selectSql = String.format("SELECT DISTINCT bot_name, exchange_name, coin from trade where email=\'%s\'", (String) session.getAttribute("email"));
 
 		DB useDB = new DB();
 

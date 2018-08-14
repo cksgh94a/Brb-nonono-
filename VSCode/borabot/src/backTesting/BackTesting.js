@@ -32,10 +32,10 @@ class BackTesting extends Component {
       endDay: '',
       nowCash:'',
 
-      isResulted:false,
-      text:'',
-      ReturnDetailMessage:'',
-      ReturnMessage:'',
+      // isResulted:false,
+      // text:'',
+      // ReturnDetailMessage:'',
+      // ReturnMessage:'',
       
       buyDetail: false,
       sellDetail: false,
@@ -45,6 +45,7 @@ class BackTesting extends Component {
       pageNum:1,  // 현재 선택된 페이지 번호
       pageNumList: [1], // 게시물의 전체 페이지 리스트
 
+      showList: [],
       resultList: [],
       result: {}
     }
@@ -74,6 +75,7 @@ class BackTesting extends Component {
         pageNumList: [1], // 게시물의 전체 페이지 리스트
   
         resultList: [],
+        showList: [],
         result: {}
       })
       document.getElementById('exchange').selectedIndex = 0
@@ -159,7 +161,7 @@ class BackTesting extends Component {
       alert('시작 금액을 입력하세요')
       return
     }
-
+    
     const { startDay, endDay } = this.state
     var startDate = startDay.getFullYear()+'-'+
       ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
@@ -180,18 +182,29 @@ class BackTesting extends Component {
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+document.getElementById('buyingSetting').value+
         '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&buyingDetail='+document.getElementById('buyingDetail').value+
+        '&sellingDetail='+document.getElementById('sellingDetail').value+
         '&startDate='+startDate+
         '&endDate='+endDate+
         '&nowCash='+document.getElementById('nowCash').value,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.setState({
-          isResulted: true,
-          ReturnDetailMessage: response.data.ReturnDetailMessage,
-          ReturnMessage: response.data.ReturnMessage,
-          text: response.data.ReturnMessage
-        })
+        if(response.data.status === '성공'){
+          this.setState({
+            resultList: response.data.log,
+            result: response.data.result
+          })
+          var pNL = [1]  // state에 저장할 페이지리스트 생성
+          for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
+            pNL.push(i)
+          }
+          this.setState({
+            logList: response.data.logList,
+            pageNumList: pNL,
+            showList: this.state.resultList.slice(0, 10)
+          })
+        } else alert('백테스팅에 실패하였습니다.')
       }) 
       .catch( response => { console.log('err\n'+response); } ); // ERROR
     } else alert(
@@ -201,21 +214,42 @@ class BackTesting extends Component {
       ' 이내의 기간으로 설정해주세요.')
   }
 
-  handleResult = (e) => {
-    if(e.target.id === "result"){
-      this.setState({
-        text:this.state.ReturnMessage
-      })
-    } else{
-      this.setState({
-        text:this.state.ReturnDetailMessage
-      })
-    }
+  // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
+  selectPage = (fbn) => {
+    const { pageNum, pageNumList } = this.state
+    var pn = 1  // 서버에 호출할 페이지 번호
+
+    if(fbn === 'front'){
+      (pageNum > 10)
+      ? pn = pageNum -(pageNum-1)%10 -1
+      : pn = 1
+    } else if(fbn === 'back'){
+      (parseInt(pageNum/10, 10) !== parseInt(pageNumList.length/10, 10))
+      ? pn = pageNum -pageNum%10 +11
+      : pn = pageNumList.length
+    } else pn = fbn
+    
+    this.setState({
+      pageNum: pn,
+      showList: this.state.resultList.slice((pn -1)*10, (pn -1)*10+10)
+    })
   }
+
+  // handleResult = (e) => {
+  //   if(e.target.id === "result"){
+  //     this.setState({
+  //       text:this.state.ReturnMessage
+  //     })
+  //   } else{
+  //     this.setState({
+  //       text:this.state.ReturnDetailMessage
+  //     })
+  //   }
+  // }
 
   render() {
     const { exchangeList, intervalList , strategyList } = this.props
-    const { exchangeIndex, baseIndex, isResulted, text, pageNum, pageNumList, resultList, result } = this.state
+    const { exchangeIndex, baseIndex, isResulted, text, pageNum, pageNumList, showList, result } = this.state
     
     const onTextBg = {
       backgroundImage : `url(${onText})`,
@@ -335,10 +369,10 @@ class BackTesting extends Component {
 
               <tbody className = 'log-tbodyContainer' >              
                 { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
-                resultList.map((r, i) => {
+                showList.map((r, i) => {
                   return (<tr key={i} style={{borderBottom : "1px solid"}} >
                     <td className = 'log-td'>{r.success}</td>
-                    <td className = 'log-td'>{r.sales_action}</td>
+                    <td className = 'log-td'>{r.saleAction}</td>
                     <td className = 'log-td'>{r.coinCurrentPrice}</td>
                     <td className = 'log-td'>{r.salingCoinNumber}</td>
                     <td className = 'log-td'>{r.nowCash}</td>

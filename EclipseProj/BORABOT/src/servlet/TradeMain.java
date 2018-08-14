@@ -55,7 +55,7 @@ public class TradeMain extends HttpServlet {
         		default: break;
         	}
         	
-        	switch(request.getParameter("buyingSetting")) {
+        	switch(request.getParameter("sellingSetting")) {
     	    	case "sellCertainPrice":
     	    		priceSellUnit = Double.parseDouble(request.getParameter("sellingDetail"));
     	    		break;

@@ -432,7 +432,7 @@ public class tradingBot {
 							
 							String currentTime = LocalDateTime.now().toString();
 							
-							String sql = String.format("INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s)", email, botName, exchange, currentTime, 1, coin+base, ticker, numOfSalingCoin, total, balanceOfNow, numOfNowCoin );
+							String sql = String.format("INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s, %s)", email, botName, exchange, currentTime, 1, coin+base, ticker, numOfSalingCoin, total, balanceOfNow, numOfNowCoin, 0 );
 							System.out.println(sql);
 							try {
 								useDB.Query(sql, "insert");

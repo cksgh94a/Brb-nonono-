@@ -40,7 +40,7 @@ public class BackTest extends HttpServlet {
 	    
 		HttpSession session = request.getSession();
 		
-		System.out.println(request.getParameter("buySetting"));
+		System.out.println(request.getParameter("buyingSetting"));
 
     	// 거래 세부 설정
     	double priceBuyUnit = 0.0;
@@ -58,7 +58,7 @@ public class BackTest extends HttpServlet {
     		default: break;
     	}
     	
-    	switch(request.getParameter("buyingSetting")) {
+    	switch(request.getParameter("sellingSetting")) {
 	    	case "sellCertainPrice":
 	    		priceSellUnit = Double.parseDouble(request.getParameter("sellingDetail"));
 	    		break;

@@ -174,7 +174,7 @@ class Log extends Component {
         </div>
 
         <div className = "log-mainBox">
-          <div className = "log-botIndivText">일반봇1의 거래 기록</div>
+          <div className = "log-botIndivText">{selectedTrade.bot_name}의 거래 기록</div>
           <table className='log-tableContainer' >
             <thead>
               <th className='log-headTr'>거래 신호 시간</th>

@@ -87,7 +87,7 @@ class Sales extends Component {
     var endDate = selectedDay.getFullYear()+'-'+
       ("0"+(selectedDay.getMonth()+1)).slice(-2)+'-'+
       ("0"+selectedDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('endHour').value).slice(1,3)+':00:00.000'
+      ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
     var now = new Date();
     if(new Date(endDate) - now < 0){
       alert('😆 거래 종료를 과거에 할 순 없어요 😆')
@@ -196,7 +196,7 @@ class Sales extends Component {
           </div>
           <select id="endHour" className='select_hour'>
             {hourList.map((e, i) => {
-              return (<option key={i} selected={e === new Date().getHours()}> &nbsp; {e} 시 </option>)
+              return (<option key={i} selected={e === new Date().getHours()}> &nbsp; {e}시 </option>)
             })}
           </select>
        </div>
