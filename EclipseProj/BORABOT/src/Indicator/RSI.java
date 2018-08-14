@@ -54,7 +54,7 @@ public class RSI implements calcIndicator {
 		//initializing.printArray(hArr);
 		double up=0;
 		double down=0;
-		for(int i = 0; i < period_day; i++) {
+		for(int i = 0; i < hArr.length-1; i++) {
 			
 			if(hArr[i] < hArr[i+1]) {
 				up += hArr[i+1] - hArr[i];
@@ -64,7 +64,7 @@ public class RSI implements calcIndicator {
 			}
 		}
 		
-		double RS = (up/period_day) / (down/period_day);
+		double RS = (up/hArr.length-1) / (down/hArr.length-1);
 		
 		double RSI = up / (up+down) * 100.0;
 		RSI = 100 - (100 / (1 + RS));

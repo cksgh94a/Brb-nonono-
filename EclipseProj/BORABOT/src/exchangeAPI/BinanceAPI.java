@@ -46,6 +46,7 @@ public class BinanceAPI implements exAPI{
 
 	public BinanceAPI(String apikey, String secret, int retryAttempts, int retryDelaySeconds) {
 
+		System.out.println(apikey+" , "+secret);
 		factory = BinanceApiClientFactory.newInstance(apikey, secret);
 		client = factory.newRestClient();
 		
@@ -148,16 +149,18 @@ public class BinanceAPI implements exAPI{
 		return getOpenOrders("");
 	}
 	
-	public String getBalances() { // Returns all balances in your account
+	@Override
+	public String getAllBalances() { // Returns all balances in your account
 
 		return getJson(API_VERSION, "getbalances");
 	}
 
+	@Override
 	public double getBalance(String currency) { // Returns a specific balance in your account
 		
 		Account account = client.getAccount();
-		System.out.println(account.getBalances());
-		System.out.println(account.getAssetBalance(currency).getFree());
+		//System.out.println(account.getBalances());
+		//System.out.println(account.getAssetBalance(currency).getFree());
 		
 		return Double.parseDouble(account.getAssetBalance(currency).getFree());
 	}

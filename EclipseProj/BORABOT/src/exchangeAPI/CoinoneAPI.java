@@ -101,7 +101,7 @@ public class CoinoneAPI implements exAPI{
 		return getOpenOrders("");
 	}
 	
-	public String getBalances() { // Returns all balances in your account
+	public String getAllBalances() { // Returns all balances in your account
 
 		return getJson( "getbalances");
 	}

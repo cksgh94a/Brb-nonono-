@@ -33,6 +33,8 @@ public class RSI_bt implements calcIndicator_bt {
 		this.initialEnd = initialEnd;
 		this.initialStart = initialStart;
 		this.HLCArr = hArr;
+		this.initialEnd++;
+		this.initialStart++;
 	}
 	
 	public double[] toPriceHistory(double[][] arr) {
@@ -50,8 +52,11 @@ public class RSI_bt implements calcIndicator_bt {
 		
 		double[] phArr = toPriceHistory(HLCArr);
 		//System.out.println("RSI : " + initialStart +" / "+initialEnd);
-		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart++, initialEnd++);
-		
+		System.out.println(initialStart + "/" + initialEnd);
+		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, (initialStart++), (initialEnd++));
+		System.out.println("phArr len : " + phArr.length);
+		System.out.println("tempArr len : " + tempArr.length);
+		System.out.println(initialStart + "/" + initialEnd+"\n");
 		int det;
 		double RSI;
 		RSI = getRSI(tempArr);
@@ -78,6 +83,7 @@ public class RSI_bt implements calcIndicator_bt {
 		//System.out.println("RSI : " + initialStart +" / "+initialEnd);
 		double up=0;
 		double down=0;
+		System.out.println("plz" + hArr.length + "?" + period_day);
 		for(int i = 0; i < period_day; i++) {
 			
 			if(hArr[i] < hArr[i+1]) {
@@ -93,87 +99,6 @@ public class RSI_bt implements calcIndicator_bt {
 		double RSI = up / (up+down) * 100.0;
 		RSI = 100 - (100 / (1 + RS));
 		//System.out.println("RSI test cnt : " + cnt);
-		return RSI;
-	}
-	
-	public double getWilderRSI() throws Exception {
-		
-		double[] hArr = null;
-		
-		hArr = IndicatorFunction_bt.getHistoryArray(crypt, exchange, coin, base, interval, period_day+1);
-		Queue<Double> upList = new LinkedList<Double>();
-		Queue<Double> downList = new LinkedList<Double>();
-		double up = 0;
-		double down = 0;
-		
-		for(int i = 0; i < period_day; i++) {
-			
-			if(hArr[i] < hArr[i+1]) {
-				upList.add(hArr[i+1] - hArr[i]);
-				up += (hArr[i+1] - hArr[i]);
-			}
-			else if(hArr[i] > hArr[i+1]){
-				downList.add(hArr[i] - hArr[i+1]);
-				down += (hArr[i] - hArr[i+1]);
-			}
-		}
-		
-		double[] upD = new double[upList.size()];
-		double[] downD = new double[downList.size()];
-		upD[0] = up / period_day;//upList.remove();
-		downD[0] = down / period_day;//downList.remove();
-		
-		for(int i = 1; i < upD.length; i++) {
-		
-			upD[i] = (upD[i-1] * (period_day-1) + upList.remove())/period_day;
-		}
-		for(int i = 1; i < downD.length; i++) {
-			
-			downD[i] = (downD[i-1] * (period_day-1) + downList.remove())/period_day;
-		}
-		
-		double RS = upD[upD.length-1] / downD[downD.length-1];
-		double RSI = 100 - (100 / (1 + RS));
-		return RSI;
-	}
-	
-	public double getWilderedRSI() throws Exception {
-		
-		double[] hArr = null;
-		
-		hArr = IndicatorFunction_bt.getHistoryArray(crypt, exchange, coin, base, interval, period_day+1);
-		
-		Queue<Double> upList = new LinkedList<Double>();
-		Queue<Double> downList = new LinkedList<Double>();
-
-		for(int i = 0; i < period_day; i++) {
-			
-			if(hArr[i] < hArr[i+1]) {
-				upList.add(hArr[i+1] - hArr[i]);
-				downList.add((double) 0);
-			}
-			else if(hArr[i] > hArr[i+1]){
-				downList.add(hArr[i] - hArr[i+1]);
-				upList.add((double) 0);
-			}
-		}
-		
-		double[] upD = new double[upList.size()];
-		double[] downD = new double[downList.size()];
-		
-		for(int i = 1; i < upD.length; i++) {
-			upD[i] = upList.remove();
-		}
-		for(int i = 1; i < downD.length; i++) {
-			downD[i] = downList.remove();
-		}
-		
-		double emaUP = IndicatorFunction_bt.getEMA(upD);
-		double emaDown = IndicatorFunction_bt.getEMA(downD);
-		
-		double RS = emaUP / emaDown;
-		double RSI = 100 - (100 / (1 + RS));
-		
 		return RSI;
 	}
 	

@@ -49,6 +49,7 @@ public class gdCross implements calcIndicator {
 				det= 0;
 			}
 		}
+		
 		else if(prevShort > prevLong){
 			if(shortMA < longMA) {
 				//장기가 단기 위로 : 매도

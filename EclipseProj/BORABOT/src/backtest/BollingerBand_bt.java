@@ -3,11 +3,12 @@ package backtest;
 import java.util.Iterator;
 import java.util.Queue;
 
+import Indicator.calcIndicator;
 import exchangeAPI.CryptowatchAPI;
 
 // period_day
 
-public class BollingerBand_bt implements calcIndicator_bt{
+public class BollingerBand_bt implements calcIndicator_bt, calcIndicator{
 	
 	private int period_day;
 	private CryptowatchAPI crypt;
@@ -75,7 +76,7 @@ public class BollingerBand_bt implements calcIndicator_bt{
 			nowStatus = 0;
 		}
 		
-		if(prevStatus == 1 && nowStatus == 0) {
+		if(prevStatus == 1 && nowStatus == 0) { 
 			det =  -1;
 		}
 		else if (prevStatus == 2 && nowStatus == 0) {

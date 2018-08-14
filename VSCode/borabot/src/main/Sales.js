@@ -127,8 +127,8 @@ class Sales extends Component {
         '&coin='+document.getElementById('salesCoin').value+
         '&interval='+this.props.intervalList[this.props.sales.intervalIndex].value+
         '&strategyName='+document.getElementById('strategy').value+
-        '&buyingSetting='+document.getElementById('buyingSetting').value+
-        '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
+        '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
         '&buyingDetail='+document.getElementById('buyingDetail').value+
         '&sellingDetail='+document.getElementById('sellingDetail').value+
         '&startDate='+startDate+

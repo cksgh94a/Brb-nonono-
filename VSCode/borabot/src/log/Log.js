@@ -128,7 +128,7 @@ class Log extends Component {
       : pn = 1
     } else if(fbn === 'back'){
       (parseInt(pageNum/10, 10) !== parseInt(pageNumList.length/10, 10))
-      ? pn = pageNum -pageNum%10 +11
+      ? pn = (pageNum -1) -(pageNum -1)%10 +11
       : pn = pageNumList.length
     } else pn = fbn
     

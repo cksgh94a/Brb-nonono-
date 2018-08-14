@@ -32,13 +32,15 @@ public class VolumeRatio_bt implements calcIndicator_bt {
 		this.sellIndex = sellIndex;
 		this.initialEnd = initialEnd; // breakThrough가 아니기 떄문~
 		this.initialStart = initialStart;
+		this.initialEnd++;
+		this.initialStart++;
 		this.HLCArr = hArr;
 	}
 	
 	public int getDeterminConstant() throws Exception{
 		
 		int det;
-		double[][] tempArr = IndicatorFunction_bt.makeSublist2d(HLCArr, ++initialStart, ++initialEnd);
+		double[][] tempArr = IndicatorFunction_bt.makeSublist2d(HLCArr, initialStart++, initialEnd++);
 		double VR = getVolumeRatio(tempArr);
 		
 		if(VR < buyIndex) {

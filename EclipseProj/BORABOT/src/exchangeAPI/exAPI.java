@@ -11,6 +11,7 @@ public interface exAPI {
 
 	public double getBalance(String currency);
 	
+	public String getAllBalances();
 }
 
 class ExException extends Exception{

@@ -107,6 +107,7 @@ public class BithumbAPI implements exAPI{
 		return result;
 	}
 	
+	@Override
 	public double getBalance(String coin) {
 		
 		HashMap<String, String> rgParams = new HashMap<String, String>();
@@ -120,7 +121,7 @@ public class BithumbAPI implements exAPI{
 		} catch (Exception e) {
 		    e.printStackTrace();
 		}
-		System.out.println(result);
+		//System.out.println(result);
 		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
 		JsonObject data = ohlc_json.get("data").getAsJsonObject();
 		double balance = data.get("available_krw").getAsDouble();
@@ -128,6 +129,21 @@ public class BithumbAPI implements exAPI{
 		return balance;
 	}
 	
-	
-	
+	@Override
+	public String getAllBalances() { // Returns all balances in your account
+
+		HashMap<String, String> rgParams = new HashMap<String, String>();
+
+		rgParams.put("order_currency", "ALL");
+		rgParams.put("payment_currency", "krw");
+		
+		String result = null;
+		try {
+		    result = api.callApi("/info/balance", rgParams);
+		} catch (Exception e) {
+		    e.printStackTrace();
+		}
+		
+		return result;
+	}
 }

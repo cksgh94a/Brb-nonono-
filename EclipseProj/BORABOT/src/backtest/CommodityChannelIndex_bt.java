@@ -40,7 +40,7 @@ public class CommodityChannelIndex_bt implements calcIndicator_bt {
 		
 		this.phArr = IndicatorFunction_bt.toPriceHistory(hArr);
 		
-		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart++, initialEnd++);
+		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		
 		this.prevCCI = getCCI(tempArr);
 

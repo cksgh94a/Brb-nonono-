@@ -68,7 +68,7 @@ public class BollingerBand implements calcIndicator{
 		}
 		else if (prevStatus == 2 && nowStatus == 0) {
 			det =  1;
-		}
+		} 
 		else {
 			det = 0;
 		}
@@ -82,7 +82,7 @@ public class BollingerBand implements calcIndicator{
 
 		Queue<Double> history_queue;
 		
-		history_queue = IndicatorFunction.getHistoryQueue(crypt, exchange, coin, base, interval, period_day);
+		history_queue = IndicatorFunction.getHistoryQueue(exchange,coin, base, interval, period_day);
 		Iterator<Double> iter = null;
 		double nowPrice=-1;
 		iter = history_queue.iterator();

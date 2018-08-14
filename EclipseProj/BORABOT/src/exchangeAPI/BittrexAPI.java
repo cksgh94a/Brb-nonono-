@@ -122,7 +122,7 @@ public class BittrexAPI implements exAPI{
 		return getOpenOrders("");
 	}
 
-	public String getBalances() { // Returns all balances in your account
+	public String getAllBalances() { // Returns all balances in your account
 
 		return getJson(API_VERSION, ACCOUNT, "getbalances");
 	}

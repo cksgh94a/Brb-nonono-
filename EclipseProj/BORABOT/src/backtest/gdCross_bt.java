@@ -34,8 +34,8 @@ public class gdCross_bt implements calcIndicator_bt {
 		this.meanType = mT;
 		this.HLCVArr = hArr;
 		this.phArr = IndicatorFunction_bt.toPriceHistory(hArr);
-		this.initialStart = initialStart;
 		this.initialEnd = initialEnd;
+		this.initialStart = initialStart;
 		
 		double[] longTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		double[] shortTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart+(longd-shortd), initialEnd);
@@ -83,8 +83,8 @@ public class gdCross_bt implements calcIndicator_bt {
 			det= 0;
 		}
 		
-		System.out.print("prevShort : " + prevShort + " prevLong : " + prevLong + " nowShort : " + shortMA + " nowLong : " + longMA);
-		System.out.println(" / gdCross deterConstant : " + det);
+		//System.out.print("prevShort : " + prevShort + " prevLong : " + prevLong + " nowShort : " + shortMA + " nowLong : " + longMA);
+		//System.out.println(" / gdCross deterConstant : " + det);
 		return det;
 		
 	}

@@ -53,42 +53,45 @@ class BackTesting extends Component {
 
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
   componentWillReceiveProps (nextProps) {
-    if(this.props.location.key !== nextProps.location.key) {
-      this.setState({
-        exchangeIndex: 0,
-        baseIndex: 0,
-        startDay: '',
-        endDay: '',
-        nowCash:'',
-  
-        isResulted:false,
-        text:'',
-        ReturnDetailMessage:'',
-        ReturnMessage:'',
-        
-        buyDetail: false,
-        sellDetail: false,
-        buyUnit:'',
-        sellUnit:'',
-        
-        pageNum:1,  // 현재 선택된 페이지 번호
-        pageNumList: [1], // 게시물의 전체 페이지 리스트
-  
-        resultList: [],
-        showList: [],
-        result: {}
-      })
-      document.getElementById('exchange').selectedIndex = 0
-      document.getElementById('base').selectedIndex = 0
-      document.getElementById('coin').selectedIndex = 0
-      document.getElementById('interval').selectedIndex = 0
-      document.getElementById('buyingSetting').selectedIndex = 0
-      document.getElementById('sellingSetting').selectedIndex = 0
-      document.getElementById('startHour').selectedIndex = 0
-      document.getElementById('endHour').selectedIndex = 0
-      document.getElementById('buyingDetail').value = ''
-      document.getElementById('sellingDetail').value = ''
-    }
+    (this.props.location.key !== nextProps.location.key)
+    && this.stateRefresh()
+  }
+
+  stateRefresh = () => {
+    this.setState({
+      exchangeIndex: 0,
+      baseIndex: 0,
+      startDay: '',
+      endDay: '',
+      nowCash:'',
+
+      isResulted:false,
+      text:'',
+      ReturnDetailMessage:'',
+      ReturnMessage:'',
+      
+      buyDetail: false,
+      sellDetail: false,
+      buyUnit:'',
+      sellUnit:'',
+      
+      pageNum:1,  // 현재 선택된 페이지 번호
+      pageNumList: [1], // 게시물의 전체 페이지 리스트
+
+      resultList: [],
+      showList: [],
+      result: {}
+    })
+    document.getElementById('exchange').selectedIndex = 0
+    document.getElementById('base').selectedIndex = 0
+    document.getElementById('coin').selectedIndex = 0
+    document.getElementById('interval').selectedIndex = 0
+    document.getElementById('buyingSetting').selectedIndex = 0
+    document.getElementById('sellingSetting').selectedIndex = 0
+    document.getElementById('startHour').selectedIndex = 0
+    document.getElementById('endHour').selectedIndex = 0
+    document.getElementById('buyingDetail').value = ''
+    document.getElementById('sellingDetail').value = ''
   }
 
   handleIndex = (e) => {
@@ -180,8 +183,8 @@ class BackTesting extends Component {
         '&base='+document.getElementById('base').value+ 
         '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
         '&strategyName='+document.getElementById('strategy').value+
-        '&buyingSetting='+document.getElementById('buyingSetting').value+
-        '&sellingSetting='+document.getElementById('sellingSetting').value+
+        '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
+        '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
         '&buyingDetail='+document.getElementById('buyingDetail').value+
         '&sellingDetail='+document.getElementById('sellingDetail').value+
         '&startDate='+startDate+
@@ -192,16 +195,16 @@ class BackTesting extends Component {
       .then( response => {
         if(response.data.status === '성공'){
           this.setState({
-            resultList: response.data.log,
-            result: response.data.result
           })
           var pNL = [1]  // state에 저장할 페이지리스트 생성
           for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
             pNL.push(i)
           }
           this.setState({
-            logList: response.data.logList,
+            resultList: response.data.log,
+            result: response.data.result,
             pageNumList: pNL,
+            pageNum: 1,
             showList: this.state.resultList.slice(0, 10)
           })
         } else alert('백테스팅에 실패하였습니다.')
@@ -225,7 +228,7 @@ class BackTesting extends Component {
       : pn = 1
     } else if(fbn === 'back'){
       (parseInt(pageNum/10, 10) !== parseInt(pageNumList.length/10, 10))
-      ? pn = pageNum -pageNum%10 +11
+      ? pn = (pageNum -1) -(pageNum -1)%10 +11
       : pn = pageNumList.length
     } else pn = fbn
     
@@ -399,17 +402,17 @@ class BackTesting extends Component {
         </div>
 
         {/* 거래 결과 영역 */}
-        <div className = 'bt-resultWindow'>
+        {/* <div className = 'bt-resultWindow'>
           <div style={{marginTop : '30px', marginLeft : '30px', fontSize : "24px", fontWeight:"bold"}}>백테스팅 결과</div>
           <div style={{marginTop : '20px', marginLeft : '30px', width : "236px", borderBottom : '1px solid #9646a0'}} /> 
-          {/* {isResulted && 
+        </div> */}
+      </div>
+          /* {isResulted && 
             (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
           {isResulted && 
             (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}<br/>
           {isResulted && 
-            (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)} */}
-        </div>
-      </div>
+            (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)} */
     );
   }
 }

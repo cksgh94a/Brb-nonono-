@@ -53,6 +53,7 @@ public class gdVCross_bt implements calcIndicator_bt {
 		
 		double[] longTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		double[] shortTempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart+(longd-shortd), initialEnd);
+
 		initialStart++;
 		initialEnd++;
 		
@@ -83,8 +84,8 @@ public class gdVCross_bt implements calcIndicator_bt {
 			det= 0;
 		}
 		
-		System.out.print("prevShort : " + prevShort + " prevLong : " + prevLong + " nowShort : " + shortMA + " nowLong : " + longMA);
-		System.out.println(" / gdCross deterConstant : " + det);
+		//System.out.print("prevShort : " + prevShort + " prevLong : " + prevLong + " nowShort : " + shortMA + " nowLong : " + longMA);
+		//System.out.println(" / gdCross deterConstant : " + det);
 		return det;
 		
 	}

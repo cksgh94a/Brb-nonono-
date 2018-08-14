@@ -56,7 +56,7 @@ public class CryptowatchAPI {
 				try {
 					Thread.sleep(retryDelaySeconds * 1000);
 				} catch (InterruptedException e1) {
-					e1.printStackTrace();
+					e1.printStackTrace(); 
 				}
 				result = getOHLC(exchange, coin,base,after,interval);
 			} else {

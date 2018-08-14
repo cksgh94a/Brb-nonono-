@@ -31,7 +31,7 @@ public class StochasticOsillator_bt implements calcIndicator_bt {
 		this.interval = interval;
 		
 		this.initialEnd = initialEnd;
-		this.initialStart = ++initialStart; // 인덱스와 길이의 차이!!
+		this.initialStart = initialStart; // 인덱스와 길이의 차이!!
 		
 		this.phArr = IndicatorFunction_bt.toPriceHistory(hArr);
 		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);

@@ -1,62 +1,85 @@
 package tass;
-import java.sql.Timestamp;
-import java.time.LocalDate;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.ZoneId;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.Date;
+import java.util.Map;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
-import Indicator.MACDs;
 import backtest.BackTestingPerform;
-import exchangeAPI.*;
+
 public class initializing {
-	
+
 	public static void printArray(double[] arr) {
-		
-		for(int i = 0; i < arr.length; i++) {
-			System.out.print(arr[i]+" ");
+
+		for (int i = 0; i < arr.length; i++) {
+			System.out.print(arr[i] + " ");
 		}
 		System.out.println();
 	}
-	
+
+	public static long dateToUt(LocalDateTime ldt) {
+
+		ZoneId zoneId = ZoneId.systemDefault(); // or: ZoneId.of("Europe/Oslo");
+		long epoch = ldt.atZone(zoneId).toEpochSecond();
+
+		return epoch;
+	}
+
+	public static Date utToDate(long Utime) {
+
+		Date date = new Date();
+		date.setTime((long) Utime * 1000);
+
+		return date;
+	}
+
 	// websocket 통신으로 받아오는 부분
-	// 동시에  db저장(INSERT INTO trade VALUES(); )
-	private static String email = "test";
-	private static String botName = "wqetqwet";
+	// 동시에 db저장(INSERT INTO trade VALUES(); )
+	private static String email = "dirtyrobot00@gmail.com";
+	private static String botName = "mybo12t";
 	private static String exchange = "bithumb";
-	private static String coin = "ltc";
+	private static String coin = "btc";
 	private static String base = "krw";
-	private static String strategyName = "test1";
-	private static int interval = 1800;
-	private static String startDate = "2018-07-23T00:00:00.000";
-	private static String endDate = "2018-07-27T14:25:00.000";
-	
+	private static double initialCash = 1000000000;
+	private static String strategyName = "johnbur1";
+	private static int interval = 300;
+	private static String startDate = "2018-08-09T12:50:00";
+	private static String endDate = "2018-08-09T18:20:00";
+
 	// 매매량 세팅
+	// "buyAll", "buyCertainNumber", "buyCertainPrice"
+	// "sellAll", "sellCertainNumber", "sellCertainPrice"
 	private static String buySetting = "buyAll";
 	private static String sellSetting = "sellAll";
-	
-	//optional
-	private static double priceBuyUnit = 0.0;
-	private static double priceSellUnit = 0.0;
-	private static double numBuyUnit = 0.0;
-	private static double numSellUnit = 0.0;
-	
-	//errorHandle : 1 => 대기
-	//				0 => shutdown
-	private static int errorHandling = 0;
-	
-	public static void main(String[] args) {
 
-//		new BackTesting(email, exchange, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting, 10000000, priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).backTestRun();
-		new tradingBot(email, exchange, botName, coin, base, interval, startDate, endDate, strategyName, buySetting, sellSetting,  priceBuyUnit, priceSellUnit, numBuyUnit,  numSellUnit, errorHandling).botStart();
-		
-		
+	// optional
+	private static double priceBuyUnit;
+	private static double priceSellUnit;
+	private static double numBuyUnit;
+	private static double numSellUnit;
+
+	// errorHandle : 1 => 대기
+	// 0 => shutdown
+	private static int errorHandling = 0;
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		System.out.println(new BackTestingPerform(email, exchange, coin, base, initialCash, interval, startDate,
+				endDate, strategyName, buySetting, sellSetting, priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit,
+				errorHandling).backTestRun());
+
+		// new tradingBot(email, exchange, botName, coin, base, interval, startDate,
+		// endDate, strategyName, buySetting, sellSetting, priceBuyUnit, priceSellUnit,
+		// numBuyUnit, numSellUnit, errorHandling).botStart();
+
+		// get24BiggstGap : 24시간동안 가격 차이가 가장 큰 (상승) 한 코인
+		Map<String, String> ret = new CoinRecommendation().get24BiggestGapCoin();
+		System.out.println(ret.get("binance"));
+		System.out.println(ret.get("bithumb"));
+		System.out.println(ret.get("coinone"));
 	}
 
 }
