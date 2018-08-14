@@ -8,7 +8,9 @@ class Alarm extends Component {
     super(props);
 
     this.state = {
-      alarmList: []
+      // alarmList: []
+      // 앞단 테스트용
+      alarmList: [{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:51:01","coin_price":"313500.0","sales_action":"-1","coin":"ETHbtc"},{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:50:43","coin_price":"0.043949","sales_action":"1","coin":"ETHbtc"},{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:51:01","coin_price":"313500.0","sales_action":"-1","coin":"ETHbtc"},{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:50:43","coin_price":"0.043949","sales_action":"1","coin":"ETHbtc"},{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:51:01","coin_price":"313500.0","sales_action":"-1","coin":"ETHbtc"},{"exchange_name":"binance","coin_intent":"0.0","trans_time":"2018-08-14 18:50:43","coin_price":"0.043949","sales_action":"1","coin":"ETHbtc"}]
     };
   }
 

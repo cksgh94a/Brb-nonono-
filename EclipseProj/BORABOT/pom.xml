@@ -9,6 +9,12 @@
     <project.reporting.outputEncoding>utf-8</project.reporting.outputEncoding>
     <com.squareup.retrofit2.version>2.3.0</com.squareup.retrofit2.version>
   </properties>
+  <repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
   <dependencies>
 	<dependency>
 	  <groupId>com.google.code.gson</groupId>
@@ -30,6 +36,12 @@
       <artifactId>retrofit</artifactId>
       <version>${com.squareup.retrofit2.version}</version>
     </dependency>
+    <dependency>
+	  <groupId>com.github.binance-exchange</groupId>
+	  <artifactId>binance-java-api</artifactId>
+	  <version>master-SNAPSHOT</version>
+	</dependency>
+    
     <dependency>
       <groupId>com.squareup.retrofit2</groupId>
       <artifactId>converter-jackson</artifactId>

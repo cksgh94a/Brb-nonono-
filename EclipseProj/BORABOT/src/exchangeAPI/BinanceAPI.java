@@ -46,7 +46,6 @@ public class BinanceAPI implements exAPI{
 
 	public BinanceAPI(String apikey, String secret, int retryAttempts, int retryDelaySeconds) {
 
-		System.out.println(apikey+" , "+secret);
 		factory = BinanceApiClientFactory.newInstance(apikey, secret);
 		client = factory.newRestClient();
 		
