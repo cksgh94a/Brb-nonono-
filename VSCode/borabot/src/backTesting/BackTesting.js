@@ -6,7 +6,10 @@ import DayPickerInput from 'react-day-picker/DayPickerInput';
 import 'react-day-picker/lib/style.css';
 
 import './BackTesting.css';
-
+import toLeftBtn from '../img/common/pre_btn_01.png';
+import toRightBtn from '../img/common/next_btn_01.png';
+import onText from '../img/common/on_bg_01.png';
+import offText from '../img/common/off_bg_01.png';
 import startBtn from '../img/common/btn_08.png';
 import calendar from '../img/common/calendar_01.png';
 
@@ -37,7 +40,13 @@ class BackTesting extends Component {
       buyDetail: false,
       sellDetail: false,
       buyUnit:'',
-      sellUnit:''
+      sellUnit:'',
+        
+      pageNum:1,  // 현재 선택된 페이지 번호
+      pageNumList: [1], // 게시물의 전체 페이지 리스트
+
+      resultList: [],
+      result: {}
     }
   }
 
@@ -59,7 +68,13 @@ class BackTesting extends Component {
         buyDetail: false,
         sellDetail: false,
         buyUnit:'',
-        sellUnit:''
+        sellUnit:'',
+        
+        pageNum:1,  // 현재 선택된 페이지 번호
+        pageNumList: [1], // 게시물의 전체 페이지 리스트
+  
+        resultList: [],
+        result: {}
       })
       document.getElementById('exchange').selectedIndex = 0
       document.getElementById('base').selectedIndex = 0
@@ -200,7 +215,16 @@ class BackTesting extends Component {
 
   render() {
     const { exchangeList, intervalList , strategyList } = this.props
-    const { exchangeIndex, baseIndex,isResulted, text } = this.state
+    const { exchangeIndex, baseIndex, isResulted, text, pageNum, pageNumList, resultList, result } = this.state
+    
+    const onTextBg = {
+      backgroundImage : `url(${onText})`,
+    }
+
+    const offTextBg = {
+      backgroundImage : `url(${offText})`,
+    }
+
     return (
       <div>
         {/* 거래 설정 영역 */}
@@ -295,7 +319,50 @@ class BackTesting extends Component {
         </div>
 
         {/* 거래 결과 기록 영역 */}
-        <div className = 'bt-resultLogContainer'></div>
+        <div className = 'bt-resultLogContainer'>
+          <div>
+            <div className = "log-botIndivText">매매 기록</div>
+            <table className='log-tableContainer' >
+              <thead>
+                <th className='log-headTr'>성공 여부</th>
+                <th className='log-headTr'>매매</th>
+                <th className='log-headTr'>가격</th>
+                <th className='log-headTr'>코인 매매 수량</th>
+                <th className='log-headTr'>현재 보유 현금</th>
+                <th className='log-headTr'>현재 보유 코인수</th>
+                <th className='log-headTr'>시간</th>
+              </thead>
+
+              <tbody className = 'log-tbodyContainer' >              
+                { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+                resultList.map((r, i) => {
+                  return (<tr key={i} style={{borderBottom : "1px solid"}} >
+                    <td className = 'log-td'>{r.success}</td>
+                    <td className = 'log-td'>{r.sales_action}</td>
+                    <td className = 'log-td'>{r.coinCurrentPrice}</td>
+                    <td className = 'log-td'>{r.salingCoinNumber}</td>
+                    <td className = 'log-td'>{r.nowCash}</td>
+                    <td className = 'log-td'>{r.nowCoin}</td>
+                    <td className = 'log-td'>{r.time}</td>
+                  </tr>)
+                })}
+              </tbody>
+            </table>
+
+            <div className = "log-chooseBoxContainer">
+              { /* 이전 10 페이지 이동 버튼*/ }
+              <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
+              { // 현재 선택된 페이지의 근처 10개 페이지 표시
+              pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
+                return(<div  key ={i} onClick={() => this.selectPage(p)}>
+                  {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
+                </div>)
+              })}
+              { /* 이후 10 페이지 이동 버튼*/ }
+              <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
+            </div>
+          </div>
+        </div>
 
         {/* 거래 결과 영역 */}
         <div className = 'bt-resultWindow'>

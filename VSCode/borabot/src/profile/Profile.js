@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { Tabs, Tab, TabPanel, TabList } from 'react-tabs';
+
+import './Profile.css';
 
 class Profile extends Component {
   constructor(){
     super();
     this.state={
-      name: '', // 사용자 이름
+      tabIndex: 0,
+
+      profile_name: '', // 사용자 이름
       phone_number: '', // 사용자 전화번호
       password: null, // 비밀번호
       passwordC: null,  // 비밀번호 확인
@@ -35,7 +40,7 @@ class Profile extends Component {
     axios.get('Profile')
     .then( response => {
       this.setState({
-        name: response.data.name,
+        profile_name: response.data.name,
         phone_number: response.data.phone_number,
         exchange: response.data.exchange, // 서버의 DB에서 받아온 거래소 정보 담긴 배열, 거래소 순서는 redux store에 저장된 거래소 배열의 순서와 같아야함
   
@@ -47,16 +52,17 @@ class Profile extends Component {
 
   // 거래소 선택 핸들 (이거 따라 거래소 키 밸류 바뀜)
   handleExchange = () => {
-    this.setState({
-      selectedExchange: this.state.exchange[document.getElementById('exchange').selectedIndex]
+    this.state.exchange.map((e, i) => {
+      e.exchange_name === document.getElementById('exchange').value
+      && this.setState({ selectedExchange: e })
     })
   }
 
   // 각 정보 필드 변경시 핸들
   handleValue = (e) => {
     switch(e.target.id){
-      case 'name':  // 이름
-        return this.setState({ name: e.target.value })
+      case 'profile_name':  // 이름
+        return this.setState({ profile_name: e.target.value })
       case 'phone_number':  // 전화번호
         return (!isNaN(e.target.value)) && this.setState({ phone_number: e.target.value })
       case 'newPassword': // 비밀번호 유효성 검사 (영문(대소문자 구분),숫자,특수문자 ~!@#$%^&*()-_? 만 허용)
@@ -81,13 +87,13 @@ class Profile extends Component {
       axios.post(
         'Profile', 
         'item=profile'+
-        '&name='+document.getElementById('name').value+
+        '&name='+document.getElementById('profile_name').value+
         '&phone_number='+document.getElementById('phone_number').value,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
         this.setState({
-          name: response.data.name,
+          profile_name: response.data.name,
           phone_number: response.data.phone_number
         })
         alert('수정이 완료되었습니다.')
@@ -154,32 +160,108 @@ class Profile extends Component {
   render() {
     const { exchangeList } = this.props
     const { selectedExchange, password, passwordC, pVal, ppVal } = this.state
-    console.log(passwordC)
+    
     return (
-      <div>
-        <h4>개인 정보</h4>
-        이름: <input id="name" value={this.state.name} onChange={this.handleValue}/><br/>
-        휴대폰 번호: <input id="phone_number" value={this.state.phone_number} onChange={this.handleValue}/><br/>
-        <button id="modPersonal" onClick={this.handleModPersonal}>수정</button>
-        <h4>비밀번호 변경</h4>
-        현재 비밀번호: <input id="oldPassword" type="password"/><br/>
-        새로운 비밀번호: <input id="newPassword" type="password" onChange={this.handleValue}/><br/>
-        비밀번호 확인: <input id="newPasswordConfirm" type="password" onChange={this.handleValue}/><br/>
-        {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.<br/></text>}
-        {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.<br/></text>}
-        <button id="modPassword" onClick={this.handleModPassword}>수정</button>
-        <h4>거래소 정보</h4>
-        <select id="exchange" onChange={this.handleExchange}>
-          {exchangeList.map((exchange, index) => {
-            return (<option key={index} > {exchange.key} </option>)
-          })
-          }
-        </select><br/>
-        API KEY: <input id="api_key" value={selectedExchange.api_key} onChange={this.handleValue}/><br/>
-        SECRET KEY: <input id="secret_key" value={selectedExchange.secret_key} onChange={this.handleValue}/><br/>
-        <button id="modExchange" onClick={this.handleModExchange}>수정</button><br/><br/><br/>
-        <button onClick={this.handleComplete}>완료</button>
+      <div class="profile">
+        <div class="bd_profile"> {/*tab_container*/}
+          <Tabs class="profile_tabs" selectedIndex={this.state.tabIndex} onSelect={tabIndex => this.setState({ tabIndex })}>
+            <TabList class="profile_tablist">
+              <div class="profile_tabs_wrap">
+                <Tab><a class="profile_tab_1">개인정보</a></Tab>
+                <Tab><a class="profile_tab_2">거래소 정보</a></Tab>
+                <Tab><a class="profile_tab_3">비밀번호 변경</a></Tab>
+              </div>
+            </TabList>
+
+            <TabPanel>
+              <div class="profile_1">
+                <h4 class="personal">개인 정보</h4>
+                <div class="personal_contents">
+                  <div class="personal_name">
+                    <input id="profile_name" placeholder="이름" value={this.state.profile_name} onChange={this.handleValue}/><br/>
+                  </div>
+                  <div class="personal_number">
+                    <input id="phone_number" placeholder="휴대폰 번호" value={this.state.phone_number} onChange={this.handleValue}/><br/>
+                  </div>
+                </div>
+                <button id="modPersonal" onClick={this.handleModPersonal}><img src={require('../img/common/btn_04.png')} /></button>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div class="profile_3">
+                <h4 class="personal">거래소 정보</h4>
+                <div class="exchange">
+                  <select id="exchange" onChange={this.handleExchange}>
+                  { this.state.exchange.map((e, index) => {
+                    return ( <option key={index} > {e.exchange_name} </option> )
+                  })}
+                  {/* {exchangeList.map((exchange, index) => {
+                      return (<option key={index} > {exchange.key} </option>)
+                  })
+                  } */}
+                  </select><br/>
+                </div>
+                <div class="exchange_contents">
+                  <div class="exchange_api">
+                      <input id="api_key" placeholder="API KEY" value={selectedExchange.api_key} onChange={this.handleValue}/><br/>
+                  </div>
+                  <div class="exchange_secret">
+                      <input id="secret_key" placeholder="SECRET KEY" value={selectedExchange.secret_key} onChange={this.handleValue}/><br/>
+                  </div>
+                </div>
+                <button id="modExchange" onClick={this.handleModExchange}><img src={require('../img/common/btn_04.png')} /></button><br/><br/><br/>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div class="profile_2">
+                <h4 class="personal">비밀번호 변경</h4>
+                <div class="pw_contents">
+                  <div class="pw_1">
+                    <input id="oldPassword" placeholder="현재 비밀번호" type="password"/><br/>
+                  </div>
+                  <div class="pw_2">
+                    <input id="newPassword" placeholder="새로운 비밀번호" type="password" onChange={this.handleValue}/><br/>
+                  </div>
+                  <div class="pw_3">
+                    <input id="newPasswordConfirm" placeholder="비밀번호 확인" type="password" onChange={this.handleValue}/><br/>
+                  </div>
+                  <div class="pw_error">
+                    {((password !== '') && (password !== null) && !pVal) && <text id="pw_error">올바른 비밀번호 형식이 아닙니다.<br/></text>}
+                    {((passwordC !== '') && pVal && !ppVal) && <text id="pw_error">비밀번호가 다릅니다.<br/></text>}
+                  </div>
+                </div>
+                <button id="modPassword" onClick={this.handleModPassword}><img src={require('../img/common/btn_04.png')} /></button>
+              </div>
+            </TabPanel>
+          </Tabs>
+        </div>
+        {/*<button id="completeButton" onClick={this.handleComplete}><img src={require('../img/common/btn_05.png')} /></button>*/}
       </div>
+      // <div>
+      //   <h4>개인 정보</h4>
+      //   이름: <input id="name" value={this.state.name} onChange={this.handleValue}/><br/>
+      //   휴대폰 번호: <input id="phone_number" value={this.state.phone_number} onChange={this.handleValue}/><br/>
+      //   <button id="modPersonal" onClick={this.handleModPersonal}>수정</button>
+      //   <h4>비밀번호 변경</h4>
+      //   현재 비밀번호: <input id="oldPassword" type="password"/><br/>
+      //   새로운 비밀번호: <input id="newPassword" type="password" onChange={this.handleValue}/><br/>
+      //   비밀번호 확인: <input id="newPasswordConfirm" type="password" onChange={this.handleValue}/><br/>
+      //   {((password !== '') && (password !== null) && !pVal) && <text>올바른 비밀번호 형식이 아닙니다.<br/></text>}
+      //   {((passwordC !== '') && pVal && !ppVal) && <text>비밀번호가 다릅니다.<br/></text>}
+      //   <button id="modPassword" onClick={this.handleModPassword}>수정</button>
+      //   <h4>거래소 정보</h4>
+      //   <select id="exchange" onChange={this.handleExchange}>
+      //     {exchangeList.map((exchange, index) => {
+      //       return (<option key={index} > {exchange.key} </option>)
+      //     })
+      //     }
+      //   </select><br/>
+      //   API KEY: <input id="api_key" value={selectedExchange.api_key} onChange={this.handleValue}/><br/>
+      //   SECRET KEY: <input id="secret_key" value={selectedExchange.secret_key} onChange={this.handleValue}/><br/>
+      //   <button id="modExchange" onClic
+      //   k={this.handleModExchange}>수정</button><br/><br/><br/>
+      //   <button onClick={this.handleComplete}>완료</button>
+      // </div>
     );
   }
 }

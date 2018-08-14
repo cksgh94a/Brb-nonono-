@@ -73,10 +73,13 @@ class Log extends Component {
   handleChange = (e) => {
     const { tradeList } = this.state
     if(e.target.id === 'botName'){  // 봇 이름 선택일 때
-      // 기본 인덱스 0일 때와 직접 봇을 부를 때
-      if ((document.getElementById('botName').selectedIndex-1) === 0){
-        this.setState({ logList: [] })
-      } else{
+      // 기본 인덱스 0일 때
+      if ((document.getElementById('botName').selectedIndex) === 0){
+        this.setState({
+          selectedTrade: {},
+          logList: []
+         })
+      } else{ // 봇을 선택했을 때
         this.setState({ selectedTrade: tradeList[document.getElementById('botName').selectedIndex-1] })
         this.getLog(
           tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
@@ -84,7 +87,7 @@ class Log extends Component {
           '매수/매도'
         )
       }
-    } else {
+    } else {  // 매수/매도 선택일 
       document.getElementById('botName').selectedIndex !== 0
       && this.getLog(
           tradeList[document.getElementById('botName').selectedIndex-1].bot_name,

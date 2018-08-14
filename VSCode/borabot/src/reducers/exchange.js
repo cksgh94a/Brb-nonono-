@@ -41,8 +41,8 @@ const COINONE = {
 
 const Exchange = {
 	exchangeList: [ 
-    { key: "BITHUMB", value: BITHUMB },
     { key: "BINANCE", value: BINANCE },
+    { key: "BITHUMB", value: BITHUMB },
     { key: "COINONE", value: COINONE }
   ],
   intervalList: [

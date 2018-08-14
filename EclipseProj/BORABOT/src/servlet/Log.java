@@ -92,9 +92,9 @@ public class Log extends HttpServlet {
 					(String) session.getAttribute("email"),request.getParameter("bot_name"));	
 			break;
 		case "매도":
-			selectSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\' and sales_action=0 ORDER BY trans_time DESC limit %s,10",
+			selectSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\' and sales_action=-1 ORDER BY trans_time DESC limit %s,10",
 					(String) session.getAttribute("email"),request.getParameter("bot_name"), ((Integer.parseInt(request.getParameter("pageNum"))-1)*10));
-			countSql = String.format("SELECT count(*) from trans_log where email=\'%s\' and bot_name=\'%s\' and sales_action=0",
+			countSql = String.format("SELECT count(*) from trans_log where email=\'%s\' and bot_name=\'%s\' and sales_action=-1",
 					(String) session.getAttribute("email"),request.getParameter("bot_name"));	
 			break;
 		default:
