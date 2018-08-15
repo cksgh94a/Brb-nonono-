@@ -128,7 +128,7 @@ class Board extends Component {
           <div class="board_title">전략 공유 게시판</div>
           { // 게시물 작성/보기일 경우엔 게시물 표시, 아니면 목록 표시
           post
-          ? <div>
+          ? <div class="post_table">
               <Post post_num={post_num} write={write}/>  
               {/*목록버튼*/}
               <button id="listButton" onClick={this.moveList}><img src={require('../img/common/btn_13.png')} /></button>

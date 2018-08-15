@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import { setStrategy } from '../reducers/strategy';
 
+import './Strategy.css';
+
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
 var CCI = { indicator:'CCI', weight:1, period:20, buyIndex:-100, sellIndex:100 }
@@ -33,7 +35,7 @@ class Strategy extends Component {
   constructor(){
     super();
     this.state={
-      name: '',
+      strategy_name: '',
       selectedIndicator: RSI, // 설정된 지표
       defaultIndicator: defaultRSI, // 설정된 지표의 기본값
       calculate: 'or', // 연산 방법
@@ -72,7 +74,7 @@ class Strategy extends Component {
     // 새로 만들기 선택하면 기존에 만든 것 초기화
     if(e.target.value === '새로 만들기'){
       this.setState({
-        name: '',
+        strategy_name: '',
         selectedIndicator: RSI, // 설정된 지표
         defaultIndicator: defaultRSI, // 설정된 지표의 기본값
         calculate: 'or', // 연산 방법
@@ -174,7 +176,7 @@ class Strategy extends Component {
       })
     } else {
       this.setState({
-        name: document.getElementById('name').value,
+        strategy_name: document.getElementById('strategy_name').value,
         indicatorList: indicatorList.concat(selectedIndicator),
         expList: expList.concat(calculate),
         savedCnt: savedCnt + 1,
@@ -185,7 +187,7 @@ class Strategy extends Component {
   
   handleComplete = () => {
     // 항목 검증
-    if(this.state.name === '') {
+    if(this.state.strategy_name === '') {
       alert('전략 이름을 입력하세요')
       return
     }
@@ -204,7 +206,7 @@ class Strategy extends Component {
       // DB에 새로운 전략 저장
       axios.post(
         'Strategy', 
-        'name='+this.state.name+'&data='+send, 
+        'name='+this.state.strategy_name+'&data='+send, 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
@@ -215,123 +217,282 @@ class Strategy extends Component {
   }
 
   render() {
-    const { selectedIndicator, buttonVal, jsonString, savedCnt, expList, selectedStrategy } = this.state
+    const { selectedIndicator, buttonVal, jsonString, expList, selectedStrategy } = this.state
     return (
-      <div>
-        <h4>불러오기</h4>
-        <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)}>
-          <option>새로 만들기</option>
-          {
-            this.props.strategyList.map((e, i) => {
-            return (<option key={i}> {e.name} </option>)
-          })
-        }
-        </select>
-        <h4>전략 만들기</h4>
-        전략 이름 : <input placeholder="이름" id="name"/>
-        <h4>거래 세팅</h4>
+      <div class="strategy">
+        <div class="strategy_1">
+          <div class="strategy_1_contents">
+            <div class="strategy_1_contents_top">
+              <h4 class="strategy_1_contents_titles_1">불러오기</h4>
+              <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)}>
+                <option class="strategy_1_contents_titles">새로 만들기</option>
+                {
+                  this.props.strategyList.map((e, i) => {
+                  return (<option key={i}> {e.name} </option>)
+                })
+                
+                }
+              </select>
+            </div>
+            <div class="strategy_1_contents_bottom">
+              <h4 class="strategy_1_contents_titles_2">전략 만들기</h4>
+              <input placeholder="이름" id="strategy_name"/>
+              <h4 class="strategy_1_contents_titles_3">거래 세팅</h4>
+              <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} onChange={(e) => this.handleCriteria(e, 'buy')}/><br/>
+              <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} onChange={(e) => this.handleCriteria(e, 'sell')}/>
 
-        구매 기준치 : <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} onChange={(e) => this.handleCriteria(e, 'buy')}/>
-        판매 기준치 : <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} onChange={(e) => this.handleCriteria(e, 'sell')}/>
+              <h4 class="strategy_1_contents_titles_4">지표 세팅</h4>
+              <select id="indicator" onChange={(e)=>this.handleIndicator(e)}>
+                {
+                  indicatorList.map((e, i) => {
+                  return (<option key={i}> {e.indicator} </option>)
+                })
+              }
+              </select>
+              <input placeholder={"weight: "+selectedIndicator.weight} id="weight"/>
+              {selectedIndicator.period !== undefined && 
+                (<input placeholder={"period: "+selectedIndicator.period} id="period"/>)}
+              {selectedIndicator.buyIndex !== undefined && 
+                (<input placeholder={"buyIndex: "+selectedIndicator.buyIndex} id="buyIndex"/>)}
+              {selectedIndicator.sellIndex !== undefined && 
+                (<input placeholder={"sellIndex: "+selectedIndicator.sellIndex} id="sellIndex"/>)}
+              {selectedIndicator.mul !== undefined && 
+                (<input placeholder={"mul: "+selectedIndicator.mul} id="mul"/>)}
+              {selectedIndicator.longD !== undefined && 
+                (<input placeholder={"longD: "+selectedIndicator.longD} id="longD"/>)}
+              {selectedIndicator.shortD !== undefined && 
+                (<input placeholder={"shortD: "+selectedIndicator.shortD} id="shortD"/>)}
+              {selectedIndicator.mT !== undefined && 
+                (<input placeholder={"mT: "+selectedIndicator.mT} id="mT"/>)}
+              {selectedIndicator.n !== undefined && 
+                (<input placeholder={"n: "+selectedIndicator.n} id="n"/>)}
+              {selectedIndicator.m !== undefined && 
+                (<input placeholder={"m: "+selectedIndicator.m} id="m"/>)}
+              {selectedIndicator.t !== undefined && 
+                (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
+              {selectedIndicator.cor !== undefined && 
+                (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
+            </div>
 
-        <h4>지표 세팅</h4>
-        <select id="indicator" onChange={(e)=>this.handleIndicator(e)}>
-          {
-            indicatorList.map((e, i) => {
-            return (<option key={i}> {e.indicator} </option>)
-          })
-        }
-        </select>
-        <input placeholder={"weight: "+selectedIndicator.weight} id="weight"/>
-        {selectedIndicator.period !== undefined && 
-          (<input placeholder={"period: "+selectedIndicator.period} id="period"/>)}
-        {selectedIndicator.buyIndex !== undefined && 
-          (<input placeholder={"buyIndex: "+selectedIndicator.buyIndex} id="buyIndex"/>)}
-        {selectedIndicator.sellIndex !== undefined && 
-          (<input placeholder={"sellIndex: "+selectedIndicator.sellIndex} id="sellIndex"/>)}
-        {selectedIndicator.mul !== undefined && 
-          (<input placeholder={"mul: "+selectedIndicator.mul} id="mul"/>)}
-        {selectedIndicator.longD !== undefined && 
-          (<input placeholder={"longD: "+selectedIndicator.longD} id="longD"/>)}
-        {selectedIndicator.shortD !== undefined && 
-          (<input placeholder={"shortD: "+selectedIndicator.shortD} id="shortD"/>)}
-        {selectedIndicator.mT !== undefined && 
-          (<input placeholder={"mT: "+selectedIndicator.mT} id="mT"/>)}
-        {selectedIndicator.n !== undefined && 
-          (<input placeholder={"n: "+selectedIndicator.n} id="n"/>)}
-        {selectedIndicator.m !== undefined && 
-          (<input placeholder={"m: "+selectedIndicator.m} id="m"/>)}
-        {selectedIndicator.t !== undefined && 
-          (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
-        {selectedIndicator.cor !== undefined && 
-          (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
-        <button disabled={buttonVal} onClick={this.handleSave}>저장</button>
+            <div class="strategySaveButton">
+              <button id="strategySaveButton" disabled={buttonVal} onClick={this.handleSave}><img src={require('../img/common/btn_09.png')} /></button>
+            </div>
+          </div>
+        </div>
+        
+        <div class="strategy_2">
+          <h4 class="strategy_2_title">저장된 항목</h4>
+          <h6 class="strategy_2_common">모든지표는 or 입니다</h6>
+          <div class="strategy_2_grid">
+            {buttonVal === false
+            ? (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
+                return (<div class="setting _1" key={i}>
+                <table>
+                  <thead>
+                    <tr>
+                      <p class="strategy_2_titles">{JSON.parse('{'+jsonString+'}')[idc].indicator}</p>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <div class="strategy_2_contents">
+                      <div class="strategy_2_subtitles">
+                        <tr class="strategy_2_subtitle">
+                          <th class="strategy_2_sub_subtitle">
+                            {JSON.parse('{'+jsonString+'}')[idc].weight !== undefined && (<th>weight &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && (<th>period &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && (<th>buyIndex &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && (<th>sellIndex&emsp; </th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && (<th>mul &emsp;&emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && (<th>longD &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && (<th>shortD &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && (<th>mT &emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && (<th>n &emsp;&emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && (<th>m &emsp;&emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && (<th>t &emsp;&emsp;</th>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<th>cor &emsp;</th>)}
+                          </th>
+                        </tr>
+                      </div>
+                      <div class="strategy_2_subcontents">
+                        <tr class="strategy_2_subcontent">
+                          <td class="strategy_2_sub_subcontent">
+                            {JSON.parse('{'+jsonString+'}')[idc].weight !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].weight} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].period} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].buyIndex} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].sellIndex} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mul} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].longD} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].shortD} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mT} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].n} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].m} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].t} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].cor} &emsp;</td>)}
+                          </td>
+                        </tr>
+                      </div>
+                      
+                      {/* {i !== savedCnt-1 && (<button disabled>{expList[i]}</button>)} */}
+                      
+                    </div>
+                  </tbody>
+                </table>
+                </div>);
+              })) 
 
-        <h4>저장된 항목</h4>
-        {buttonVal === false ? 
-          (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
-            return (<div key={i}>
-              <b>{JSON.parse('{'+jsonString+'}')[idc].indicator}</b><br/>
-              <input value={"weight: "+JSON.parse('{'+jsonString+'}')[idc].weight} readOnly/>
-              {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && 
-                (<input value={"period: "+JSON.parse('{'+jsonString+'}')[idc].period} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+JSON.parse('{'+jsonString+'}')[idc].buyIndex} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+JSON.parse('{'+jsonString+'}')[idc].sellIndex} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && 
-                (<input value={"mul: "+JSON.parse('{'+jsonString+'}')[idc].mul} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && 
-                (<input value={"longD: "+JSON.parse('{'+jsonString+'}')[idc].longD} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && 
-                (<input value={"shortD: "+JSON.parse('{'+jsonString+'}')[idc].shortD} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && 
-                (<input value={"mT: "+JSON.parse('{'+jsonString+'}')[idc].mT} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && 
-                (<input value={"n: "+JSON.parse('{'+jsonString+'}')[idc].n} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && 
-                (<input value={"m: "+JSON.parse('{'+jsonString+'}')[idc].m} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && 
-                (<input value={"t: "+JSON.parse('{'+jsonString+'}')[idc].t} readOnly/>)}
-              {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && 
-                (<input value={"cor: "+JSON.parse('{'+jsonString+'}')[idc].cor} readOnly/>)}<br/>
-              {i !== savedCnt-1 &&
-                (<button disabled>{expList[i]}</button>)} 
-            </div>);
-          })) :
-          (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
-            return (<div key={i}>
-              <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
-              <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
-              {selectedStrategy.indicatorList[idc].period !== undefined && 
-                (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
-                (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
-                (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].mul !== undefined && 
-                (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].longD !== undefined && 
-                (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].shortD !== undefined && 
-                (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].mT !== undefined && 
-                (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].n !== undefined && 
-                (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].m !== undefined && 
-                (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].t !== undefined && 
-                (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
-              {selectedStrategy.indicatorList[idc].cor !== undefined && 
-                (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
-              {i !== selectedStrategy.expList.split(',').length &&
-                (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
-            </div>);
-          }))
-        }
-        <button disabled={buttonVal} onClick={this.handleComplete}>완료</button>
+            : (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
+                return (<div class="setting_2" key={i}>
+                  <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
+                  <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
+                  {selectedStrategy.indicatorList[idc].period !== undefined && 
+                    (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
+                    (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
+                    (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].mul !== undefined && 
+                    (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].longD !== undefined && 
+                    (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].shortD !== undefined && 
+                    (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].mT !== undefined && 
+                    (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].n !== undefined && 
+                    (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].m !== undefined && 
+                    (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].t !== undefined && 
+                    (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
+                  {selectedStrategy.indicatorList[idc].cor !== undefined && 
+                    (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
+                  {i !== selectedStrategy.expList.split(',').length &&
+                    (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
+                </div>);
+              }))
+            }
+          </div>
+          <button id="strategyCompleteButton" disabled={buttonVal} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} /></button>
+        </div>
       </div>
+
+
+      // css 입히기전 백업 (나중에 기능 이상 없으면 삭제)
+      // <div>
+      //   <h4>불러오기</h4>
+      //   <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)}>
+      //     <option>새로 만들기</option>
+      //     {
+      //       this.props.strategyList.map((e, i) => {
+      //       return (<option key={i}> {e.name} </option>)
+      //     })
+      //   }
+      //   </select>
+      //   <h4>전략 만들기</h4>
+      //   전략 이름 : <input placeholder="이름" id="name"/>
+      //   <h4>거래 세팅</h4>
+
+      //   구매 기준치 : <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} onChange={(e) => this.handleCriteria(e, 'buy')}/>
+      //   판매 기준치 : <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} onChange={(e) => this.handleCriteria(e, 'sell')}/>
+
+      //   <h4>지표 세팅</h4>
+      //   <select id="indicator" onChange={(e)=>this.handleIndicator(e)}>
+      //     {
+      //       indicatorList.map((e, i) => {
+      //       return (<option key={i}> {e.indicator} </option>)
+      //     })
+      //   }
+      //   </select>
+      //   <input placeholder={"weight: "+selectedIndicator.weight} id="weight"/>
+      //   {selectedIndicator.period !== undefined && 
+      //     (<input placeholder={"period: "+selectedIndicator.period} id="period"/>)}
+      //   {selectedIndicator.buyIndex !== undefined && 
+      //     (<input placeholder={"buyIndex: "+selectedIndicator.buyIndex} id="buyIndex"/>)}
+      //   {selectedIndicator.sellIndex !== undefined && 
+      //     (<input placeholder={"sellIndex: "+selectedIndicator.sellIndex} id="sellIndex"/>)}
+      //   {selectedIndicator.mul !== undefined && 
+      //     (<input placeholder={"mul: "+selectedIndicator.mul} id="mul"/>)}
+      //   {selectedIndicator.longD !== undefined && 
+      //     (<input placeholder={"longD: "+selectedIndicator.longD} id="longD"/>)}
+      //   {selectedIndicator.shortD !== undefined && 
+      //     (<input placeholder={"shortD: "+selectedIndicator.shortD} id="shortD"/>)}
+      //   {selectedIndicator.mT !== undefined && 
+      //     (<input placeholder={"mT: "+selectedIndicator.mT} id="mT"/>)}
+      //   {selectedIndicator.n !== undefined && 
+      //     (<input placeholder={"n: "+selectedIndicator.n} id="n"/>)}
+      //   {selectedIndicator.m !== undefined && 
+      //     (<input placeholder={"m: "+selectedIndicator.m} id="m"/>)}
+      //   {selectedIndicator.t !== undefined && 
+      //     (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
+      //   {selectedIndicator.cor !== undefined && 
+      //     (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
+      //   <button disabled={buttonVal} onClick={this.handleSave}>저장</button>
+
+      //   <h4>저장된 항목</h4>
+      //   {buttonVal === false ? 
+      //     (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
+      //       return (<div key={i}>
+      //         <b>{JSON.parse('{'+jsonString+'}')[idc].indicator}</b><br/>
+      //         <input value={"weight: "+JSON.parse('{'+jsonString+'}')[idc].weight} readOnly/>
+      //         {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && 
+      //           (<input value={"period: "+JSON.parse('{'+jsonString+'}')[idc].period} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && 
+      //           (<input value={"buyIndex: "+JSON.parse('{'+jsonString+'}')[idc].buyIndex} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && 
+      //           (<input value={"sellIndex: "+JSON.parse('{'+jsonString+'}')[idc].sellIndex} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && 
+      //           (<input value={"mul: "+JSON.parse('{'+jsonString+'}')[idc].mul} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && 
+      //           (<input value={"longD: "+JSON.parse('{'+jsonString+'}')[idc].longD} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && 
+      //           (<input value={"shortD: "+JSON.parse('{'+jsonString+'}')[idc].shortD} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && 
+      //           (<input value={"mT: "+JSON.parse('{'+jsonString+'}')[idc].mT} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && 
+      //           (<input value={"n: "+JSON.parse('{'+jsonString+'}')[idc].n} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && 
+      //           (<input value={"m: "+JSON.parse('{'+jsonString+'}')[idc].m} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && 
+      //           (<input value={"t: "+JSON.parse('{'+jsonString+'}')[idc].t} readOnly/>)}
+      //         {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && 
+      //           (<input value={"cor: "+JSON.parse('{'+jsonString+'}')[idc].cor} readOnly/>)}<br/>
+      //         {i !== savedCnt-1 &&
+      //           (<button disabled>{expList[i]}</button>)} 
+      //       </div>);
+      //     })) :
+      //     (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
+      //       return (<div key={i}>
+      //         <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
+      //         <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
+      //         {selectedStrategy.indicatorList[idc].period !== undefined && 
+      //           (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
+      //           (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
+      //           (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].mul !== undefined && 
+      //           (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].longD !== undefined && 
+      //           (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].shortD !== undefined && 
+      //           (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].mT !== undefined && 
+      //           (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].n !== undefined && 
+      //           (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].m !== undefined && 
+      //           (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].t !== undefined && 
+      //           (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
+      //         {selectedStrategy.indicatorList[idc].cor !== undefined && 
+      //           (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
+      //         {i !== selectedStrategy.expList.split(',').length &&
+      //           (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
+      //       </div>);
+      //     }))
+      //   }
+      //   <button disabled={buttonVal} onClick={this.handleComplete}>완료</button>
+      // </div>
     );
   }
 }

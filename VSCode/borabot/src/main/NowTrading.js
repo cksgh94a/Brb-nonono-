@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import { connect } from 'react-redux';
 import Popup from "reactjs-popup";
 
 import Alarm from './Alarm';
-import { selectTrading } from '../reducers/sales';
 
 import './NowTrading.css';
 import logBtn from '../img/common/btn_01.png';

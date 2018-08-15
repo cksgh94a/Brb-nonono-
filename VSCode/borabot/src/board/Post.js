@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+import './Post.css';
+
 class Post extends Component {
   constructor(){
     super();
@@ -196,50 +198,125 @@ class Post extends Component {
   }
 
   render() {
-    // const { write } = this.props
-    // const { post, modify, comment} = this.state
+    const { write } = this.props
+    const { post, modify, comment} = this.state
 
     // 앞단 테스트용 - 글쓰기 클릭해서 포스트 확인 ========================================================================================== //
-    const write = false
-    const modify = false
-    const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
-    const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
+    // const write = true
+    // const modify = false
+    // const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
+    // const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
     // ================================================================================================================================ //
 
     return (
       write || modify
       ? // 쓰기/수정이면
-      <div> 
-        {/* 제목 영역 */}
-        제목 : <input id="title" value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/>
-        {/* 내용 textarea 수정 가능 */}
-        내용 : <textarea id="content" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}}/><br/>
-        {/* 저장 버튼 */}
-        <button onClick={this.enrollPost}>저장</button>
+      <div class="post"> 
+        <table class="post_table">
+          <thead>
+            <div class="post_table_title">      
+              <tr>
+                <th class="post_table_title_1" style={{width:"160px"}}>제목</th>
+                <td class="post_table_title_2">
+                  {/* 제목 영역 */}
+                  <input id="title" placeholder="제목을 입력해주세요." value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/>
+                </td>
+              </tr>
+              <tr>
+                <th class="post_table_title_1">내용</th>
+                <td class="post_table_title_2">
+                  {/* 내용 textarea 수정 가능 */}
+                  <textarea id="content" placeholder="회원님께서 문의하신 내용은 관리자가 확인 후 연락 드리도록 하겠습니다. 문의 내용 또는 문제사항을 최대한 자세하게 적어주세요." value={post.content} onChange={(e, h='content') => this.handleModify(e, h)}/><br/>
+                </td>
+              </tr>
+            </div>
+          </thead>        
+        </table>
+        <div class="post_save">
+          {/* 저장 버튼 */}
+          <button id="saveButton" onClick={this.enrollPost}><img src={require('../img/common/btn_12.png')} /></button>
+        </div>
       </div>
 
       : // 보기이면
-      <div> 
-        {/* 제목 영역 */}
-        <h3>{post.title}</h3>{post.email} | {post.post_time}
-        {/* 내용 textarea 수정 가능 */}
-        <textarea id="content" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}} readOnly/><br/>
-        { // 글 작성자이면 수정/삭제 가능
+      <div class="comment_total"> 
+        <div class="comment_top">
+          <table class="comment_top_table">
+            <tr class="comment_top_title">
+              
+              <th class="comment_top_title_1">
+                {/* 제목 영역 */}
+                <h3>{post.title}</h3>
+              </th>
+              <th class="comment_top_title_2">
+                <h5>{post.email} &nbsp; | &nbsp;&nbsp;{post.post_time}</h5>
+              </th>
+            </tr>
+            <tr>
+              {/* 내용 textarea 수정 가능 */}
+              <textarea id="content2" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:334, width:811, resize:"none"}} readOnly/><br/>
+            </tr>
+        </table>
+          { // 글 작성자이면 수정/삭제 가능
           post.writer
-          && <div>
-              <button onClick={this.modifyPost}>수정</button>
-              <button onClick={this.deletePost}>삭제</button>
-            </div>}
+          && <div class="post_buttons">
+              <button id="post_edit" onClick={this.modifyPost}><img src={require('../img/common/btn_14.png')} /></button>
+              <button id="post_delete" onClick={this.deletePost}><img src={require('../img/common/btn_15.png')} /></button>
+            </div>
+          }
+        </div>
+        <div class="comment_bottom_1">
+        
         {/* 댓글 영역 */}
-          <input id="comment" placeholder="댓글을 입력하세요"></input >
-          <button onClick={this.enrollComment}>댓글 등록</button>
+          <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 698, resize:"none"}}></input >
+          <button id="comment_new" onClick={this.enrollComment}><img src={require('../img/common/btn_16.png')} /></button>
           { comment.map((c, i) => {              
-            return (<div style={{border:"1px solid"}}>
-              <b>{c.email}</b>  <small>{c.comment_time}</small> {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}<br/>
+            return (<div class="comment_bottom_2" style={{border:"1px solid"}}>
+              <b>{c.email}</b>  <small>{c.comment_time}</small> 
+              <div class="comment_delete">
+                {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
+              </div>
               {c.comment}
             </div>)
           })}
+        </div>
       </div>
+
+
+      //  css 입히기 전 (기능 이상 없으면 삭제)
+      // write || modify
+      // ? // 쓰기/수정이면
+      // <div> 
+      //   {/* 제목 영역 */}
+      //   제목 : <input id="title" value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/>
+      //   {/* 내용 textarea 수정 가능 */}
+      //   내용 : <textarea id="content" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}}/><br/>
+      //   {/* 저장 버튼 */}
+      //   <button onClick={this.enrollPost}>저장</button>
+      // </div>
+
+      // : // 보기이면
+      // <div> 
+      //   {/* 제목 영역 */}
+      //   <h3>{post.title}</h3>{post.email} | {post.post_time}
+      //   {/* 내용 textarea 수정 가능 */}
+      //   <textarea id="content" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:500, width:"70%", resize:"none"}} readOnly/><br/>
+      //   { // 글 작성자이면 수정/삭제 가능
+      //     post.writer
+      //     && <div>
+      //         <button onClick={this.modifyPost}>수정</button>
+      //         <button onClick={this.deletePost}>삭제</button>
+      //       </div>}
+      //   {/* 댓글 영역 */}
+      //     <input id="comment" placeholder="댓글을 입력하세요"></input >
+      //     <button onClick={this.enrollComment}>댓글 등록</button>
+      //     { comment.map((c, i) => {              
+      //       return (<div style={{border:"1px solid"}}>
+      //         <b>{c.email}</b>  <small>{c.comment_time}</small> {c.writer && <button onClick={() => this.deleteComment(i)}>댓글 삭제</button>}<br/>
+      //         {c.comment}
+      //       </div>)
+      //     })}
+      // </div>
     );
   }
 }

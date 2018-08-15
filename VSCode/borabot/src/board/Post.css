@@ -34,6 +34,7 @@
     background-color: #f9f9f9;
     font-style: bold #333333;
     font-size: 12px;
+    margin-top: 30px;
 
     position: relative;
 
@@ -51,18 +52,91 @@
     border-left: none;
 }
 
+.comment_top_table {
+    width: 815px;
+    margin-top: 30px;
+    border-top: 1px solid #9646a0;
+}
+
+.comment_top_title {
+    
+    
+}
+
+.comment_top_title_1 {
+    position: relative;
+    float: left;
+    padding-left: 10px;
+}
+
+.comment_top_title_2 {
+    position: relative;
+    float: right;
+    padding-right: 20px;
+}
+
 
 #listButton {
     position: absolute;
-    margin-top: 30px;
-    margin-left: 299px;
+    margin-left: 303px;
     float: right;
     border: none;
     background-color: #ffffff;
+    
 }
 
 .post_save {
     position: absolute;
     margin-left: 590px;
     margin-top: 30px;
+}
+
+.comment_total {
+    
+}
+
+
+#content2 {
+    
+}
+.post_buttons {
+    position: relative;
+    left: 191px;
+    margin-top: 19px;
+}
+.comment_bottom_1 {
+    margin-top: 50px;
+    position: absolute;
+       
+}
+
+.comment_bottom_2 {
+    margin-top: 25px;
+    height: 63px;
+}
+
+#comment {
+    margin-top: 2px;
+    height: 10px; 
+}
+
+#comment_new {
+    position: absolute;
+    margin-left: 10px;
+}
+
+#post_edit, #post_delete, #comment_new, #comment_delete {
+    border: none;
+    background-color: #ffffff;
+}
+
+.comment_delete {
+    position: absolute;
+    left: 712px;
+    top: 94px;
+    bottom: 0.1px;
+}
+#commet_delete {
+    position: relative;
+    
 }

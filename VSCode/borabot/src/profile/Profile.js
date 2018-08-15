@@ -237,6 +237,8 @@ class Profile extends Component {
         </div>
         {/*<button id="completeButton" onClick={this.handleComplete}><img src={require('../img/common/btn_05.png')} /></button>*/}
       </div>
+
+      // css 입히기 전 (기능 이상없으면 삭제)
       // <div>
       //   <h4>개인 정보</h4>
       //   이름: <input id="name" value={this.state.name} onChange={this.handleValue}/><br/>
