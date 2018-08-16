@@ -8,30 +8,29 @@
 }
 
 .board {
-    margin-left: 328px;
+    margin-left: 320px;
     background-color: #ffffff;
     text-align: center;
     position: absolute;
 
-    width: 814px;
+    width: 1280px;
     height: 830px;
-    padding-left: 130px;
-    padding-right: 130px;
+    /* padding-left: 130px;
+    padding-right: 130px; */
     
-
-    top: 100px;
+    top: 106px;
     left: 0px; 
 }
 
 .board_title {
-    /* padding-top: 20px;
-    padding-bottom: 30px;
+    padding-top: 30px;
+    /* padding-bottom: 30px;
     padding-left: 320px; */
-    padding-top: 25px;
     position: relative;
     border: none;
     font-style: bold #111111;
     font-size: 24px;
+    font-weight: bold;
     
 }
 
@@ -41,8 +40,8 @@
     /* padding-top: 30px; */
     position: absolute;
     border: none;
-    top : 724px;
-    left: 84.5%;
+    top : 690px;
+    left: 87%;
     background-color: #ffffff;
     /* padding-left: 690px;
     padding-bottom: 80px; */
@@ -62,7 +61,7 @@
 
 
 .table-tableContainer{
-    width: 997px;
+    width: 1200px;
     /* height: 536px; */
     position: absolute;
     left: 20px;

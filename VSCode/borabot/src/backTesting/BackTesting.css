@@ -85,97 +85,98 @@
 }
 
 .bt-select-hour{
-    width: 80px;
-    height : 30px;
-    padding: 6px;
-    background: url("../img/common/select_01.png") no-repeat 95% 50%;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-top : 0px;
-    border-left : 0px;
-    border-right : 0px;
-    border-bottom: 1px solid #9646a0;
-    border-radius: 0px;
-    font-size: 14px;
-    position: absolute;
-    left: 120px;
-    margin-top : 12px;
-    
-  }
+  width: 80px;
+  height : 30px;
+  padding: 6px;
+  background: url("../img/common/select_01.png") no-repeat 95% 50%;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  border-top : 0px;
+  border-left : 0px;
+  border-right : 0px;
+  border-bottom: 1px solid #9646a0;
+  border-radius: 0px;
+  font-size: 14px;
+  position: absolute;
+  left: 120px;
+  margin-top : 12px;
+  
+}
 
 
-  .bt-resultWindow{
-    width: 1040px;
-    height: 80px;
+.bt-resultWindow{
+  width: 1040px;
+  height: 80px;
+  position: absolute;
+  top: 106px;
+  left : 563px;
+  background-color: white;
+}
+
+
+.bt-resultLogContainer{
+    width : 1040px;
+    height : 750px;
     position: absolute;
-    top: 106px;
-    left : 563px;
+    left: 563px;
+    top : 206px;
     background-color: white;
-  }
+}
+
+.bt-select {
+  width: 182px;
+  height: 27px;
+  border: none;
+  border-bottom: 1px solid #9646a0;
+  font-size: 14px;
+  background: url("../img/common/select_01.png") no-repeat 95% 50%;
+  padding: 5px;
+
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin-left: 20px;
+  margin-top : 40px;
+  
+}
 
 
-  .bt-resultLogContainer{
-      width : 1040px;
-      height : 750px;
-      position: absolute;
-      left: 563px;
-      top : 206px;
-      background-color: white;
-  }
-
-   #bt_exchange, #base, #coin, #interval, #strategy, #buyingSetting, #sellingSetting {
-    width: 182px;
-    height: 27px;
-    border: none;
-    border-bottom: 1px solid #9646a0;
-    font-size: 14px;
-    background: url("../img/common/select_01.png") no-repeat 95% 50%;
-    padding: 5px;
-
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    
-    margin-left: 20px;
-    margin-top : 40px;
-    
-  }
-
- .bt-input {
-   margin-top: 10px;
- }
+.bt-input {
+  margin-top: 10px;
+}
 
 #buyingSetting, #sellingSetting {
-    width: 182px;
-    height: 27px;
-    border: none;
-    border-bottom: 1px solid #9646a0;
-    font-size: 14px;
-    background: url("../img/common/select_01.png") no-repeat 95% 50%;
-    padding: 5px;
+  width: 182px;
+  height: 27px;
+  border: none;
+  border-bottom: 1px solid #9646a0;
+  font-size: 14px;
+  background: url("../img/common/select_01.png") no-repeat 95% 50%;
+  padding: 5px;
 
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    
-    margin-left: 20px;
-    margin-top : 20px;
-    
-  }
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  
+  margin-left: 20px;
+  margin-top : 20px;
+  
+}
 
-  #nowCash {
-    position: relative;
-    margin-top: 80px;
-  }
+#nowCash {
+  position: relative;
+  margin-top: 80px;
+}
 
 
-  .bt-headTr{
-    
-    background-color: #f5f5f5;
-    border-top: 2px solid #9646a0;
-    font-size : '24px';
-    height: 56px;
+.bt-headTr{
+  
+  background-color: #f5f5f5;
+  border-top: 2px solid #9646a0;
+  font-size : '24px';
+  height: 56px;
 }
 
 .bt-botIndivText{

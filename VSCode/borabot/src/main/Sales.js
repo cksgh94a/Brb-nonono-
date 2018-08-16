@@ -275,7 +275,12 @@ class Sales extends Component {
         
        <div style = {{ maringTop : "12px", height : "42px"}}>
           <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-            <DayPickerInput inputProps={{ style: { width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'} }} onDayChange={this.handleDayChange}/>
+            <DayPickerInput
+            placeholder = "종료일"            
+            inputProps={{
+              style: { width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'}
+            }}
+            onDayChange={this.handleDayChange}/>
             <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
           </div>
           <select id="endHour" className='select_hour'>

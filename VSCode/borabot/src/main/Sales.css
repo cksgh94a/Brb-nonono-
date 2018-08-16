@@ -8,7 +8,7 @@
   font-size: 40pt;
   position: absolute;
   left: 20px;
-  top : 520px;
+  top : 595px;
 
 }
 
@@ -66,26 +66,27 @@ margin-top : 12px;
 }
 
 .sales-select {
-width: 182px;
-height : 27px;
+  width: 182px;
+  height : 27px;
 
-padding: 5px;
-background: url("../img/common/select_01.png") no-repeat 95% 50%;
+  padding: 5px;
+  background: url("../img/common/select_01.png") no-repeat 95% 50%;
 
--webkit-appearance: none;
--moz-appearance: none;
-appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
 
-border-top : 0px;
-border-left : 0px;
-border-right : 0px;
-border-bottom: 1px solid #9646a0;
-border-radius: 0px;
-font-size: 14px;
+  border-top : 0px;
+  border-left : 0px;
+  border-right : 0px;
+  border-bottom: 1px solid #9646a0;
+  border-radius: 0px;
+  font-size: 14px;
 
-margin-left: 20px;
-margin-top : 15px;
+  margin-left: 20px;
+  margin-top : 15px;
 }
+
 
 .select-custom{
 width: 182px;
@@ -97,4 +98,3 @@ font-size:15px;
 background-color:transparent;
 font-family: 'nanum gothic';
 }
-

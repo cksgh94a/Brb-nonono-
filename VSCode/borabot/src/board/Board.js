@@ -15,17 +15,17 @@ class Board extends Component {
       post: false,  // true : 게시물 작성, 보기, false : 목록 표시
       write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
 
-      // post_num: 0,  // 현재 선택된 게시물 번호
-      // postList: [], // 현재 선택된 페이지의 10개의 게시물 리스트
+      post_num: 0,  // 현재 선택된 게시물 번호
+      postList: [], // 현재 선택된 페이지의 10개의 게시물 리스트
 
-      // pageNum:1,  // 현재 선택된 페이지 번호
-      // pageNumList: [1] // 게시물의 전체 페이지 리스트
+      pageNum:1,  // 현재 선택된 페이지 번호
+      pageNumList: [1] // 게시물의 전체 페이지 리스트
 
       // 앞단 테스트용 ============================================================================================================================= //
-      post_num: 0,  // 현재 선택된 게시물 번호
-      pageNum:1,  // 현재 선택된 페이지 번호
-      postList: [{"comment_count":"1","post_num":"247","title":"zxbasdfgweqtgw","email":"test","post_time":"2018-07-31 18:47:35"},{"comment_count":"2","post_num":"244","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"243","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"242","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"241","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"240","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"239","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"238","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"237","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"236","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"}],
-      pageNumList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
+      // post_num: 0,  // 현재 선택된 게시물 번호
+      // pageNum:1,  // 현재 선택된 페이지 번호
+      // postList: [{"comment_count":"1","post_num":"247","title":"zxbasdfgweqtgw","email":"test","post_time":"2018-07-31 18:47:35"},{"comment_count":"2","post_num":"244","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"243","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"242","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"241","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"240","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"239","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"238","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"237","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"236","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"}],
+      // pageNumList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
       // 앞단 테스트용 ============================================================================================================================= //
     }
   }

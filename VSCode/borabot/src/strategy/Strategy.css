@@ -1,13 +1,12 @@
 .strategy {
     margin-left: 320px;
-    padding-top: 30px;
 }
 
 .strategy_1 {
     position: relative;
     float: left;
     width: 237px;
-    padding-top: 70px;
+    top : 106px;
 }
 
 .strategy_1_contents {
@@ -88,15 +87,14 @@
 .strategy_2 {
     width: 1027px;
     height: auto;
-    top: 70px;
+    top: 106px;
     padding-top: 30px;
     padding-left: 10px;
-    margin-left: 262px;
+    margin-left: 257px;
     position: relative;
     text-align: center;
     background-color: #ffffff;
 
-    
 }
 
 .strategy_2_title {
@@ -205,4 +203,3 @@
     position: relative;
     
 }
-

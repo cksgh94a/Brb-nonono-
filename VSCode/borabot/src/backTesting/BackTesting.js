@@ -317,35 +317,35 @@ class BackTesting extends Component {
         <div className = 'bt-settingContainer'>          
           <div className = 'bt-btSettingText'>백테스팅 설정</div>
             {/* 거래소 선택 */}
-            <select id="bt_exchange" placeholder="거래소" onChange={this.handleIndex}>
+            <select className="bt-select" id="bt_exchange" placeholder="거래소" onChange={this.handleIndex}>
               {exchangeList.map((exchange, index) => {
                 return (<option key={index} > {exchange.key} </option>)
               })}
               <option selected hidden disabled>거래소</option>
             </select><br/>
             {/* 기축통화 선택 */}
-            <select id="base" placeholder="기축통화" onChange={this.handleIndex}>
+            <select className="bt-select" id="base" placeholder="기축통화" onChange={this.handleIndex}>
               {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
                 return (<option key={i}> {base} </option>)
               })}
               <option selected hidden disabled>기축통화</option>
             </select><br/>
             {/* 코인 선택 */}
-            <select id="coin" placeholder="코인">
+            <select className="bt-select" id="coin" placeholder="코인">
               {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
                 return (<option key={i}> {coin} </option>)
               })}
               <option selected hidden disabled>코인</option>
             </select>
             {/* 거래 간격 선택 */}
-            <select id="interval" placeholder="거래 간격">
+            <select className="bt-select" id="interval" placeholder="거래 간격">
               {intervalList.map((int, i) => {
                 return (<option key={i}> {int.key} </option>)
               })}
               <option selected hidden disabled>거래 간격</option>
             </select>
             {/* 전략 선택 */}
-            <select id="strategy" placeholder="전략">
+            <select className="bt-select" id="strategy" placeholder="전략">
               <option selected hidden disabled>전략</option>
               {strategyList.map((s, i) => {
                 return (<option key={i}> {s.name} </option>)
@@ -354,13 +354,13 @@ class BackTesting extends Component {
             </select>
             <div class="bt-input">
               {/* 구매 설정 선택 */}
-              <select id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
+              <select className="bt-select" id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
                 {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
                 <option selected hidden disabled>구매 설정</option>
               </select>
               <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
               {/* 판매 설정 선택 */}
-              <select id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
+              <select className="bt-select" id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
                 {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
                 <option selected hidden disabled>판매 설정</option>
               </select>
@@ -368,7 +368,9 @@ class BackTesting extends Component {
               {/* 시작일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
                 <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                  <DayPickerInput inputProps={{
+                  <DayPickerInput
+                    placeholder = "시작일"
+                    inputProps={{
                     style: {
                       width: '80px',
                       marginTop : "20px",
@@ -389,7 +391,9 @@ class BackTesting extends Component {
               {/* 종료일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
                 <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                  <DayPickerInput inputProps={{
+                  <DayPickerInput
+                    placeholder = "종료일"
+                    inputProps={{
                     style: {
                       width: '80px',
                       marginTop : "20px",
@@ -401,7 +405,7 @@ class BackTesting extends Component {
                   <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
                 </div>
                 {/* 종료 시간 선택 */}
-                <select  className = "bt-select-hour" id="endHour">
+                <select className = "bt-select-hour" id="endHour">
                   {hourList.map((e, i) => {
                     return (<option key={i}> {e}시 </option>)
                   })}
@@ -418,8 +422,7 @@ class BackTesting extends Component {
         <div className = 'bt-resultLogContainer'>
           <div>
             <div className = "bt-botIndivText" >
-              매매 기록
-              <text style={{color: "grey", fontSize : "12px", marginLeft: "765px"}}>대기는 기록되지 않습니다</text>
+              매매 기록<text style={{color: "grey", fontSize : "12px", marginLeft: "765px"}}>대기는 기록되지 않습니다</text>
             </div>
             <table className='bt-tableContainer' >
               <thead>

@@ -168,13 +168,20 @@ class Log extends Component {
           <select id="salesAction" className = "log-saleSelect" onChange={this.handleChange}>
             <option>매수/매도</option><option>매수</option><option>매도</option>
           </select><br/>
-          <h4>봇 기록</h4>        
-          거래소 : {selectedTrade.exchange_name}
-          | 코인 : {selectedTrade.coin}
         </div>
 
         <div className = "log-mainBox">
-          <div className = "log-botIndivText">{selectedTrade.bot_name}의 거래 기록</div>
+          <div className = "log-botTextContainer">
+            <div className = "log-botIndivText">
+              {selectedTrade.bot_name}의 거래 기록 
+            </div> 
+            <div className = "log-botBackground" style={{marginLeft : "200px", width : "270px"}}>
+              거래소 : {selectedTrade.exchange_name}
+            </div>  
+            <div className = "log-botBackground">
+              코인 : {selectedTrade.coin}
+            </div>  
+          </div>
           <table className='log-tableContainer' >
             <thead>
               <th className='log-headTr'>거래 신호 시간</th>

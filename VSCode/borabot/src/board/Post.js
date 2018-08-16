@@ -219,14 +219,14 @@ class Post extends Component {
                 <th class="post_table_title_1" style={{width:"160px"}}>제목</th>
                 <td class="post_table_title_2">
                   {/* 제목 영역 */}
-                  <input id="title" placeholder="제목을 입력해주세요." value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/>
+                  <input id="title" placeholder="제목을 입력해주세요" value={post.title} onChange={(e, h='title') => this.handleModify(e, h)}/>
                 </td>
               </tr>
               <tr>
                 <th class="post_table_title_1">내용</th>
                 <td class="post_table_title_2">
                   {/* 내용 textarea 수정 가능 */}
-                  <textarea id="content" placeholder="회원님께서 문의하신 내용은 관리자가 확인 후 연락 드리도록 하겠습니다. 문의 내용 또는 문제사항을 최대한 자세하게 적어주세요." value={post.content} onChange={(e, h='content') => this.handleModify(e, h)}/><br/>
+                  <textarea id="content" placeholder="내용을 입력해주세요" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)}/><br/>
                 </td>
               </tr>
             </div>
