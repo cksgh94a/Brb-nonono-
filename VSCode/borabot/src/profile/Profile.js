@@ -192,13 +192,9 @@ class Profile extends Component {
                 <h4 class="personal">거래소 정보</h4>
                 <div class="exchange">
                   <select id="exchange" onChange={this.handleExchange}>
-                  { this.state.exchange.map((e, index) => {
-                    return ( <option key={index} > {e.exchange_name} </option> )
-                  })}
-                  {/* {exchangeList.map((exchange, index) => {
+                  {exchangeList.map((exchange, index) => {
                       return (<option key={index} > {exchange.key} </option>)
-                  })
-                  } */}
+                  })}
                   </select><br/>
                 </div>
                 <div class="exchange_contents">

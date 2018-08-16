@@ -77,7 +77,7 @@ class Sales extends Component {
   handleStartbtn = () => {
     // 봇 이름 검증
     if(document.getElementById('botname').value === ''){
-      alert('😆 당신의 지갑을 풍족하게 해줄 귀여운 봇의 이름을 지어주세요 😆')
+      alert('봇의 이름을 설정해주세요')
       return
     }
 
@@ -90,7 +90,7 @@ class Sales extends Component {
       ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
     var now = new Date();
     if(new Date(endDate) - now < 0){
-      alert('😆 거래 종료를 과거에 할 순 없어요 😆')
+      alert('종료일은 현재 시간 이후여야 합니다.')
       return
     }
     
@@ -155,7 +155,7 @@ class Sales extends Component {
           })}
         </select>
 
-        <select className='sales-select' id="salesBase" onChange={this.handleIndex}  >
+        <select className='sales-select' id="salesBase" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
             return (<option key={i}> {base} </option>)
           })}
@@ -174,6 +174,7 @@ class Sales extends Component {
         </select>
 
         <select className='sales-select' id="strategy">
+          <option selected hidden disabled>전략</option>
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}

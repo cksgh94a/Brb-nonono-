@@ -82,7 +82,7 @@ class BackTesting extends Component {
       showList: [],
       result: {}
     })
-    document.getElementById('exchange').selectedIndex = 0
+    document.getElementById('bt_exchange').selectedIndex = 0
     document.getElementById('base').selectedIndex = 0
     document.getElementById('coin').selectedIndex = 0
     document.getElementById('interval').selectedIndex = 0
@@ -95,12 +95,12 @@ class BackTesting extends Component {
   }
 
   handleIndex = (e) => {
-    if (e.target.id === 'exchange'){
+    if (e.target.id === 'bt_exchange'){
       document.getElementById('base').selectedIndex = 0
       document.getElementById('coin').selectedIndex = 0
     } else if(e.target.id === 'base') document.getElementById('coin').selectedIndex = 0
     this.setState({
-      exchangeIndex: document.getElementById('exchange').selectedIndex,
+      exchangeIndex: document.getElementById('bt_exchange').selectedIndex,
       baseIndex: document.getElementById('base').selectedIndex
     })
   }
@@ -178,7 +178,7 @@ class BackTesting extends Component {
     if(this.dateValidate(startDate, endDate)){
       axios.post( 
         'BackTest', 
-        'exchange='+document.getElementById('exchange').value+
+        'exchange='+document.getElementById('bt_exchange').value+
         '&coin='+document.getElementById('coin').value+
         '&base='+document.getElementById('base').value+ 
         '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
@@ -268,88 +268,91 @@ class BackTesting extends Component {
         <div className = 'bt-settingContainer'>          
           <div className = 'bt-btSettingText'>백테스팅 설정</div>
             {/* 거래소 선택 */}
-            <select className = "bt-select" id="exchange" onChange={this.handleIndex}>
+            <select id="bt_exchange" placeholder="거래소" onChange={this.handleIndex}>
               {exchangeList.map((exchange, index) => {
                 return (<option key={index} > {exchange.key} </option>)
               })}
             </select><br/>
             {/* 기축통화 선택 */}
-            <select id="base" className = "bt-select" onChange={this.handleIndex}>
+            <select id="base" placeholder="기축통화" onChange={this.handleIndex}>
               {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
                 return (<option key={i}> {base} </option>)
               })}
             </select><br/>
             {/* 코인 선택 */}
-            <select id="coin" className = "bt-select">
+            <select id="coin" placeholder="코인">
               {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
                 return (<option key={i}> {coin} </option>)
               })}
             </select>
             {/* 거래 간격 선택 */}
-            <select id="interval" className = "bt-select">
+            <select id="interval" placeholder="거래 간격">
               {intervalList.map((int, i) => {
                 return (<option key={i}> {int.key} </option>)
               })}
             </select>
             {/* 전략 선택 */}
-            <select id="strategy" className = "bt-select">
+            <select id="strategy" placeholder="전략">
+              <option selected hidden disabled>전략</option>
               {strategyList.map((s, i) => {
                 return (<option key={i}> {s.name} </option>)
               })}
             </select>
-            {/* 구매 설정 선택 */}
-            <select id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
-              {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
-            </select>
-            <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
-            {/* 판매 설정 선택 */}
-            <select id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
-              {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
-            </select>
-            <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
-            {/* 시작일 선택 */}
-            <div style = {{ maringTop : "12px", height : "42px"}}>
-              <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                <DayPickerInput inputProps={{
-                  style: {
-                    width: '80px',
-                    marginTop : "20px",
-                    borderTop : 'transparent',
-                    borderLeft : 'transparent',
-                    borderRight : 'transparent',
-                    borderBottom : 'transparent'}
-                  }} onDayChange={(day) => this.handleDayChange(day, 'start')} />
-                <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
-              </div>
-              {/* 시작 시간 선택 */}
-              <select className = "bt-select-hour" id="startHour">
-                {hourList.map((e, i) => {
-                  return (<option key={i}> {e}시 </option>)
-                })}
+            <div class="bt-input">
+              {/* 구매 설정 선택 */}
+              <select id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
+                {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
               </select>
-            </div>
-            {/* 종료일 선택 */}
-            <div style = {{ maringTop : "12px", height : "42px"}}>
-              <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                <DayPickerInput inputProps={{
-                  style: {
-                    width: '80px',
-                    marginTop : "20px",
-                    borderTop : 'transparent',
-                    borderLeft : 'transparent',
-                    borderRight : 'transparent',
-                    borderBottom : 'transparent'}
-                  }} onDayChange={(day) => this.handleDayChange(day, 'end')} />
-                <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
-              </div>
-              {/* 종료 시간 선택 */}
-              <select  className = "bt-select-hour" id="endHour">
-                {hourList.map((e, i) => {
-                  return (<option key={i}> {e}시 </option>)
-                })}
+              <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+              {/* 판매 설정 선택 */}
+              <select id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
+                {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
               </select>
-              {/* 시작 금액 선택 */}
-              <input id="nowCash" placeholder="시작 금액을 입력하세요"  className = 'bt-startPrice' value={this.state.nowCash} onChange={this.handleCash}/><br/>
+              <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
+              {/* 시작일 선택 */}
+              <div style = {{ maringTop : "12px", height : "42px"}}>
+                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                  <DayPickerInput inputProps={{
+                    style: {
+                      width: '80px',
+                      marginTop : "20px",
+                      borderTop : 'transparent',
+                      borderLeft : 'transparent',
+                      borderRight : 'transparent',
+                      borderBottom : 'transparent'}
+                    }} onDayChange={(day) => this.handleDayChange(day, 'start')} />
+                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+                </div>
+                {/* 시작 시간 선택 */}
+                <select className = "bt-select-hour" id="startHour">
+                  {hourList.map((e, i) => {
+                    return (<option key={i}> {e}시 </option>)
+                  })}
+                </select>
+              </div>
+              {/* 종료일 선택 */}
+              <div style = {{ maringTop : "12px", height : "42px"}}>
+                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                  <DayPickerInput inputProps={{
+                    style: {
+                      width: '80px',
+                      marginTop : "20px",
+                      borderTop : 'transparent',
+                      borderLeft : 'transparent',
+                      borderRight : 'transparent',
+                      borderBottom : 'transparent'}
+                    }} onDayChange={(day) => this.handleDayChange(day, 'end')} />
+                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+                </div>
+                {/* 종료 시간 선택 */}
+                <select  className = "bt-select-hour" id="endHour">
+                  {hourList.map((e, i) => {
+                    return (<option key={i}> {e}시 </option>)
+                  })}
+                </select>
+                {/* 시작 금액 선택 */}
+                <input id="nowCash" placeholder="시작 금액을 입력하세요"  className = 'bt-startPrice' value={this.state.nowCash} onChange={this.handleCash}/><br/>
+              </div>       
             </div>            
           {/* 시작 버튼 */}
           <div className = 'bt-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
@@ -373,7 +376,7 @@ class BackTesting extends Component {
               <tbody className = 'log-tbodyContainer' >              
                 { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
                 showList.map((r, i) => {
-                  return (<tr key={i} style={{borderBottom : "1px solid"}} >
+                  return (<tr key={i} className="log-tr" style={{borderBottom : "1px solid"}} >
                     <td className = 'log-td'>{r.success}</td>
                     <td className = 'log-td'>{r.saleAction}</td>
                     <td className = 'log-td'>{r.coinCurrentPrice}</td>
@@ -386,26 +389,26 @@ class BackTesting extends Component {
               </tbody>
             </table>
 
-            <div className = "log-chooseBoxContainer">
+            <div className = "bt-chooseBoxContainer">
               { /* 이전 10 페이지 이동 버튼*/ }
-              <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
+              <div className = "bt-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
               { // 현재 선택된 페이지의 근처 10개 페이지 표시
               pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                 return(<div  key ={i} onClick={() => this.selectPage(p)}>
-                  {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
+                  {pageNum === p ? <div style={onTextBg} className = "bt-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "bt-chooseNumber" >  {p}  </div>}
                 </div>)
               })}
               { /* 이후 10 페이지 이동 버튼*/ }
-              <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
+              <div className = "bt-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
             </div>
           </div>
         </div>
 
         {/* 거래 결과 영역 */}
-        {/* <div className = 'bt-resultWindow'>
-          <div style={{marginTop : '30px', marginLeft : '30px', fontSize : "24px", fontWeight:"bold"}}>백테스팅 결과</div>
-          <div style={{marginTop : '20px', marginLeft : '30px', width : "236px", borderBottom : '1px solid #9646a0'}} /> 
-        </div> */}
+        <div className = 'bt-resultWindow'>
+          <div style={{marginTop : '24px', marginLeft : '20px', fontSize : "24px", fontWeight:"bold", borderRight : '1px solid #9646a0', width : '172px',}}>백테스팅 결과</div>
+          {/* <div style={{marginTop : '20px', marginLeft : '30px', width : "236px", borderBottom : '1px solid #9646a0'}} />  */}
+        </div>
       </div>
           /* {isResulted && 
             (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}

@@ -255,10 +255,15 @@
     margin-top: 6px;
 }
 
-input::-ms-input-placeholder { color: white; }
+input::-ms-input-placeholder { color: #BDBDBD; }
+input::-webkit-input-placeholder { color: #BDBDBD; } 
+
+input::-moz-placeholder { color: #BDBDBD; }
+
+/* input::-ms-input-placeholder { color: white; }
 input::-webkit-input-placeholder { color: white; } 
 
-input::-moz-placeholder { color: white; }
+input::-moz-placeholder { color: white; } */
 input:focus {
     outline: none;
   }

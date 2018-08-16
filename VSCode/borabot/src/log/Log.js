@@ -160,7 +160,7 @@ class Log extends Component {
         <div className = "log-leftBox">
           <div className = "log-botSelText">봇 선택</div>
           <select id="botName" className = "log-botSelect" onChange={this.handleChange}>
-            <option>봇 이름</option>
+            <option selected hidden disabled>봇 이름</option>
             {tradeList.map((t, i) => {
               return (<option key={i}> {t.bot_name} </option>)
             })}

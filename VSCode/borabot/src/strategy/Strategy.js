@@ -191,6 +191,10 @@ class Strategy extends Component {
       alert('전략 이름을 입력하세요')
       return
     }
+    if(this.state.strategy_name === '전략') {
+      alert('불가능한 전략 이름입니다')
+      return
+    }
     if(this.state.buyC === '') {
       alert('구매 기준치를 입력하세요')
       return

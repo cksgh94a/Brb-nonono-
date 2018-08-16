@@ -96,7 +96,7 @@ class ChartSelect extends Component {
             ? 240
             : intervalList[intervalIndex].value/60
           }
-          hide_top_toolbar
+          // hide_top_toolbar
         />
       </div>
     );
