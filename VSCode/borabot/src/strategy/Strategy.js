@@ -102,7 +102,7 @@ class Strategy extends Component {
   }
 
   handleCriteria = (e, bs) => {
-    if(!isNaN(e.target.value)){
+    if(!isNaN(e.target.value) || e.target.value === '-'){
       (bs === 'buy')
         ? this.setState({
           buyC:e.target.value

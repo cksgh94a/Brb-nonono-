@@ -28,8 +28,8 @@ class BackTesting extends Component {
     this.state={
       exchangeIndex: 0,
       baseIndex: 0,
-      startDay: '',
-      endDay: '',
+      startDay: new Date(),
+      endDay: new Date(),
       nowCash:'',
 
       // isResulted:false,
@@ -158,66 +158,112 @@ class BackTesting extends Component {
     }
   }
 
-  handleStartbtn = () => {
-    // 항목 검증
+  // 데이터 유효성 검증
+  validate = () => {
+    // 거래소 검증
+    if(document.getElementById('bt_exchange').value === '거래소'){
+      alert('거래소를 설정해주세요')
+      return false
+    }
+    // 기축통화 검증
+    if(document.getElementById('base').value === '기축통화'){
+      alert('기축통화를 설정해주세요')
+      return false
+    }
+    // 코인 검증
+    if(document.getElementById('coin').value === '코인'){
+      alert('거래할 코인을 설정해주세요')
+      return false
+    }
+    // 거래 간격 검증
+    if(document.getElementById('interval').value === '거래 간격'){
+      alert('거래 간격을 설정해주세요')
+      return false
+    }
+    // 전략 검증
+    // if(document.getElementById('strategy').value === '전략'){
+    //   alert('전략을 설정해주세요')
+    //   return false
+    // }
+    // 구매 방식 검증
+    if(document.getElementById('buyingSetting').value === '구매 설정'){
+      alert('구매 방식을 설정해주세요')
+      return false
+    }
+    // 세부 구매 설정 검증
+    if(document.getElementById('buyingDetail').value === '' && document.getElementById('buyingSetting').value !== '전액구매'){
+      alert('구매할 금액(수량)을 설정해주세요')
+      return false
+    }
+    // 판매 방식 검증
+    if(document.getElementById('sellingSetting').value === '판매 설정'){
+      alert('판매 방식을 설정해주세요')
+      return false
+    }
+    // 세부 판매 설정 검증
+    if(document.getElementById('sellingDetail').value === '' && document.getElementById('sellingSetting').value !== '전액판매'){
+      alert('판매할 금액(수량)을 설정해주세요')
+      return false
+    }
     if(document.getElementById('nowCash').value === '') {
       alert('시작 금액을 입력하세요')
-      return
+      return false
     }
-    if(document.getElementById('strategy').value === '전략') {
-      alert('전략을 선택하세요')
-      return
-    }
-    
-    const { startDay, endDay } = this.state
-    var startDate = startDay.getFullYear()+'-'+
-      ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
-      ("0"+startDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('startHour').value).slice(0,-1).slice(-2)+':00:00.000'
-    var endDate = endDay.getFullYear()+'-'+
-      ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
-      ("0"+endDay.getDate()).slice(-2)+'T'+
-      ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
+    return true
+  }
 
-    if(this.dateValidate(startDate, endDate)){
-      axios.post( 
-        'BackTest', 
-        'exchange='+document.getElementById('bt_exchange').value+
-        '&coin='+document.getElementById('coin').value+
-        '&base='+document.getElementById('base').value+ 
-        '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
-        '&strategyName='+document.getElementById('strategy').value+
-        '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
-        '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
-        '&buyingDetail='+document.getElementById('buyingDetail').value+
-        '&sellingDetail='+document.getElementById('sellingDetail').value+
-        '&startDate='+startDate+
-        '&endDate='+endDate+
-        '&nowCash='+document.getElementById('nowCash').value,
-        { 'Content-Type': 'application/x-www-form-urlencoded' }
-      )
-      .then( response => {
-        if(response.data.status === '성공'){
-          var pNL = [1]  // state에 저장할 페이지리스트 생성
-          for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
-            pNL.push(i)
-          }
-          this.setState({
-            resultList: response.data.log,
-            result: response.data.result,
-            pageNumList: pNL,
-            pageNum: 1,
-            showList: response.data.log.slice(0, 10),
-            isResulted: true
-          })
-        } else alert('백테스팅에 실패하였습니다.')
-      }) 
-      .catch( response => { console.log('err\n'+response); } ); // ERROR
-    } else alert(
-      document.getElementById('interval').value +
-      ' 간격의 거래는 ' +
-      periodLimit[document.getElementById('interval').selectedIndex] +
-      ' 이내의 기간으로 설정해주세요.')
+  handleStartbtn = () => {
+    if(this.validate()){
+      const { startDay, endDay } = this.state
+      var startDate = startDay.getFullYear()+'-'+
+        ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
+        ("0"+startDay.getDate()).slice(-2)+'T'+
+        ("0"+document.getElementById('startHour').value).slice(0,-1).slice(-2)+':00:00.000'
+      var endDate = endDay.getFullYear()+'-'+
+        ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
+        ("0"+endDay.getDate()).slice(-2)+'T'+
+        ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
+  
+      if(this.dateValidate(startDate, endDate)){
+        axios.post( 
+          'BackTest', 
+          'exchange='+document.getElementById('bt_exchange').value+
+          '&coin='+document.getElementById('coin').value+
+          '&base='+document.getElementById('base').value+ 
+          '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
+          '&strategyName='+document.getElementById('strategy').value+
+          '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
+          '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
+          '&buyingDetail='+document.getElementById('buyingDetail').value+
+          '&sellingDetail='+document.getElementById('sellingDetail').value+
+          '&startDate='+startDate+
+          '&endDate='+endDate+
+          '&nowCash='+document.getElementById('nowCash').value,
+          { 'Content-Type': 'application/x-www-form-urlencoded' }
+        )
+        .then( response => {
+          if(response.data.status === '성공'){
+            var pNL = [1]  // state에 저장할 페이지리스트 생성
+            for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
+              pNL.push(i)
+            }
+            this.setState({
+              resultList: response.data.log,
+              result: response.data.result,
+              pageNumList: pNL,
+              pageNum: 1,
+              showList: response.data.log.slice(0, 10),
+              isResulted: true
+            })
+          } else alert('백테스팅에 실패하였습니다.')
+        }) 
+        .catch( response => { console.log('err\n'+response); } ); // ERROR
+      } else alert(
+        document.getElementById('interval').value +
+        ' 간격의 거래는 ' +
+        periodLimit[document.getElementById('interval').selectedIndex] +
+        ' 이내의 기간으로 설정해주세요.')
+    }
   }
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
@@ -275,24 +321,28 @@ class BackTesting extends Component {
               {exchangeList.map((exchange, index) => {
                 return (<option key={index} > {exchange.key} </option>)
               })}
+              <option selected hidden disabled>거래소</option>
             </select><br/>
             {/* 기축통화 선택 */}
             <select id="base" placeholder="기축통화" onChange={this.handleIndex}>
               {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
                 return (<option key={i}> {base} </option>)
               })}
+              <option selected hidden disabled>기축통화</option>
             </select><br/>
             {/* 코인 선택 */}
             <select id="coin" placeholder="코인">
               {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
                 return (<option key={i}> {coin} </option>)
               })}
+              <option selected hidden disabled>코인</option>
             </select>
             {/* 거래 간격 선택 */}
             <select id="interval" placeholder="거래 간격">
               {intervalList.map((int, i) => {
                 return (<option key={i}> {int.key} </option>)
               })}
+              <option selected hidden disabled>거래 간격</option>
             </select>
             {/* 전략 선택 */}
             <select id="strategy" placeholder="전략">
@@ -300,16 +350,19 @@ class BackTesting extends Component {
               {strategyList.map((s, i) => {
                 return (<option key={i}> {s.name} </option>)
               })}
+              <option selected hidden disabled>전략</option>
             </select>
             <div class="bt-input">
               {/* 구매 설정 선택 */}
               <select id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
                 {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
+                <option selected hidden disabled>구매 설정</option>
               </select>
               <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
               {/* 판매 설정 선택 */}
               <select id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
                 {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
+                <option selected hidden disabled>판매 설정</option>
               </select>
               <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
               {/* 시작일 선택 */}
@@ -417,7 +470,7 @@ class BackTesting extends Component {
           </div>
           { isResulted
             && <div style={{display: "inline-block", marginLeft : '20px'}}>
-                최종 수익률 : {result.finalProfit}% &nbsp; &nbsp; &nbsp; 최종 금액 : {result.finalAsset}KRW
+                최종 수익률 : {result.finalProfit} % &nbsp; &nbsp; &nbsp; 최종 금액 : {result.finalAsset} KRW
               </div>
           }
         </div>
