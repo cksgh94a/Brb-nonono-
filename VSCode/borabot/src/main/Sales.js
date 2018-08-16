@@ -144,8 +144,8 @@ class Sales extends Component {
     const { exchangeIndex, baseIndex } = this.props.sales
 
     return (
-      <div style={{color:"grey"}}>        
-        <h4 style={{textAlign : "center"}}>Sales configuration</h4>
+      <div style={{color:"black"}}>        
+        <h3 style={{textAlign : "center"}}>자동 매매 설정</h3>
 
         <input placeholder="이름" id="botname" className = 'select-botName' size = '1'/>
 

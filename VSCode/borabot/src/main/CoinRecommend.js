@@ -39,15 +39,6 @@ class CoinRecommend extends Component {
     };
     return (
       <Slider {...settings} >
-        <div style={{height:"100%", alignItems:"center"}}>
-          이준형 똥멍청이 똥이나 먹어라
-        </div>
-        <div style={{height:"100%", alignItems:"center"}}>
-          이준형 똥멍청이 똥이나 먹어라
-        </div>
-        <div style={{height:"100%", alignItems:"center"}}>
-          이준형 똥멍청이 똥이나 먹어라
-        </div>
         {exchangeList.map((e,i) => {
           return (
             <div style={{height:"100%"}}>

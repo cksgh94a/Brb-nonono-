@@ -14,7 +14,7 @@ var gdVCross = { indicator:'gdVCross', weight:1, longD:26, shortD:9, mT:1}
 var MFI = { indicator:'MFI', weight:1, period:14, buyIndex:0, sellIndex:0 }
 var StochOsc = { indicator:'StochOsc', weight:1, n:15, m:5, t:3 }
 var VolumeRatio = { indicator:'VolumeRatio', weight:1, period:20, buyIndex:70, sellIndex:350 }
-var pCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
+// var pCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
 
 // 지표 기본값
 var defaultRSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
@@ -25,10 +25,10 @@ var defaultgdVCross = { indicator:'gdVCross', weight:1, longD:26, shortD:9, mT:1
 var defaultMFI = { indicator:'MFI', weight:1, period:14, buyIndex:0, sellIndex:0 }
 var defaultStochOsc = { indicator:'StochOsc', weight:1, n:15, m:5, t:3 }
 var defaultVolumeRatio = { indicator:'VolumeRatio', weight:1, period:20, buyIndex:70, sellIndex:350 }
-var defaultpCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
+// var defaultpCorr = { indicator:'pCorr', weight:1, period:15, cor:0 }
 
-var indicatorList = [RSI, BollingerBand, CCI, gdCross, gdVCross, MFI, StochOsc, VolumeRatio, pCorr]
-var defaultIndicatorList = [defaultRSI, defaultBollingerBand, defaultCCI, defaultgdCross, defaultgdVCross, defaultMFI, defaultStochOsc, defaultVolumeRatio, defaultpCorr]
+var indicatorList = [RSI, BollingerBand, CCI, gdCross, gdVCross, MFI, StochOsc, VolumeRatio]
+var defaultIndicatorList = [defaultRSI, defaultBollingerBand, defaultCCI, defaultgdCross, defaultgdVCross, defaultMFI, defaultStochOsc, defaultVolumeRatio]
 
 
 class Strategy extends Component {
@@ -344,36 +344,91 @@ class Strategy extends Component {
                 </div>);
               })) 
 
-            : (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
-                return (<div class="setting_2" key={i}>
-                  <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
-                  <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
-                  {selectedStrategy.indicatorList[idc].period !== undefined && 
-                    (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
-                    (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
-                    (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].mul !== undefined && 
-                    (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].longD !== undefined && 
-                    (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].shortD !== undefined && 
-                    (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].mT !== undefined && 
-                    (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].n !== undefined && 
-                    (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].m !== undefined && 
-                    (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].t !== undefined && 
-                    (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
-                  {selectedStrategy.indicatorList[idc].cor !== undefined && 
-                    (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
-                  {i !== selectedStrategy.expList.split(',').length &&
-                    (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
-                </div>);
-              }))
+              : (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
+                  return (<div class="setting _1" key={i}>
+                  <table>
+                    <thead>
+                      <tr>
+                        <p class="strategy_2_titles">{selectedStrategy.indicatorList[idc].indicator}</p>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <div class="strategy_2_contents">
+                        <div class="strategy_2_subtitles">
+                          <tr class="strategy_2_subtitle">
+                            <th class="strategy_2_sub_subtitle">
+                              {selectedStrategy.indicatorList[idc].weight !== undefined && (<th>weight &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].period !== undefined && (<th>period &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].buyIndex !== undefined && (<th>buyIndex &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].sellIndex !== undefined && (<th>sellIndex&emsp; </th>)}
+                              {selectedStrategy.indicatorList[idc].mul !== undefined && (<th>mul &emsp;&emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].longD !== undefined && (<th>longD &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].shortD !== undefined && (<th>shortD &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].mT !== undefined && (<th>mT &emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].n !== undefined && (<th>n &emsp;&emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].m !== undefined && (<th>m &emsp;&emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].t !== undefined && (<th>t &emsp;&emsp;</th>)}
+                              {selectedStrategy.indicatorList[idc].cor !== undefined && (<th>cor &emsp;</th>)}
+                            </th>
+                          </tr>
+                        </div>
+                        <div class="strategy_2_subcontents">
+                          <tr class="strategy_2_subcontent">
+                            <td class="strategy_2_sub_subcontent">
+                              {selectedStrategy.indicatorList[idc].weight !== undefined && (<td>{selectedStrategy.indicatorList[idc].weight} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].period !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].period} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].buyIndex !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].buyIndex} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].sellIndex !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].sellIndex} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].mul !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].mul} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].longD !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].longD} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].shortD !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].shortD} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].mT !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].mT} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].n !== undefined && (<td>{selectedStrategy.indicatorList[idc].n} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].m !== undefined && (<td>{selectedStrategy.indicatorList[idc].m} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].t !== undefined && (<td>{selectedStrategy.indicatorList[idc].t} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].cor !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].cor} &emsp;</td>)}
+                            </td>
+                          </tr>
+                        </div>
+                        
+                        {/* {i !== savedCnt-1 && (<button disabled>{expList[i]}</button>)} */}
+                        
+                      </div>
+                    </tbody>
+                  </table>
+                  </div>);
+                })) 
+
+            // : (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
+            //     return (<div class="setting_2" key={i}>
+            //       <b>{selectedStrategy.indicatorList[idc].indicator}</b><br/>
+            //       <input value={"weight: "+selectedStrategy.indicatorList[idc].weight} readOnly/>
+            //       {selectedStrategy.indicatorList[idc].period !== undefined && 
+            //         (<input value={"period: "+selectedStrategy.indicatorList[idc].period} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].buyIndex !== undefined && 
+            //         (<input value={"buyIndex: "+selectedStrategy.indicatorList[idc].buyIndex} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].sellIndex !== undefined && 
+            //         (<input value={"sellIndex: "+selectedStrategy.indicatorList[idc].sellIndex} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].mul !== undefined && 
+            //         (<input value={"mul: "+selectedStrategy.indicatorList[idc].mul} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].longD !== undefined && 
+            //         (<input value={"longD: "+selectedStrategy.indicatorList[idc].longD} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].shortD !== undefined && 
+            //         (<input value={"shortD: "+selectedStrategy.indicatorList[idc].shortD} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].mT !== undefined && 
+            //         (<input value={"mT: "+selectedStrategy.indicatorList[idc].mT} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].n !== undefined && 
+            //         (<input value={"n: "+selectedStrategy.indicatorList[idc].n} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].m !== undefined && 
+            //         (<input value={"m: "+selectedStrategy.indicatorList[idc].m} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].t !== undefined && 
+            //         (<input value={"t: "+selectedStrategy.indicatorList[idc].t} readOnly/>)}
+            //       {selectedStrategy.indicatorList[idc].cor !== undefined && 
+            //         (<input value={"cor: "+selectedStrategy.indicatorList[idc].cor} readOnly/>)}<br/>
+            //       {i !== selectedStrategy.expList.split(',').length &&
+            //         (<button disabled>{selectedStrategy.expList.split(',')[i]}</button>)}
+            //     </div>);
+            //   }))
             }
           </div>
           <button id="strategyCompleteButton" disabled={buttonVal} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} /></button>

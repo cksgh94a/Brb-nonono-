@@ -28,22 +28,10 @@ const BITHUMB = {
   ]
 }
 
-const COINONE = {
-  name: 'COINONE',
-  baseList: [ "KRW"],
-  coin: [
-    {
-    base: "KRW",
-    list: [ "BTC", "BCH", "ETH", "ETC", "LTC", "BTG" ]
-    }
-  ]
-}
-
 const Exchange = {
 	exchangeList: [ 
     { key: "BINANCE", value: BINANCE },
-    { key: "BITHUMB", value: BITHUMB },
-    { key: "COINONE", value: COINONE }
+    { key: "BITHUMB", value: BITHUMB }
   ],
   intervalList: [
     { key: "5분", value: "300" },

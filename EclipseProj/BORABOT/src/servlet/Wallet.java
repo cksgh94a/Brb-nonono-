@@ -6,6 +6,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  * Servlet implementation class Wallet
@@ -26,8 +27,14 @@ public class Wallet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+		// 데이터 인코딩 설정
+	    request.setCharacterEncoding("utf-8");
+	    response.setContentType("text/html;charset=utf-8");
+	    
+        HttpSession session = request.getSession();
+        
+//        String coin 
+//        getBalance(request.getParameter("exchange"), coin) 
 	}
 
 }

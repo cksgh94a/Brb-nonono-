@@ -164,6 +164,10 @@ class BackTesting extends Component {
       alert('시작 금액을 입력하세요')
       return
     }
+    if(document.getElementById('strategy').value === '전략') {
+      alert('전략을 선택하세요')
+      return
+    }
     
     const { startDay, endDay } = this.state
     var startDate = startDay.getFullYear()+'-'+
@@ -194,8 +198,6 @@ class BackTesting extends Component {
       )
       .then( response => {
         if(response.data.status === '성공'){
-          this.setState({
-          })
           var pNL = [1]  // state에 저장할 페이지리스트 생성
           for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
             pNL.push(i)
@@ -205,7 +207,8 @@ class BackTesting extends Component {
             result: response.data.result,
             pageNumList: pNL,
             pageNum: 1,
-            showList: this.state.resultList.slice(0, 10)
+            showList: response.data.log.slice(0, 10),
+            isResulted: true
           })
         } else alert('백테스팅에 실패하였습니다.')
       }) 
@@ -252,7 +255,7 @@ class BackTesting extends Component {
 
   render() {
     const { exchangeList, intervalList , strategyList } = this.props
-    const { exchangeIndex, baseIndex, isResulted, text, pageNum, pageNumList, showList, result } = this.state
+    const { exchangeIndex, baseIndex, isResulted, pageNum, pageNumList, showList, result } = this.state
     
     const onTextBg = {
       backgroundImage : `url(${onText})`,
@@ -361,29 +364,32 @@ class BackTesting extends Component {
         {/* 거래 결과 기록 영역 */}
         <div className = 'bt-resultLogContainer'>
           <div>
-            <div className = "log-botIndivText">매매 기록</div>
-            <table className='log-tableContainer' >
+            <div className = "bt-botIndivText" >
+              매매 기록
+              <text style={{color: "grey", fontSize : "12px", marginLeft: "765px"}}>대기는 기록되지 않습니다</text>
+            </div>
+            <table className='bt-tableContainer' >
               <thead>
-                <th className='log-headTr'>성공 여부</th>
-                <th className='log-headTr'>매매</th>
-                <th className='log-headTr'>가격</th>
-                <th className='log-headTr'>코인 매매 수량</th>
-                <th className='log-headTr'>현재 보유 현금</th>
-                <th className='log-headTr'>현재 보유 코인수</th>
-                <th className='log-headTr'>시간</th>
+                <th className='bt-headTr'>성공 여부</th>
+                <th className='bt-headTr'>매매</th>
+                <th className='bt-headTr'>가격</th>
+                <th className='bt-headTr'>코인 매매 수량</th>
+                <th className='bt-headTr'>현재 보유 현금</th>
+                <th className='bt-headTr'>현재 보유 코인수</th>
+                <th className='bt-headTr'>시간</th>
               </thead>
 
-              <tbody className = 'log-tbodyContainer' >              
+              <tbody className = 'bt-tbodyContainer' >              
                 { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
                 showList.map((r, i) => {
-                  return (<tr key={i} className="log-tr" style={{borderBottom : "1px solid"}} >
-                    <td className = 'log-td'>{r.success}</td>
-                    <td className = 'log-td'>{r.saleAction}</td>
-                    <td className = 'log-td'>{r.coinCurrentPrice}</td>
-                    <td className = 'log-td'>{r.salingCoinNumber}</td>
-                    <td className = 'log-td'>{r.nowCash}</td>
-                    <td className = 'log-td'>{r.nowCoin}</td>
-                    <td className = 'log-td'>{r.time}</td>
+                  return (<tr key={i} className="bt-tr" style={{borderBottom : "1px solid"}} >
+                    <td className = 'bt-td'>{r.success}</td>
+                    <td className = 'bt-td'>{r.saleAction}</td>
+                    <td className = 'bt-td'>{r.coinCurrentPrice}</td>
+                    <td className = 'bt-td'>{r.salingCoinNumber}</td>
+                    <td className = 'bt-td'>{r.nowCash}</td>
+                    <td className = 'bt-td'>{r.nowCoin}</td>
+                    <td className = 'bt-td'>{r.time}</td>
                   </tr>)
                 })}
               </tbody>
@@ -406,8 +412,14 @@ class BackTesting extends Component {
 
         {/* 거래 결과 영역 */}
         <div className = 'bt-resultWindow'>
-          <div style={{marginTop : '24px', marginLeft : '20px', fontSize : "24px", fontWeight:"bold", borderRight : '1px solid #9646a0', width : '172px',}}>백테스팅 결과</div>
-          {/* <div style={{marginTop : '20px', marginLeft : '30px', width : "236px", borderBottom : '1px solid #9646a0'}} />  */}
+          <div style={{marginTop : '24px', marginLeft : '20px', fontSize : "24px", fontWeight:"bold", borderRight : '1px solid #9646a0', width : '172px', display: "inline-block"}}>
+            백테스팅 결과
+          </div>
+          { isResulted
+            && <div style={{display: "inline-block", marginLeft : '20px'}}>
+                최종 수익률 : {result.finalProfit}% &nbsp; &nbsp; &nbsp; 최종 금액 : {result.finalAsset}KRW
+              </div>
+          }
         </div>
       </div>
           /* {isResulted && 
