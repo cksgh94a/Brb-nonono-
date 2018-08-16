@@ -40,7 +40,7 @@ class Alarm extends Component {
             <h2>&emsp;BORABOT 거래 알람</h2>
           </th>
           <th class="alarm-tableButton">
-            <img src={require('../img/common/btn_06.png')} />
+            <img onClick={()=>{this.props.close()}} src={require('../img/common/btn_06.png')} />
           </th>
         </div>
         <table class="alarm-table">

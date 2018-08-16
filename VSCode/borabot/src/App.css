@@ -1,19 +1,19 @@
 .main {
 	/* div가 화면에 꽉차게 */
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 
 	/* 배경이미지 */
 	background-image: url('./img/sign/sign_bg_01.png');
     background-size:     cover;                      
     background-repeat:   no-repeat;
-    /* overflow: hidden; */
+    overflow: hidden;
 }
 
 .login { 
 	/* div가 화면에 꽉차게 */
-	width: 100%;
-	height: 100%;
+	width: 100vw;
+	height: 100vh;
 	
 	/* 배경이미지 */
 	background-image: url('./img/login/login_bg.png');

@@ -89,7 +89,7 @@ class NowTrading extends Component {
             modal
             onClose={this.handleAlarm}
             // closeOnDocumentClick
-          ><Alarm /></Popup>
+          >{close => (<Alarm close={close}/>)}</Popup>
           <div className="ntr-nowTradingRefresh" onClick={this.reload}><img src = {refreshBtn}/></div>
         </div>
         
