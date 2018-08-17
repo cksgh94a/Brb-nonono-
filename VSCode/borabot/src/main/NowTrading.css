@@ -1,5 +1,7 @@
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
+
+
 .NowTrading-elementList{
     margin-top: 20px;
     overflow: scroll;
@@ -73,9 +75,10 @@
     left: 193px;
 }
 
+
 .ntr-nowTradingHead{
  
-    width : 231px;
+    width : 222px;
     height: 72px ;
     background-color: white;
   }
@@ -127,5 +130,3 @@
 ::-webkit-scrollbar{
     color: transparent;
 }
-
-

@@ -49,11 +49,11 @@
  
  
  .bg-recommend{
-   width : 780px;
-   height: 72px;
+   width : 788px;
+   height: 80px;
    position: absolute;
    top: 106px;
-   left: 571px;
+   left: 562px;
    background-color: white;
  }
  
@@ -69,8 +69,8 @@
  
  .bg-nowTrading{
  
-   width: 231px;
-   height: 852px;
+   width: 222px;
+   height: 850px;
    position: absolute;
    left: 320px;
    top: 106px;
@@ -89,19 +89,19 @@
  
  .bg-chart{
    position: absolute;
-   top: 198px;
-   left: 571px;
+   top: 205px;
+   left: 561px;
    background-color: white; 
    border: 1.2px solid;
-   width : 780px;
-   height: 760px;
+   width : 788px;
+   height: 750px;
  }
  
  .bg-wallet{
    position: absolute;
    top: 106px;
    left: 1371px;
-   width: 222px;
+   width: 232px;
    height: 160px;
    background-color: white;
    font-size: 14px;
@@ -112,8 +112,8 @@
    position: absolute;
    top: 286px;
    left: 1371px;
-   width: 222px;
-   height: 672px;
+   width: 232px;
+   height: 670px;
    background-color: white;
  }
  

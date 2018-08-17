@@ -198,14 +198,14 @@ class Post extends Component {
   }
 
   render() {
-    const { write } = this.props
-    const { post, modify, comment} = this.state
+    // const { write } = this.props
+    // const { post, modify, comment} = this.state
 
     // 앞단 테스트용 - 글쓰기 클릭해서 포스트 확인 ========================================================================================== //
-    // const write = true
-    // const modify = false
-    // const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
-    // const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
+    const write = true
+    const modify = false
+    const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
+    const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}, {"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
     // ================================================================================================================================ //
 
     return (
@@ -254,7 +254,7 @@ class Post extends Component {
             </tr>
             <tr>
               {/* 내용 textarea 수정 가능 */}
-              <textarea id="content2" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:334, width:811, resize:"none"}} readOnly/><br/>
+              <textarea id="content2" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:334, width:1040, resize:"none"}} readOnly/><br/>
             </tr>
         </table>
           { // 글 작성자이면 수정/삭제 가능
@@ -268,15 +268,24 @@ class Post extends Component {
         <div class="comment_bottom_1">
         
         {/* 댓글 영역 */}
-          <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 698, resize:"none"}}></input >
+          <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 930, resize:"none"}}></input >
           <button id="comment_new" onClick={this.enrollComment}><img src={require('../img/common/btn_16.png')} /></button>
           { comment.map((c, i) => {              
             return (<div class="comment_bottom_2" style={{border:"1px solid"}}>
-              <b>{c.email}</b>  <small>{c.comment_time}</small> 
+              <div class="comment_title">
+                <b>{c.email}</b>  <small>{c.comment_time}</small> 
+              </div>
               <div class="comment_delete">
                 {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
               </div>
-              {c.comment}
+              <div class="comment_comment">
+                {c.comment}
+              </div>
+              {/* <b>{c.email}</b>  <small>{c.comment_time}</small> 
+              <div class="comment_delete">
+                {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
+              </div>
+              {c.comment} */}
             </div>)
           })}
         </div>

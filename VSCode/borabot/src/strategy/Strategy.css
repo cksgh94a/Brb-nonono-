@@ -5,12 +5,12 @@
 .strategy_1 {
     position: relative;
     float: left;
-    width: 237px;
+    width: 230px;
     top : 106px;
 }
 
 .strategy_1_contents {
-    width: 238px;
+    width: 223px;
 }
 
 .strategy_1_contents_top {
@@ -70,7 +70,7 @@
 
 .strategySaveButton {
     padding-top: 42px;
-    padding-bottom: 35px;
+    padding-bottom: 31px;
     margin:auto;
     width: 100%;
     background-color: #ffffff;
@@ -85,26 +85,38 @@
 }
 
 .strategy_2 {
-    width: 1027px;
-    height: auto;
-    top: 106px;
-    padding-top: 30px;
+    width: 1030px;
+    height: 654px;
+    top: 213px;
+    /* padding-top: 20px; */
     padding-left: 10px;
-    margin-left: 257px;
+    margin-left: 243px;
     position: relative;
     text-align: center;
     background-color: #ffffff;
+    z-index: 3;
+    overflow: scroll;
 
 }
 
-.strategy_2_title {
+.strategy_2_wrap {
+    position: fixed;
+    width: 1040px;
+    height: 200px;
+    
+    top: 106px;
+    left: 563px;
+    background-color: #ffffff;
+}
 
+.strategy_2_title {
+    margin-left: 470px;
 }
 
 .strategy_2_common {
     font-size: 14px;
     color: #5a75d0;
-    padding-bottom: 10px;
+    margin-left: 445px;
 }
 
 .strategy_2_titles {
@@ -124,10 +136,24 @@
    
 }
 
+.strategyCompleteButton {
+    width: 634px;
+    height: 74px;
+    top: 783px;
+    left: 563px;
+    padding-top: 99px;
+    padding-left: 406px;    
+    position: fixed;
+        
+
+    background-color: #ffffff;
+}
 
 #strategyCompleteButton {
-    margin-top: 50px;
+/*     
+    margin-top: 1%;
     margin-bottom: 30px;
+    margin-left: 22%; */
     border: none;
     background-color: #ffffff;
     align-content: center;
@@ -136,11 +162,15 @@
 
 /*grid 형식 */
 .strategy_2_grid {
+    position: absolute;
+    margin-left: 18px;
+    /* margin-top: 12%; */
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    grid-gap: 20px;
+    grid-gap: 15px;
     grid-column-gap: 1px;
     grid-auto-rows: auto auto;
+    
 }
 
 

@@ -284,9 +284,11 @@ class Strategy extends Component {
           </div>
         </div>
         
-        <div class="strategy_2">
+        <div class="strategy_2_wrap">
           <h4 class="strategy_2_title">저장된 항목</h4>
           <h6 class="strategy_2_common">모든지표는 or 입니다</h6>
+        </div>
+        <div class="strategy_2">
           <div class="strategy_2_grid">
             {buttonVal === false
             ? (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
@@ -431,6 +433,9 @@ class Strategy extends Component {
             //   }))
             }
           </div>
+          
+        </div>
+        <div class="strategyCompleteButton">
           <button id="strategyCompleteButton" disabled={buttonVal} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} /></button>
         </div>
       </div>

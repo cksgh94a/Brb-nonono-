@@ -275,15 +275,15 @@ public class tradingBot {
 
 				} else if (indicator.equals("gdCross")) {
 
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 
 					indicatorCalcer[i] = new gdCross(longd, shortd, mT, crypt, exchange, coin, base, interval);
 				} else if (indicator.equals("gdVCross")) {
 
-					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longd").getAsInt();
-					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortd").getAsInt();
+					int longd = indicatorListJs.get(indexOrder).getAsJsonObject().get("longD").getAsInt();
+					int shortd = indicatorListJs.get(indexOrder).getAsJsonObject().get("shortD").getAsInt();
 					int mT = indicatorListJs.get(indexOrder).getAsJsonObject().get("mT").getAsInt();
 
 					indicatorCalcer[i] = new gdVCross(longd, shortd, mT, crypt, exchange, coin, base, interval);

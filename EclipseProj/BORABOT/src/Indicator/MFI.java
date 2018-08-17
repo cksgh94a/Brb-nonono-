@@ -96,7 +96,9 @@ public class MFI implements calcIndicator {
 		}
 	
 		catch(Exception e) {
+			e.printStackTrace();
 			throw new Exception();
+			
 		}
 	}
 }

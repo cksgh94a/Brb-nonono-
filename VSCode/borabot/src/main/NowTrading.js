@@ -81,7 +81,7 @@ class NowTrading extends Component {
     }
     
     return(
-      <div >
+      <div class="ntr-nowTradingTotal">
         <div className = "ntr-nowTradingHead">
         <text className="ntr-nowTradingHeadText">거래 현황</text>
           <Popup

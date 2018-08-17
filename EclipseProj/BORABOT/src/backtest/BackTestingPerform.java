@@ -157,7 +157,7 @@ public class BackTestingPerform {
 		jsobj.addProperty("expList", "or, or, or, or, or, or");
 		//"and, or, and , or, or, or"
 			
-		String strategySettingJson = gson.toJson(jsobj);
+		/*String strategySettingJson = gson.toJson(jsobj);*/
 //--------------------------------------------------------------------
 		
 		
@@ -165,19 +165,19 @@ public class BackTestingPerform {
 		
 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 //
 //----------------------------------------------------------------------
-//		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);	
-//		String strategySettingJson="";
-//		
-//		DB db = new DB();
-//		try {
-//			ResultSet rsTemp = db.Query(settingSelectSql, "select");
-//			if(rsTemp.next()) {
-//				strategySettingJson = rsTemp.getString(1);
-//			}
-//			db.clean();
-//		} catch(Exception e) {
-//			e.printStackTrace();
-//		}
+		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);	
+		String strategySettingJson="";
+		
+		DB db = new DB();
+		try {
+			ResultSet rsTemp = db.Query(settingSelectSql, "select");
+			if(rsTemp.next()) {
+				strategySettingJson = rsTemp.getString(1);
+			}
+			db.clean();
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
 //----------------------------------------------------------------------
 		
 		
@@ -637,9 +637,9 @@ public class BackTestingPerform {
 		
 		JsonObject finResult = new JsonObject();
 		finResult.addProperty("finalCoin", nowCoin);
-		finResult.addProperty("finalCoin", nowCash);
-		finResult.addProperty("finalCoin", finalAsset);
-		finResult.addProperty("finalCoin", profit*100);
+		finResult.addProperty("nowCash", nowCash);
+		finResult.addProperty("finalAsset", finalAsset);
+		finResult.addProperty("finalProfit", profit*100);
 		
 		resultLog.addProperty("status", "성공");
 		resultLog.add("result", finResult);
