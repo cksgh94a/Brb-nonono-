@@ -426,12 +426,12 @@ class BackTesting extends Component {
             </div>
             <table className='bt-tableContainer' >
               <thead>
-                <th className='bt-headTr'>성공 여부</th>
+                {/* <th className='bt-headTr'>성공 여부</th> */}
                 <th className='bt-headTr'>매매</th>
-                <th className='bt-headTr'>가격</th>
-                <th className='bt-headTr'>코인 매매 수량</th>
-                <th className='bt-headTr'>현재 보유 현금</th>
-                <th className='bt-headTr'>현재 보유 코인수</th>
+                <th className='bt-headTr'>가격<small>{result.base !== (null || undefined) && (result.base)}</small></th>
+                <th className='bt-headTr'>코인 매매 수량<small>(개)</small></th>
+                <th className='bt-headTr'>현재 보유 현금<small>(KRW)</small></th>
+                <th className='bt-headTr'>현재 보유 코인수<small>(개)</small></th>
                 <th className='bt-headTr'>시간</th>
               </thead>
 
@@ -439,7 +439,7 @@ class BackTesting extends Component {
                 { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
                 showList.map((r, i) => {
                   return (<tr key={i} className="bt-tr" style={{borderBottom : "1px solid"}} >
-                    <td className = 'bt-td'>{r.success}</td>
+                    {/* <td className = 'bt-td'>{r.success}</td> */}
                     <td className = 'bt-td'>{r.saleAction}</td>
                     <td className = 'bt-td'>{r.coinCurrentPrice}</td>
                     <td className = 'bt-td'>{r.salingCoinNumber}</td>

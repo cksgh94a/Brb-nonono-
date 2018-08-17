@@ -46,11 +46,12 @@
 }
 
 .log-botIndivText{
-    width: 300px;
+    width: 480px;
     height: 50px;
     
     margin-top: 30px;
     margin-left: 20px;
+    margin-right: 20px;
     font-family: 'nanum gothic',sans-serif;
     font-size: 24px;
     font-weight: bold;
@@ -60,7 +61,7 @@
 
 .log-botBackground{
 
-    width: 200px;
+    width: 245px;
     height: 50px;
     margin-top: 40px;
     

@@ -5,6 +5,7 @@ import DB.DB;
 import Indicator.*;
 
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -90,71 +91,71 @@ public class BackTestingPerform {
 		CryptowatchAPI crypt = new CryptowatchAPI(10,10);
 		
 		//테스트를 위해 만든 JSON객체
-		Gson gson = new Gson();
-		
+//		Gson gson = new Gson();
+//		
 //--------------------------------------------------------------------
-		JsonObject indicators = new JsonObject();
-		
-		JsonObject indicatorSetting = new JsonObject();
-		indicatorSetting.addProperty("indicator", "BollingerBand");
-		indicatorSetting.addProperty("weight", 1);
-		indicatorSetting.addProperty("period", 12);
-		indicatorSetting.addProperty("mul", 3);
-		indicators.add("1", gson.toJsonTree(indicatorSetting));
-		
-		JsonObject indicatorSetting1 = new JsonObject();
-		indicatorSetting1.addProperty("indicator", "VolumeRatio");
-		indicatorSetting1.addProperty("weight", 1);
-		indicatorSetting1.addProperty("period", "20");
-		indicatorSetting1.addProperty("buyIndex", "70");
-		indicatorSetting1.addProperty("sellIndex", "30");
-		indicators.add("0", gson.toJsonTree(indicatorSetting1));
-		
-		JsonObject indicatorSetting2 = new JsonObject();
-		indicatorSetting2.addProperty("indicator", "gdVCross");
-		indicatorSetting2.addProperty("weight", 1);
-		indicatorSetting2.addProperty("longD", "26");
-		indicatorSetting2.addProperty("shortD", "9");
-		indicatorSetting2.addProperty("mT", "1");
-		indicators.add("2", gson.toJsonTree(indicatorSetting2));
-		
-		JsonObject indicatorSetting3 = new JsonObject();
-		indicatorSetting3.addProperty("indicator", "gdCross");
-		indicatorSetting3.addProperty("weight", 1);
-		indicatorSetting3.addProperty("longD", "26");
-		indicatorSetting3.addProperty("shortD", "9");
-		indicatorSetting3.addProperty("mT", "1");
-		indicators.add("3", gson.toJsonTree(indicatorSetting3));
-		
-		JsonObject indicatorSetting4 = new JsonObject();
-		indicatorSetting4.addProperty("indicator", "CCI");
-		indicatorSetting4.addProperty("weight", 1);
-		indicatorSetting4.addProperty("period", "20");
-		indicatorSetting4.addProperty("buyIndex", "70");
-		indicatorSetting4.addProperty("sellIndex", "30");
-		indicators.add("4", gson.toJsonTree(indicatorSetting4));
-		
-		JsonObject indicatorSetting5 = new JsonObject();
-		indicatorSetting5.addProperty("indicator", "MFI");
-		indicatorSetting5.addProperty("weight", 1);
-		indicatorSetting5.addProperty("period", "20");
-		indicatorSetting5.addProperty("buyIndex", "70");
-		indicatorSetting5.addProperty("sellIndex", "30");
-		indicators.add("5", gson.toJsonTree(indicatorSetting5));
-		
-		JsonObject indicatorSetting6 = new JsonObject();
-		indicatorSetting6.addProperty("indicator", "StochOsc");
-		indicatorSetting6.addProperty("weight", 1);
-		indicatorSetting6.addProperty("n", "5");
-		indicatorSetting6.addProperty("m", "3");
-		indicatorSetting6.addProperty("t", "2");
-		indicators.add("6", gson.toJsonTree(indicatorSetting6));
-		
-		JsonObject jsobj = new JsonObject();
-		jsobj.add("indicatorList", gson.toJsonTree(indicators));
-		jsobj.addProperty("buyCriteria", 0);
-		jsobj.addProperty("sellCriteria", -1);
-		jsobj.addProperty("expList", "or, or, or, or, or, or");
+//		JsonObject indicators = new JsonObject();
+//		
+//		JsonObject indicatorSetting = new JsonObject();
+//		indicatorSetting.addProperty("indicator", "BollingerBand");
+//		indicatorSetting.addProperty("weight", 1);
+//		indicatorSetting.addProperty("period", 12);
+//		indicatorSetting.addProperty("mul", 3);
+//		indicators.add("1", gson.toJsonTree(indicatorSetting));
+//		
+//		JsonObject indicatorSetting1 = new JsonObject();
+//		indicatorSetting1.addProperty("indicator", "VolumeRatio");
+//		indicatorSetting1.addProperty("weight", 1);
+//		indicatorSetting1.addProperty("period", "20");
+//		indicatorSetting1.addProperty("buyIndex", "70");
+//		indicatorSetting1.addProperty("sellIndex", "30");
+//		indicators.add("0", gson.toJsonTree(indicatorSetting1));
+//		
+//		JsonObject indicatorSetting2 = new JsonObject();
+//		indicatorSetting2.addProperty("indicator", "gdVCross");
+//		indicatorSetting2.addProperty("weight", 1);
+//		indicatorSetting2.addProperty("longD", "26");
+//		indicatorSetting2.addProperty("shortD", "9");
+//		indicatorSetting2.addProperty("mT", "1");
+//		indicators.add("2", gson.toJsonTree(indicatorSetting2));
+//		
+//		JsonObject indicatorSetting3 = new JsonObject();
+//		indicatorSetting3.addProperty("indicator", "gdCross");
+//		indicatorSetting3.addProperty("weight", 1);
+//		indicatorSetting3.addProperty("longD", "26");
+//		indicatorSetting3.addProperty("shortD", "9");
+//		indicatorSetting3.addProperty("mT", "1");
+//		indicators.add("3", gson.toJsonTree(indicatorSetting3));
+//		
+//		JsonObject indicatorSetting4 = new JsonObject();
+//		indicatorSetting4.addProperty("indicator", "CCI");
+//		indicatorSetting4.addProperty("weight", 1);
+//		indicatorSetting4.addProperty("period", "20");
+//		indicatorSetting4.addProperty("buyIndex", "70");
+//		indicatorSetting4.addProperty("sellIndex", "30");
+//		indicators.add("4", gson.toJsonTree(indicatorSetting4));
+//		
+//		JsonObject indicatorSetting5 = new JsonObject();
+//		indicatorSetting5.addProperty("indicator", "MFI");
+//		indicatorSetting5.addProperty("weight", 1);
+//		indicatorSetting5.addProperty("period", "20");
+//		indicatorSetting5.addProperty("buyIndex", "70");
+//		indicatorSetting5.addProperty("sellIndex", "30");
+//		indicators.add("5", gson.toJsonTree(indicatorSetting5));
+//		
+//		JsonObject indicatorSetting6 = new JsonObject();
+//		indicatorSetting6.addProperty("indicator", "StochOsc");
+//		indicatorSetting6.addProperty("weight", 1);
+//		indicatorSetting6.addProperty("n", "5");
+//		indicatorSetting6.addProperty("m", "3");
+//		indicatorSetting6.addProperty("t", "2");
+//		indicators.add("6", gson.toJsonTree(indicatorSetting6));
+//		
+//		JsonObject jsobj = new JsonObject();
+//		jsobj.add("indicatorList", gson.toJsonTree(indicators));
+//		jsobj.addProperty("buyCriteria", 0);
+//		jsobj.addProperty("sellCriteria", -1);
+//		jsobj.addProperty("expList", "or, or, or, or, or, or");
 		//"and, or, and , or, or, or"
 			
 		/*String strategySettingJson = gson.toJson(jsobj);*/
@@ -267,6 +268,7 @@ public class BackTestingPerform {
 //		}
 		
 		//-- !! 지표 객체 생성 파트 !! --//
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		
 		// 배열에다가 해당하는 지표 객체 담기 (각각 개별 파라미터 및 웨이트 적용)
 		for(int i = 0; i < indicatorListJs.size(); i++) {
@@ -419,15 +421,15 @@ public class BackTestingPerform {
 							
 							
 							// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-							JsonObject tempJob = new JsonObject();
-							tempJob.addProperty("time", date.toString());
-							tempJob.addProperty("saleAction", "구매");
-							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-							tempJob.addProperty("salingCoinNumber", "0");
-							tempJob.addProperty("nowCash", nowCash+"");
-							tempJob.addProperty("nowCoin", nowCoin+"");
-							tempJob.addProperty("success", "실패 : 잔액부족");
-							resultLogArr.add(tempJob);
+//							JsonObject tempJob = new JsonObject();
+//							tempJob.addProperty("time", date.toString());
+//							tempJob.addProperty("saleAction", "구매");
+//							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//							tempJob.addProperty("salingCoinNumber", "0");
+//							tempJob.addProperty("nowCash", nowCash+"");
+//							tempJob.addProperty("nowCoin", nowCoin+"");
+//							tempJob.addProperty("success", "실패 : 잔액부족");
+//							resultLogArr.add(tempJob);
 							
 				
 							returnDetailMessage += "일정가 구매 - fail : 잔액부족\n";
@@ -448,15 +450,15 @@ public class BackTestingPerform {
 							
 							
 							// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-							JsonObject tempJob = new JsonObject();
-							tempJob.addProperty("time", date.toString());
-							tempJob.addProperty("saleAction", "구매");
-							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-							tempJob.addProperty("salingCoinNumber", "0");
-							tempJob.addProperty("nowCash", nowCash+"");
-							tempJob.addProperty("nowCoin", nowCoin+"");
-							tempJob.addProperty("success", "실패 : 잔액부족");
-							resultLogArr.add(tempJob);
+//							JsonObject tempJob = new JsonObject();
+//							tempJob.addProperty("time", date.toString());
+//							tempJob.addProperty("saleAction", "구매");
+//							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//							tempJob.addProperty("salingCoinNumber", "0");
+//							tempJob.addProperty("nowCash", nowCash+"");
+//							tempJob.addProperty("nowCoin", nowCoin+"");
+//							tempJob.addProperty("success", "실패 : 잔액부족");
+//							resultLogArr.add(tempJob);
 							
 							returnDetailMessage += "일정수 구매 - fail : 잔액부족\n";
 							continue;
@@ -469,13 +471,13 @@ public class BackTestingPerform {
 					
 					// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
 					JsonObject tempJob = new JsonObject();
-					tempJob.addProperty("time", date.toString());
-					tempJob.addProperty("saleAction", "구매");
-					tempJob.addProperty("coinCurrentPrice", currentPrice+"KRW");
-					tempJob.addProperty("salingCoinNumber", finCoinToBuy+"개");
-					tempJob.addProperty("nowCash", nowCash+"");
-					tempJob.addProperty("nowCoin", nowCoin+"");
-					tempJob.addProperty("success", "성공");
+					tempJob.addProperty("time", dt.format(date));
+					tempJob.addProperty("saleAction", "매수");
+					tempJob.addProperty("coinCurrentPrice", String.format("%.4f",currentPrice));
+					tempJob.addProperty("salingCoinNumber", String.format("%.4f",finCoinToBuy));
+					tempJob.addProperty("nowCash", String.format("%.4f",nowCash));
+					tempJob.addProperty("nowCoin", String.format("%.4f",nowCoin));
+//					tempJob.addProperty("success", "성공");
 					resultLogArr.add(tempJob);
 					
 					returnDetailMessage += temp+"\n";
@@ -491,15 +493,15 @@ public class BackTestingPerform {
 					
 					
 					// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-					JsonObject tempJob = new JsonObject();
-					tempJob.addProperty("time", date.toString());
-					tempJob.addProperty("saleAction", "구매");
-					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-					tempJob.addProperty("salingCoinNumber", "0");
-					tempJob.addProperty("nowCash", nowCash+"");
-					tempJob.addProperty("nowCoin", nowCoin+"");
-					tempJob.addProperty("success", "실패 : 잔액 없음");
-					resultLogArr.add(tempJob);
+//					JsonObject tempJob = new JsonObject();
+//					tempJob.addProperty("time", date.toString());
+//					tempJob.addProperty("saleAction", "구매");
+//					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//					tempJob.addProperty("salingCoinNumber", "0");
+//					tempJob.addProperty("nowCash", nowCash+"");
+//					tempJob.addProperty("nowCoin", nowCoin+"");
+//					tempJob.addProperty("success", "실패 : 잔액 없음");
+//					resultLogArr.add(tempJob);
 					
 				}
 				returnMessage += "--------------------------------------------------------------\n";
@@ -535,15 +537,15 @@ public class BackTestingPerform {
 							returnDetailMessage += "일정가 판매 - fail : 코인부족"+"\n";
 							
 							// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-							JsonObject tempJob = new JsonObject();
-							tempJob.addProperty("time", date.toString());
-							tempJob.addProperty("saleAction", "판매");
-							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-							tempJob.addProperty("salingCoinNumber", "0");
-							tempJob.addProperty("nowCash", nowCash+"");
-							tempJob.addProperty("nowCoin", nowCoin+"");
-							tempJob.addProperty("success", "실패 : 코인 부족");
-							resultLogArr.add(tempJob);
+//							JsonObject tempJob = new JsonObject();
+//							tempJob.addProperty("time", date.toString());
+//							tempJob.addProperty("saleAction", "판매");
+//							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//							tempJob.addProperty("salingCoinNumber", "0");
+//							tempJob.addProperty("nowCash", nowCash+"");
+//							tempJob.addProperty("nowCoin", nowCoin+"");
+//							tempJob.addProperty("success", "실패 : 코인 부족");
+//							resultLogArr.add(tempJob);
 							
 							continue;
 						}
@@ -553,9 +555,9 @@ public class BackTestingPerform {
 					else {
 						//일정갯수판매
 						if(nowCoin >= numSellUnit) {
-							finCoinToSell = priceSellUnit;
-							nowCoin -= priceSellUnit;
-							nowCash += priceSellUnit*currentPrice;
+							finCoinToSell = numSellUnit;
+							nowCoin -= numSellUnit;
+							nowCash += numSellUnit*currentPrice;
 							//System.out.println("일정수 판매! 현재 금액 : " + nowCash + " / 현재 코인 : " + nowCoin + " / 총 재산 : " + (nowCoin*currentPrice+nowCash)); 
 						}
 						else {
@@ -564,15 +566,15 @@ public class BackTestingPerform {
 							returnDetailMessage += "일정수 판매 - fail : 코인부족\n";
 							
 							// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-							JsonObject tempJob = new JsonObject();
-							tempJob.addProperty("time", date.toString());
-							tempJob.addProperty("saleAction", "판매");
-							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-							tempJob.addProperty("salingCoinNumber", "0");
-							tempJob.addProperty("nowCash", nowCash+"");
-							tempJob.addProperty("nowCoin", nowCoin+"");
-							tempJob.addProperty("success", "실패 : 코인 부족");
-							resultLogArr.add(tempJob);
+//							JsonObject tempJob = new JsonObject();
+//							tempJob.addProperty("time", date.toString());
+//							tempJob.addProperty("saleAction", "판매");
+//							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//							tempJob.addProperty("salingCoinNumber", "0");
+//							tempJob.addProperty("nowCash", nowCash+"");
+//							tempJob.addProperty("nowCoin", nowCoin+"");
+//							tempJob.addProperty("success", "실패 : 코인 부족");
+//							resultLogArr.add(tempJob);
 							
 							continue;
 						}
@@ -586,13 +588,13 @@ public class BackTestingPerform {
 					
 					// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
 					JsonObject tempJob = new JsonObject();
-					tempJob.addProperty("time", date.toString());
-					tempJob.addProperty("saleAction", "판매");
-					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-					tempJob.addProperty("salingCoinNumber", finCoinToSell);
-					tempJob.addProperty("nowCash", nowCash+"");
-					tempJob.addProperty("nowCoin", nowCoin+"");
-					tempJob.addProperty("success", "성공");
+					tempJob.addProperty("time", dt.format(date));
+					tempJob.addProperty("saleAction", "매도");
+					tempJob.addProperty("coinCurrentPrice", String.format("%.4f",currentPrice));
+					tempJob.addProperty("salingCoinNumber", String.format("%.4f",finCoinToSell));
+					tempJob.addProperty("nowCash", String.format("%.4f",nowCash));
+					tempJob.addProperty("nowCoin", String.format("%.4f",nowCoin));
+//					tempJob.addProperty("success", "성공");
 					resultLogArr.add(tempJob);
 					
 				}
@@ -602,15 +604,15 @@ public class BackTestingPerform {
 					returnDetailMessage += "판매 - no coin!"+"\n";
 					
 					// 시간, 행동, 코인 가격, 수량, 현금, 코인수, 성공여부
-					JsonObject tempJob = new JsonObject();
-					tempJob.addProperty("time", date.toString());
-					tempJob.addProperty("saleAction", "판매");
-					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
-					tempJob.addProperty("salingCoinNumber", "0");
-					tempJob.addProperty("nowCash", nowCash+"");
-					tempJob.addProperty("nowCoin", nowCoin+"");
-					tempJob.addProperty("success", "실패 : 코인 없음");
-					resultLogArr.add(tempJob);
+//					JsonObject tempJob = new JsonObject();
+//					tempJob.addProperty("time", date.toString());
+//					tempJob.addProperty("saleAction", "판매");
+//					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
+//					tempJob.addProperty("salingCoinNumber", "0");
+//					tempJob.addProperty("nowCash", nowCash+"");
+//					tempJob.addProperty("nowCoin", nowCoin+"");
+//					tempJob.addProperty("success", "실패 : 코인 없음");
+//					resultLogArr.add(tempJob);
 				}
 				
 				returnMessage += "--------------------------------------------------------------\n";
@@ -636,15 +638,16 @@ public class BackTestingPerform {
 		System.out.println(returnResult);
 		
 		JsonObject finResult = new JsonObject();
-		finResult.addProperty("finalCoin", nowCoin);
-		finResult.addProperty("nowCash", nowCash);
-		finResult.addProperty("finalAsset", finalAsset);
-		finResult.addProperty("finalProfit", profit*100);
+		finResult.addProperty("finalCoin", String.format("%.4f",nowCoin));
+		finResult.addProperty("nowCash", String.format("%.4f",nowCash));
+		finResult.addProperty("finalAsset", String.format("%.4f",finalAsset));
+		finResult.addProperty("finalProfit", String.format("%.2f",profit*100));
 		
 		resultLog.addProperty("status", "성공");
 		resultLog.add("result", finResult);
 		resultLog.addProperty("error", "");
 		resultLog.add("log", resultLogArr);
+		resultLog.addProperty("base", base.toUpperCase());
 		
 		
 		return resultLog.toString();

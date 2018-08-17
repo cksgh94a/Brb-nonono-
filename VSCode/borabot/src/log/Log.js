@@ -175,14 +175,14 @@ class Log extends Component {
             <div className = "log-botIndivText">
               {selectedTrade.bot_name}의 거래 기록 
             </div> 
-            <div className = "log-botBackground" style={{marginLeft : "200px", width : "270px"}}>
+            <div className = "log-botBackground">
               거래소 : {selectedTrade.exchange_name}
             </div>  
             <div className = "log-botBackground">
               코인 : {selectedTrade.coin}
             </div>  
           </div>
-          <table className='log-tableContainer' >
+          <table className='log-tableContainer'>
             <thead>
               <th className='log-headTr'>거래 신호 시간</th>
               <th className='log-headTr'>매매 행동</th>

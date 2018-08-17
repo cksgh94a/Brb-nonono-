@@ -39,8 +39,6 @@ public class BackTest extends HttpServlet {
 	    response.setContentType("application/json;charset=utf-8");
 	    
 		HttpSession session = request.getSession();
-		
-		System.out.println(request.getParameter("buyingSetting"));
 
     	// 거래 세부 설정
     	double priceBuyUnit = 0.0;
@@ -67,20 +65,7 @@ public class BackTest extends HttpServlet {
 	    		break;
 			default: break;
 		}
-//
-//        new tradingBot((String) session.getAttribute("email"),
-//        		request.getParameter("exchange").toLowerCase(),
-//        		request.getParameter("botname"),
-//        		request.getParameter("coin"),
-//        		request.getParameter("base"),
-//        		Integer.parseInt(request.getParameter("interval")),
-//        		request.getParameter("startDate"),
-//        		request.getParameter("endDate"),
-//        		request.getParameter("strategyName"),
-//        		request.getParameter("buyingSetting"),
-//        		request.getParameter("sellingSetting"),
-//        		priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0).botStart();
-        
+    	
 		BackTestingPerform bt = new BackTestingPerform((String) session.getAttribute("email"),
 				request.getParameter("exchange").toLowerCase(),
 				request.getParameter("coin"),
