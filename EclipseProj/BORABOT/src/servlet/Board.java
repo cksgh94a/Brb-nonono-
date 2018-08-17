@@ -40,7 +40,8 @@ public class Board extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 	    
         HttpSession session = request.getSession();
-
+		PrintWriter out = response.getWriter();
+        
         JSONObject jObject = new JSONObject();
 		JSONArray jArray = new JSONArray();
     	
@@ -80,7 +81,6 @@ public class Board extends HttpServlet {
 		}
 		useDB.clean();
 
-		PrintWriter out = response.getWriter();
 		out.print(jObject.toJSONString());
 	}
 

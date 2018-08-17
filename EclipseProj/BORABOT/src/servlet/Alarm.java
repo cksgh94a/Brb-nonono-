@@ -41,6 +41,16 @@ public class Alarm extends HttpServlet {
 	    response.setContentType("text/html;charset=utf-8");
 	    
         HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
+		
+		
+		session.invalidate();
+		// 세션 유효성 확인
+//        if (request.getSession(false) == null) {
+//        	System.out.println("zz");
+//        	out.print("<html><script type='text/javascript'>location.href='/';alert('세션이 만료되었습니다\\n다시 로그인해주세요');</script></html>");
+//        	return;
+//        }
         
 		JSONArray jArray = new JSONArray();
 		String selectSql = String.format("SELECT * from trans_log where email=\'%s\' and read_mark=0 ORDER BY trans_time DESC",
@@ -66,10 +76,10 @@ public class Alarm extends HttpServlet {
 		} catch (SQLException e) {
 			e.printStackTrace();			
 		}				
+
+    	response.sendRedirect("/");
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();		
-
-		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());
 	}
 

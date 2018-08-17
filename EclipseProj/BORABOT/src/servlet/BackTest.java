@@ -39,6 +39,7 @@ public class BackTest extends HttpServlet {
 	    response.setContentType("application/json;charset=utf-8");
 	    
 		HttpSession session = request.getSession();
+		PrintWriter out = response.getWriter();
 
     	// 거래 세부 설정
     	double priceBuyUnit = 0.0;
@@ -79,7 +80,6 @@ public class BackTest extends HttpServlet {
 				request.getParameter("sellingSetting"),	
         		priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0);
 
-		PrintWriter out = response.getWriter();
 		out.print(bt.backTestRun());	
 
 //		resBT.put("ReturnDetailMessage", bt.getReturnDetailMsg());	
