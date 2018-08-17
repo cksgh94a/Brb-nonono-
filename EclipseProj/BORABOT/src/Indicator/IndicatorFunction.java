@@ -24,7 +24,12 @@ public class IndicatorFunction {
 		long now = System.currentTimeMillis() / 1000;
 
 		String symb;
-		if (exchange.equals("binance")) {
+
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -35,6 +40,9 @@ public class IndicatorFunction {
 		String sql = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval,
 				symb, now - ((period_day - 1) * interval) - 1, now + 1);
 
+		String sql2 = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
+		
 		rs = db.Query(sql, "select");
 		rs.next();
 		int cnt = 0;
@@ -58,14 +66,14 @@ public class IndicatorFunction {
 		after = now - (now % interval);
 		String recentHL = String.format(
 				"Select MAX(c), MIN(c), SUM(v) FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s and %s; ", exchange, interval,
-				symb, after, now);
+				coin, after, now);
 
 		String selectForC = String.format(
 				" SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange, exchange,
-				symb, symb, after - 1, now + 1);
+				coin, coin, after - 1, now + 1);
 
 		String selectForO = String.format(
-				"SELECT price FROM %sOneMinute%s WHERE uTime < %s ORDER BY ABS(uTime - %s) LIMIT 1  ", exchange, symb,
+				"SELECT price FROM %sOneMinute%s WHERE uTime < %s ORDER BY ABS(uTime - %s) LIMIT 1  ", exchange, coin,
 				after - 1, now + 1);
 
 		DB_ohlc db1 = new DB_ohlc();
@@ -119,7 +127,11 @@ public class IndicatorFunction {
 		long now = System.currentTimeMillis() / 1000;
 
 		String symb;
-		if (exchange.equals("binance")) {
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -129,6 +141,9 @@ public class IndicatorFunction {
 		ResultSet rs = null;
 		String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange,
 				interval, symb, now - ((period_day - 1) * interval) - 100, now + 50);
+		
+		String sql2 = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
 
 		rs = db.Query(sql, "select");
 
@@ -159,7 +174,11 @@ public class IndicatorFunction {
 		long now = System.currentTimeMillis() / 1000;
 
 		String symb;
-		if (exchange.equals("binance")) {
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -169,6 +188,9 @@ public class IndicatorFunction {
 		ResultSet rs = null;
 		String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
 				now - ((period_day - 1) * interval) - 10, now + 50);
+		String sql2 = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
+		
 		// System.out.println(sql);
 		rs = db.Query(sql, "select");
 		double temp=0;
@@ -194,7 +216,7 @@ public class IndicatorFunction {
 
 		String selectForC = String.format(
 				" SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",  exchange,
-				symb, exchange, symb, after - 1, now + 1);
+				coin, exchange, coin, after - 1, now + 1);
 
 		DB_ohlc db2 = new DB_ohlc();
 
@@ -223,7 +245,11 @@ public class IndicatorFunction {
 		double ret[] = new double[size];
 		long now = System.currentTimeMillis() / 1000;
 		String symb;
-		if (exchange.equals("binance")) {
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -233,6 +259,8 @@ public class IndicatorFunction {
 		ResultSet rs = null;
 		String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
 				now - ((period_day - 1) * interval) - 100, now + 50);
+		String sql2 = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
 
 		rs = db.Query(sql, "select");
 
@@ -254,18 +282,20 @@ public class IndicatorFunction {
 
 		String selectForC = String.format(
 				" SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange,
-				symb,  exchange, symb, after - 1, now + 1);
+				coin,  exchange, coin, after - 1, now + 1);
 
 		DB_ohlc db2 = new DB_ohlc();
 
 		ResultSet rs2 = db2.Query(selectForC, "select");
 
-		double o, h, l, c, v;
+		double c;
 
 		rs2.next();
 		if (rs2.wasNull()) {
+			// 고 사이에 한 개도 없다면 ! 그냥 그 전꺼를 쓰는거고
 			ret[size - 1] = ret[size - 2];
 		} else {
+			// 있으면 이거쓰고~
 			c = rs2.getDouble(1);
 			ret[size - 1] = c;
 		}
@@ -281,7 +311,11 @@ public class IndicatorFunction {
 		double ret[] = new double[size];
 		long now = System.currentTimeMillis() / 1000;
 		String symb;
-		if (exchange.equals("binance")) {
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -291,6 +325,8 @@ public class IndicatorFunction {
 		ResultSet rs = null;
 		String sql = String.format("SELECT v FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
 				now - ((period_day - 1) * interval) - 100, now + 50);
+		String sql2 = String.format("SELECT v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
 
 		rs = db.Query(sql, "select");
 
@@ -312,7 +348,7 @@ public class IndicatorFunction {
 		after = now - (now % interval);
 
 		String recentV = String.format("Select SUM(v) FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s and %s; ", exchange,
-				interval, symb, after, now);
+				interval, coin, after, now);
 
 		DB_ohlc db2 = new DB_ohlc();
 
@@ -341,7 +377,11 @@ public class IndicatorFunction {
 		double ret[] = new double[size];
 		long now = System.currentTimeMillis() / 1000;
 		String symb;
-		if (exchange.equals("binance")) {
+		System.out.println(exchange);
+		System.out.println(exchange.equals("BINANCE"));
+		System.out.println(exchange.equals("binance"));
+		
+		if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			symb = coin + base;
 		} else {
 			symb = coin;
@@ -351,6 +391,8 @@ public class IndicatorFunction {
 		ResultSet rs = null;
 		String sql = String.format("SELECT h,l,c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval,
 				symb, now - ((period_day - 1) * interval) - 10, now + 50);
+		String sql2 = String.format("SELECT h,l,c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+				symb, period_day);
 
 		rs = db.Query(sql, "select");
 
@@ -372,11 +414,11 @@ public class IndicatorFunction {
 		after = now - (now % interval);
 		String recentHL = String.format(
 				"Select MAX(c), MIN(c), SUM(v) FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s and %s; ", exchange, interval,
-				symb, after, now);
+				coin, after, now);
 
 		String selectForC = String.format(
 				" SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange, 
-				symb, exchange, symb, after - 1, now + 1);
+				coin, exchange, coin, after - 1, now + 1);
 
 		DB_ohlc db1 = new DB_ohlc();
 		DB_ohlc db2 = new DB_ohlc();
@@ -467,7 +509,7 @@ public class IndicatorFunction {
 		long now = System.currentTimeMillis() / 1000;
 
 		String symb;
-		if (exchange.equals("binance")) {
+		if (exchange == "binance") {
 			symb = coin + base;
 		} else {
 			symb = coin;

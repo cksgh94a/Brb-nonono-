@@ -1,8 +1,3 @@
-// 이전거 아마 안쓸듯 지워야지~~
-
-
-
-
 //package backtest;
 //
 //import exchangeAPI.CryptowatchAPI;

@@ -85,19 +85,19 @@ public class tradingBot {
 
 	private static CryptowatchAPI crypt = new CryptowatchAPI(20, 60);
 
-	public void botStart() {
+	public void botStart() throws SQLException {
 
 		/* DB에서 API Sec 키 가지고오기 */
 
 		String KeySQL = String.format(
-				"Select api_key, secret_key from customer_key where email = '%s' and exchange_name = '%s'", email, exchange);
+				"Select api_key, secret_key from customer_key where email = '%s' and exchange_name = '%s'", email,
+				exchange);
 		DB dbkey = new DB();
+		ResultSet rsKey = dbkey.Query(KeySQL, "select");
 
 		String apiKey = "";
 		String secKey = "";
-
 		try {
-			ResultSet rsKey = dbkey.Query(KeySQL, "select");
 			if (rsKey.next()) {
 				apiKey = rsKey.getString(1);
 				secKey = rsKey.getString(2);
@@ -107,23 +107,23 @@ public class tradingBot {
 			e1.printStackTrace();
 		}
 
-		this.API_KEY = apiKey;
-		this.Secret_KEY = secKey;
+//		this.API_KEY = "F3q8CU2cmpO1WKpQgoqENyZ95Dnjx7sF8dd2eMu9W0kThhg89F9cDmoWWDMMD0Ee";
+//		this.Secret_KEY = "SL2vp07h6wzG7ij2StbY1rb0YqIa3oexN1up6II58276THbadwzOdkuLSUYFhzMM";
 
+		dbkey.clean();
 		final exAPI exAPIobj;
 
-		if (exchange.equals("bithumb")) {
-			exAPIobj = (exAPI) new BithumbAPI(API_KEY, Secret_KEY);
-			base = "krw";
+		if (exchange.equals("bithumb") || exchange.equals("BITHUMB")) {
+			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);			
 		} else if (exchange.equals("bittrex")) {
-			exAPIobj = (exAPI) new BittrexAPI(API_KEY, Secret_KEY, 10, 10);
-			base = "usd";
-		} else if (exchange.equals("binance")) {
-			exAPIobj = (exAPI) new BinanceAPI(API_KEY, Secret_KEY, 10, 10);
-			base = "btc";
+			exAPIobj = (exAPI) new BittrexAPI(API_KEY, Secret_KEY, 10, 10);			
+		} else if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+			exAPIobj = (exAPI) new BinanceAPI(apiKey, secKey, 10, 10);			
+		} else if (exchange.equals("hitbtc")|| exchange.equals("HITBTC")) {
+			exAPIobj = (exAPI) new HitbtcAPI(apiKey, secKey);			
 		} else {
-			exAPIobj = (exAPI) new CoinoneAPI(API_KEY, Secret_KEY, 10, 10);
-			base = "krw";
+			System.out.println("API 객체 생성 오류!");
+			return;
 		}
 
 		DB dao = new DB();
@@ -131,18 +131,14 @@ public class tradingBot {
 		// trade DB insert!
 		double initialCoinNum = exAPIobj.getBalance(coin);
 		double initialBalance = exAPIobj.getBalance(base);
+		System.out.println(initialCoinNum);
 		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1000으로 표시(null)
 		String initialTradeSql = String.format(
 				" INSERT INTO trade VALUES( \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s )",
 				email, botName, exchange, coin, base, strategyName, interval, startDate, endDate, buyingSetting,
 				sellingSetting, priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, buyCriteria, sellCriteria, 1,
-				initialBalance, initialCoinNum, -1000, -1, -1);
-		try {
-			dao.Query(initialTradeSql, "insert");
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+				initialBalance, initialCoinNum, -1, -1, -1);
+		dao.Query(initialTradeSql, "insert");
 		dao.clean();
 
 		// 테스트를 위해 만든 JSON객체
@@ -216,7 +212,7 @@ public class tradingBot {
 		// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ ****************************
 		// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-		String strategySettingJson = gson.toJson(jsobj);
+//		String strategySettingJson = gson.toJson(jsobj);
 		// -----------------------------------------------------------------
 
 		// -----------------------------------------------------------------
@@ -228,20 +224,17 @@ public class tradingBot {
 		//
 		//
 		//
-		// String settingSelectSql = String.format(
-		// "SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and
-		// strategy_name = \"%s\"; ", email,
-		// strategyName);
-		// String strategySettingJson = "";
-		// try {
-		// ResultSet rsTemp = dao.Query(settingSelectSql, "select");
-		// if (rsTemp.next()) {
-		// strategySettingJson = rsTemp.getString(1);
-		// }
-		// dao.clean();
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
+		 String settingSelectSql = String.format( "SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
+		 String strategySettingJson = "";
+		 try {
+		 ResultSet rsTemp = dao.Query(settingSelectSql, "select");
+		 if (rsTemp.next()) {
+		 strategySettingJson = rsTemp.getString(1);
+		 }
+		 dao.clean();
+		 } catch (Exception e) {
+		 e.printStackTrace();
+		 }
 		// -----------------------------------------------------------------
 
 		System.out.println("json test" + strategySettingJson);
@@ -345,12 +338,7 @@ public class tradingBot {
 					// dao 상태 0으로 전환 , trans_log는 업데이트 ㄴㄴ
 					String sql = String.format("UPDATE trade SET status=0 WHERE email = \"%s\" and bot_name = \"%s\" ",
 							email, botName);
-					try {
-						dao.Query(sql, "insert");
-					} catch (SQLException e1) {
-						// TODO Auto-generated catch block
-						e1.printStackTrace();
-					}
+					dao.Query(sql, "insert");
 					dao.clean();
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 초기 오류로 종료되었습니다.";
@@ -374,13 +362,15 @@ public class tradingBot {
 				// 시간 체크 //
 				LocalDateTime now = LocalDateTime.now();
 				LocalDateTime deadDay = LocalDateTime.parse(endDate);
+
+				double numOfNowCoin = exAPIobj.getBalance(coin);
+				double balanceOfNow = exAPIobj.getBalance(base);
+
+				// 시간 초과 종료
 				if (now.isAfter(deadDay)) {
-					// 종료
 
 					// ---moduel---//
 					double ticker = exAPIobj.getTicker(coin, base);
-					double numOfNowCoin = exAPIobj.getBalance(coin);
-					double balanceOfNow = exAPIobj.getBalance(base);
 					double total = numOfNowCoin * ticker + balanceOfNow;
 
 					String sql = String.format(
@@ -424,14 +414,12 @@ public class tradingBot {
 					e.printStackTrace();
 				}
 
-				// status가 0이면 종료
+				// status가 0이면 종료 강제종료
 				if (nowStatus.equals("0")) {
 					// 종료
 
 					// ---moduel---//
 					double ticker = exAPIobj.getTicker(coin, base);
-					double numOfNowCoin = exAPIobj.getBalance(coin);
-					double balanceOfNow = exAPIobj.getBalance(base);
 					double total = numOfNowCoin * ticker + balanceOfNow;
 
 					String sql = String.format(
@@ -439,24 +427,29 @@ public class tradingBot {
 							total, numOfNowCoin, balanceOfNow, email, botName);
 					try {
 						dao.Query(sql, "insert");
-						dao.clean();
-						// ---moduel---//
-	
-						// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-						String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 사용자 선택으로 종료되었습니다.";
-						String subject = "보라봇 " + botName + " 종료 알람";
-						SendMail.sendEmail(email, subject, content);
-	
-						String sqlTemp = String.format(
-								"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
-								email);
-						DB dbt = new DB();
-						dbt.Query(sqlTemp, "insert");
-						dbt.clean();
 					} catch (SQLException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					dao.clean();
+					// ---moduel---//
+
+					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+					String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 사용자 선택으로 종료되었습니다.";
+					String subject = "보라봇 " + botName + " 종료 알람";
+					SendMail.sendEmail(email, subject, content);
+
+					String sqlTemp = String.format(
+							"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
+							email);
+					DB dbt = new DB();
+					try {
+						dbt.Query(sqlTemp, "insert");
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					dbt.clean();
 
 					System.out.println("trade is done : teminated by forced");
 					timer.cancel();
@@ -464,7 +457,7 @@ public class tradingBot {
 					trigger = -1;
 				}
 
-				// 1차관문 : dao에 상태가 진행중이거나, 날짜가 아직 안지났거나
+				// 1차관문 : dao에 상태가 진행중이거나, 날짜가 아직 안지났거나 둘 다 만족하면 거래진행!
 				if (trigger == 1) {
 					double fin;
 
@@ -496,8 +489,8 @@ public class tradingBot {
 
 							// ---moduel---//
 							double ticker = exAPIobj.getTicker(coin, base);
-							double numOfNowCoin = exAPIobj.getBalance(coin);
-							double balanceOfNow = exAPIobj.getBalance(base);
+							// double numOfNowCoin = exAPIobj.getBalance(coin);
+							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 
 							String sql = String.format(
@@ -505,24 +498,29 @@ public class tradingBot {
 									total, numOfNowCoin, balanceOfNow, email, botName);
 							try {
 								dao.Query(sql, "insert");
-								dao.clean();
-								// ---moduel---//
-	
-								// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-								String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 거래 중 데이터 api 오류로 종료되었습니다.";
-								String subject = "보라봇 " + botName + " 종료 알람";
-								SendMail.sendEmail(email, subject, content);
-	
-								String sqlTemp = String.format(
-										"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
-										email);
-								DB dbt = new DB();
-								dbt.Query(sqlTemp, "insert");
-								dbt.clean();
 							} catch (SQLException e1) {
 								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
+							dao.clean();
+							// ---moduel---//
+
+							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+							String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 거래 중 데이터 api 오류로 종료되었습니다.";
+							String subject = "보라봇 " + botName + " 종료 알람";
+							SendMail.sendEmail(email, subject, content);
+
+							String sqlTemp = String.format(
+									"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
+									email);
+							DB dbt = new DB();
+							try {
+								dbt.Query(sqlTemp, "insert");
+							} catch (SQLException e1) {
+								// TODO Auto-generated catch block
+								e1.printStackTrace();
+							}
+							dbt.clean();
 
 							trigger = -1; // timer cancel을 해도 최초 1회는 실행되므로, 그걸 막기 위해 트리거를 별도 설정
 							fin = -1; // meaningless
@@ -539,22 +537,33 @@ public class tradingBot {
 
 							if (buyingSetting.equals("buyAll")) {
 
-								numOfSalingCoin = buyAll(exAPIobj);
+								numOfSalingCoin = buyAll(exAPIobj, balanceOfNow);
+
 							} else if (buyingSetting.equals("buyCertainPrice")) {
 
-								numOfSalingCoin = buyCertainPrice(exAPIobj, priceBuyUnit);
+								numOfSalingCoin = buyCertainPrice(exAPIobj, priceBuyUnit, balanceOfNow);
 							} else {
 
-								numOfSalingCoin = buyCertainNum(exAPIobj, numBuyUnit);
+								numOfSalingCoin = buyCertainNum(exAPIobj, numBuyUnit, balanceOfNow);
 							}
 
-							numOfSalingCoin = shapingnumOfSalingCoin(numOfSalingCoin);
+							numOfSalingCoin = shapingnumOfSalingCoin(numOfSalingCoin, coin);
 
-							// exAPIobj.buyCoin(coin, base, numOfSalingCoin+"");
+							// try {
+							// exAPIobj.buyCoin(coin, base, numOfSalingCoin + "");
+							// } catch (Exception e) {
+							// // 매도 시그널 보냈 지만 실패
+							// // 이유
+							// // 1. 서버 오류
+							// // 2. 잔액 부족?
+							// // 3. 코인 부족
+							// // 4. 소숫점 단위 안 맞음.
+							//
+							// }
 
 							double ticker = exAPIobj.getTicker(coin, base);
-							double numOfNowCoin = exAPIobj.getBalance(coin);
-							double balanceOfNow = exAPIobj.getBalance(base);
+							// double numOfNowCoin = exAPIobj.getBalance(coin);
+							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 
 							String currentTime = LocalDateTime.now().toString();
@@ -563,28 +572,34 @@ public class tradingBot {
 									"INSERT INTO trans_log VALUES(\"%s\", \"%s\", \"%s\", \"%s\", %s, \"%s\", \"%s\", %s, %s, %s, %s, 0)",
 									email, botName, exchange, currentTime, 1, coin + base, ticker, numOfSalingCoin,
 									total, balanceOfNow, numOfNowCoin, 0); // 마지막 0 -> 안읽음
+
 							System.out.println(sql);
 							try {
 								dao.Query(sql, "insert");
-								dao.clean();
-								// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 구매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
-								// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
-								String subject = "보라봇 " + botName + " 구매 알람!";
-								String content = String.format(
-										"%s \n %s봇이 코인 %s 을 %s개 시장가로 매수주문 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", botName,
-										LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
-								SendMail.sendEmail(email, subject, content);
-	
-								String sqlTemp = String.format(
-										"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
-										email);
-								DB dbt = new DB();
-								dbt.Query(sqlTemp, "insert");
-								dbt.clean();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							dao.clean();
+							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 구매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+							String subject = "보라봇 " + botName + " 구매 알람!";
+							String content = String.format(
+									"%s \n %s봇이 코인 %s 을 %s개 시장가로 매수주문 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", botName,
+									LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
+							SendMail.sendEmail(email, subject, content);
+
+							String sqlTemp = String.format(
+									"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
+									email);
+							DB dbt = new DB();
+							try {
+								dbt.Query(sqlTemp, "insert");
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							dbt.clean();
 
 						} else if (fin <= sellCriteria) { // 매도 시그널!
 							System.out.println("sell!");
@@ -593,22 +608,32 @@ public class tradingBot {
 
 							if (sellingSetting.equals("sellAll")) {
 
-								numOfSalingCoin = sellAll(exAPIobj);
+								numOfSalingCoin = sellAll(numOfNowCoin);
 							} else if (sellingSetting.equals("sellCertainPrice")) {
 
-								numOfSalingCoin = sellCertainPrice(exAPIobj, priceSellUnit);
+								numOfSalingCoin = sellCertainPrice(exAPIobj, priceSellUnit, numOfNowCoin);
 							} else {
 
-								numOfSalingCoin = sellCertainNum(exAPIobj, numSellUnit);
+								numOfSalingCoin = sellCertainNum(exAPIobj, numSellUnit, numOfNowCoin);
 							}
 
-							numOfSalingCoin = shapingnumOfSalingCoin(numOfSalingCoin);
+							numOfSalingCoin = shapingnumOfSalingCoin(numOfSalingCoin, coin);
 
-							// exAPIobj.sellCoin(coin, base, numOfSalingCoin+"");
+							// try {
+							// exAPIobj.sellCoin(coin, base, numOfSalingCoin + "");
+							// } catch (Exception e) {
+							// // 매도 시그널 보냈 지만 실패
+							// // 이유
+							// // 1. 서버 오류
+							// // 2. 잔액 부족?
+							// // 3. 코인 부족
+							// // 4. 소숫점 단위 안 맞음.
+							//
+							// }
 
 							double ticker = exAPIobj.getTicker(coin, base);
-							double numOfNowCoin = exAPIobj.getBalance(coin);
-							double balanceOfNow = exAPIobj.getBalance(base);
+							// double numOfNowCoin = exAPIobj.getBalance(coin);
+							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 
 							String currentTime = LocalDateTime.now().toString();
@@ -620,31 +645,36 @@ public class tradingBot {
 							System.out.println(sql);
 							try {
 								dao.Query(sql, "insert");
-								dao.clean();
-								// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 판매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
-								// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
-								String subject = "보라봇 " + botName + " 판매 알람!";
-								String content = String.format(
-										"%s \n %s봇이 코인 %s 을 %s개 시장가로 매도주문을 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", botName,
-										LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
-								SendMail.sendEmail(email, subject, content);
-	
-								String sqlTemp = String.format(
-										"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
-										email);
-								DB dbt = new DB();
-								dbt.Query(sqlTemp, "insert");
-								dbt.clean();
 							} catch (SQLException e) {
 								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}
+							dao.clean();
+							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡsendAlarm : 판매 ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ알람내용 디비에 저장ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+							String subject = "보라봇 " + botName + " 판매 알람!";
+							String content = String.format(
+									"%s \n %s봇이 코인 %s 을 %s개 시장가로 매도주문을 보냈습니다. 현재 코인 : %s , 현재 잔액 : %s", botName,
+									LocalDateTime.now(), coin, numOfSalingCoin, numOfNowCoin, balanceOfNow);
+							SendMail.sendEmail(email, subject, content);
+
+							String sqlTemp = String.format(
+									"update customer set alarm_count_unread = alarm_count_unread+1 where email = \"%s\" ",
+									email);
+							DB dbt = new DB();
+							try {
+								dbt.Query(sqlTemp, "insert");
+							} catch (SQLException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							dbt.clean();
 
 						} else {
 							System.out.println("wait!");
 							double ticker = exAPIobj.getTicker(coin, base);
-							double numOfNowCoin = exAPIobj.getBalance(coin);
-							double balanceOfNow = exAPIobj.getBalance(base);
+							// double numOfNowCoin = exAPIobj.getBalance(coin);
+							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 							String currentTime = LocalDateTime.now().toString();
 
@@ -662,9 +692,7 @@ public class tradingBot {
 							dao.clean();
 
 						}
-
 						System.out.println("\n");
-
 					}
 				}
 			}
@@ -686,7 +714,7 @@ public class tradingBot {
 	}
 
 	// 8자리로
-	private static double shapingnumOfSalingCoin(double numOfSalingCoin) {
+	private static double shapingnumOfSalingCoin(double numOfSalingCoin, String coin) {
 
 		double ret = Double.parseDouble(String.format("%.8f", numOfSalingCoin));
 		System.out.println("shaped : " + ret);
@@ -696,17 +724,20 @@ public class tradingBot {
 
 	// 올인선택
 	// 다 사버려
-	private static double buyAll(exAPI api) {
+	private static double buyAll(exAPI api, double balanceOfNow) {
 
-		return api.getBalance(base) / api.getTicker(coin, base);
+		// return api.getBalance(base) / api.getTicker(coin, base);
+		return balanceOfNow / api.getTicker(coin, base);
 	}
 
 	// 특정 가격 만큼 산다고 정하면
 	// 이 함수
-	private static double buyCertainPrice(exAPI api, double value) {
+	private static double buyCertainPrice(exAPI api, double value, double balanceOfNow) {
 
-		if (api.getBalance(base) > value) {
+		if (balanceOfNow > value) {
+
 			return value / api.getTicker(coin, base);
+
 		} else {
 			return 0;
 		}
@@ -714,31 +745,31 @@ public class tradingBot {
 
 	// 특정 갯수 만큼 삼
 	// 이 함수
-	private static double buyCertainNum(exAPI api, double value) {
-		if (api.getBalance(base) / api.getTicker(coin, base) > value) {
+	private static double buyCertainNum(exAPI api, double value, double balanceOfNow) {
+		if (balanceOfNow / api.getTicker(coin, base) > value) {
 			return value;
 		} else {
 			return 0;
 		}
 	}
 
-	private static double sellAll(exAPI api) {
+	private static double sellAll(double nomOfNowCoin) {
 
-		return api.getBalance(coin);
+		return nomOfNowCoin;
 	}
 
-	private static double sellCertainPrice(exAPI api, double value) {
+	private static double sellCertainPrice(exAPI api, double value, double numOfNowCoin) {
 
-		if (value / api.getTicker(coin, base) <= api.getBalance(coin)) {
+		if (value / api.getTicker(coin, base) <= numOfNowCoin) {
 			return value / api.getTicker(coin, base);
 		} else {
 			return 0;
 		}
 	}
 
-	private static double sellCertainNum(exAPI api, double value) {
+	private static double sellCertainNum(exAPI api, double value, double numOfNowCoin) {
 
-		if (api.getBalance(coin) >= value) {
+		if (numOfNowCoin >= value) {
 			return value;
 		} else {
 			return 0;

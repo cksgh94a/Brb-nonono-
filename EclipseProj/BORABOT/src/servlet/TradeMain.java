@@ -66,18 +66,23 @@ public class TradeMain extends HttpServlet {
     		}
         	
         	// 거래 객체 생성
-            new tradingBot((String) session.getAttribute("email"),
-            		request.getParameter("exchange").toLowerCase(),
-            		request.getParameter("botname"),
-            		request.getParameter("coin"),
-            		request.getParameter("base"),
-            		Integer.parseInt(request.getParameter("interval")),
-            		request.getParameter("startDate"),
-            		request.getParameter("endDate"),
-            		request.getParameter("strategyName"),
-            		request.getParameter("buyingSetting"),
-            		request.getParameter("sellingSetting"),
-            		priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0).botStart();        	
+            try {
+				new tradingBot((String) session.getAttribute("email"),
+						request.getParameter("exchange").toLowerCase(),
+						request.getParameter("botname"),
+						request.getParameter("coin"),
+						request.getParameter("base"),
+						Integer.parseInt(request.getParameter("interval")),
+						request.getParameter("startDate"),
+						request.getParameter("endDate"),
+						request.getParameter("strategyName"),
+						request.getParameter("buyingSetting"),
+						request.getParameter("sellingSetting"),
+						priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0).botStart();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}        	
         }
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		try {

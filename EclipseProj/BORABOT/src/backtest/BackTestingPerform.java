@@ -44,10 +44,10 @@ public class BackTestingPerform {
 	private static double buyCriteria;
 	private static double sellCriteria;
 	
-	private static double nowCash;
-	private static double nowCoin;
-	private static double initialCash;
-	private static double initialCoin = 0;
+	private double nowCash;
+	private double nowCoin;
+	private double initialCash;
+	private double initialCoin = 0;
 	
 	
 	String returnMessage = "";
@@ -78,7 +78,6 @@ public class BackTestingPerform {
 		this.numBuyUnit = numBuyUnit;
 		this.priceSellUnit = priceSellUnit;
 		this.numSellUnit = numSellUnit;
-		
 		this.initialCash = initialCash;
 		this.nowCash = initialCash;
 		this.nowCoin = initialCoin;
@@ -86,99 +85,102 @@ public class BackTestingPerform {
 	
 	public String backTestRun() {
 
-		//String returnMessage = "";
-		//String returnDetailMessage = "";
-		
 		System.out.println("시작 코인 : " + nowCoin + " / 시작 금액 : " + (long)nowCash);
 		
 		CryptowatchAPI crypt = new CryptowatchAPI(10,10);
+		
 		//테스트를 위해 만든 JSON객체
 		Gson gson = new Gson();
 		
-//		JsonObject indicators = new JsonObject();
-//		
-//		JsonObject indicatorSetting = new JsonObject();
-//		indicatorSetting.addProperty("indicator", "BollingerBand");
-//		indicatorSetting.addProperty("weight", 1);
-//		indicatorSetting.addProperty("period", 12);
-//		indicatorSetting.addProperty("mul", 3);
-//		indicators.add("1", gson.toJsonTree(indicatorSetting));
-//		
-//		JsonObject indicatorSetting1 = new JsonObject();
-//		indicatorSetting1.addProperty("indicator", "VolumeRatio");
-//		indicatorSetting1.addProperty("weight", 1);
-//		indicatorSetting1.addProperty("period", "20");
-//		indicatorSetting1.addProperty("buyIndex", "70");
-//		indicatorSetting1.addProperty("sellIndex", "30");
-//		indicators.add("0", gson.toJsonTree(indicatorSetting1));
-//		
-//		JsonObject indicatorSetting2 = new JsonObject();
-//		indicatorSetting2.addProperty("indicator", "gdVCross");
-//		indicatorSetting2.addProperty("weight", 1);
-//		indicatorSetting2.addProperty("longD", "26");
-//		indicatorSetting2.addProperty("shortD", "9");
-//		indicatorSetting2.addProperty("mT", "1");
-//		indicators.add("2", gson.toJsonTree(indicatorSetting2));
-//		
-//		JsonObject indicatorSetting3 = new JsonObject();
-//		indicatorSetting3.addProperty("indicator", "gdCross");
-//		indicatorSetting3.addProperty("weight", 1);
-//		indicatorSetting3.addProperty("longD", "26");
-//		indicatorSetting3.addProperty("shortD", "9");
-//		indicatorSetting3.addProperty("mT", "1");
-//		indicators.add("3", gson.toJsonTree(indicatorSetting3));
-//		
-//		JsonObject indicatorSetting4 = new JsonObject();
-//		indicatorSetting4.addProperty("indicator", "CCI");
-//		indicatorSetting4.addProperty("weight", 1);
-//		indicatorSetting4.addProperty("period", "20");
-//		indicatorSetting4.addProperty("buyIndex", "70");
-//		indicatorSetting4.addProperty("sellIndex", "30");
-//		indicators.add("4", gson.toJsonTree(indicatorSetting4));
-//		
-//		JsonObject indicatorSetting5 = new JsonObject();
-//		indicatorSetting5.addProperty("indicator", "MFI");
-//		indicatorSetting5.addProperty("weight", 1);
-//		indicatorSetting5.addProperty("period", "20");
-//		indicatorSetting5.addProperty("buyIndex", "70");
-//		indicatorSetting5.addProperty("sellIndex", "30");
-//		indicators.add("5", gson.toJsonTree(indicatorSetting5));
-//		
-//		JsonObject indicatorSetting6 = new JsonObject();
-//		indicatorSetting6.addProperty("indicator", "StochOsc");
-//		indicatorSetting6.addProperty("weight", 1);
-//		indicatorSetting6.addProperty("n", "5");
-//		indicatorSetting6.addProperty("m", "3");
-//		indicatorSetting6.addProperty("t", "2");
-//		indicators.add("6", gson.toJsonTree(indicatorSetting6));
-//		
-//		JsonObject jsobj = new JsonObject();
-//		jsobj.add("indicatorList", gson.toJsonTree(indicators));
-//		jsobj.addProperty("buyCriteria", 0);
-//		jsobj.addProperty("sellCriteria", -1);
-//		jsobj.addProperty("expList", "or, or, or, or, or, or");
-//		//"and, or, and , or, or, or"
-//			
-//		String strategySettingJson = gson.toJson(jsobj);
-		//System.out.println("json test : \n" + strategySettingJson);  -> 제이슨 테스트출력!!!
+//--------------------------------------------------------------------
+		JsonObject indicators = new JsonObject();
 		
-		// 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 //
-		// String jsonSql = "SELECT strategy_content FROM custom_strategy WHERE email = '$email' and strategy_name = '$strategyName';"
-		// Resultset rs = DB.query(jsonSql, "select");
-		// String strategySettingJson = rs.get(1);
-		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
-		String strategySettingJson="";
+		JsonObject indicatorSetting = new JsonObject();
+		indicatorSetting.addProperty("indicator", "BollingerBand");
+		indicatorSetting.addProperty("weight", 1);
+		indicatorSetting.addProperty("period", 12);
+		indicatorSetting.addProperty("mul", 3);
+		indicators.add("1", gson.toJsonTree(indicatorSetting));
 		
-		DB db = new DB();
-		try {
-			ResultSet rsTemp = db.Query(settingSelectSql, "select");
-			if(rsTemp.next()) {
-				strategySettingJson = rsTemp.getString(1);
-			}
-			db.clean();
-		} catch(Exception e) {
-			e.printStackTrace();
-		}
+		JsonObject indicatorSetting1 = new JsonObject();
+		indicatorSetting1.addProperty("indicator", "VolumeRatio");
+		indicatorSetting1.addProperty("weight", 1);
+		indicatorSetting1.addProperty("period", "20");
+		indicatorSetting1.addProperty("buyIndex", "70");
+		indicatorSetting1.addProperty("sellIndex", "30");
+		indicators.add("0", gson.toJsonTree(indicatorSetting1));
+		
+		JsonObject indicatorSetting2 = new JsonObject();
+		indicatorSetting2.addProperty("indicator", "gdVCross");
+		indicatorSetting2.addProperty("weight", 1);
+		indicatorSetting2.addProperty("longD", "26");
+		indicatorSetting2.addProperty("shortD", "9");
+		indicatorSetting2.addProperty("mT", "1");
+		indicators.add("2", gson.toJsonTree(indicatorSetting2));
+		
+		JsonObject indicatorSetting3 = new JsonObject();
+		indicatorSetting3.addProperty("indicator", "gdCross");
+		indicatorSetting3.addProperty("weight", 1);
+		indicatorSetting3.addProperty("longD", "26");
+		indicatorSetting3.addProperty("shortD", "9");
+		indicatorSetting3.addProperty("mT", "1");
+		indicators.add("3", gson.toJsonTree(indicatorSetting3));
+		
+		JsonObject indicatorSetting4 = new JsonObject();
+		indicatorSetting4.addProperty("indicator", "CCI");
+		indicatorSetting4.addProperty("weight", 1);
+		indicatorSetting4.addProperty("period", "20");
+		indicatorSetting4.addProperty("buyIndex", "70");
+		indicatorSetting4.addProperty("sellIndex", "30");
+		indicators.add("4", gson.toJsonTree(indicatorSetting4));
+		
+		JsonObject indicatorSetting5 = new JsonObject();
+		indicatorSetting5.addProperty("indicator", "MFI");
+		indicatorSetting5.addProperty("weight", 1);
+		indicatorSetting5.addProperty("period", "20");
+		indicatorSetting5.addProperty("buyIndex", "70");
+		indicatorSetting5.addProperty("sellIndex", "30");
+		indicators.add("5", gson.toJsonTree(indicatorSetting5));
+		
+		JsonObject indicatorSetting6 = new JsonObject();
+		indicatorSetting6.addProperty("indicator", "StochOsc");
+		indicatorSetting6.addProperty("weight", 1);
+		indicatorSetting6.addProperty("n", "5");
+		indicatorSetting6.addProperty("m", "3");
+		indicatorSetting6.addProperty("t", "2");
+		indicators.add("6", gson.toJsonTree(indicatorSetting6));
+		
+		JsonObject jsobj = new JsonObject();
+		jsobj.add("indicatorList", gson.toJsonTree(indicators));
+		jsobj.addProperty("buyCriteria", 0);
+		jsobj.addProperty("sellCriteria", -1);
+		jsobj.addProperty("expList", "or, or, or, or, or, or");
+		//"and, or, and , or, or, or"
+			
+		String strategySettingJson = gson.toJson(jsobj);
+//--------------------------------------------------------------------
+		
+		
+		
+		
+// 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 // 디비에서 제이슨 불러오기 //
+//----------------------------------------------------------------------
+//		String settingSelectSql = String.format("SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);	
+//		String strategySettingJson="";
+//		
+//		DB db = new DB();
+//		try {
+//			ResultSet rsTemp = db.Query(settingSelectSql, "select");
+//			if(rsTemp.next()) {
+//				strategySettingJson = rsTemp.getString(1);
+//			}
+//			db.clean();
+//		} catch(Exception e) {
+//			e.printStackTrace();
+//		}
+//----------------------------------------------------------------------
+		
+		
 		System.out.println("test"+strategySettingJson);
 		
 		JsonParser parser = new JsonParser();
@@ -255,14 +257,14 @@ public class BackTestingPerform {
 			return resultLog.getAsString();
 		}
 		
-		
-		for(int i = 0; i < hHLCVArr.length; i++) {
-			for(int j = 0; j < hHLCVArr[i].length; j++) {
-				System.out.print((long)hHLCVArr[i][j]+" ");
-			}
-			System.out.print(" -> " + i);
-			System.out.println();
-		}
+//		
+//		for(int i = 0; i < hHLCVArr.length; i++) {
+//			for(int j = 0; j < hHLCVArr[i].length; j++) {
+//				System.out.print((long)hHLCVArr[i][j]+" ");
+//			}
+//			System.out.print(" -> " + i);
+//			System.out.println();
+//		}
 		
 		//-- !! 지표 객체 생성 파트 !! --//
 		
@@ -342,7 +344,7 @@ public class BackTestingPerform {
 				/////////////////////////////////// ERROR //////////////////////////////////////////
 				// Sleep or Terminate?
 				// 초기 생성 오류 -> 기다리는걸 추천... 
-				System.out.println("error ! : " + LocalDate.now());
+				System.out.println("error ! - 초기 지표 객체 생성 중 오류 : " + LocalDate.now());
 				e.printStackTrace();
 				returnMessage += "초기 에러 : 재시작\n";
 //				resultLog.addProperty("status", "fail");
@@ -362,7 +364,7 @@ public class BackTestingPerform {
 		int cnt = 1;
 		for(int i = maxPeriod; i < hHLCVArr.length; i++) {
 			
-			System.out.println((i)+" th!");
+//			System.out.println((i)+" th!");
 			returnDetailMessage += (cnt++)+" th trade\n";
 			double fin;
 			Date date;
@@ -398,7 +400,7 @@ public class BackTestingPerform {
 					if(buyingSetting.equals("buyAll")){
 						double coinToBuy = nowCash/currentPrice;
 						finCoinToBuy = coinToBuy;
-						nowCoin += finCoinToBuy;
+						nowCoin += coinToBuy;
 						nowCash = 0;
 					}
 					else if(buyingSetting.equals("buyCertainPrice")) {
@@ -451,8 +453,8 @@ public class BackTestingPerform {
 							tempJob.addProperty("saleAction", "구매");
 							tempJob.addProperty("coinCurrentPrice", currentPrice+"");
 							tempJob.addProperty("salingCoinNumber", "0");
-							tempJob.addProperty("nowCash", nowCash);
-							tempJob.addProperty("nowCoin", nowCoin);
+							tempJob.addProperty("nowCash", nowCash+"");
+							tempJob.addProperty("nowCoin", nowCoin+"");
 							tempJob.addProperty("success", "실패 : 잔액부족");
 							resultLogArr.add(tempJob);
 							
@@ -471,8 +473,8 @@ public class BackTestingPerform {
 					tempJob.addProperty("saleAction", "구매");
 					tempJob.addProperty("coinCurrentPrice", currentPrice+"KRW");
 					tempJob.addProperty("salingCoinNumber", finCoinToBuy+"개");
-					tempJob.addProperty("nowCash", nowCash);
-					tempJob.addProperty("nowCoin", nowCoin);
+					tempJob.addProperty("nowCash", nowCash+"");
+					tempJob.addProperty("nowCoin", nowCoin+"");
 					tempJob.addProperty("success", "성공");
 					resultLogArr.add(tempJob);
 					
@@ -588,8 +590,8 @@ public class BackTestingPerform {
 					tempJob.addProperty("saleAction", "판매");
 					tempJob.addProperty("coinCurrentPrice", currentPrice+"");
 					tempJob.addProperty("salingCoinNumber", finCoinToSell);
-					tempJob.addProperty("nowCash", nowCash);
-					tempJob.addProperty("nowCoin", nowCoin);
+					tempJob.addProperty("nowCash", nowCash+"");
+					tempJob.addProperty("nowCoin", nowCoin+"");
 					tempJob.addProperty("success", "성공");
 					resultLogArr.add(tempJob);
 					
@@ -622,26 +624,22 @@ public class BackTestingPerform {
 			returnDetailMessage += "--------------------------------------------------------------\n";
 		}
 		
-		
-		
-		
-		
 		System.out.println("\n		<<결과>>\n" + returnMessage);
-		//System.out.println("\n		<<상세결과>>\n" + returnDetailMessage);
+		System.out.println("\n		<<상세결과>>\n" + returnDetailMessage);
 		
 		double finalAsset = (hHLCVArr[hHLCVArr.length-1][2] * nowCoin + nowCash);
 		double profit = ( (finalAsset - initialCash) / initialCash);
 		System.out.println(finalAsset + " / 시작금액 : " + initialCash);
+		
+		
 		String returnResult = "최종 코인 : " + nowCoin + " / 최종 금액 : " + nowCash + " / 최종 자산 : " + finalAsset + " / 수익률 : " + profit*100;
 		System.out.println(returnResult);
 		
-		
 		JsonObject finResult = new JsonObject();
 		finResult.addProperty("finalCoin", nowCoin);
-		finResult.addProperty("finalCash", nowCash);
-		finResult.addProperty("finalAsset", finalAsset);
-		finResult.addProperty("finalProfit", profit*100);
-		
+		finResult.addProperty("finalCoin", nowCash);
+		finResult.addProperty("finalCoin", finalAsset);
+		finResult.addProperty("finalCoin", profit*100);
 		
 		resultLog.addProperty("status", "성공");
 		resultLog.add("result", finResult);
@@ -764,4 +762,3 @@ public class BackTestingPerform {
 		return postStk;*/
 	}
 }
-

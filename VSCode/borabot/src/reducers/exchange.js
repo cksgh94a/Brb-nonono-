@@ -8,7 +8,7 @@ const BINANCE = {
   coin: [
     {
       base: "BTC",
-      list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST","VEN", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
+      list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
     },
     {
       base: "USDT",

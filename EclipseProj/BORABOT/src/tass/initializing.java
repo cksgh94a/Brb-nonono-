@@ -1,13 +1,10 @@
 package tass;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
 
-import backtest.BackTestingPerform;
+import exchangeAPI.HitbtcAPI;
 
 public class initializing {
 
@@ -39,14 +36,14 @@ public class initializing {
 	// 동시에 db저장(INSERT INTO trade VALUES(); )
 	private static String email = "dirtyrobot00@gmail.com";
 	private static String botName = "mybo12t";
-	private static String exchange = "bithumb";
-	private static String coin = "btc";
-	private static String base = "krw";
+	private static String exchange = "binance";
+	private static String coin = "eth";
+	private static String base = "btc";
 	private static double initialCash = 1000000000;
 	private static String strategyName = "johnbur1";
 	private static int interval = 300;
 	private static String startDate = "2018-08-09T12:50:00";
-	private static String endDate = "2018-08-09T18:20:00";
+	private static String endDate = "2018-08-20T18:20:00";
 
 	// 매매량 세팅
 	// "buyAll", "buyCertainNumber", "buyCertainPrice"
@@ -67,19 +64,32 @@ public class initializing {
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 
-		System.out.println(new BackTestingPerform(email, exchange, coin, base, initialCash, interval, startDate,
-				endDate, strategyName, buySetting, sellSetting, priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit,
-				errorHandling).backTestRun());
-
-		// new tradingBot(email, exchange, botName, coin, base, interval, startDate,
+		// System.out.println(new BackTestingPerform(email, exchange, coin, base,
+		// initialCash, interval, startDate,
 		// endDate, strategyName, buySetting, sellSetting, priceBuyUnit, priceSellUnit,
-		// numBuyUnit, numSellUnit, errorHandling).botStart();
+		// numBuyUnit, numSellUnit,
+		// errorHandling).backTestRun());
+
+//		 new tradingBot(email, exchange, botName, coin, base, interval, startDate,
+//		 endDate, strategyName, buySetting, sellSetting, priceBuyUnit, priceSellUnit,
+//		 numBuyUnit, numSellUnit, errorHandling).botStart();
 
 		// get24BiggstGap : 24시간동안 가격 차이가 가장 큰 (상승) 한 코인
-		Map<String, String> ret = new CoinRecommendation().get24BiggestGapCoin();
-		System.out.println(ret.get("binance"));
-		System.out.println(ret.get("bithumb"));
-		System.out.println(ret.get("coinone"));
+//		Map<String, String> ret = new CoinRecommendation().get24BiggestGapCoin();
+//		System.out.println(ret.get("binance"));
+//		System.out.println(ret.get("bithumb"));
+//		System.out.println(ret.get("coinone"));
+		
+		HitbtcAPI hapi = new HitbtcAPI("9753ad544eac3cae547d684ea422b35a", "2f23d39615c2fc406899e8dd6c375d88");
+		
+		System.out.println(hapi.getAllBalances());
+		
+		System.out.println(hapi.sellCoin("btc", "usdt", "1"));
+		
+		
+		
+		
+		
 	}
 
 }

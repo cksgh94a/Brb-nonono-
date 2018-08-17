@@ -18,7 +18,6 @@ public class Wallet {
 		this.email = email;
 	}
 	
-	
 	public double getBalance(String exchange, String coin) {
 		
 		double result;

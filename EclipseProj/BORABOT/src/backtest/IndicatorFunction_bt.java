@@ -1,16 +1,9 @@
 package backtest;
 
-import exchangeAPI.*;
-import DB.DB;
 import DB.DB_ohlc;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
-
-import com.google.gson.*;
 
 class IndicatorFunction_bt {
 
@@ -23,12 +16,15 @@ class IndicatorFunction_bt {
 		} else {
 			symb = coin;
 		}
+		
+		long period = (endUt - startUt) / interval;
 
 		DB_ohlc db = new DB_ohlc();
 		ResultSet rs = null;
 		String sql = String.format(
 				"SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange,
 				interval, symb, startUt - 10, endUt + 10);
+
 		// System.out.println("error? " +sql);
 		rs = db.Query(sql, "select");
 		// int size = (int) (before - after) / interval;
@@ -59,7 +55,59 @@ class IndicatorFunction_bt {
 			e.printStackTrace();
 		}
 		db.clean();
+		
+		return ret;
+	}
+	
+	public static double[][] get_HLCV_HistoryArrayModified(String exchange, String coin, String base, int interval,
+			long startUt, long endUt) throws Exception {
 
+		String symb;
+		if (exchange.equals("binance") || exchange.equals("hitbtc")) {
+			symb = coin + base;
+		} else {
+			symb = coin;
+		}
+		
+		long period = (endUt - startUt) / interval;
+
+		DB_ohlc db = new DB_ohlc();
+		ResultSet rs = null;
+		
+		String sql = String.format(
+				"SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s ", exchange,
+				interval, symb, period);
+		
+		// System.out.println("error? " +sql);
+		rs = db.Query(sql, "select");
+		// int size = (int) (before - after) / interval;
+
+
+		// System.out.println("indicatorFunc rs result number : " + rs.getRow());
+		int size = (int)period;
+
+		///////////////////////////////////////////// 매우중요
+		///////////////////////////////////////////// 매우중요
+		///////////////////////////////////////////// 매우중요
+		///////////////////////////////////////////// 매우중
+		double ret[][] = new double[size][5]; 	// SIZE - 1 ?????????????????? 를 해줘야 한다! 왜그런지는 rs.last 와 rs.first의 기능을
+													// 잘 몰라서.
+		int cnt = 0;
+		try {
+			while (rs.next()) {
+				ret[cnt][0] = rs.getDouble(1);
+				ret[cnt][1] = rs.getDouble(2);
+				ret[cnt][2] = rs.getDouble(3);
+				ret[cnt][3] = rs.getDouble(4);
+				ret[cnt][4] = rs.getLong(5);
+				cnt++;
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		db.clean();
+		
 		return ret;
 	}
 
