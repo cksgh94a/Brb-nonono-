@@ -7,29 +7,37 @@ class Alarm extends Component {
   constructor(props) {
     super(props);
 
-    //앞단 테스트용
     this.state = {
       alarmList: [
+        // 앞단 테스트용
         // {"exchange_name":"binance","coin":"ETHbtc","sales_action":"-1","coin_intent":"0.0","coin_price":"313500.0","trans_time":"2018-08-14 18:51:01"},
         // {"exchange_name":"bitthumb","coin":"BTCeth","sales_action":"1","coin_intent":"0.0","coin_price":"0.043949","trans_time":"2018-08-14 18:50:43"},
         // {"exchange_name":"binance","coin":"ETHbtc","sales_action":"-1","coin_intent":"0.0","coin_price":"313500.0","trans_time":"2018-08-14 18:51:01"},
         // {"exchange_name":"bitthumb","coin":"BTCeth","sales_action":"1","coin_intent":"0.0","coin_price":"0.043949","trans_time":"2018-08-14 18:50:43"},
         // {"exchange_name":"bitthumb","coin":"ETHbtc","sales_action":"-1","coin_intent":"0.0","coin_price":"313500.0","trans_time":"2018-08-14 18:51:01"},
         // {"exchange_name":"binance","coin":"BTCeth","sales_action":"1","coin_intent":"0.0","coin_price":"0.043949","trans_time":"2018-08-14 18:50:43"}
+        // 앞단 테스트용
       ]
     };
-    //앞단 테스트용
   }
 
-  componentDidMount() {    
+  componentDidMount() { 
     axios.get('Alarm')
     .then( response => {
-      this.setState({
-        alarmList: response.data
-      })
+      response.data === 'sessionExpired'
+      ? this.sessionExpired()
+      : this.setState({
+          alarmList: response.data
+        })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
     // this.props.handleAlarm()
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   render() {

@@ -210,10 +210,22 @@ class Sales extends Component {
           '&startDate='+startDate+
           '&endDate='+endDate,
           { 'Content-Type': 'application/x-www-form-urlencoded' }
-        )
-        alert('거래가 시작되었습니다.')
+        )        
+        .then( response => {
+          if(response.data === 'sessionExpired') this.sessionExpired()
+          else{
+            alert('거래가 시작되었습니다.')
+          }
+        }) 
+        .catch( response => { console.log('err\n'+response); } ); // ERROR
       } else alert('취소되었습니다.')
     }
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   render() {

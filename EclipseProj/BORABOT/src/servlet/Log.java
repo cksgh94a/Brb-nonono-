@@ -35,11 +35,20 @@ public class Log extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 접속한 계정의 로그 리스트 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 
 		JSONArray jArray = new JSONArray();
     	
@@ -64,7 +73,6 @@ public class Log extends HttpServlet {
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();
 
-		PrintWriter out = response.getWriter();
 		out.print(jArray.toJSONString());
 	}
 
@@ -72,12 +80,20 @@ public class Log extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 선택한 상세 로그 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
-
-        HttpSession session = request.getSession();
-
+	    
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
         JSONObject jObject = new JSONObject();
 		JSONArray jArray = new JSONArray();
 
@@ -138,7 +154,6 @@ public class Log extends HttpServlet {
 		}
 		useDB.clean();
 
-		PrintWriter out = response.getWriter();
 		out.print(jObject.toJSONString());
 	}
 }

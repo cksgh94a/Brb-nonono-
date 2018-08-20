@@ -33,13 +33,20 @@ public class BackTest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// 백테스트 시작 버튼을 누르면 해당 정보로 백테스팅
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
-	    response.setContentType("application/json;charset=utf-8");
+	    response.setContentType("text/html;charset=utf-8");
 	    
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
 		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 
     	// 거래 세부 설정
     	double priceBuyUnit = 0.0;
@@ -80,7 +87,9 @@ public class BackTest extends HttpServlet {
 				request.getParameter("sellingSetting"),	
         		priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0);
 
-		out.print(bt.backTestRun());	
+		String res = bt.backTestRun(); 
+		System.out.println(res);
+		out.print(res);	
 
 //		resBT.put("ReturnDetailMessage", bt.getReturnDetailMsg());	
 //		resBT.put("ReturnMessage", bt.getReturnMsg());	

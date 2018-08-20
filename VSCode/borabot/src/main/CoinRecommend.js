@@ -28,6 +28,7 @@ class CoinRecommend extends Component {
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
+  
   render() {
     const { volumeHigh, priceHigh, biggestGap, exchangeList } = this.state
 

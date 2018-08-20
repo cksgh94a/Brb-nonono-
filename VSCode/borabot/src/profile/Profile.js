@@ -39,15 +39,23 @@ class Profile extends Component {
     // =========================================================================================================================================
     axios.get('Profile')
     .then( response => {
-      this.setState({
-        profile_name: response.data.name,
-        phone_number: response.data.phone_number,
-        exchange: response.data.exchange, // 서버의 DB에서 받아온 거래소 정보 담긴 배열, 거래소 순서는 redux store에 저장된 거래소 배열의 순서와 같아야함
-  
-        selectedExchange: response.data.exchange[0]
-      })
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          profile_name: response.data.name,
+          phone_number: response.data.phone_number,
+          exchange: response.data.exchange, // 서버의 DB에서 받아온 거래소 정보 담긴 배열, 거래소 순서는 redux store에 저장된 거래소 배열의 순서와 같아야함
+    
+          selectedExchange: response.data.exchange[0]
+        })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   // 거래소 선택 핸들 (이거 따라 거래소 키 밸류 바뀜)
@@ -92,11 +100,14 @@ class Profile extends Component {
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.setState({
-          profile_name: response.data.name,
-          phone_number: response.data.phone_number
-        })
-        alert('수정이 완료되었습니다.')
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else {
+          this.setState({
+            profile_name: response.data.name,
+            phone_number: response.data.phone_number
+          })
+          alert('수정이 완료되었습니다.')
+        }
       }) 
       .catch( response => { console.log('err\n'+response); } ) // ERROR
     }
@@ -114,13 +125,15 @@ class Profile extends Component {
           { 'Content-Type': 'application/x-www-form-urlencoded' }
         )
         .then( response => {
-          switch(response.data){
-            case 'wrongError':
-              return alert('현재 비밀번호가 일치하지 않습니다.')
-            case 'sameError':
-            return alert('현재 비밀번호와 다른 비밀번호를 입력주세요.')
-            default: return alert('변경이 완료되었습니다.')
-          }
+          if(response.data === 'sessionExpired') this.sessionExpired()
+          else
+            switch(response.data){
+              case 'wrongError':
+                return alert('현재 비밀번호가 일치하지 않습니다.')
+              case 'sameError':
+              return alert('현재 비밀번호와 다른 비밀번호를 입력주세요.')
+              default: return alert('변경이 완료되었습니다.')
+            }
         }) 
         .catch( response => { console.log('err\n'+response); } ) // ERROR
       
@@ -141,11 +154,14 @@ class Profile extends Component {
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.setState({
-          exchange: response.data.exchange,
-          selectedExchange: response.data.exchange[document.getElementById('exchange').selectedIndex]
-        })
-        alert('수정이 완료되었습니다.')
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else{
+          this.setState({
+            exchange: response.data.exchange,
+            selectedExchange: response.data.exchange[document.getElementById('exchange').selectedIndex]
+          })
+          alert('수정이 완료되었습니다.')
+        }
       }) 
       .catch( response => { console.log('err\n'+response); } ) // ERROR    
     }

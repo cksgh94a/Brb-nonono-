@@ -31,11 +31,6 @@ class BackTesting extends Component {
       startDay: new Date(),
       endDay: new Date(),
       nowCash:'',
-
-      // isResulted:false,
-      // text:'',
-      // ReturnDetailMessage:'',
-      // ReturnMessage:'',
       
       buyDetail: false,
       sellDetail: false,
@@ -64,11 +59,6 @@ class BackTesting extends Component {
       startDay: '',
       endDay: '',
       nowCash:'',
-
-      isResulted:false,
-      text:'',
-      ReturnDetailMessage:'',
-      ReturnMessage:'',
       
       buyDetail: false,
       sellDetail: false,
@@ -82,6 +72,7 @@ class BackTesting extends Component {
       showList: [],
       result: {}
     })
+
     document.getElementById('bt_exchange').selectedIndex = 0
     document.getElementById('base').selectedIndex = 0
     document.getElementById('coin').selectedIndex = 0
@@ -242,7 +233,10 @@ class BackTesting extends Component {
           { 'Content-Type': 'application/x-www-form-urlencoded' }
         )
         .then( response => {
-          if(response.data.status === '성공'){
+          // 세션 검증
+          if(response.data === 'sessionExpired') this.sessionExpired()
+          // 백테스트 성공 여부
+          else if(response.data.status === '성공'){
             var pNL = [1]  // state에 저장할 페이지리스트 생성
             for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
               pNL.push(i)
@@ -255,7 +249,7 @@ class BackTesting extends Component {
               showList: response.data.log.slice(0, 10),
               isResulted: true
             })
-          } else alert('백테스팅에 실패하였습니다.')
+          } else alert('백테스팅에 실패하였습니다. (' + response.data + ')')
         }) 
         .catch( response => { console.log('err\n'+response); } ); // ERROR
       } else alert(
@@ -264,6 +258,12 @@ class BackTesting extends Component {
         periodLimit[document.getElementById('interval').selectedIndex] +
         ' 이내의 기간으로 설정해주세요.')
     }
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
@@ -286,18 +286,6 @@ class BackTesting extends Component {
       showList: this.state.resultList.slice((pn -1)*10, (pn -1)*10+10)
     })
   }
-
-  // handleResult = (e) => {
-  //   if(e.target.id === "result"){
-  //     this.setState({
-  //       text:this.state.ReturnMessage
-  //     })
-  //   } else{
-  //     this.setState({
-  //       text:this.state.ReturnDetailMessage
-  //     })
-  //   }
-  // }
 
   render() {
     const { exchangeList, intervalList , strategyList } = this.props
@@ -478,12 +466,6 @@ class BackTesting extends Component {
           }
         </div>
       </div>
-          /* {isResulted && 
-            (<button id="result" onClick={(e)=>this.handleResult(e)}>결과 확인</button>)}
-          {isResulted && 
-            (<button id="detailResult" onClick={(e)=>this.handleResult(e)}>세부 정보</button>)}<br/>
-          {isResulted && 
-            (<textarea style={{height:500, width:"70%", resize:"none"}} readOnly value={text}/>)} */
     );
   }
 }

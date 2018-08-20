@@ -35,12 +35,20 @@ public class Board extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 게시판을 눌렀을 때 게시판 목록 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
 		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
         
         JSONObject jObject = new JSONObject();
 		JSONArray jArray = new JSONArray();
@@ -83,14 +91,4 @@ public class Board extends HttpServlet {
 
 		out.print(jObject.toJSONString());
 	}
-
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// 데이터 인코딩 설정
-	    request.setCharacterEncoding("utf-8");
-	    response.setContentType("text/html;charset=utf-8");
-	}
-
 }

@@ -69,6 +69,11 @@ public class LogInOut extends HttpServlet {
 				if(password.equals(rs.getString("password"))) {
 					// 세션에 사용자 정보 저장
 					HttpSession session = request.getSession();
+					
+					// 테스트용 세션 타임 ////////////////////
+//					session.setMaxInactiveInterval(10);
+					// 테스트용 세션 타임 ////////////////////					
+					
 					session.setAttribute("email", email);	
 					session.setAttribute("status", true);		
 					result = "complete";

@@ -35,11 +35,21 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 접속한 계정의 개인 정보 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
+		
 		JSONObject jsonObject = new JSONObject();
 		
 		String profileSql = String.format("SELECT * from customer where email=\'%s\'", (String) session.getAttribute("email"));
@@ -77,7 +87,6 @@ public class Profile extends HttpServlet {
 		// 5. DB 사용후 clean()을 이용하여 정리
 		useDB.clean();
 
-		PrintWriter out = response.getWriter();
 		out.print(jsonObject.toJSONString());
 	}
 
@@ -85,12 +94,20 @@ public class Profile extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// 접속한 계정의 개인 정보 저장/삭제
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-		HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 		
 		String result = "";
 		
@@ -140,7 +157,6 @@ public class Profile extends HttpServlet {
 				doGet(request, response);
 			}
 			else {	// 오류가 발생한 경우 오류 메세지 전송
-				PrintWriter out = response.getWriter();
 				out.print(result);
 			}   
 		} catch (SQLException se) {

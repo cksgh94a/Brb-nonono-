@@ -2,6 +2,7 @@ package servlet;
 
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 
 import javax.servlet.ServletException;
@@ -32,11 +33,20 @@ public class TradeMain extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 거래 시작/종료 설정
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
-
-        HttpSession session = request.getSession();
+	    
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 
         if(Boolean.valueOf(request.getParameter("status"))) {
         	// 거래 세부 설정

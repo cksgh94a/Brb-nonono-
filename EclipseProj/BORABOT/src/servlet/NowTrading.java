@@ -38,12 +38,20 @@ public class NowTrading extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		// 접속한 계정의 현재 진행 중인 거래 정보 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
 	    
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 
 		JSONObject jObject = new JSONObject();	// 전송용 json 객체
 		JSONArray jArray = new JSONArray();	// 현재 거래 리스트 담는 json 배열
@@ -87,7 +95,6 @@ public class NowTrading extends HttpServlet {
 			e.printStackTrace();			
 		}		
 
-		PrintWriter out = response.getWriter();
 		out.print(jObject.toJSONString());
 	}
 }

@@ -30,12 +30,20 @@ class Post extends Component {
         'Post?post_num='+this.props.post_num,
         { 'Content-Type': 'application/x-www-form-urlencoded' } )
       .then( response => {
-        this.setState({
-          post: response.data
-        })
+        (response.data === 'sessionExpired')
+        ? this.sessionExpired()
+        : this.setState({
+            post: response.data
+          })
       }) 
       .catch( response => { console.log('err\n'+response)}); // ERROR
     }
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   // 게시물 불러온 뒤에 댓글 불러오기
@@ -47,9 +55,11 @@ class Post extends Component {
       'Comment?post_num='+this.props.post_num,
       { 'Content-Type': 'application/x-www-form-urlencoded' } )
     .then( response => {
-      this.setState({
-        comment: response.data
-      })
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          comment: response.data
+        })
     }) 
     .catch( response => { console.log('err\n'+response)}); // ERROR
   }
@@ -93,9 +103,13 @@ class Post extends Component {
       // 서버에 전송
       axios.post( 
         'Post', params,
-        { 'Content-Type': 'application/x-www-form-urlencoded' }
-      )
-      alert('저장되었습니다.')
+        { 'Content-Type': 'application/x-www-form-urlencoded' })
+      .then( response => {
+        (response.data === 'sessionExpired')
+        ? this.sessionExpired()
+        : alert('저장되었습니다.')
+      }) 
+      .catch( response => { console.log('err\n'+response)}); // ERROR
       
       window.location = "/board"; // 저장 완료 후 다시 게시판 목록으로
     }
@@ -137,9 +151,13 @@ class Post extends Component {
         'Post', 
         'action=delete'+
         '&post_num='+this.props.post_num,
-        { 'Content-Type': 'application/x-www-form-urlencoded' }
-      )
-      alert('삭제되었습니다.')
+        { 'Content-Type': 'application/x-www-form-urlencoded' })
+      .then( response => {
+        (response.data === 'sessionExpired')
+        ? this.sessionExpired()
+        : alert('삭제되었습니다.')
+      }) 
+      .catch( response => { console.log('err\n'+response)}); // ERROR
       window.location = "/board"; // 삭제 완료 후 다시 게시판 목록으로
     }
   }
@@ -169,9 +187,11 @@ class Post extends Component {
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
     .then( response => {
-      this.setState({
-        comment: response.data
-      })
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          comment: response.data
+        })
     }) 
     .catch( response => { console.log('err\n'+response)}); // ERROR
 
@@ -189,9 +209,11 @@ class Post extends Component {
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.setState({
-          comment: response.data
-        })
+        (response.data === 'sessionExpired')
+        ? this.sessionExpired()
+        : this.setState({
+            comment: response.data
+          })
       }) 
       .catch( response => { console.log('err\n'+response)}); // ERROR
     }

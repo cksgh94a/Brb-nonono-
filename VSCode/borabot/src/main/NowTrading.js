@@ -24,21 +24,32 @@ class NowTrading extends Component {
   componentDidMount() {    
     axios.get('NowTrading')
     .then( response => {
-      this.setState({
-        listE: response.data.nowTradingList,
-        alarmCount: response.data.alarmCount
-      })
+      if(response.data === 'sessionExpired') this.sessionExpired()
+      else {
+        this.setState({
+          listE: response.data.nowTradingList,
+          alarmCount: response.data.alarmCount
+        })
+      }
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   handleAlarm = () => {
     console.log(this.state, this.props)
     axios.post('Alarm')
     .then( response => {
-      this.setState({
-        alarmCount: '0'
-      })
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          alarmCount: '0'
+        })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
@@ -52,15 +63,25 @@ class NowTrading extends Component {
       '&botname='+nt.bot_name,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
+    .then( response => {
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          alarmCount: '0'
+        })
+    }) 
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   reload = () => {
     axios.get('NowTrading')
     .then( response => {
-      this.setState({
-        listE: response.data.nowTradingList,
-        alarmCount: response.data.alarmCount
-      })
+      (response.data === 'sessionExpired')
+      ? this.sessionExpired()
+      : this.setState({
+          listE: response.data.nowTradingList,
+          alarmCount: response.data.alarmCount
+        })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
     this.forceUpdate(); // 새로고침

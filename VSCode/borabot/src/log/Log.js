@@ -31,24 +31,33 @@ class Log extends Component {
   componentDidMount() {
     axios.get( 'Log' )
     .then( response => {
-      this.setState({
-        tradeList: response.data,
-        pageNumList: [1]
-      })
-      // 거래 현황에서 거래 기록을 눌렀을 경우
-      this.props.location.bot_name !== undefined
-      && response.data.map((t, i) => {
-        if(t.bot_name === this.props.location.bot_name){
-          this.setState({
-            selectedTrade: t
-          })
-          this.getLog(t.bot_name, 1, '매수/매도')
-          document.getElementById('botName').selectedIndex=i+1
-        }})
+      if(response.data === 'sessionExpired') this.sessionExpired()
+      else{
+        this.setState({
+          tradeList: response.data,
+          pageNumList: [1]
+        })
+        // 거래 현황에서 거래 기록을 눌렀을 경우
+        this.props.location.bot_name !== undefined
+        && response.data.map((t, i) => {
+          if(t.bot_name === this.props.location.bot_name){
+            this.setState({
+              selectedTrade: t
+            })
+            this.getLog(t.bot_name, 1, '매수/매도')
+            document.getElementById('botName').selectedIndex=i+1
+          }})
+      }
     }) 
     .catch( response => { 
       console.log('err\n'+response); 
     }); // ERROR
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
@@ -56,6 +65,8 @@ class Log extends Component {
     (this.props.location.key !== nextProps.location.key)
     && axios.get( 'Log' )
       .then( response => {
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else{
           this.setState({
             tradeList: response.data,
             selectedTrade: {},
@@ -64,6 +75,7 @@ class Log extends Component {
             pageNum:1,  // 현재 선택된 페이지 번호
           })      
           document.getElementById('botName').selectedIndex=0
+        }
       }) 
       .catch( response => { 
         console.log('err\n'+response); 
@@ -105,14 +117,17 @@ class Log extends Component {
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
     .then( response => {
-      var pNL = [1]  // state에 저장할 페이지리스트 생성
-      for(var i = 2; i <= (response.data.count-1)/10+1; i++){
-        pNL.push(i)
+      if(response.data === 'sessionExpired') this.sessionExpired()
+      else{
+        var pNL = [1]  // state에 저장할 페이지리스트 생성
+        for(var i = 2; i <= (response.data.count-1)/10+1; i++){
+          pNL.push(i)
+        }
+        this.setState({
+          logList: response.data.logList,
+          pageNumList: pNL
+        })
       }
-      this.setState({
-        logList: response.data.logList,
-        pageNumList: pNL
-      })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }

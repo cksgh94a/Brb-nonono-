@@ -255,7 +255,7 @@ public class BackTestingPerform {
 			hHLCVArr = IndicatorFunction_bt.get_HLCV_HistoryArray( exchange, coin, base, interval, startUnix, endUnix );
 		} catch(Exception e) {
 			System.out.println("초기에러 : 데이터 불러오기 실패");
-			return resultLog.getAsString();
+			return "dataLoadFail";
 		}
 		
 //		

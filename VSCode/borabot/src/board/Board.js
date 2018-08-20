@@ -52,16 +52,25 @@ class Board extends Component {
   getBoard = (i) => {
     axios.get( 'Board?pageNum='+i )
     .then( response => {
-      var pNL = [1]  // state에 저장할 페이지리스트 생성
-      for(var i = 2; i <= (response.data.count-1)/10+1; i++){
-        pNL.push(i)
+      if(response.data === 'sessionExpired') this.sessionExpired()
+      else{
+        var pNL = [1]  // state에 저장할 페이지리스트 생성
+        for(var i = 2; i <= (response.data.count-1)/10+1; i++){
+          pNL.push(i)
+        }
+        this.setState({
+          postList: response.data.postList, // 10개의 게시물 저장
+          pageNumList: pNL
+        })
       }
-      this.setState({
-        postList: response.data.postList, // 10개의 게시물 저장
-        pageNumList: pNL
-      })
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴

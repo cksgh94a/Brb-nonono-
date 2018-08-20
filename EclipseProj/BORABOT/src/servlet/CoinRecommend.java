@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -26,16 +27,22 @@ public class CoinRecommend extends HttpServlet {
      */
     public CoinRecommend() {
         super();
-        // TODO Auto-generated constructor stub
     }
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 메인 화면 표시할 때 코인 정보 전송
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
+	    
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인 (NowTrading과 같은 화면이어서 여기선 처리 안함)
 
 	    JSONObject jObject = new JSONObject();
 
@@ -49,7 +56,6 @@ public class CoinRecommend extends HttpServlet {
 	    for (String exchange: cr.getExchangeList())	jArray.add(exchange);
 	    jObject.put("exchangeList", jArray);
 	    
-		PrintWriter out = response.getWriter();
 		out.print(jObject.toJSONString());
 	}
 }
