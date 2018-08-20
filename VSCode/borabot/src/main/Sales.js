@@ -247,7 +247,11 @@ class Sales extends Component {
 
         <select className='sales-select' id="salesBase" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
-            return (<option key={i}> {base} </option>)
+            return (<option key={i}>
+              {(base === 'USD')
+                ? 'USDT'
+                : base }
+              </option>)
           })}
           <option selected hidden disabled>기축통화</option>
         </select>

@@ -28,7 +28,7 @@ public class IndicatorFunction {
 	      System.out.println(exchange.equals("BINANCE"));
 	      System.out.println(exchange.equals("binance"));
 	      
-	      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+	      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
 	         symb = coin + base;
 	      } else {
 	         symb = coin;
@@ -118,7 +118,7 @@ public class IndicatorFunction {
 	   }
 
    public static double[][] get_HLCV_Test(CryptowatchAPI crypt, String exchange, String coin, String base,
-         int interval, int period_day) throws Exception {
+     int interval, int period_day) throws Exception {
 
       int size = period_day;
       double ret[][] = new double[size][5];
@@ -130,7 +130,7 @@ public class IndicatorFunction {
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
       
-      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -177,7 +177,7 @@ public class IndicatorFunction {
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
       
-      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -248,7 +248,7 @@ public class IndicatorFunction {
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
       
-      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -314,7 +314,7 @@ public class IndicatorFunction {
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
       
-      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -379,7 +379,7 @@ public class IndicatorFunction {
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
       
-      if (exchange.equals("binance") || exchange.equals("BINANCE")) {
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;

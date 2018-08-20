@@ -17,11 +17,7 @@ public class BithumbAPI implements exAPI {
 	private Api_Client api;
 
 	public BithumbAPI(String api_key, String secret_key) {
-
-		this.api_key = api_key;
-		this.secret_key = secret_key;
-		api = new Api_Client("e1309d23ddbb6b2239ed9a63b40288fb", "493a4813263a71cc1b03297812fc6242");
-
+		api = new Api_Client(api_key, secret_key);
 	}
 
 	@Override
@@ -128,8 +124,7 @@ public class BithumbAPI implements exAPI {
 	}
 
 	@Override
-	public double getBalance(String coin) {
-
+	public double getBalance(String coin) {		
 		HashMap<String, String> rgParams = new HashMap<String, String>();
 
 		rgParams.put("order_currency", coin);
@@ -145,11 +140,11 @@ public class BithumbAPI implements exAPI {
 		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
 		JsonObject data = ohlc_json.get("data").getAsJsonObject();
 		double balance;
-		if (coin.equals("krw")) {
+		if (coin.equals("krw") || coin.equals("KRW") ) {
 			balance = data.get("available_krw").getAsDouble();
 		}
 		else {
-			balance = data.get("available_"+coin).getAsDouble();
+			balance = data.get("available_"+coin.toLowerCase()).getAsDouble();
 		}
 
 		return balance;

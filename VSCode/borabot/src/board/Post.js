@@ -220,14 +220,14 @@ class Post extends Component {
   }
 
   render() {
-    // const { write } = this.props
-    // const { post, modify, comment} = this.state
+    const { write } = this.props
+    const { post, modify, comment} = this.state
 
     // 앞단 테스트용 - 글쓰기 클릭해서 포스트 확인 ========================================================================================== //
-    const write = true
-    const modify = false
-    const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
-    const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}, {"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
+    // const write = true
+    // const modify = false
+    // const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
+    // const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}, {"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
     // ================================================================================================================================ //
 
     return (

@@ -112,7 +112,7 @@ public class tradingBot {
 
 		dbkey.clean();
 		final exAPI exAPIobj;
-
+		
 		if (exchange.equals("bithumb") || exchange.equals("BITHUMB")) {
 			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);			
 		} else if (exchange.equals("bittrex")) {

@@ -352,7 +352,7 @@ public class BackTestingPerform {
 //				resultLog.addProperty("status", "fail");
 //				resultLog.addProperty("error", "초기 ");
 				i--;
-				continue;
+				return "dataLoadFail";
 			}
 		}
 		

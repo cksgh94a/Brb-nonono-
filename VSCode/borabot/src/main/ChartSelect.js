@@ -55,6 +55,8 @@ class ChartSelect extends Component {
       ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales // 거래 시작 화면에서 설정이 변경되면 차트는 해당 내용을 그림
       : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
 
+    // console.log(exchangeList[exchangeIndex].key)
+    // console.log(exchangeIndex[exchangeIndex].value.baseList[baseIndex])
     return (
       <div>
         <div className = 'CS-selectingChart'>
@@ -67,7 +69,11 @@ class ChartSelect extends Component {
 
           <select id="chartBase" className = 'CS-select' onChange={this.handleIndex}>
             {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
-              return (<option key={i}> {base} </option>)
+              return (<option key={i}>
+                {(base === 'USD')
+                  ? 'USDT'
+                  : base }
+                </option>)
             })}
           </select>
 

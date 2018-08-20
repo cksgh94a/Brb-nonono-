@@ -4,17 +4,26 @@
 
 const BINANCE = {
   name: 'BINANCE',
-  baseList: [ "BTC", "USDT"],
+  baseList: [ "USDT"],
   coin: [
     {
-      base: "BTC",
-      list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
-    },
-    {
       base: "USDT",
-      list: [ "BCC", "BNB", "BTC", "ETH", "LTC", "NEO", "ADA", "EOS", "IOTA", "TUSD", "XLM", "XRP", "ICX", "ONT" ]
+      list: [ "BCC", "BNB", "BTC", "ETH", "LTC", "NEO", "QTUM", "ADA", "EOS", "TUSD", "XLM", "XRP" ]
     }
   ]
+
+  // BTC base 추가 버전
+  // baseList: [ "BTC", "USDT"],
+  // coin: [
+  //   {
+  //     base: "BTC",
+  //     list: [ "ETH", "TRX", "XRP", "NEO", "BCD", "BNB", "VIB", "WTC", "ELF", "ICX", "IOST", "EOS", "XLM", "XVG", "PPT", "ONT", "OMG" ]
+  //   },
+  //   {
+  //     base: "USDT",
+  //     list: [ "BCC", "BNB", "BTC", "ETH", "LTC", "NEO", "ADA", "EOS", "IOTA", "TUSD", "XLM", "XRP", "ICX", "ONT" ]
+  //   }
+  // ]
 }
 
 const BITHUMB = {
@@ -22,8 +31,27 @@ const BITHUMB = {
   baseList: [ "KRW"],
   coin: [
     {
-    base: "KRW",
-    list: [ "BTC", "ETH", "DASH", "LTC", "ETC", "XRP", "BCH", "XMR", "ZEC", "BTG", "EOS" ]
+      base: "KRW",
+      list: [ "BTC", "ETH", "DASH", "LTC", "ETC", "XRP", "BCH", "XMR", "ZEC", "BTG", "EOS" ]
+    }
+  ]
+}
+
+const HITBTC = {
+  name: 'HITBTC',
+  baseList: [ "USD", "BTC", "ETH" ],
+  coin: [
+    {
+      base: "USD",
+      list: [ "BTC", "ETH", "BCH", "LTC",  ]
+    },
+    {
+      base: "BTC",
+      list: [ "BCH", "XRP", "ETH", "XMR", "DASH", "ZEC"  ]
+    },
+    {
+      base: "ETH",
+      list: [ "ZRX" ]
     }
   ]
 }
@@ -31,7 +59,8 @@ const BITHUMB = {
 const Exchange = {
 	exchangeList: [ 
     { key: "BINANCE", value: BINANCE },
-    { key: "BITHUMB", value: BITHUMB }
+    { key: "BITHUMB", value: BITHUMB },
+    { key: "HITBTC", value: HITBTC }
   ],
   intervalList: [
     { key: "5분", value: "300" },

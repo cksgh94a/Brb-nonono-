@@ -202,9 +202,9 @@ class Log extends Component {
               <th className='log-headTr'>거래 신호 시간</th>
               <th className='log-headTr'>매매 행동</th>
               <th className='log-headTr'>개당 코인 가격</th>
-              <th className='log-headTr'>코인 매매 수량</th>
-              <th className='log-headTr'>현재 보유 현금</th>
-              <th className='log-headTr'>현재 보유 코인수</th>
+              <th className='log-headTr'>코인 매매 수량<small>(개)</small></th>
+              <th className='log-headTr'>현재 보유 현금<small>(KRW)</small></th>
+              <th className='log-headTr'>현재 보유 코인수<small>(개)</small></th>
             </thead>
 
             <tbody className = 'log-tbodyContainer' >              

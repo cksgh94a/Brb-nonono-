@@ -65,7 +65,7 @@ public class Register extends HttpServlet {
 		    		useDB.Query(insertSql2, "insert");
 
 		    		String insertSql3 = String.format("INSERT INTO customer_key (email,exchange_name, api_key, secret_key) VALUES('"
-		    				+request.getParameter("email")+"', 'COINONE', '', '')");
+		    				+request.getParameter("email")+"', 'HITBTC', '', '')");
 
 		    		useDB.Query(insertSql3, "insert");
 

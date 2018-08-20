@@ -54,7 +54,7 @@ class Alarm extends Component {
         <table class="alarm-table">
           <thead class="alarm-tableTitles" style={{width:'100%'}}>
             <th class="alarm-tableTitle1">거래소</th>
-            <th class="alarm-tableTitle2">코인</th>
+            <th class="alarm-tableTitle2">코인/기축통화</th>
             <th class="alarm-tableTitle3">매매</th>
             <th class="alarm-tableTitle4">수량</th>
             <th class="alarm-tableTitle5">가격</th>

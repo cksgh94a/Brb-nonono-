@@ -1,9 +1,7 @@
 @import url(https://fonts.googleapis.com/earlyaccess/nanumgothic.css);
 
-
-
 .NowTrading-elementList{
-    margin-top: 20px;
+    margin-top: 22px;    
     overflow: scroll;
     margin-left: 0px;
     height: 760px;
@@ -23,13 +21,15 @@
 
 }
 
+
+
 .ntr-nowTradingHeadText{
    
     position: absolute;
     width : 75px;
-    height: 24px;
+    height: 32px;
     top: 36px;
-    margin-top: -12px;
+    margin-top: -7px;
     left: 20px;
     font-family: 'nanum gothic';
     font-size: 18px;
@@ -44,7 +44,7 @@
     height: 32px;
 
     top : 36px;
-    margin-top: -16px;
+    margin-top: -10px;
 
     left: 151px;
     font-size: 18px;
@@ -59,7 +59,6 @@
 
     display:table-cell;
     
-    
 }
 
 
@@ -70,16 +69,36 @@
     height: 28px;
 
     top : 36px;
-    margin-top: -14px; 
+    margin-top: -8px; 
 
     left: 193px;
+
+    -webkit-animation: spin 4s infinite linear;
+    -o-animation: spin 4s infinite linear;
+    -moz-animation: spin 4s infinite linear;
+    animation: spin 4s infinite linear;
 }
+
+@-webkit-keyframes spin {
+    0%  {-webkit-transform: rotate(0deg);}
+    100% {-webkit-transform: rotate(360deg);}
+}
+ 
+@-moz-keyframes spin {
+   0%  {-moz-transform: rotate(0deg);}
+    100% {-moz-transform: rotate(360deg);}
+}
+@keyframes spin {
+    0%  {transform: rotate(0deg);}
+    100% {transform: rotate(360deg);}
+}
+
 
 
 .ntr-nowTradingHead{
  
     width : 222px;
-    height: 72px ;
+    height: 79px ;
     background-color: white;
   }
 
@@ -101,7 +120,7 @@
 }
 
 .ntr-obj-text{
-    margin-top: 15px;
+    margin-top: 10px;
     margin-left: 20px;
     font-size: 14px;
 }
@@ -115,7 +134,7 @@
     width : 94;
     height: 24;
     margin-top : 30px;
-    margin-left: 20px;
+    margin-left: 16px;
     float: left;
 }
 
@@ -123,7 +142,7 @@
     width : 94;
     height: 24;
     margin-top : 30px;
-    margin-left: 10px;
+    margin-left: 8px;
     float:left;
 }
 
