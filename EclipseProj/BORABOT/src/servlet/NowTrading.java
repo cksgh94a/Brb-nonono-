@@ -70,6 +70,7 @@ public class NowTrading extends HttpServlet {
 					subObject.put("coin", rs.getString("coin"));
 					subObject.put("strategy_name", rs.getString("strategy_name"));
 					subObject.put("end_date", rs.getString("end_date"));
+					subObject.put("interval", rs.getString("interval"));
 
 					String profitSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\' order by trans_time limit 1", (String) session.getAttribute("email"), rs.getString("bot_name"));
 					ResultSet pRs = useDB.Query(profitSql, "select");

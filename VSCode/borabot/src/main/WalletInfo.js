@@ -5,21 +5,21 @@ import { connect } from 'react-redux';
 import './WalletInfo.css';
 
 class WalletInfo extends Component{
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    this.state = {
-			selectedWallet: []
-    };
+		this.state = {
+				selectedWallet: []
+		};
 	}
-	
+
 	handleExchange = (e) => {
-    axios.get( 'Wallet?exchange='+e.target.value )
-    .then( response => {
-			this.setState({ selectedWallet : response.data})
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
-    this.forceUpdate(); // 새로고침
+		axios.get( 'Wallet?exchange='+e.target.value )
+		.then( response => {
+		this.setState({ selectedWallet : response.data})
+		})
+		.catch( response => { console.log('err\n'+response); } ); // ERROR
+		this.forceUpdate(); // 새로고침
 	}
 
 	render() {
@@ -36,7 +36,7 @@ class WalletInfo extends Component{
 						placeholder={'Select something'}>
 						<option selected hidden disabled>거래소</option>
 						{exchangeList.map((exchange, i) => {
-							return (<option key = {i}>{exchange.key}</option>)
+								return (<option key = {i}>{exchange.key}</option>)
 						})}
 					</select>
 				</div>
@@ -53,9 +53,9 @@ class WalletInfo extends Component{
 }
 
 let mapStateToProps = (state) => {
-	return {
-	exchangeList: state.exchange.exchangeList,
-	};
+		return {
+		exchangeList: state.exchange.exchangeList,
+		};
 }
 
 WalletInfo = connect(mapStateToProps)(WalletInfo);

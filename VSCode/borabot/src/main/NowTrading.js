@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import Popup from "reactjs-popup";
+import { connect } from 'react-redux';
 
 import Alarm from './Alarm';
 
@@ -115,7 +116,7 @@ class NowTrading extends Component {
         </div>
         
         <div className = "NowTrading-elementList">
-          {this.state.listE.map((nt, i) => {
+          {this.state.listE.map((nt) => {
             return (
               <div className = "NowTrading-element" >
 
@@ -123,7 +124,14 @@ class NowTrading extends Component {
                 <div className = 'ntr-obj-coin'>코인 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
                 <div className = 'ntr-obj-text' >거래소 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.exchange_name}</div>
                 <div className = 'ntr-obj-text' >전략 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.strategy_name}</div>
-                <div className = 'ntr-obj-text' >거래 간격 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.interval}</div>
+                <div className = 'ntr-obj-text' >거래 간격 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text>
+                  {this.props.intervalList.map((interval) => {
+                    return (
+                      interval.value === nt.interval
+                      && <text>{interval.key}</text>
+                    )
+                  })}
+                </div>
                 <div className = 'ntr-obj-text' >종료일 <text style={{marginLeft : "8px", marginRight:"8px"}} >:</text> {nt.end_date.slice(0,-3)}</div>
                 <div className = 'ntr-obj-text' >수익률 <text style={{marginLeft : "8px", marginRight:"8px"}}>  :</text> <text className = "ntr-obj-profit">{nt.profit}%</text></div>
 
@@ -141,5 +149,13 @@ class NowTrading extends Component {
     );
   }
 }
+
+let mapStateToProps = (state) => {
+  return {
+    intervalList: state.exchange.intervalList
+  };
+}
+
+NowTrading = connect(mapStateToProps)(NowTrading);
 
 export default NowTrading;

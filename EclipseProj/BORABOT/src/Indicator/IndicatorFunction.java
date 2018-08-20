@@ -13,112 +13,101 @@ import DB.DB_ohlc;
 import com.google.gson.*;
 
 public class IndicatorFunction {
-	// return[0] = 고가, return[1] = 저가, return[2] = 종가, return[3] = 볼륨
-	   public static double[][] get_HLCV_HistoryArray(CryptowatchAPI crypt, String exchange, String coin, String base,
-	         int interval, int period_day) throws Exception {
+   // return[0] = 고가, return[1] = 저가, return[2] = 종가, return[3] = 볼륨
+   public static double[][] get_HLCV_HistoryArray(CryptowatchAPI crypt, String exchange, String coin, String base,
+         int interval, int period_day) throws Exception {
 
-	      int size = period_day;
-	      double ret[][] = new double[size][4];
+      int size = period_day;
+      double ret[][] = new double[size][4];
 
-	      long now = System.currentTimeMillis() / 1000;
+      long now = System.currentTimeMillis() / 1000;
 
-	      String symb;
+      String symb;
 
-	      System.out.println(exchange);
-	      System.out.println(exchange.equals("BINANCE"));
-	      System.out.println(exchange.equals("binance"));
-	      
-	      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
-	         symb = coin + base;
-	      } else {
-	         symb = coin;
-	      }
+      System.out.println(exchange);
+      System.out.println(exchange.equals("BINANCE"));
+      System.out.println(exchange.equals("binance"));
 
-	      DB_ohlc db = new DB_ohlc();
-	      ResultSet rs = null;
-	      String sql = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval,
-	            symb, now - ((period_day - 1) * interval) - 1, now + 1);
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
+         symb = coin + base;
+      } else {
+         symb = coin;
+      }
 
-	      String sql2 = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-	            symb, period_day);
-	      
-	      rs = db.Query(sql, "select");
-	      rs.next();
-	      int cnt = 0;
-	      try {
-	         while (rs.next()) {
-	            ret[cnt][0] = rs.getDouble(1);
-	            ret[cnt][1] = rs.getDouble(2);
-	            ret[cnt][2] = rs.getDouble(3);
-	            ret[cnt][3] = rs.getDouble(4);
-	            cnt++;
-	            
-	         }
-	      } catch (SQLException e) {
-	         // TODO Auto-generated catch block
-	         e.printStackTrace();
-	      }
-	      db.clean();
+      DB_ohlc db = new DB_ohlc();
+      ResultSet rs = null;
+      // String sql = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s WHERE uTime
+      // BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval,
+      // symb, now - ((period_day - 1) * interval) - 1, now + 1);
 
-	      long after;
-	      now = System.currentTimeMillis() / 1000;
-	      after = now - (now % interval);
-	      String recentHL = String.format(
-	            "Select MAX(c), MIN(c), SUM(v) FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s and %s; ", exchange, interval,
-	            symb, after, now);
+      String sql = String.format("SELECT h,l,c,v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+            symb, period_day);
 
-	      String selectForC = String.format(
-	            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange, symb,
-	            exchange, symb, after - 1, now + 1);
+      rs = db.Query(sql, "select");
+      rs.next();
+      int cnt = 0;
+      try {
+         while (rs.next()) {
+            ret[cnt][0] = rs.getDouble(1);
+            ret[cnt][1] = rs.getDouble(2);
+            ret[cnt][2] = rs.getDouble(3);
+            ret[cnt][3] = rs.getDouble(4);
+            cnt++;
 
-	      String selectForO = String.format(
-	            "SELECT price FROM %sOneMinute%s WHERE uTime < %s ORDER BY ABS(uTime - %s) LIMIT 1  ", exchange, symb,
-	            after - 1, now + 1);
+         }
+      } catch (SQLException e) {
+         // TODO Auto-generated catch block
+         e.printStackTrace();
+      }
+      db.clean();
 
-	      DB_ohlc db1 = new DB_ohlc();
-	      DB_ohlc db2 = new DB_ohlc();
-	      DB_ohlc db3 = new DB_ohlc();
+      long after;
+      now = System.currentTimeMillis() / 1000;
+      after = now - (now % interval);
+      String recentHL = String.format(
+            "Select MAX(c), MIN(c), SUM(v) FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s and %s; ", exchange, interval,
+            symb, after, now);
 
-	      ResultSet rs1 = db1.Query(recentHL, "select");
-	      ResultSet rs2 = db2.Query(selectForC, "select");
-//	      ResultSet rs3 = db3.Query(selectForO, "select");
+      String selectForC = String.format(
+            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",
+            exchange, symb, exchange, symb, after - 1, now + 1);
 
-	      double o, h, l, c, v;
+      DB_ohlc db1 = new DB_ohlc();
+      DB_ohlc db2 = new DB_ohlc();
+      DB_ohlc db3 = new DB_ohlc();
 
-	      rs1.next();
-	      rs2.next();
-//	      rs3.next();
-	      if (!rs1.next() || !rs2.next()) {
-	         ret[size - 1][0] = ret[size - 2][0];
-	         ret[size - 1][1] = ret[size - 2][1];
-	         ret[size - 1][2] = ret[size - 2][2];
-	         ret[size - 1][3] = ret[size - 2][3];
-//	         ret[size - 1][4] = ret[size - 2][4];
-//	         ret[size - 1][5] = ret[size - 2][5];
-	      } else {
-	         h = rs1.getDouble(1);
-	         l = rs1.getDouble(2);
-	         v = rs1.getDouble(3);
-//	         o = rs3.getDouble(1);
-	         c = rs2.getDouble(1);
-//	         ret[size - 1][0] = o;
-	         ret[size - 1][1] = h;
-	         ret[size - 1][2] = l;
-	         ret[size - 1][3] = c;
-	         ret[size - 1][4] = v; 
-//	         ret[size - 1][5] = now;
-	      }
+      ResultSet rs1 = db1.Query(recentHL, "select");
+      ResultSet rs2 = db2.Query(selectForC, "select");
 
-	      db1.clean();
-	      db2.clean();
-	      db3.clean();
+      double o, h, l, c, v;
 
-	      return ret;
+      if (!rs1.next() || !rs2.next()) {
+         ret[size - 1][0] = ret[size - 2][0];
+         ret[size - 1][1] = ret[size - 2][1];
+         ret[size - 1][2] = ret[size - 2][2];
+         ret[size - 1][3] = ret[size - 2][3];
+      } else {
+         h = rs1.getDouble(1);
+         l = rs1.getDouble(2);
+         v = rs1.getDouble(3);
+         c = rs2.getDouble(1);
+         ret[size - 1][1] = h;
+         ret[size - 1][2] = l;
+         ret[size - 1][3] = c;
+         ret[size - 1][4] = v;
+      }
 
-	   }
+      db1.clean();
+      db2.clean();
+      db3.clean();
+
+      return ret;
+
+   }
 
    public static double[][] get_HLCV_Test(CryptowatchAPI crypt, String exchange, String coin, String base,
-     int interval, int period_day) throws Exception {
+         int interval, int period_day) throws Exception {
 
       int size = period_day;
       double ret[][] = new double[size][5];
@@ -129,8 +118,9 @@ public class IndicatorFunction {
       System.out.println(exchange);
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
-      
-      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
+
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -138,11 +128,12 @@ public class IndicatorFunction {
 
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
-      String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange,
-            interval, symb, now - ((period_day - 1) * interval) - 100, now + 50);
-      
-      String sql2 = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-            symb, period_day);
+      // String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE
+      // uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange,
+      // interval, symb, now - ((period_day - 1) * interval) - 100, now + 50);
+
+      String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange,
+            interval, symb, period_day);
 
       rs = db.Query(sql, "select");
 
@@ -166,8 +157,8 @@ public class IndicatorFunction {
 
    }
 
-   public static Queue<Double> getHistoryQueue (String exchange, String coin, String base, int interval,
-         int period_day) throws Exception {
+   public static Queue<Double> getHistoryQueue(String exchange, String coin, String base, int interval, int period_day)
+         throws Exception {
 
       Queue<Double> historyQueue = new LinkedList<Double>();
       long now = System.currentTimeMillis() / 1000;
@@ -176,8 +167,9 @@ public class IndicatorFunction {
       System.out.println(exchange);
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
-      
-      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
+
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -185,14 +177,16 @@ public class IndicatorFunction {
 
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
-      String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
-            now - ((period_day - 1) * interval) - 10, now + 50);
-      String sql2 = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-            symb, period_day);
-      
+      // String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s
+      // AND %s ORDER BY uTime ASC",
+      // exchange, interval, symb, now - ((period_day - 1) * interval) - 10, now +
+      // 50);
+      String sql = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval, symb,
+            period_day);
+
       // System.out.println(sql);
       rs = db.Query(sql, "select");
-      double temp=0;
+      double temp = 0;
       try {
          while (rs.next()) {
             double c = rs.getDouble(1);
@@ -206,7 +200,7 @@ public class IndicatorFunction {
 
       // System.out.println("indicatorFunc rs result number : " + cnt);
       db.clean();
-      
+
       historyQueue.poll();
 
       long after;
@@ -214,8 +208,8 @@ public class IndicatorFunction {
       after = now - (now % interval);
 
       String selectForC = String.format(
-            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",  exchange,
-            symb, exchange, symb, after - 1, now + 1);
+            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",
+            exchange, symb, exchange, symb, after - 1, now + 1);
 
       DB_ohlc db2 = new DB_ohlc();
 
@@ -223,7 +217,6 @@ public class IndicatorFunction {
 
       double cc;
 
-      
       if (!rs2.next()) {
          historyQueue.add(temp);
       } else {
@@ -232,8 +225,7 @@ public class IndicatorFunction {
       }
 
       db2.clean();
-      
-      
+
       return historyQueue;
    }
 
@@ -247,8 +239,9 @@ public class IndicatorFunction {
       System.out.println(exchange);
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
-      
-      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
+
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -256,10 +249,12 @@ public class IndicatorFunction {
 
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
-      String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
-            now - ((period_day - 1) * interval) - 100, now + 50);
-      String sql2 = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-            symb, period_day);
+      // String sql = String.format("SELECT c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s
+      // AND %s ORDER BY uTime ASC",
+      // exchange, interval, symb, now - ((period_day - 1) * interval) - 100, now +
+      // 50);
+      String sql = String.format("SELECT c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval, symb,
+            period_day);
 
       rs = db.Query(sql, "select");
 
@@ -280,8 +275,8 @@ public class IndicatorFunction {
       after = now - (now % interval);
 
       String selectForC = String.format(
-            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange,
-            symb,  exchange, symb, after - 1, now + 1);
+            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",
+            exchange, symb, exchange, symb, after - 1, now + 1);
 
       DB_ohlc db2 = new DB_ohlc();
 
@@ -289,7 +284,6 @@ public class IndicatorFunction {
 
       double c;
 
-      
       if (!rs2.next()) {
          // 고 사이에 한 개도 없다면 ! 그냥 그 전꺼를 쓰는거고
          ret[size - 1] = ret[size - 2];
@@ -313,8 +307,9 @@ public class IndicatorFunction {
       System.out.println(exchange);
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
-      
-      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
+
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -322,10 +317,12 @@ public class IndicatorFunction {
 
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
-      String sql = String.format("SELECT v FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval, symb,
-            now - ((period_day - 1) * interval) - 100, now + 50);
-      String sql2 = String.format("SELECT v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-            symb, period_day);
+      // String sql = String.format("SELECT v FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s
+      // AND %s ORDER BY uTime ASC",
+      // exchange, interval, symb, now - ((period_day - 1) * interval) - 100, now +
+      // 50);
+      String sql = String.format("SELECT v FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval, symb,
+            period_day);
 
       rs = db.Query(sql, "select");
 
@@ -334,7 +331,7 @@ public class IndicatorFunction {
       try {
          while (rs.next()) {
             ret[cnt++] = rs.getDouble(1);
-            
+
          }
       } catch (SQLException e) {
          // TODO Auto-generated catch block
@@ -378,8 +375,9 @@ public class IndicatorFunction {
       System.out.println(exchange);
       System.out.println(exchange.equals("BINANCE"));
       System.out.println(exchange.equals("binance"));
-      
-      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC") || exchange.equals("hitbtc")) {
+
+      if (exchange.equals("binance") || exchange.equals("BINANCE") || exchange.equals("HITBTC")
+            || exchange.equals("hitbtc")) {
          symb = coin + base;
       } else {
          symb = coin;
@@ -387,9 +385,11 @@ public class IndicatorFunction {
 
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
-      String sql = String.format("SELECT h,l,c FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange, interval,
-            symb, now - ((period_day - 1) * interval) - 10, now + 50);
-      String sql2 = String.format("SELECT h,l,c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+      // String sql = String.format("SELECT h,l,c FROM %sOHLC_%s_%s WHERE uTime
+      // BETWEEN %s AND %s ORDER BY uTime ASC",
+      // exchange, interval, symb, now - ((period_day - 1) * interval) - 10, now +
+      // 50);
+      String sql = String.format("SELECT h,l,c FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
             symb, period_day);
 
       rs = db.Query(sql, "select");
@@ -399,7 +399,7 @@ public class IndicatorFunction {
       try {
          while (rs.next()) {
             ret[cnt++] = (rs.getDouble(1) + rs.getDouble(2) + rs.getDouble(3)) / 3;
-            
+
          }
       } catch (SQLException e) {
          // TODO Auto-generated catch block
@@ -415,8 +415,8 @@ public class IndicatorFunction {
             symb, after, now);
 
       String selectForC = String.format(
-            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);", exchange, 
-            symb, exchange, symb, after - 1, now + 1);
+            " SELECT price FROM %sOneMinute%s WHERE uTime IN ( SELECT MAX(uTime) FROM %sOneMinute%s WHERE uTime BETWEEN %s and %s);",
+            exchange, symb, exchange, symb, after - 1, now + 1);
 
       DB_ohlc db1 = new DB_ohlc();
       DB_ohlc db2 = new DB_ohlc();
@@ -428,14 +428,14 @@ public class IndicatorFunction {
 
       if (!rs2.next() || !rs1.next()) {
 
-         ret[size-1] = ret[size-2];
-         
+         ret[size - 1] = ret[size - 2];
+
       } else {
          h = rs1.getDouble(1);
          l = rs1.getDouble(2);
          c = rs2.getDouble(1);
-         
-         ret[size-1] = (h+l+c)/3;
+
+         ret[size - 1] = (h + l + c) / 3;
       }
 
       return ret;
@@ -515,7 +515,6 @@ public class IndicatorFunction {
       ResultSet rs = null;
       String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s", exchange,
             interval, symb, startUnix - 10, endUnix + 10);
-
 
       int cnt = 0;
       try {
