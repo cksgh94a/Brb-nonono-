@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { setStrategy } from '../reducers/strategy';
 
 import './Strategy.css';
-import { isNullOrUndefined } from 'util';
+import { isNullOrUndefined, isUndefined } from 'util';
 
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
@@ -119,95 +119,82 @@ class Strategy extends Component {
   handleSave = (e) => {
     const { selectedIndicator, jsonString, savedCnt, expList, defaultIndicator, calculate } = this.state
 
-    console.log(!Number.isInteger(parseInt(document.getElementById('weight').value)))
-
     // 현재 설정된 지표 세부 설정 저장 (공백이면 기본값)
     if(document.getElementById('weight').value === '') selectedIndicator.weight = defaultIndicator.weight
     else if(!Number.isInteger(parseInt(document.getElementById('weight').value))){  // 정수 판별
       alert('정수를 입력하세요')
       return
-    }
-    else selectedIndicator.weight = document.getElementById('weight').value
+    } else selectedIndicator.weight = document.getElementById('weight').value
 
     if(selectedIndicator.period === undefined) {} // 선택된 지표에 해당 값이 없으면 건너뜀
+    else if(document.getElementById('period').value === '') selectedIndicator.period = defaultIndicator.period
     else if(!Number.isInteger(parseInt(document.getElementById('period').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('period').value === '') selectedIndicator.period = defaultIndicator.period
-    else selectedIndicator.period = document.getElementById('period').value
+    } else selectedIndicator.period = document.getElementById('period').value
 
     if(selectedIndicator.buyIndex === undefined) {}
+    else if(document.getElementById('buyIndex').value === '') selectedIndicator.buyIndex = defaultIndicator.buyIndex
     else if(!Number.isInteger(parseInt(document.getElementById('buyIndex').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('buyIndex').value === '') selectedIndicator.buyIndex = defaultIndicator.buyIndex
-    else selectedIndicator.buyIndex = document.getElementById('buyIndex').value
+    } else selectedIndicator.buyIndex = document.getElementById('buyIndex').value
 
     if(selectedIndicator.sellIndex === undefined) {}
+    else if(document.getElementById('sellIndex').value === '') selectedIndicator.sellIndex = defaultIndicator.sellIndex
     else if(!Number.isInteger(parseInt(document.getElementById('sellIndex').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('sellIndex').value === '') selectedIndicator.sellIndex = defaultIndicator.sellIndex
-    else selectedIndicator.sellIndex = document.getElementById('sellIndex').value
+    } else selectedIndicator.sellIndex = document.getElementById('sellIndex').value
 
     if(selectedIndicator.mul === undefined) {}
+    else if(document.getElementById('mul').value === '') selectedIndicator.mul = defaultIndicator.mul
     else if(!Number.isInteger(parseInt(document.getElementById('mul').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('mul').value === '') selectedIndicator.mul = defaultIndicator.mul
-    else selectedIndicator.mul = document.getElementById('mul').value
+    } else selectedIndicator.mul = document.getElementById('mul').value
 
     if(selectedIndicator.longD === undefined) {}
+    else if(document.getElementById('longD').value === '') selectedIndicator.longD = defaultIndicator.longD
     else if(!Number.isInteger(parseInt(document.getElementById('longD').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('longD').value === '') selectedIndicator.longD = defaultIndicator.longD
-    else selectedIndicator.longD = document.getElementById('longD').value
+    } else selectedIndicator.longD = document.getElementById('longD').value
 
     if(selectedIndicator.shortD === undefined) {}
+    else if(document.getElementById('shortD').value === '') selectedIndicator.shortD = defaultIndicator.shortD
     else if(!Number.isInteger(parseInt(document.getElementById('shortD').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('shortD').value === '') selectedIndicator.shortD = defaultIndicator.shortD
-    else selectedIndicator.shortD = document.getElementById('shortD').value
+    } else selectedIndicator.shortD = document.getElementById('shortD').value
 
     if(selectedIndicator.mT === undefined) {}
+    else if(document.getElementById('mT').value === '') selectedIndicator.mT = defaultIndicator.mT
     else if(!Number.isInteger(parseInt(document.getElementById('mT').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('mT').value === '') selectedIndicator.mT = defaultIndicator.mT
-    else selectedIndicator.mT = document.getElementById('mT').value
+    } else selectedIndicator.mT = document.getElementById('mT').value
 
     if(selectedIndicator.n === undefined) {}
+    else if(document.getElementById('n').value === '') selectedIndicator.n = defaultIndicator.n
     else if(!Number.isInteger(parseInt(document.getElementById('n').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('n').value === '') selectedIndicator.n = defaultIndicator.n
-    else selectedIndicator.n = document.getElementById('n').value
+    } else selectedIndicator.n = document.getElementById('n').value
 
     if(selectedIndicator.m === undefined) {}
+    else if(document.getElementById('m').value === '') selectedIndicator.m = defaultIndicator.m
     else if(!Number.isInteger(parseInt(document.getElementById('m').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('m').value === '') selectedIndicator.m = defaultIndicator.m
-    else selectedIndicator.m = document.getElementById('m').value
+    } else selectedIndicator.m = document.getElementById('m').value
 
     if(selectedIndicator.t === undefined) {}
+    else if(document.getElementById('t').value === '') selectedIndicator.t = defaultIndicator.t
     else if(!Number.isInteger(parseInt(document.getElementById('t').value))){
       alert('정수를 입력하세요')
       return
-    }
-    else if(document.getElementById('t').value === '') selectedIndicator.t = defaultIndicator.t
-    else selectedIndicator.t = document.getElementById('t').value
+    } else selectedIndicator.t = document.getElementById('t').value
 
     // if(selectedIndicator.cor === undefined) {}
     // else if(document.getElementById('cor').value === '') selectedIndicator.cor = defaultIndicator.cor
@@ -278,26 +265,41 @@ class Strategy extends Component {
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.props.onStoreStrategy(response.data)
+        // 세션 검증
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else if(response.data === 1062) alert('중복된 전략 이름입니다')
+        else if(!isUndefined(response.data.error)) alert('전략 생성 실패'+response.data.error)
+        else {
+          this.props.onStoreStrategy(response.data)
+          alert('저장이 완료되었습니다')
+          window.location = "/strategy"
+        }
       }) 
       .catch( response => { console.log('err\n'+response); } ); // ERROR로
     }
   }
 
-  handleDelete = () => {
+  handleDelete = () => {    
     if(window.confirm("전략을 삭제하시겠습니까?")){
       // DB에 해당 전략 삭제
       axios.post(
         'Strategy', 
-        'name='+this.state.strategy_name+'&data=delete', 
+        'name='+this.props.strategyList[document.getElementById('serverStrategy').selectedIndex-1].name+'&data=delete', 
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
-        this.props.onStoreStrategy(response.data)
+        console.log(response.data)
+        // 세션 검증
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else if(!isUndefined(response.data.error)) alert('전략 삭제 실패'+response.data.error)
+        else {
+          this.props.onStoreStrategy(response.data)
+          alert('삭제가 완료되었습니다')
+          window.location = "/strategy"
+        }
       }) 
       .catch( response => { console.log('err\n'+response); } ); // ERROR로
     }
-
   }
 
   render() {

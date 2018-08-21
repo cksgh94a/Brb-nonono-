@@ -67,7 +67,7 @@ public class NowTrading extends HttpServlet {
 					JSONObject subObject = new JSONObject();
 					subObject.put("bot_name", rs.getString("bot_name"));
 					subObject.put("exchange_name", rs.getString("exchange_name"));
-					subObject.put("coin", rs.getString("coin"));
+					subObject.put("coin", rs.getString("coin")+rs.getString("base"));
 					subObject.put("strategy_name", rs.getString("strategy_name"));
 					subObject.put("end_date", rs.getString("end_date"));
 					subObject.put("interval", rs.getString("interval"));

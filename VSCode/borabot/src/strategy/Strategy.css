@@ -23,12 +23,20 @@
 }
 
 #serverStrategy, #strategy_name, #buyWeight, #sellWeight, #indicator, #weight, #period, #buyIndex, #sellIndex, #mul, #longD, #shortD, #mT, #n, #m, #t, #cor {
-    width: 197px;
+    width: 182px;
     height: 42px;
     border: none;
     border-bottom: 1px solid #9646a0;
     font-size: 14px;
     color: #111111;
+}
+
+#serverStrategy, #indicator {
+    background: url("../img/common/select_01.png") no-repeat 95% 50%;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .strategy_1_contents_titles_1 {

@@ -38,6 +38,7 @@ public class Strategy extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// 전략 내보내기
 		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
@@ -74,40 +75,53 @@ public class Strategy extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
-
+		// 전략 생성/삭제
+		
 		// 데이터 인코딩 설정
 	    request.setCharacterEncoding("utf-8");
 	    response.setContentType("text/html;charset=utf-8");
-
-		HttpSession session = request.getSession();
+	    
+        HttpSession session = request.getSession(false);
+		PrintWriter out = response.getWriter();
+		
+		// 세션 유효성 확인
+		if(session == null) {
+			out.print("sessionExpired");
+			return;
+		}
 		
 	    String email = (String) session.getAttribute("email"); 
 		String name = request.getParameter("name");
 		String data = request.getParameter("data");		
 		
-		if(data.equals("delete")) {
+		if(data.equals("delete")) {	// 삭제 요청일 경우
 			String deleteSql = String.format("delete from custom_strategy where email='%s' and strategy_name='%s'", email, name);
+			System.out.println(deleteSql);
 			try {
 				DB useDB = new DB();
-				useDB.Query(deleteSql, "insert");		
-				useDB.clean();		
+				useDB.Query(deleteSql, "insert");
+				useDB.clean();
+				
+				doGet(request, response);
 			} catch (SQLException e) {
-				e.printStackTrace();			
+				e.printStackTrace();
+				out.print("{error:"+e.getErrorCode()+"}");
 			}			
-		} else {			
+		} else {	// 생성 요청일 경우
 			String insertSql = String.format("INSERT INTO custom_strategy (email, strategy_name, strategy_content) VALUES('"
 					+email+"', '"+name+"', '"+data+"')");
 
 			try {
 				DB useDB = new DB();
 				useDB.Query(insertSql, "insert");		
-				useDB.clean();		
+				useDB.clean();				
+				
+				doGet(request, response);
 			} catch (SQLException e) {
-				e.printStackTrace();			
+				e.printStackTrace();	
+				out.print(e.getErrorCode());
 			}			
 		}		
-		
-		doGet(request, response);
 	}
 
 }
