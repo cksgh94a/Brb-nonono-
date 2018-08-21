@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
+import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -245,6 +246,7 @@ class BackTesting extends Component {
               showList: response.data.log.slice(0, 10),
               isResulted: true
             })
+            alert('백테스팅에 성공하였습니다.')
           } else alert('백테스팅에 실패하였습니다. (' + response.data + ')')
         }) 
         .catch( response => { console.log('err\n'+response); } ); // ERROR

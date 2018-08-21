@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { setStrategy } from '../reducers/strategy';
 
 import './Strategy.css';
+import { isNullOrUndefined } from 'util';
 
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
@@ -52,24 +53,6 @@ class Strategy extends Component {
     }
   }
 
-  // 지표 select box 변화에 따른 현재 선택된 지표와 기본값 state 변화
-  handleIndicator = (e) => {
-    indicatorList.map((idc) => {
-      if(idc.indicator === e.target.value){
-        this.setState({
-          selectedIndicator: idc
-        })
-      }
-    })
-    defaultIndicatorList.map((didc) => {
-      if(didc.indicator === e.target.value){
-        this.setState({
-          defaultIndicator: didc
-        })
-      }
-    })
-  }
-
   handleLoad = (e) => {
     // 새로 만들기 선택하면 기존에 만든 것 초기화
     if(e.target.value === '새로 만들기'){
@@ -113,57 +96,122 @@ class Strategy extends Component {
     }
   }
 
+  // 지표 select box 변화에 따른 현재 선택된 지표와 기본값 state 변화
+  handleIndicator = (e) => {
+    indicatorList.map((idc) => {
+      if(idc.indicator === e.target.value){
+        this.setState({
+          selectedIndicator: idc
+        })
+      }
+    })
+    defaultIndicatorList.map((didc) => {
+      if(didc.indicator === e.target.value){
+        this.setState({
+          defaultIndicator: didc
+        })
+      }
+    })
+    this.initInput()
+  }
+
   // 설정한 지표 저장 및 리스트, json 저장
   handleSave = (e) => {
     const { selectedIndicator, jsonString, savedCnt, expList, defaultIndicator, calculate } = this.state
 
-    // 현재 설정된 지표 세부 설정 저장
+    console.log(!Number.isInteger(parseInt(document.getElementById('weight').value)))
+
+    // 현재 설정된 지표 세부 설정 저장 (공백이면 기본값)
     if(document.getElementById('weight').value === '') selectedIndicator.weight = defaultIndicator.weight
+    else if(!Number.isInteger(parseInt(document.getElementById('weight').value))){  // 정수 판별
+      alert('정수를 입력하세요')
+      return
+    }
     else selectedIndicator.weight = document.getElementById('weight').value
 
-    if(selectedIndicator.period === undefined) {}
+    if(selectedIndicator.period === undefined) {} // 선택된 지표에 해당 값이 없으면 건너뜀
+    else if(!Number.isInteger(parseInt(document.getElementById('period').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('period').value === '') selectedIndicator.period = defaultIndicator.period
     else selectedIndicator.period = document.getElementById('period').value
 
     if(selectedIndicator.buyIndex === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('buyIndex').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('buyIndex').value === '') selectedIndicator.buyIndex = defaultIndicator.buyIndex
     else selectedIndicator.buyIndex = document.getElementById('buyIndex').value
 
     if(selectedIndicator.sellIndex === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('sellIndex').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('sellIndex').value === '') selectedIndicator.sellIndex = defaultIndicator.sellIndex
     else selectedIndicator.sellIndex = document.getElementById('sellIndex').value
 
     if(selectedIndicator.mul === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('mul').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('mul').value === '') selectedIndicator.mul = defaultIndicator.mul
     else selectedIndicator.mul = document.getElementById('mul').value
 
     if(selectedIndicator.longD === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('longD').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('longD').value === '') selectedIndicator.longD = defaultIndicator.longD
     else selectedIndicator.longD = document.getElementById('longD').value
 
     if(selectedIndicator.shortD === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('shortD').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('shortD').value === '') selectedIndicator.shortD = defaultIndicator.shortD
     else selectedIndicator.shortD = document.getElementById('shortD').value
 
     if(selectedIndicator.mT === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('mT').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('mT').value === '') selectedIndicator.mT = defaultIndicator.mT
     else selectedIndicator.mT = document.getElementById('mT').value
 
     if(selectedIndicator.n === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('n').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('n').value === '') selectedIndicator.n = defaultIndicator.n
     else selectedIndicator.n = document.getElementById('n').value
 
     if(selectedIndicator.m === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('m').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('m').value === '') selectedIndicator.m = defaultIndicator.m
     else selectedIndicator.m = document.getElementById('m').value
 
     if(selectedIndicator.t === undefined) {}
+    else if(!Number.isInteger(parseInt(document.getElementById('t').value))){
+      alert('정수를 입력하세요')
+      return
+    }
     else if(document.getElementById('t').value === '') selectedIndicator.t = defaultIndicator.t
     else selectedIndicator.t = document.getElementById('t').value
 
-    if(selectedIndicator.cor === undefined) {}
-    else if(document.getElementById('cor').value === '') selectedIndicator.cor = defaultIndicator.cor
-    else selectedIndicator.cor = document.getElementById('cor').value
+    // if(selectedIndicator.cor === undefined) {}
+    // else if(document.getElementById('cor').value === '') selectedIndicator.cor = defaultIndicator.cor
+    // else selectedIndicator.cor = document.getElementById('cor').value
 
     var tempJson = jsonString
 
@@ -183,6 +231,22 @@ class Strategy extends Component {
         jsonString: tempJson+',"'+savedCnt+'":'+JSON.stringify(selectedIndicator)
       })
     }
+    this.initInput()
+  }
+
+  // 지표 input 초기화
+  initInput = () => {
+    if(!isNullOrUndefined(document.getElementById('weight'))) document.getElementById('weight').value = null
+    if(!isNullOrUndefined(document.getElementById('period'))) document.getElementById('period').value = null
+    if(!isNullOrUndefined(document.getElementById('buyIndex'))) document.getElementById('buyIndex').value = null
+    if(!isNullOrUndefined(document.getElementById('sellIndex'))) document.getElementById('sellIndex').value = null
+    if(!isNullOrUndefined(document.getElementById('mul'))) document.getElementById('mul').value = null
+    if(!isNullOrUndefined(document.getElementById('longD'))) document.getElementById('longD').value = null
+    if(!isNullOrUndefined(document.getElementById('shortD'))) document.getElementById('shortD').value = null
+    if(!isNullOrUndefined(document.getElementById('mT'))) document.getElementById('mT').value = null
+    if(!isNullOrUndefined(document.getElementById('n'))) document.getElementById('n').value = null
+    if(!isNullOrUndefined(document.getElementById('m'))) document.getElementById('m').value = null
+    if(!isNullOrUndefined(document.getElementById('t'))) document.getElementById('t').value = null
   }
   
   handleComplete = () => {
@@ -221,7 +285,7 @@ class Strategy extends Component {
   }
 
   render() {
-    const { selectedIndicator, buttonVal, jsonString, expList, selectedStrategy } = this.state
+    const { selectedIndicator, buttonVal, jsonString, defaultIndicator, selectedStrategy } = this.state
     return (
       <div class="strategy">
         <div class="strategy_1">
@@ -253,29 +317,29 @@ class Strategy extends Component {
                 })
               }
               </select>
-              <input placeholder={"weight: "+selectedIndicator.weight} id="weight"/>
+              <input placeholder={"weight: "+defaultIndicator.weight} id="weight"/>
               {selectedIndicator.period !== undefined && 
-                (<input placeholder={"period: "+selectedIndicator.period} id="period"/>)}
+                (<input placeholder={"period: "+defaultIndicator.period} id="period"/>)}
               {selectedIndicator.buyIndex !== undefined && 
-                (<input placeholder={"buyIndex: "+selectedIndicator.buyIndex} id="buyIndex"/>)}
+                (<input placeholder={"buyIndex: "+defaultIndicator.buyIndex} id="buyIndex"/>)}
               {selectedIndicator.sellIndex !== undefined && 
-                (<input placeholder={"sellIndex: "+selectedIndicator.sellIndex} id="sellIndex"/>)}
+                (<input placeholder={"sellIndex: "+defaultIndicator.sellIndex} id="sellIndex"/>)}
               {selectedIndicator.mul !== undefined && 
-                (<input placeholder={"mul: "+selectedIndicator.mul} id="mul"/>)}
+                (<input placeholder={"mul: "+defaultIndicator.mul} id="mul"/>)}
               {selectedIndicator.longD !== undefined && 
-                (<input placeholder={"longD: "+selectedIndicator.longD} id="longD"/>)}
+                (<input placeholder={"longD: "+defaultIndicator.longD} id="longD"/>)}
               {selectedIndicator.shortD !== undefined && 
-                (<input placeholder={"shortD: "+selectedIndicator.shortD} id="shortD"/>)}
+                (<input placeholder={"shortD: "+defaultIndicator.shortD} id="shortD"/>)}
               {selectedIndicator.mT !== undefined && 
-                (<input placeholder={"mT: "+selectedIndicator.mT} id="mT"/>)}
+                (<input placeholder={"mT: "+defaultIndicator.mT} id="mT"/>)}
               {selectedIndicator.n !== undefined && 
-                (<input placeholder={"n: "+selectedIndicator.n} id="n"/>)}
+                (<input placeholder={"n: "+defaultIndicator.n} id="n"/>)}
               {selectedIndicator.m !== undefined && 
-                (<input placeholder={"m: "+selectedIndicator.m} id="m"/>)}
+                (<input placeholder={"m: "+defaultIndicator.m} id="m"/>)}
               {selectedIndicator.t !== undefined && 
-                (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
-              {selectedIndicator.cor !== undefined && 
-                (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
+                (<input placeholder={"t: "+defaultIndicator.t} id="t"/>)}
+              {/* {selectedIndicator.cor !== undefined && 
+                (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)} */}
             </div>
 
             <div class="strategySaveButton">
@@ -315,7 +379,7 @@ class Strategy extends Component {
                             {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && (<th>n &emsp;&emsp;</th>)}
                             {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && (<th>m &emsp;&emsp;</th>)}
                             {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && (<th>t &emsp;&emsp;</th>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<th>cor &emsp;</th>)}
+                            {/* {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<th>cor &emsp;</th>)} */}
                           </th>
                         </tr>
                       </div>
@@ -333,7 +397,7 @@ class Strategy extends Component {
                             {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].n} &emsp;</td>)}
                             {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].m} &emsp;</td>)}
                             {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].t} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].cor} &emsp;</td>)}
+                            {/* {JSON.parse('{'+jsonString+'}')[idc].cor !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].cor} &emsp;</td>)} */}
                           </td>
                         </tr>
                       </div>
@@ -370,7 +434,7 @@ class Strategy extends Component {
                               {selectedStrategy.indicatorList[idc].n !== undefined && (<th>n &emsp;&emsp;</th>)}
                               {selectedStrategy.indicatorList[idc].m !== undefined && (<th>m &emsp;&emsp;</th>)}
                               {selectedStrategy.indicatorList[idc].t !== undefined && (<th>t &emsp;&emsp;</th>)}
-                              {selectedStrategy.indicatorList[idc].cor !== undefined && (<th>cor &emsp;</th>)}
+                              {/* {selectedStrategy.indicatorList[idc].cor !== undefined && (<th>cor &emsp;</th>)} */}
                             </th>
                           </tr>
                         </div>
@@ -388,7 +452,7 @@ class Strategy extends Component {
                               {selectedStrategy.indicatorList[idc].n !== undefined && (<td>{selectedStrategy.indicatorList[idc].n} &emsp;</td>)}
                               {selectedStrategy.indicatorList[idc].m !== undefined && (<td>{selectedStrategy.indicatorList[idc].m} &emsp;</td>)}
                               {selectedStrategy.indicatorList[idc].t !== undefined && (<td>{selectedStrategy.indicatorList[idc].t} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].cor !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].cor} &emsp;</td>)}
+                              {/* {selectedStrategy.indicatorList[idc].cor !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].cor} &emsp;</td>)} */}
                             </td>
                           </tr>
                         </div>
