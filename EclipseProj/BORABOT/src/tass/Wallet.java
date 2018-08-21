@@ -24,7 +24,7 @@ public class Wallet {
 		
 		/* DB에서 API Sec 키 가지고오기  */
 		
-		String KeySQL = String.format("Select api_key, secret_key from customer_key where email = %s and exchange_name = %s", email, exchange);
+		String KeySQL = String.format("Select api_key, secret_key from customer_key where email = '%s' and exchange_name = '%s'", email, exchange);
 		DB dbkey = new DB();
 		
 		String apiKey = "";

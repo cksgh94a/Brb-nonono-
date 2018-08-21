@@ -80,8 +80,6 @@ public class WalletInfo extends HttpServlet {
 			default: break;
         }
         
-        System.out.println(jArray);
-        
         out.print(jArray);
 	}
 

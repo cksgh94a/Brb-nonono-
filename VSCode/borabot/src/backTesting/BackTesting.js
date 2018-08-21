@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import './BackTesting.css';
 import toLeftBtn from '../img/common/pre_btn_01.png';
@@ -28,8 +28,8 @@ class BackTesting extends Component {
     this.state={
       exchangeIndex: 0,
       baseIndex: 0,
-      startDay: new Date(),
-      endDay: new Date(),
+      startDay: '',
+      endDay: '',
       nowCash:'',
       
       buyDetail: false,
@@ -172,10 +172,10 @@ class BackTesting extends Component {
       return false
     }
     // 전략 검증
-    // if(document.getElementById('strategy').value === '전략'){
-    //   alert('전략을 설정해주세요')
-    //   return false
-    // }
+    if(document.getElementById('strategy').value === '전략'){
+      alert('전략을 설정해주세요')
+      return false
+    }
     // 구매 방식 검증
     if(document.getElementById('buyingSetting').value === '구매 설정'){
       alert('구매 방식을 설정해주세요')
@@ -206,13 +206,9 @@ class BackTesting extends Component {
   handleStartbtn = () => {
     if(this.validate()){
       const { startDay, endDay } = this.state
-      var startDate = startDay.getFullYear()+'-'+
-        ("0"+(startDay.getMonth()+1)).slice(-2)+'-'+
-        ("0"+startDay.getDate()).slice(-2)+'T'+
+      var startDate = startDay.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('startHour').value).slice(0,-1).slice(-2)+':00:00.000'
-      var endDate = endDay.getFullYear()+'-'+
-        ("0"+(endDay.getMonth()+1)).slice(-2)+'-'+
-        ("0"+endDay.getDate()).slice(-2)+'T'+
+      var endDate = endDay.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
   
       if(this.dateValidate(startDate, endDate)){
@@ -356,17 +352,26 @@ class BackTesting extends Component {
               {/* 시작일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
                 <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                  <DayPickerInput
-                    placeholder = "시작일"
-                    inputProps={{
-                    style: {
-                      width: '80px',
-                      marginTop : "20px",
-                      borderTop : 'transparent',
-                      borderLeft : 'transparent',
-                      borderRight : 'transparent',
-                      borderBottom : 'transparent'}
-                    }} onDayChange={(day) => this.handleDayChange(day, 'start')} />
+                  <DatePicker
+                    selected={this.state.startDay}
+                    onChange={(day) => this.handleDayChange(day, 'start')}
+                    customInput={
+                      <input 
+                        style={{ 
+                          width: '80px',
+                          marginTop : "20px",
+                          borderTop : 'transparent',
+                          borderLeft : 'transparent',
+                          borderRight : 'transparent',
+                          borderBottom : 'transparent'}}
+                        onClick={this.props.onClick}>
+                        {this.props.value}
+                      </input>
+                    }
+                    fixedHeight
+                    placeholderText = "시작일"
+                    dateFormat="YYYY/M/D"
+                    maxDate={moment()}/>
                   <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
                 </div>
                 {/* 시작 시간 선택 */}
@@ -379,17 +384,27 @@ class BackTesting extends Component {
               {/* 종료일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
                 <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-                  <DayPickerInput
-                    placeholder = "종료일"
-                    inputProps={{
-                    style: {
-                      width: '80px',
-                      marginTop : "20px",
-                      borderTop : 'transparent',
-                      borderLeft : 'transparent',
-                      borderRight : 'transparent',
-                      borderBottom : 'transparent'}
-                    }} onDayChange={(day) => this.handleDayChange(day, 'end')} />
+                  <DatePicker
+                    selected={this.state.endDay}
+                    onChange={(day) => this.handleDayChange(day, 'end')}
+                    customInput={
+                      <input 
+                        style={{
+                          width: '80px',
+                          marginTop : "20px",
+                          borderTop : 'transparent',
+                          borderLeft : 'transparent',
+                          borderRight : 'transparent',
+                          borderBottom : 'transparent'}}
+                        onClick={this.props.onClick}>
+                        {this.props.value}
+                      </input>
+                    }
+                    fixedHeight
+                    placeholderText = "종료일"
+                    dateFormat="YYYY/M/D"
+                    minDate={this.state.startDay}
+                    maxDate={moment()}/>
                   <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
                 </div>
                 {/* 종료 시간 선택 */}
@@ -481,4 +496,3 @@ let mapStateToProps = (state) => {
 BackTesting = connect(mapStateToProps)(BackTesting);
 
 export default BackTesting;
-

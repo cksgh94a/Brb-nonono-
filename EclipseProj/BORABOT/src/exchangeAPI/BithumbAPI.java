@@ -124,11 +124,11 @@ public class BithumbAPI implements exAPI {
 	}
 
 	@Override
-	public double getBalance(String coin) {		
+	public double getBalance(String coin) {
+
 		HashMap<String, String> rgParams = new HashMap<String, String>();
 
-		rgParams.put("order_currency", coin);
-		rgParams.put("payment_currency", "krw");
+		rgParams.put("currency", coin);
 
 		String result = null;
 		try {
@@ -139,12 +139,12 @@ public class BithumbAPI implements exAPI {
 		// System.out.println(result);
 		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
 		JsonObject data = ohlc_json.get("data").getAsJsonObject();
+
 		double balance;
-		if (coin.equals("krw") || coin.equals("KRW") ) {
+		if (coin.equals("krw")) {
 			balance = data.get("available_krw").getAsDouble();
-		}
-		else {
-			balance = data.get("available_"+coin.toLowerCase()).getAsDouble();
+		} else {
+			balance = data.get("available_" + coin).getAsDouble();
 		}
 
 		return balance;

@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
-import DayPickerInput from 'react-day-picker/DayPickerInput';
-import 'react-day-picker/lib/style.css';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 import { setSales } from '../reducers/sales';
 
@@ -26,7 +26,7 @@ class Sales extends Component {
     super(props);
 
     this.state = {
-      selectedDay: new Date(), // 선택한 날짜
+      selectedDate: '', // 선택한 날짜
       
       buyDetail: false,
       sellDetail: false,
@@ -36,8 +36,8 @@ class Sales extends Component {
   }
 
   // 날짜 변경 핸들
-  handleDayChange = (day) => {
-    this.setState({ selectedDay: day });
+  handleDateChange = (date) => {
+    this.setState({ selectedDate: date });
   }
 
   // 거래 설정 값들의 인덱스 저장 (차트 표시용 인덱스)
@@ -158,11 +158,9 @@ class Sales extends Component {
   handleStartbtn = () => {
     if(this.validate()) {
       // 종료일 검증
-      const { selectedDay } = this.state
+      const { selectedDate } = this.state
       // 종료일 문자열 생성
-      var endDate = selectedDay.getFullYear()+'-'+
-        ("0"+(selectedDay.getMonth()+1)).slice(-2)+'-'+
-        ("0"+selectedDay.getDate()).slice(-2)+'T'+
+      var endDate = selectedDate.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
       var now = new Date();
       if(new Date(endDate) - now < 0){
@@ -213,9 +211,12 @@ class Sales extends Component {
         )        
         .then( response => {
           if(response.data === 'sessionExpired') this.sessionExpired()
-          else{
-            alert('거래가 시작되었습니다.')
+          else if(response.data === 1062) { // db 키 중복 오류
+            alert('중복된 봇 이름입니다.')
           }
+          else if(response.data === 'success') {
+            alert('거래가 시작되었습니다.')
+          } else alert(response.data)
         }) 
         .catch( response => { console.log('err\n'+response); } ); // ERROR
       } else alert('취소되었습니다.')
@@ -289,14 +290,22 @@ class Sales extends Component {
         </select>
         <input className = 'input-sellSetting' id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
         
-       <div style = {{ maringTop : "12px", height : "42px"}}>
+        <div style = {{ maringTop : "12px", height : "42px"}}>
           <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
-            <DayPickerInput
-            placeholder = "종료일"            
-            inputProps={{
-              style: { width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'}
-            }}
-            onDayChange={this.handleDayChange}/>
+            <DatePicker
+              selected={this.state.selectedDate}
+              onChange={this.handleDateChange}
+              customInput={
+                <input 
+                  style={{ width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'}}
+                  onClick={this.props.onClick}>
+                  {this.props.value}
+                </input>
+              }
+              fixedHeight
+              placeholderText = "종료일"
+              dateFormat="YYYY/M/D"
+              minDate={new Date()} />
             <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
           </div>
           <select id="endHour" className='select_hour'>
@@ -304,7 +313,7 @@ class Sales extends Component {
               return (<option key={i} selected={e === new Date().getHours()}> &nbsp; {e}시 </option>)
             })}
           </select>
-       </div>
+        </div>
        
         <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
       </div>

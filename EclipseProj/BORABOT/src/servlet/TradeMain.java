@@ -91,8 +91,14 @@ public class TradeMain extends HttpServlet {
 						priceBuyUnit, priceSellUnit, numBuyUnit, numSellUnit, 0).botStart();
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+//				e.printStackTrace();
+				System.out.println("servlet.TradeMain 95"+e.getErrorCode());
+				System.out.println("servlet.TradeMain 96"+e.getMessage());
+				System.out.println("servlet.TradeMain 97"+e.getSQLState());
+				out.print(e.getErrorCode());
+				return;				
 			}        	
+			out.print("success");
         }
         else {	// 거래 종료 (DB의 거래 상태, 거래 종료 시간 변경) 
     		try {

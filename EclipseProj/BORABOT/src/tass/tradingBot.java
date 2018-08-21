@@ -97,16 +97,10 @@ public class tradingBot {
 
 		String apiKey = "";
 		String secKey = "";
-		try {
-			if (rsKey.next()) {
-				apiKey = rsKey.getString(1);
-				secKey = rsKey.getString(2);
-			}
-		} catch (SQLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		if (rsKey.next()) {
+			apiKey = rsKey.getString(1);
+			secKey = rsKey.getString(2);
 		}
-
 //		this.API_KEY = "F3q8CU2cmpO1WKpQgoqENyZ95Dnjx7sF8dd2eMu9W0kThhg89F9cDmoWWDMMD0Ee";
 //		this.Secret_KEY = "SL2vp07h6wzG7ij2StbY1rb0YqIa3oexN1up6II58276THbadwzOdkuLSUYFhzMM";
 
@@ -227,13 +221,13 @@ public class tradingBot {
 		 String settingSelectSql = String.format( "SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
 		 String strategySettingJson = "";
 		 try {
-		 ResultSet rsTemp = dao.Query(settingSelectSql, "select");
-		 if (rsTemp.next()) {
-		 strategySettingJson = rsTemp.getString(1);
-		 }
-		 dao.clean();
+			 ResultSet rsTemp = dao.Query(settingSelectSql, "select");
+			 if (rsTemp.next()) {
+				 strategySettingJson = rsTemp.getString(1);
+			 }
+			 dao.clean();
 		 } catch (Exception e) {
-		 e.printStackTrace();
+			 e.printStackTrace();
 		 }
 		// -----------------------------------------------------------------
 
@@ -712,15 +706,20 @@ public class tradingBot {
 		timer.scheduleAtFixedRate(task, date, interval * 1000);
 
 	}
+	
+   // 8자리로
+   private static double shapingnumOfSalingCoin(double numOfSalingCoin, String coin) {
 
-	// 8자리로
-	private static double shapingnumOfSalingCoin(double numOfSalingCoin, String coin) {
+      if (coin.equals("XRP") || coin.equals("xrp")) {
 
-		double ret = Double.parseDouble(String.format("%.8f", numOfSalingCoin));
-		System.out.println("shaped : " + ret);
+         double ret = Double.parseDouble(String.format("%.6f", numOfSalingCoin));
+         return ret;
+      } else {
 
-		return ret;
-	}
+         double ret = Double.parseDouble(String.format("%.8f", numOfSalingCoin));
+         return ret;
+      }
+   }
 
 	// 올인선택
 	// 다 사버려

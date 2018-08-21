@@ -17,9 +17,19 @@ class WalletInfo extends Component{
     };
   }
 
+  componentDidMount() {    
+    axios.get( 'WalletInfo?exchange=BINANCE' )
+    .then( response => {
+      if(response.data === 'sessionExpired') this.sessionExpired()
+      else {
+        this.setState({ selectedWallet: response.data })
+      }
+    })
+    .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
   handleExchange = (e) => {
     if(e.target.value !== '거래소'){
-
       axios.get( 'WalletInfo?exchange='+e.target.value )
       .then( response => {
         if(response.data === 'sessionExpired') this.sessionExpired()
@@ -28,7 +38,6 @@ class WalletInfo extends Component{
         }
       })
       .catch( response => { console.log('err\n'+response); } ); // ERROR
-      this.forceUpdate(); // 새로고침
     }
   }
 
