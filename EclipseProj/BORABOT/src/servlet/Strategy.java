@@ -53,12 +53,12 @@ public class Strategy extends HttpServlet {
 			DB useDB = new DB();
 			ResultSet rs = useDB.Query(selectSql, "select"); 
 			
-				while(rs.next()) {
-					JSONObject jObject = new JSONObject();
-					jObject.put("data", rs.getString("strategy_content"));
-					jObject.put("name", rs.getString("strategy_name"));
-					jArray.add(jObject);
-					}
+			while(rs.next()) {
+				JSONObject jObject = new JSONObject();
+				jObject.put("data", rs.getString("strategy_content"));
+				jObject.put("name", rs.getString("strategy_name"));
+				jArray.add(jObject);
+			}
 			
 			// 5. DB 사용후 clean()을 이용하여 정리
 			useDB.clean();
@@ -85,15 +85,26 @@ public class Strategy extends HttpServlet {
 		String name = request.getParameter("name");
 		String data = request.getParameter("data");		
 		
-		String insertSql = String.format("INSERT INTO custom_strategy (email, strategy_name, strategy_content) VALUES('"
-				+email+"', '"+name+"', '"+data+"')");
+		if(data.equals("delete")) {
+			String deleteSql = String.format("delete from custom_strategy where email='%s' and strategy_name='%s'", email, name);
+			try {
+				DB useDB = new DB();
+				useDB.Query(deleteSql, "insert");		
+				useDB.clean();		
+			} catch (SQLException e) {
+				e.printStackTrace();			
+			}			
+		} else {			
+			String insertSql = String.format("INSERT INTO custom_strategy (email, strategy_name, strategy_content) VALUES('"
+					+email+"', '"+name+"', '"+data+"')");
 
-		try {
-			DB useDB = new DB();
-			useDB.Query(insertSql, "insert");		
-			useDB.clean();		
-		} catch (SQLException e) {
-			e.printStackTrace();			
+			try {
+				DB useDB = new DB();
+				useDB.Query(insertSql, "insert");		
+				useDB.clean();		
+			} catch (SQLException e) {
+				e.printStackTrace();			
+			}			
 		}		
 		
 		doGet(request, response);

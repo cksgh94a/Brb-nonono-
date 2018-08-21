@@ -49,7 +49,7 @@ class Strategy extends Component {
       jsonString:'', // 서버에 보내기 위한 json
 
       selectedStrategy:'',
-      buttonVal: false
+      isLoad: false  // 불러오기이면 true, 새로 만들기이면 false 
     }
   }
 
@@ -68,11 +68,11 @@ class Strategy extends Component {
         expList: [],  // 지표 연산 방법 리스트
         savedCnt: 0,  // 설정된 지표 개수
         jsonString:'', // 서버에 보내기 위한 json
-        buttonVal: false
+        isLoad: false
       })
     } else{
       this.setState({
-        buttonVal: true
+        isLoad: true
       })
       this.props.strategyList.map((s) => {
         if(e.target.value === s.name) {
@@ -217,7 +217,7 @@ class Strategy extends Component {
 
     if(savedCnt === 0) {
       this.setState({
-        buttonVal: false,
+        isLoad: false,
         indicatorList: indicatorList.concat(selectedIndicator),
         savedCnt: savedCnt + 1,
         jsonString: '"'+savedCnt+'":'+JSON.stringify(selectedIndicator)
@@ -284,8 +284,24 @@ class Strategy extends Component {
     }
   }
 
+  handleDelete = () => {
+    if(window.confirm("전략을 삭제하시겠습니까?")){
+      // DB에 해당 전략 삭제
+      axios.post(
+        'Strategy', 
+        'name='+this.state.strategy_name+'&data=delete', 
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        this.props.onStoreStrategy(response.data)
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR로
+    }
+
+  }
+
   render() {
-    const { selectedIndicator, buttonVal, jsonString, defaultIndicator, selectedStrategy } = this.state
+    const { selectedIndicator, isLoad, jsonString, defaultIndicator, selectedStrategy } = this.state
     return (
       <div class="strategy">
         <div class="strategy_1">
@@ -343,7 +359,7 @@ class Strategy extends Component {
             </div>
 
             <div class="strategySaveButton">
-              <button id="strategySaveButton" disabled={buttonVal} onClick={this.handleSave}><img src={require('../img/common/btn_09.png')} /></button>
+              <button id="strategySaveButton" hidden={isLoad} onClick={this.handleSave}><img src={require('../img/common/btn_09.png')} /></button>
             </div>
           </div>
         </div>
@@ -354,7 +370,7 @@ class Strategy extends Component {
         </div>
         <div class="strategy_2">
           <div class="strategy_2_grid">
-            {buttonVal === false
+            {isLoad === false
             ? (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
                 return (<div class="setting _1" key={i}>
                 <table>
@@ -500,7 +516,8 @@ class Strategy extends Component {
           
         </div>
         <div class="strategyCompleteButton">
-          <button id="strategyCompleteButton" disabled={buttonVal} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} /></button>
+          <button id="strategyCompleteButton" hidden={isLoad} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} /></button>
+          <button id="strategyDeleteButton" hidden={!isLoad} onClick={this.handleDelete}>삭제</button>
         </div>
       </div>
 
@@ -554,10 +571,10 @@ class Strategy extends Component {
       //     (<input placeholder={"t: "+selectedIndicator.t} id="t"/>)}
       //   {selectedIndicator.cor !== undefined && 
       //     (<input placeholder={"cor: "+selectedIndicator.cor} id="cor"/>)}
-      //   <button disabled={buttonVal} onClick={this.handleSave}>저장</button>
+      //   <button disabled={isLoad} onClick={this.handleSave}>저장</button>
 
       //   <h4>저장된 항목</h4>
-      //   {buttonVal === false ? 
+      //   {isLoad === false ? 
       //     (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
       //       return (<div key={i}>
       //         <b>{JSON.parse('{'+jsonString+'}')[idc].indicator}</b><br/>
@@ -619,7 +636,7 @@ class Strategy extends Component {
       //       </div>);
       //     }))
       //   }
-      //   <button disabled={buttonVal} onClick={this.handleComplete}>완료</button>
+      //   <button disabled={isLoad} onClick={this.handleComplete}>완료</button>
       // </div>
     );
   }

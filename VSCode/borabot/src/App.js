@@ -56,8 +56,8 @@ class App extends Component {
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
         {
-        // this.state.initLogin // 실제용
-        true // 앞단 테스트
+        this.state.initLogin // 실제용
+        // true // 앞단 테스트
         ? <div style={{height:"100%"}}>
             <div className = "header-location"><Header/></div>
             <div className="main">
