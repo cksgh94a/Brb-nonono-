@@ -5,57 +5,71 @@ import { connect } from 'react-redux';
 import './WalletInfo.css';
 
 class WalletInfo extends Component{
-	constructor(props) {
-		super(props);
+  constructor(props) {
+    super(props);
 
-		this.state = {
-				selectedWallet: []
-		};
-	}
+    this.state = {
+      selectedWallet: [
+        // 앞단 테스트용
+        // {"balance":0.0,"base":"USDT"},{"balance":0.0,"base":"BTC"},{"balance":0.0,"base":"ETH"}
+        // 앞단 테스트용
+      ]
+    };
+  }
 
-	handleExchange = (e) => {
-		axios.get( 'Wallet?exchange='+e.target.value )
-		.then( response => {
-		this.setState({ selectedWallet : response.data})
-		})
-		.catch( response => { console.log('err\n'+response); } ); // ERROR
-		this.forceUpdate(); // 새로고침
-	}
+  handleExchange = (e) => {
+    if(e.target.value !== '거래소'){
 
-	render() {
-		const { exchangeList } = this.props
+      axios.get( 'WalletInfo?exchange='+e.target.value )
+      .then( response => {
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else {
+          this.setState({ selectedWallet: response.data })
+        }
+      })
+      .catch( response => { console.log('err\n'+response); } ); // ERROR
+      this.forceUpdate(); // 새로고침
+    }
+  }
 
-		return(
-			<div className = "walletInfo-container">
-				<div style = {{marginTop : "20px", textAlign : "center", fontSize : "18px", fontWeight : "bold" }}>
-					내 지갑
-				</div>
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
+  }
 
-				<div style = {{marginTop : "20px" }}>
-					<select className = "wallet-select" id="WI_exchangeSelectbox" size = '1' onChange = {this.handleExchange}
-						placeholder={'Select something'}>
-						<option selected hidden disabled>거래소</option>
-						{exchangeList.map((exchange, i) => {
-								return (<option key = {i}>{exchange.key}</option>)
-						})}
-					</select>
-				</div>
+  render() {
+    const { exchangeList } = this.props
 
-				{this.state.selectedWallet.map((w, i) => {
-					return (
-						<div style={{marginLeft : '20px', marginTop : '20px' , fontSize : '14px', fontWeight : 'bold'}}>{w.coin} : {w.balance}</div>
-					)
-				})}
-			</div>
+    return(
+      <div className = "walletInfo-container" >
+        <div style = {{marginTop : "20px", textAlign : "center", fontSize : "18px", fontWeight : "bold" }}>
+          내 지갑
+        </div>
 
-		);
-	}
+        <div style = {{marginTop : "20px", marginBottom : '10px' }}>
+          <select className = "wallet-select" id="WI_exchangeSelectbox" size = '1' onChange = {this.handleExchange} placeholder={'Select something'}>
+            {exchangeList.map((exchange, i) => {
+              return (<option key = {i}>{exchange.key}</option>)
+            })}
+            <option selected hidden disabled>거래소</option>
+          </select>
+        </div>
+
+        {this.state.selectedWallet.map((w, i) => {
+          return (
+            <div style={{marginLeft : '20px', marginBottom : '10px', fontSize : '14px', fontWeight : 'bold' }}>{w.base} : {w.balance}<br/></div>
+          )
+        })}
+      </div>
+    );
+  }
 }
 
 let mapStateToProps = (state) => {
-		return {
-		exchangeList: state.exchange.exchangeList,
-		};
+  return {
+    exchangeList: state.exchange.exchangeList,
+  };
 }
 
 WalletInfo = connect(mapStateToProps)(WalletInfo);

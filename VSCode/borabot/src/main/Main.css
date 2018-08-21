@@ -102,7 +102,7 @@
    top: 106px;
    left: 1371px;
    width: 232px;
-   height: 160px;
+   height: 190px;
    background-color: white;
    font-size: 14px;
    font-family: 'nanum gothic'
@@ -110,10 +110,10 @@
  
  .bg-transaction{
    position: absolute;
-   top: 286px;
+   top: 316px;
    left: 1371px;
    width: 232px;
-   height: 670px;
+   height: 640px;
    background-color: white;
  }
  
