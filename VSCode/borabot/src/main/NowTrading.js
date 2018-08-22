@@ -22,7 +22,11 @@ class NowTrading extends Component {
     };
   }
 
-  componentDidMount() {    
+  componentDidMount() {
+    this.getNowTrading()
+  }
+
+  getNowTrading = () => {
     axios.get('NowTrading')
     .then( response => {
       if(response.data === 'sessionExpired') this.sessionExpired()
@@ -32,8 +36,16 @@ class NowTrading extends Component {
           alarmCount: response.data.alarmCount
         })
       }
-    }) 
+    })
     .catch( response => { console.log('err\n'+response); } ); // ERROR
+  }
+
+  // Sales에서 거래가 시작되면 상위의 toggle을 확인하여 거래 현황을 새로 불러옴
+  componentWillReceiveProps(nextProps){
+    if(this.state.toggle !== this.props.toggle){
+      this.getNowTrading()
+      this.setState({ toggle: this.props.toggle })
+    }
   }
 
   // 세션 유효성 검증
@@ -43,7 +55,6 @@ class NowTrading extends Component {
   }
 
   handleAlarm = () => {
-    console.log(this.state, this.props)
     axios.post('Alarm')
     .then( response => {
       (response.data === 'sessionExpired')
@@ -51,15 +62,15 @@ class NowTrading extends Component {
       : this.setState({
           alarmCount: '0'
         })
-    }) 
+    })
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
   handleStopbtn = (nt) => {
     // 최종 확인 후 거래 종료 (서버에 거래 정보 전송)
     if(window.confirm(nt.bot_name + " 거래를 종료하시겠습니까?")){
-      axios.post( 
-        'TradeMain', 
+      axios.post(
+        'TradeMain',
         'status='+false+
         '&botname='+nt.bot_name,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -67,42 +78,28 @@ class NowTrading extends Component {
       .then( response => {
         if(response.data === 'sessionExpired') this.sessionExpired()
         else{
-          this.setState({ alarmCount: '0' })
+          this.getNowTrading()
           alert(nt.bot_name + ' 거래가 종료되었습니다')
-        } 
-      }) 
+        }
+      })
       .catch( response => { console.log('err\n'+response); } ); // ERROR
     } else alert("거래를 계속 진행합니다");
   }
 
-  reload = () => {
-    axios.get('NowTrading')
-    .then( response => {
-      (response.data === 'sessionExpired')
-      ? this.sessionExpired()
-      : this.setState({
-          listE: response.data.nowTradingList,
-          alarmCount: response.data.alarmCount
-        })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
-    this.forceUpdate(); // 새로고침
-  }
-
   render() {
     const { alarmCount } = this.state
-    
+
     const logBtnImg  = {
       backgroundImage: `url(${logBtn})`,
     }
     const stopBtnImg  = {
       backgroundImage: `url(${stopBtn})`,
     }
-   
+
     const alarmBg = {
       backgroundImage : `url(${alarmImg})`,
     }
-    
+
     return(
       <div class="ntr-nowTradingTotal">
         <div className = "ntr-nowTradingHead">
@@ -113,9 +110,9 @@ class NowTrading extends Component {
             onClose={this.handleAlarm}
             // closeOnDocumentClick
           >{close => (<Alarm close={close}/>)}</Popup>
-          <div className="ntr-nowTradingRefresh" onClick={this.reload}><img src = {refreshBtn}/></div>
+          <div className="ntr-nowTradingRefresh" onClick={this.getNowTrading}><img src = {refreshBtn}/></div>
         </div>
-        
+
         <div className = "NowTrading-elementList">
           {this.state.listE.map((nt) => {
             return (
@@ -140,7 +137,7 @@ class NowTrading extends Component {
                   pathname: "/log",
                   bot_name: nt.bot_name,
                   state: { bot_name: nt.bot_name }
-                }} id="Sale-stop-btn" className="ntr-obj-logBtn"><img src = {logBtn}/></Link> 
+                }} id="Sale-stop-btn" className="ntr-obj-logBtn"><img src = {logBtn}/></Link>
                 <div id="Sale-stop-btn" className = "ntr-obj-stopBtn" onClick={() => this.handleStopbtn(nt)}><img src = {stopBtn}/></div>
 
               </div>);

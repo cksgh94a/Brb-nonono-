@@ -168,9 +168,6 @@ class Sales extends Component {
         return
       }
 
-      console.log(document.getElementById('endHour').value)
-      console.log(endDate)
-
       // 시작일 문자열 생성
       var startDate = now.getFullYear()+'-'+
         ("0"+(now.getMonth()+1)).slice(-2)+'-'+
@@ -180,18 +177,8 @@ class Sales extends Component {
         ("0"+now.getSeconds()).slice(-2)+'.000'
 
       // 거래 확인 메세지
-      let alertMsg = document.getElementById('botname').value + '\n' +
-        document.getElementById('salesExchange').value+ '\n' +
-        document.getElementById('salesBase').value+ '\n' +
-        document.getElementById('salesCoin').value+ '\n' +
-        document.getElementById('salesInterval').value+ '\n' +
-        document.getElementById('strategy').value+ '\n' +
-        document.getElementById('buyingSetting').value+ '\n' +
-        document.getElementById('buyingDetail').value+ '\n' +
-        document.getElementById('sellingSetting').value+ '\n' +
-        document.getElementById('sellingDetail').value+ '\n' +
-        endDate+ '\n' +
-        '\n이 맞습니까?';
+      let alertMsg = document.getElementById('botname').value
+        + ' 매매를 시작하시겠습니까?\n(한 번 사용한 봇 이름은 다시 사용할 수 없습니다';
 
       // 최종 확인 후 거래 시작 (서버에 거래 정보 전송)
       if(window.confirm(alertMsg)){
@@ -218,6 +205,7 @@ class Sales extends Component {
             alert('중복된 봇 이름입니다.')
           }
           else if(response.data === 'success') {
+            this.props.onToggle() // NowTrading에 알리기 위해 toggle 변화
             alert('거래가 시작되었습니다.')
           } else alert(response.data)
         })
