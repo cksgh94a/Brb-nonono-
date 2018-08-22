@@ -60,26 +60,10 @@ class Log extends Component {
     window.location = '/'
   }
 
-  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
-    (this.props.location.key !== nextProps.location.key)
-    && axios.get( 'Log' )
-      .then( response => {
-        if(response.data === 'sessionExpired') this.sessionExpired()
-        else{
-          this.setState({
-            tradeList: response.data,
-            selectedTrade: {},
-            logList: [],
-            pageNumList: [1],
-            pageNum:1,  // 현재 선택된 페이지 번호
-          })      
-          document.getElementById('botName').selectedIndex=0
-        }
-      }) 
-      .catch( response => { 
-        console.log('err\n'+response); 
-      }); // ERROR
+    (this.props.location.key !== nextProps.location.key) 
+    && (window.location = "/log")
   }
 
   handleChange = (e) => {

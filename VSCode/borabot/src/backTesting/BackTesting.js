@@ -47,44 +47,44 @@ class BackTesting extends Component {
     }
   }
 
-  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
     (this.props.location.key !== nextProps.location.key)
-    && this.stateRefresh()
+    && (window.location = "/backtesting")
   }
 
-  stateRefresh = () => {
-    this.setState({
-      exchangeIndex: 0,
-      baseIndex: 0,
-      startDay: '',
-      endDay: '',
-      nowCash:'',
+  // stateRefresh = () => {
+  //   this.setState({
+  //     exchangeIndex: 0,
+  //     baseIndex: 0,
+  //     startDay: '',
+  //     endDay: '',
+  //     nowCash:'',
       
-      buyDetail: false,
-      sellDetail: false,
-      buyUnit:'',
-      sellUnit:'',
+  //     buyDetail: false,
+  //     sellDetail: false,
+  //     buyUnit:'',
+  //     sellUnit:'',
       
-      pageNum:1,  // 현재 선택된 페이지 번호
-      pageNumList: [1], // 게시물의 전체 페이지 리스트
+  //     pageNum:1,  // 현재 선택된 페이지 번호
+  //     pageNumList: [1], // 게시물의 전체 페이지 리스트
 
-      resultList: [],
-      showList: [],
-      result: {}
-    })
+  //     resultList: [],
+  //     showList: [],
+  //     result: {}
+  //   })
 
-    document.getElementById('bt_exchange').selectedIndex = 0
-    document.getElementById('base').selectedIndex = 0
-    document.getElementById('coin').selectedIndex = 0
-    document.getElementById('interval').selectedIndex = 0
-    document.getElementById('buyingSetting').selectedIndex = 0
-    document.getElementById('sellingSetting').selectedIndex = 0
-    document.getElementById('startHour').selectedIndex = 0
-    document.getElementById('endHour').selectedIndex = 0
-    document.getElementById('buyingDetail').value = ''
-    document.getElementById('sellingDetail').value = ''
-  }
+  //   document.getElementById('bt_exchange').selectedIndex = 0
+  //   document.getElementById('base').selectedIndex = 0
+  //   document.getElementById('coin').selectedIndex = 0
+  //   document.getElementById('interval').selectedIndex = 0
+  //   document.getElementById('buyingSetting').selectedIndex = 0
+  //   document.getElementById('sellingSetting').selectedIndex = 0
+  //   document.getElementById('startHour').selectedIndex = 0
+  //   document.getElementById('endHour').selectedIndex = 0
+  //   document.getElementById('buyingDetail').value = ''
+  //   document.getElementById('sellingDetail').value = ''
+  // }
 
   handleIndex = (e) => {
     if (e.target.id === 'bt_exchange'){

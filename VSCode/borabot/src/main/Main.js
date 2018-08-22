@@ -9,6 +9,12 @@ import CoinRecommend from './CoinRecommend';
 import './Main.css';
 
 class Main extends Component {
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
+  componentWillReceiveProps (nextProps) {
+    (this.props.location.key !== nextProps.location.key)
+    && (window.location = "/")
+  }
+  
   render() {
     return (
       <div className="App">

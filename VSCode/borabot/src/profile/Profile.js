@@ -52,6 +52,12 @@ class Profile extends Component {
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
+  componentWillReceiveProps (nextProps) {
+    (this.props.location.key !== nextProps.location.key) 
+    && (window.location = "/profile")
+  }
+
   // 세션 유효성 검증
   sessionExpired = () => {
     alert('세션이 종료되었습니다\n다시 로그인하세요')

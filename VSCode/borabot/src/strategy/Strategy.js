@@ -53,6 +53,12 @@ class Strategy extends Component {
     }
   }
 
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
+  componentWillReceiveProps (nextProps) {
+    (this.props.location.key !== nextProps.location.key) 
+    && (window.location = "/strategy")
+  }
+
   handleLoad = (e) => {
     // 새로 만들기 선택하면 기존에 만든 것 초기화
     if(e.target.value === '새로 만들기'){

@@ -34,18 +34,10 @@ class Board extends Component {
     this.getBoard(1)
   }
 
-  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우 스테이트 초기화
+  // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
-    if(this.props.location.key !== nextProps.location.key) {
-      this.setState({
-        post: false,  // true : 게시물 작성, 보기, false : 목록 표시
-        write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
-  
-        post_num: 0,  // 현재 선택된 게시물 번호  
-        pageNum:1,  // 현재 선택된 페이지 번호
-      })
-      this.getBoard(1)
-    }
+    (this.props.location.key !== nextProps.location.key) 
+    && (window.location = "/board")
   }
 
   // 처음 게시판을 보거나 페이지가 바뀌었을 때 호출하여 10개의 게시물을 불러오고 페이지리스트 갱신
