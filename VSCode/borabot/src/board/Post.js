@@ -224,7 +224,7 @@ class Post extends Component {
     const { post, modify, comment} = this.state
 
     // 앞단 테스트용 - 글쓰기 클릭해서 포스트 확인 ========================================================================================== //
-    // const write = true
+    // const write = false
     // const modify = false
     // const post = {"writer":true,"title":"zxbasdfgweqtgw","email":"test","content":"asdgfweeqwrq","post_time":"2018-07-31 18:47:35"}
     // const comment = [{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}, {"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"},{"comment_time":"2018-07-31 18:47:40","comment":"hhhhhhhhhhh","writer":false,"email":"test"}]
@@ -254,9 +254,11 @@ class Post extends Component {
             </div>
           </thead>        
         </table>
-        <div class="post_save">
+        <div class="post_btn">
           {/* 저장 버튼 */}
           <button id="saveButton" onClick={this.enrollPost}><img src={require('../img/common/btn_12.png')} /></button>
+          {/* 목록 버튼*/}
+          <button id="listButton1" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} /></button>
         </div>
       </div>
 
@@ -279,36 +281,41 @@ class Post extends Component {
               <textarea id="content2" value={post.content} onChange={(e, h='content') => this.handleModify(e, h)} style={{height:334, width:1040, resize:"none"}} readOnly/><br/>
             </tr>
         </table>
-          { // 글 작성자이면 수정/삭제 가능
-          post.writer
-          && <div class="post_buttons">
-              <button id="post_edit" onClick={this.modifyPost}><img src={require('../img/common/btn_14.png')} /></button>
-              <button id="post_delete" onClick={this.deletePost}><img src={require('../img/common/btn_15.png')} /></button>
-            </div>
-          }
+          <div class="post_buttons">
+            {/* 글 작성자이면 수정/삭제 가능 */}
+            <button id="post_edit" onClick={this.modifyPost} hidden={!post.writer}><img src={require('../img/common/btn_14.png')} /></button>
+            <button id="post_delete" onClick={this.deletePost} hidden={!post.writer}><img src={require('../img/common/btn_15.png')} /></button>
+            {/* 목록 버튼 */}
+            <button id="listButton2" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} /></button>
+          </div>
         </div>
         <div class="comment_bottom_1">
         
         {/* 댓글 영역 */}
-          <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 930, resize:"none"}}></input >
+          <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 910, resize:"none"}}></input >
           <button id="comment_new" onClick={this.enrollComment}><img src={require('../img/common/btn_16.png')} /></button>
+        </div>
+          
+        <div class="comment_commentTotal">
           { comment.map((c, i) => {              
-            return (<div class="comment_bottom_2" style={{border:"1px solid"}}>
-              <div class="comment_title">
-                <b>{c.email}</b>  <small>{c.comment_time}</small> 
+            return (
+              <div class="comment_bottom_2" style={{border:"1px solid"}}>
+                <div class="comment_title">
+                  <b>{c.email}</b>  <small>{c.comment_time}</small> 
+                </div>
+                <div class="comment_delete">
+                  {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
+                </div>
+                <div class="comment_comment">
+                  {c.comment}
+                </div>
+                {/* <b>{c.email}</b>  <small>{c.comment_time}</small> 
+                <div class="comment_delete">
+                  {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
+                </div>
+                {c.comment} */}
               </div>
-              <div class="comment_delete">
-                {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
-              </div>
-              <div class="comment_comment">
-                {c.comment}
-              </div>
-              {/* <b>{c.email}</b>  <small>{c.comment_time}</small> 
-              <div class="comment_delete">
-                {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
-              </div>
-              {c.comment} */}
-            </div>)
+            )
           })}
         </div>
       </div>
@@ -353,4 +360,3 @@ class Post extends Component {
 }
 
 export default Post;
-

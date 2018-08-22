@@ -21,6 +21,8 @@
 
     top: 105px;
     left: 0px; 
+
+    overflow: scroll;
 }
 
 .board_title {
@@ -60,9 +62,6 @@
 
     top: 62.8%;
 }
-
-
-
 
 .table-tableContainer{
     width: 1200px;

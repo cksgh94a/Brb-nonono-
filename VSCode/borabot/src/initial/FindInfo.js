@@ -46,7 +46,7 @@ class FindInfo extends Component {
           <input id="inputFindInfo" type="text" placeholder="이메일을 입력하세요." name="email" onChange={this.handleChange}/>
           <button id="tempPwd" onClick={this.handleTempPwd}><img src={require('../img/common/btn_17.png')} /></button>
         </div>
-        <h6 class="tempPwdText">입력하신 이메일로 임시비밀번호가 발송됩니다.</h6>
+        <h5 class="tempPwdText">입력하신 이메일로 임시비밀번호가 발송됩니다.</h5>
         <button id="backToHome" onClick={this.handleBackHome}><img src={require('../img/common/btn_18.png')} /></button>
       </div>      
     );

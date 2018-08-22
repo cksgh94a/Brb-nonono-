@@ -32,17 +32,17 @@ ReactDOM.render(
   rootEl
 );
 
-// if (module.hot) {
-//   module.hot.accept('./App', () => {
-//     const NextApp = require('./App').default; 
-//     ReactDOM.render(
-//       <AppContainer>
-//         <Provider store = {store}>
-//           <NextApp />
-//         </Provider>
-//       </AppContainer>,
-//       rootEl
-//     );
-//   });
-// }
+if (module.hot) {
+  module.hot.accept('./App', () => {
+    const NextApp = require('./App').default; 
+    ReactDOM.render(
+      <AppContainer>
+        <Provider store = {store}>
+          <NextApp />
+        </Provider>
+      </AppContainer>,
+      rootEl
+    );
+  });
+}
   registerServiceWorker();

@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import DB.DB;
+import DB.Hash;
 /**
  * Servlet implementation class DoLogin
  */
@@ -65,8 +66,9 @@ public class LogInOut extends HttpServlet {
 			DB useDB = new DB();
 			ResultSet rs = useDB.Query(selectSql, "select"); 
 			
-			if(rs.next()) {					
-				if(password.equals(rs.getString("password"))) {
+			if(rs.next()) {
+				Hash h = new Hash();
+				if(h.hashing(password).equals(rs.getString("password"))) {
 					// 세션에 사용자 정보 저장
 					HttpSession session = request.getSession();
 					
@@ -82,9 +84,11 @@ public class LogInOut extends HttpServlet {
 			
 			// 5. DB 사용후 clean()을 이용하여 정리
 			useDB.clean();	
-		} catch (SQLException e) {
-			e.printStackTrace();			
-		}		
+		} catch (SQLException se) {
+			se.printStackTrace();			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	    
 		PrintWriter out = response.getWriter();
 		out.print(result);

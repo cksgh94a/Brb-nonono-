@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Random;
 
 import DB.DB;
+import DB.Hash;
 /**
  * Servlet implementation class DoAuth
  */
@@ -52,8 +53,9 @@ public class Register extends HttpServlet {
 	    	    // 회원가입 정보 DB에 저장
 	    
 	    		try {
+	    			Hash h = new Hash();
 		    		String insertSql = String.format("INSERT INTO customer (email, password) VALUES('"
-		    				+request.getParameter("email")+"', '"+request.getParameter("password")+"')");
+		    				+request.getParameter("email")+"', '"+h.hashing(request.getParameter("password"))+"')");
 		    		
 		    		DB useDB = new DB();
 		    		useDB.Query(insertSql, "insert");
@@ -76,10 +78,12 @@ public class Register extends HttpServlet {
 		    		
 		    		useDB.clean();	  
 		    		result = "complete";
-	    		} catch (SQLException e) {
-	    			if(e.getErrorCode() == 1062)
+	    		} catch (SQLException se) {
+	    			if(se.getErrorCode() == 1062)
 	    				result = "dupError";
-	    			else e.printStackTrace();
+	    			else se.printStackTrace();
+	    		} catch (Exception e) {
+	    			e.printStackTrace();
 	    		}
 	    	}
 	    	else result = "authError";

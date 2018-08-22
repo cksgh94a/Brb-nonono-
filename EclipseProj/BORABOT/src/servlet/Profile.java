@@ -17,6 +17,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import DB.DB;
+import DB.Hash;
 /**
  * Servlet implementation class Profile
  */
@@ -129,11 +130,12 @@ public class Profile extends HttpServlet {
 					ResultSet rs = useDB.Query("select password from customer where email='"+session.getAttribute("email")+"'", "select");
 					String password = "";
 					if(rs.next()) password = rs.getString("password");
-					
-					if(!request.getParameter("old_password").equals(password)) result = "wrongError";	// 현재 비밀번호가 일치하지 않을 경우
-					else if(request.getParameter("password").equals(password)) result = "sameError";	// 새로운 비밀번호가 현재 비밀번호와 같은 경우
+
+	    			Hash h = new Hash();
+					if(!h.hashing(request.getParameter("old_password")).equals(password)) result = "wrongError";	// 현재 비밀번호가 일치하지 않을 경우
+					else if(h.hashing(request.getParameter("password")).equals(password)) result = "sameError";	// 새로운 비밀번호가 현재 비밀번호와 같은 경우
 					else {	// 정상적인 경우
-						updateSql = String.format("update customer set password='"+request.getParameter("password")+
+						updateSql = String.format("update customer set password='"+h.hashing(request.getParameter("password"))+
 								"' where email='"+session.getAttribute("email")+"'");		
 						result = "complete";				
 					} 
@@ -161,6 +163,8 @@ public class Profile extends HttpServlet {
 			}   
 		} catch (SQLException se) {
 			se.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
