@@ -42,22 +42,25 @@ class App extends Component {
       }
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR    
-    
-
 
     axios.get( 'Strategy' )
     .then( response => {
       this.props.onSetStrategy(response.data)
     }) 
     .catch( response => { console.log('err\n'+response); } ); // ERROR
+
+    // 앞단 테스트용
+    // const data = [{"data":"{\"indicatorList\":{\"0\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"1\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"2\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70}},\"buyCriteria\":1,\"sellCriteria\":1,\"expList\":\"or,or\"}","name":"asdf"},{"data":"{\"indicatorList\":{\"0\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"1\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"2\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"3\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"4\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70},\"5\":{\"indicator\":\"RSI\",\"weight\":1,\"period\":14,\"buyIndex\":30,\"sellIndex\":70}},\"buyCriteria\":0,\"sellCriteria\":0,\"expList\":\"or,or,or,or,or\"}","name":"zxcvwer"}]
+    // this.props.onSetStrategy(data)
+    // 앞단 테스트용
   }
 
   render() { 
     return (
       <BrowserRouter basename={process.env.REACT_APP_ROUTER_BASE || ''}>
         {
-        this.state.initLogin // 실제용
-        // true // 앞단 테스트
+        // this.state.initLogin // 실제용
+        true // 앞단 테스트
         ? <div style={{height:"100%"}}>
             <div className = "header-location"><Header/></div>
             <div className="main">

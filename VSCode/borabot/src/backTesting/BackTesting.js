@@ -208,9 +208,9 @@ class BackTesting extends Component {
     if(this.validate()){
       const { startDay, endDay } = this.state
       var startDate = startDay.format('YYYY-MM-DDT')+
-        ("0"+document.getElementById('startHour').value).slice(0,-1).slice(-2)+':00:00.000'
+        ("0"+document.getElementById('startHour').value.slice(0,-1)).slice(-2)+':00:00.000'
       var endDate = endDay.format('YYYY-MM-DDT')+
-        ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
+        ("0"+document.getElementById('endHour').value.slice(0,-1)).slice(-2)+':00:00.000'
   
       if(this.dateValidate(startDate, endDate)){
         axios.post( 

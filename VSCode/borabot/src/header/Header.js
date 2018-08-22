@@ -21,6 +21,7 @@ class Header extends Component {
     return (
       <div className = "header-container">
         <Link to="/"><img src = {mainLogo} className = 'header-logo'/></Link>
+        <Link to="/" className = 'header-main'>거래화면</Link>
         <Link to="/board" className = 'header-board'>전략공유게시판</Link>
         <Link to="/backtesting" className = 'header-bt'>백테스팅</Link>
         <Link to="/strategy" className = 'header-strategy'>전략</Link>

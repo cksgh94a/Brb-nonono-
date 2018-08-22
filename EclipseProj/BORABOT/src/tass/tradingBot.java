@@ -103,14 +103,14 @@ public class tradingBot {
 		}
 //		this.API_KEY = "F3q8CU2cmpO1WKpQgoqENyZ95Dnjx7sF8dd2eMu9W0kThhg89F9cDmoWWDMMD0Ee";
 //		this.Secret_KEY = "SL2vp07h6wzG7ij2StbY1rb0YqIa3oexN1up6II58276THbadwzOdkuLSUYFhzMM";
-
+		
 		dbkey.clean();
 		final exAPI exAPIobj;
 		
 		if (exchange.equals("bithumb") || exchange.equals("BITHUMB")) {
 			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);			
-		} else if (exchange.equals("bittrex")) {
-			exAPIobj = (exAPI) new BittrexAPI(API_KEY, Secret_KEY, 10, 10);			
+//		} else if (exchange.equals("bittrex")) {
+//			exAPIobj = (exAPI) new BittrexAPI(API_KEY, Secret_KEY, 10, 10);			
 		} else if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			exAPIobj = (exAPI) new BinanceAPI(apiKey, secKey, 10, 10);			
 		} else if (exchange.equals("hitbtc")|| exchange.equals("HITBTC")) {
@@ -123,8 +123,8 @@ public class tradingBot {
 		DB dao = new DB();
 
 		// trade DB insert!
-		double initialCoinNum = exAPIobj.getBalance(coin);
-		double initialBalance = exAPIobj.getBalance(base);
+		double initialCoinNum = exAPIobj.getBalance(coin.toLowerCase());
+		double initialBalance = exAPIobj.getBalance(base.toLowerCase());
 		System.out.println(initialCoinNum);
 		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1000으로 표시(null)
 		String initialTradeSql = String.format(
@@ -357,8 +357,8 @@ public class tradingBot {
 				LocalDateTime now = LocalDateTime.now();
 				LocalDateTime deadDay = LocalDateTime.parse(endDate);
 
-				double numOfNowCoin = exAPIobj.getBalance(coin);
-				double balanceOfNow = exAPIobj.getBalance(base);
+				double numOfNowCoin = exAPIobj.getBalance(coin.toLowerCase());
+				double balanceOfNow = exAPIobj.getBalance(base.toLowerCase());
 
 				// 시간 초과 종료
 				if (now.isAfter(deadDay)) {

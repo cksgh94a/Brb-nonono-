@@ -22,9 +22,12 @@ class IndicatorFunction_bt {
       DB_ohlc db = new DB_ohlc();
       ResultSet rs = null;
       
-      String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
-            symb, period);
-
+//      String sql = String.format("SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s ORDER BY uTime ASC LIMIT %s", exchange, interval,
+//            symb, period);
+      String sql = String.format(
+    	      "SELECT h,l,c,v,uTime FROM %sOHLC_%s_%s WHERE uTime BETWEEN %s AND %s ORDER BY uTime ASC", exchange,
+    	      interval, symb, startUt - 10, endUt + 10);
+      
       rs = db.Query(sql, "select");
       rs.last();
       int size = rs.getRow();

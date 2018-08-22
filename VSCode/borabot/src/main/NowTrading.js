@@ -56,22 +56,23 @@ class NowTrading extends Component {
   }
 
   handleStopbtn = (nt) => {
-    alert(nt.bot_name + " 거래를 중지하시겠습니까?");
-
-    axios.post( 
-      'TradeMain', 
-      'status='+false+
-      '&botname='+nt.bot_name,
-      { 'Content-Type': 'application/x-www-form-urlencoded' }
-    )
-    .then( response => {
-      (response.data === 'sessionExpired')
-      ? this.sessionExpired()
-      : this.setState({
-          alarmCount: '0'
-        })
-    }) 
-    .catch( response => { console.log('err\n'+response); } ); // ERROR
+    // 최종 확인 후 거래 종료 (서버에 거래 정보 전송)
+    if(window.confirm(nt.bot_name + " 거래를 종료하시겠습니까?")){
+      axios.post( 
+        'TradeMain', 
+        'status='+false+
+        '&botname='+nt.bot_name,
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        else{
+          this.setState({ alarmCount: '0' })
+          alert(nt.bot_name + ' 거래가 종료되었습니다')
+        } 
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR
+    } else alert("거래를 계속 진행합니다");
   }
 
   reload = () => {
@@ -121,7 +122,7 @@ class NowTrading extends Component {
               <div className = "NowTrading-element" >
 
                 <div className = 'ntr-obj-botname'>{nt.bot_name}</div>
-                <div className = 'ntr-obj-coin'>코인 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
+                <div className = 'ntr-obj-coin'>마켓 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
                 <div className = 'ntr-obj-text' >거래소 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.exchange_name}</div>
                 <div className = 'ntr-obj-text' >전략 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.strategy_name}</div>
                 <div className = 'ntr-obj-text' >거래 간격 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text>

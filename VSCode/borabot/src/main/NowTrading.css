@@ -18,7 +18,6 @@
     font-family: 'nanum gothic', sans-serif;
     font-weight: 100;
     font-size: 14px;
-
 }
 
 
@@ -46,7 +45,7 @@
     top : 36px;
     margin-top: -10px;
 
-    left: 151px;
+    left: 140px;
     font-size: 18px;
     font-family: 'nanum-gothic';
     font-weight: bold;
@@ -71,7 +70,7 @@
     top : 36px;
     margin-top: -8px; 
 
-    left: 193px;
+    left: 185px;
 
     -webkit-animation: spin 4s infinite linear;
     -o-animation: spin 4s infinite linear;
@@ -134,7 +133,7 @@
     width : 94;
     height: 24;
     margin-top : 30px;
-    margin-left: 16px;
+    margin-left: 15px;
     float: left;
 }
 

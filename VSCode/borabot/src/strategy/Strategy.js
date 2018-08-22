@@ -56,13 +56,14 @@ class Strategy extends Component {
   handleLoad = (e) => {
     // 새로 만들기 선택하면 기존에 만든 것 초기화
     if(e.target.value === '새로 만들기'){
+      document.getElementById('strategy_name').value = ''
       this.setState({
         strategy_name: '',
         selectedIndicator: RSI, // 설정된 지표
         defaultIndicator: defaultRSI, // 설정된 지표의 기본값
         calculate: 'or', // 연산 방법
-        buyC:0, // 구매 기준
-        sellC:0,  // 판매 기준
+        buyC:'', // 구매 기준
+        sellC:'',  // 판매 기준
   
         indicatorList: [],  // 설정된 지표 리스트
         expList: [],  // 지표 연산 방법 리스트
@@ -71,13 +72,16 @@ class Strategy extends Component {
         isLoad: false
       })
     } else{
+      document.getElementById('strategy_name').value = e.target.value
       this.setState({
         isLoad: true
       })
       this.props.strategyList.map((s) => {
         if(e.target.value === s.name) {
           this.setState({
-            selectedStrategy: JSON.parse(s.data)
+            selectedStrategy: JSON.parse(s.data),
+            buyC: JSON.parse(s.data).buyCriteria,
+            sellC: JSON.parse(s.data).sellCriteria
           })
         }
       })
@@ -238,20 +242,24 @@ class Strategy extends Component {
   
   handleComplete = () => {
     // 항목 검증
-    if(this.state.strategy_name === '') {
+    if(document.getElementById('strategy_name').value === '') {
       alert('전략 이름을 입력하세요')
       return
     }
-    if(this.state.strategy_name === '전략') {
+    if(document.getElementById('strategy_name').value === '전략') {
       alert('불가능한 전략 이름입니다')
       return
     }
-    if(this.state.buyC === '') {
+    if(document.getElementById('buyWeight').value === '') {
       alert('구매 기준치를 입력하세요')
       return
     }
-    if(this.state.sellC === '') {
+    if(document.getElementById('sellWeight').value === '') {
       alert('판매 기준치를 입력하세요')
+      return
+    }
+    if(this.state.jsonString === ''){
+      alert('한개 이상의 지표를 저장하세요')
       return
     }
     
@@ -271,12 +279,18 @@ class Strategy extends Component {
         else if(!isUndefined(response.data.error)) alert('전략 생성 실패'+response.data.error)
         else {
           this.props.onStoreStrategy(response.data)
-          alert('저장이 완료되었습니다')
+          alert('저장되었습니다')
           window.location = "/strategy"
         }
       }) 
       .catch( response => { console.log('err\n'+response); } ); // ERROR로
     }
+  }
+
+  // 세션 유효성 검증
+  sessionExpired = () => {
+    alert('세션이 종료되었습니다\n다시 로그인하세요')
+    window.location = '/'
   }
 
   handleDelete = () => {    
@@ -294,7 +308,7 @@ class Strategy extends Component {
         else if(!isUndefined(response.data.error)) alert('전략 삭제 실패'+response.data.error)
         else {
           this.props.onStoreStrategy(response.data)
-          alert('삭제가 완료되었습니다')
+          alert('삭제되었습니다')
           window.location = "/strategy"
         }
       }) 
@@ -322,10 +336,10 @@ class Strategy extends Component {
             </div>
             <div class="strategy_1_contents_bottom">
               <h4 class="strategy_1_contents_titles_2">전략 만들기</h4>
-              <input placeholder="이름" id="strategy_name"/>
+              <input placeholder="전략 이름" id="strategy_name" readOnly={isLoad}/>
               <h4 class="strategy_1_contents_titles_3">거래 세팅</h4>
-              <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} onChange={(e) => this.handleCriteria(e, 'buy')}/><br/>
-              <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} onChange={(e) => this.handleCriteria(e, 'sell')}/>
+              <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} readOnly={isLoad} onChange={(e) => this.handleCriteria(e, 'buy')}/><br/>
+              <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} readOnly={isLoad} onChange={(e) => this.handleCriteria(e, 'sell')}/>
 
               <h4 class="strategy_1_contents_titles_4">지표 세팅</h4>
               <select id="indicator" onChange={(e)=>this.handleIndicator(e)}>
@@ -368,7 +382,7 @@ class Strategy extends Component {
         
         <div class="strategy_2_wrap">
           <h4 class="strategy_2_title">저장된 항목</h4>
-          <h6 class="strategy_2_common">모든지표는 or 입니다</h6>
+          <h5 class="strategy_2_common">아래 지표들의 시그널값 합이 '구매기준치' 보다 높으면 매수, '판매기준치' 보다 작으면 매도를 하게 됩니다</h5>
         </div>
         <div class="strategy_2">
           <div class="strategy_2_grid">

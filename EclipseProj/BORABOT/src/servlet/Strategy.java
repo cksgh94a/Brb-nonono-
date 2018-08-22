@@ -96,7 +96,6 @@ public class Strategy extends HttpServlet {
 		
 		if(data.equals("delete")) {	// 삭제 요청일 경우
 			String deleteSql = String.format("delete from custom_strategy where email='%s' and strategy_name='%s'", email, name);
-			System.out.println(deleteSql);
 			try {
 				DB useDB = new DB();
 				useDB.Query(deleteSql, "insert");

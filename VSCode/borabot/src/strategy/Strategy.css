@@ -70,6 +70,7 @@
     margin-top: 40px;
 }
 .strategy_1_contents_bottom {
+    height: 578.81px;
     background-color: #ffffff;
     padding-left: 20px;
     padding-right: 20px;
@@ -77,8 +78,9 @@
 }
 
 .strategySaveButton {
+    height: 73px;
     padding-top: 42px;
-    padding-bottom: 31px;
+    /* padding-bottom: 31px; */
     margin:auto;
     width: 100%;
     background-color: #ffffff;
@@ -86,6 +88,7 @@
 }
 
 #strategySaveButton {
+    top: 42px;
     border: none;
     background-color: #ffffff;
     width: 100%;
@@ -95,7 +98,7 @@
 .strategy_2 {
     width: 1030px;
     height: 654px;
-    top: 213px;
+    top: 230px;
     /* padding-top: 20px; */
     padding-left: 10px;
     margin-left: 243px;
@@ -118,13 +121,14 @@
 }
 
 .strategy_2_title {
-    margin-left: 470px;
+    text-align: center;
+    font-size: 21px;
 }
 
 .strategy_2_common {
-    font-size: 14px;
+    font-size: 18px;
     color: #5a75d0;
-    margin-left: 445px;
+    text-align: center;
 }
 
 .strategy_2_titles {

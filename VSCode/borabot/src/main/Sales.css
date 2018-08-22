@@ -7,7 +7,7 @@
   height: 50px;
   font-size: 40pt;
   position: absolute;
-  left: 20px;
+  left: 25px;
   top : 565px;
 
 }
@@ -20,17 +20,17 @@ color: blue;
 }
 
 .select-botName{
-margin-left: 20px;
+margin-left: 25px;
 width : 182px;
 border : 0px;
 border-bottom : 1px solid #9646a0;
-
+padding-left : 3px;
 }
 
 .input-buySetting{
 margin-top: 20px;
-margin-left: 20px;
-width : 162px;
+margin-left: 25px;
+width : 182px;
 border : 0px;
 border-bottom : 1px solid #9646a0;
 
@@ -38,8 +38,8 @@ border-bottom : 1px solid #9646a0;
 
 .input-sellSetting{
 margin-top: 20px;
-margin-left: 20px;
-width : 162px;
+margin-left: 25px;
+width : 182px;
 border : 0px;
 border-bottom : 1px solid #9646a0;
 
@@ -60,7 +60,7 @@ border-bottom: 1px solid #9646a0;
 border-radius: 0px;
 font-size: 14px;
 position: absolute;
-left: 120px;
+left: 125px;
 margin-top : 12px;
 
 }
@@ -83,7 +83,7 @@ margin-top : 12px;
   border-radius: 0px;
   font-size: 14px;
 
-  margin-left: 20px;
+  margin-left: 25px;
   margin-top : 15px;
 }
 

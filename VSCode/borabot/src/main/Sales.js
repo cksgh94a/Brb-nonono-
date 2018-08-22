@@ -14,7 +14,7 @@ import calendar from '../img/common/calendar_01.png';
 
 // 시간 선택 리스트
 const hourList = []
-for(var i=1;i<=24;i++) hourList.push(i-1)  
+for(var i=1;i<=24;i++) hourList.push(i-1)
 
 // 구매, 판매 설정 리스트
 const buyingSetting = [ {key: '전액구매', value: 'buyAll'}, {key: '금액구매', value: 'buyCertainPrice'}, {key: '개수구매', value: 'buyCertainNum'} ]
@@ -27,7 +27,7 @@ class Sales extends Component {
 
     this.state = {
       selectedDate: '', // 선택한 날짜
-      
+
       buyDetail: false,
       sellDetail: false,
       buyUnit:'',
@@ -127,10 +127,10 @@ class Sales extends Component {
       return false
     }
     // 전략 검증
-    if(document.getElementById('strategy').value === '전략'){
-      alert('전략을 설정해주세요')
-      return false
-    }
+    // if(document.getElementById('strategy').value === '전략'){
+    //   alert('전략을 설정해주세요')
+    //   return false
+    // }
     // 구매 방식 검증
     if(document.getElementById('buyingSetting').value === '구매 설정'){
       alert('구매 방식을 설정해주세요')
@@ -161,13 +161,16 @@ class Sales extends Component {
       const { selectedDate } = this.state
       // 종료일 문자열 생성
       var endDate = selectedDate.format('YYYY-MM-DDT')+
-        ("0"+document.getElementById('endHour').value).slice(0,-1).slice(-2)+':00:00.000'
+        ("0"+document.getElementById('endHour').value.slice(0,-1)).slice(-2)+':00:00.000'
       var now = new Date();
       if(new Date(endDate) - now < 0){
         alert('종료일은 현재 시간 이후여야 합니다.')
         return
       }
-      
+
+      console.log(document.getElementById('endHour').value)
+      console.log(endDate)
+
       // 시작일 문자열 생성
       var startDate = now.getFullYear()+'-'+
         ("0"+(now.getMonth()+1)).slice(-2)+'-'+
@@ -175,9 +178,9 @@ class Sales extends Component {
         ("0"+now.getHours()).slice(-2)+':'+
         ("0"+now.getMinutes()).slice(-2)+':'+
         ("0"+now.getSeconds()).slice(-2)+'.000'
-  
+
       // 거래 확인 메세지
-      let alertMsg = document.getElementById('botname').value + '\n' + 
+      let alertMsg = document.getElementById('botname').value + '\n' +
         document.getElementById('salesExchange').value+ '\n' +
         document.getElementById('salesBase').value+ '\n' +
         document.getElementById('salesCoin').value+ '\n' +
@@ -189,11 +192,11 @@ class Sales extends Component {
         document.getElementById('sellingDetail').value+ '\n' +
         endDate+ '\n' +
         '\n이 맞습니까?';
-  
+
       // 최종 확인 후 거래 시작 (서버에 거래 정보 전송)
       if(window.confirm(alertMsg)){
-        axios.post( 
-          'TradeMain', 
+        axios.post(
+          'TradeMain',
           'status='+true+
           '&botname='+document.getElementById('botname').value+
           '&exchange='+document.getElementById('salesExchange').value+
@@ -208,7 +211,7 @@ class Sales extends Component {
           '&startDate='+startDate+
           '&endDate='+endDate,
           { 'Content-Type': 'application/x-www-form-urlencoded' }
-        )        
+        )
         .then( response => {
           if(response.data === 'sessionExpired') this.sessionExpired()
           else if(response.data === 1062) { // db 키 중복 오류
@@ -217,7 +220,7 @@ class Sales extends Component {
           else if(response.data === 'success') {
             alert('거래가 시작되었습니다.')
           } else alert(response.data)
-        }) 
+        })
         .catch( response => { console.log('err\n'+response); } ); // ERROR
       } else alert('취소되었습니다.')
     }
@@ -234,16 +237,16 @@ class Sales extends Component {
     const { exchangeIndex, baseIndex } = this.props.sales
 
     return (
-      <div style={{color:"black"}}>        
+      <div style={{color:"black"}}>
         <h3 style={{textAlign : "center"}}>자동 매매 설정</h3>
 
-        <input placeholder="이름" id="botname" className = 'select-botName' size = '1'/>
+        <input placeholder="봇 이름" id="botname" className = 'select-botName' size = '1'/>
 
-        <select className='sales-select' placeholder={'거래소'} id="salesExchange" onChange={this.handleIndex}  >
+        <select className='sales-select' id="salesExchange" onChange={this.handleIndex}  >
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
           })}
-          <option selected hidden disabled>거래소</option>
+          <option selected hidden disabled>거래소 선택</option>
         </select>
 
         <select className='sales-select' id="salesBase" onChange={this.handleIndex}>
@@ -254,50 +257,57 @@ class Sales extends Component {
                 : base }
               </option>)
           })}
-          <option selected hidden disabled>기축통화</option>
+          <option selected hidden disabled>기축통화 선택</option>
         </select>
 
         <select className='sales-select' id="salesCoin" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
-          <option selected hidden disabled>코인</option>
+          <option selected hidden disabled>코인 선택</option>
         </select>
 
         <select className='sales-select' id="salesInterval" onChange={this.handleIndex}>
           {intervalList.map((int, i) => {
             return (<option key={i}> {int.key} </option>)
           })}
-          <option selected hidden disabled>거래 간격</option>
+          <option selected hidden disabled>거래 간격 설정</option>
         </select>
 
         <select className='sales-select' id="strategy">
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
-          <option selected hidden disabled>전략</option>
-        </select>       
+          <option selected hidden disabled>전략 선택</option>
+        </select>
 
         <select className='sales-select' id="buyingSetting" onChange={this.handleSetting}>
           {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
-          <option selected hidden disabled>구매 설정</option>
+          <option selected hidden disabled>구매 방식 설정</option>
         </select>
         <input className = 'input-buySetting' id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
 
         <select className='sales-select' id="sellingSetting" onChange={this.handleSetting}>
           {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
-          <option selected hidden disabled>판매 설정</option>
+          <option selected hidden disabled>판매 방식 설정</option>
         </select>
         <input className = 'input-sellSetting' id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
-        
+
         <div style = {{ maringTop : "12px", height : "42px"}}>
           <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
             <DatePicker
               selected={this.state.selectedDate}
               onChange={this.handleDateChange}
               customInput={
-                <input 
-                  style={{ width: '80px', marginTop : "20px", borderTop : 'transparent', borderLeft : 'transparent', borderRight : 'transparent', borderBottom : 'transparent'}}
+                <input
+                  style={{
+                     width: '80px',
+                     marginTop : "20px",
+                     borderTop : 'transparent',
+                     borderLeft : 'transparent',
+                     borderRight : 'transparent',
+                     borderBottom : 'transparent',
+                     paddingLeft : '5px'}}
                   onClick={this.props.onClick}>
                   {this.props.value}
                 </input>
@@ -314,7 +324,7 @@ class Sales extends Component {
             })}
           </select>
         </div>
-       
+
         <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
       </div>
     );

@@ -147,7 +147,7 @@
   margin-top: 10px;
 }
 
-#buyingSetting, #sellingSetting {
+.buyingSetting, .sellingSetting {
   width: 182px;
   height: 27px;
   border: none;

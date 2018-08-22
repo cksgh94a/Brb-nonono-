@@ -128,6 +128,9 @@ public class BithumbAPI implements exAPI {
 
 		HashMap<String, String> rgParams = new HashMap<String, String>();
 
+		if(coin.equals("KRW") || coin.equals("krw")) {
+			coin = "btc";
+		}
 		rgParams.put("currency", coin);
 
 		String result = null;
@@ -136,12 +139,12 @@ public class BithumbAPI implements exAPI {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		// System.out.println(result);
+		 System.out.println(result);
 		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
 		JsonObject data = ohlc_json.get("data").getAsJsonObject();
 
 		double balance;
-		if (coin.equals("krw")) {
+		if (coin.equals("krw") || coin.equals("KRW")) {
 			balance = data.get("available_krw").getAsDouble();
 		} else {
 			balance = data.get("available_" + coin).getAsDouble();
