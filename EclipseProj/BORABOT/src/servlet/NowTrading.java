@@ -72,9 +72,13 @@ public class NowTrading extends HttpServlet {
 					subObject.put("end_date", rs.getString("end_date"));
 					subObject.put("interval", rs.getString("interval"));
 
-					String profitSql = String.format("SELECT * from trans_log where email=\'%s\' and bot_name=\'%s\' order by trans_time limit 1", (String) session.getAttribute("email"), rs.getString("bot_name"));
+					String profitSql = String.format("SELECT now_asset from trans_log where email=\'%s\' and bot_name=\'%s\' order by trans_time limit 1", (String) session.getAttribute("email"), rs.getString("bot_name"));
 					ResultSet pRs = useDB.Query(profitSql, "select");
-						while(pRs.next()) subObject.put("profit", pRs.getDouble("now_asset"));
+						while(pRs.next()) {subObject.put("profit", pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100);
+						System.out.println(pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100);
+						System.out.println(pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100.0);
+						System.out.println(rs.getDouble("initial_balance"));
+						System.out.println(pRs.getDouble("now_asset"));}
 					jArray.add(subObject);
 				}
 			}

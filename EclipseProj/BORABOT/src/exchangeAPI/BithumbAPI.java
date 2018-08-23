@@ -124,30 +124,42 @@ public class BithumbAPI implements exAPI {
 	}
 
 	@Override
-	public double getBalance(String coin) {
-
+	public double getBalance(String coin) {		
 		HashMap<String, String> rgParams = new HashMap<String, String>();
 
 		if(coin.equals("KRW") || coin.equals("krw")) {
 			coin = "btc";
 		}
 		rgParams.put("currency", coin);
-
 		String result = null;
 		try {
 			result = api.callApi("/info/balance", rgParams);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 System.out.println(result);
-		JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
-		JsonObject data = ohlc_json.get("data").getAsJsonObject();
+		// System.out.println(result);
+		
+		JsonObject ohlc_json;
+		try {
+			ohlc_json = new JsonParser().parse(result).getAsJsonObject();
+		} catch (Exception e) {
+			String json = "{"+result+"}";
 
-		double balance;
+			int errorCode = new JsonParser().parse(json).getAsJsonObject().get("message").getAsJsonObject().get("status").getAsInt();
+			String errorMsg = new JsonParser().parse(json).getAsJsonObject().get("message").getAsJsonObject().get("message").getAsString();
+			
+			System.out.println("bithumb API Key 오류! : " + errorMsg);
+			
+			return -1;
+		}
+		JsonObject data = ohlc_json.get("data").getAsJsonObject();
+		
+		double balance = -1;
+		
 		if (coin.equals("krw") || coin.equals("KRW")) {
 			balance = data.get("available_krw").getAsDouble();
 		} else {
-			balance = data.get("available_" + coin).getAsDouble();
+			balance = data.get("available_" + coin.toLowerCase()).getAsDouble();
 		}
 
 		return balance;

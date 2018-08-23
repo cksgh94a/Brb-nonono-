@@ -119,7 +119,7 @@ class NowTrading extends Component {
               <div className = "NowTrading-element" >
 
                 <div className = 'ntr-obj-botname'>{nt.bot_name}</div>
-                <div className = 'ntr-obj-coin'>마켓 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
+                <div className = 'ntr-obj-coin'>시장 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
                 <div className = 'ntr-obj-text' >거래소 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.exchange_name}</div>
                 <div className = 'ntr-obj-text' >전략 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.strategy_name}</div>
                 <div className = 'ntr-obj-text' >거래 간격 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text>

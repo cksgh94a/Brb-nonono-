@@ -97,20 +97,25 @@ public class tradingBot {
 
 		String apiKey = "";
 		String secKey = "";
-		if (rsKey.next()) {
-			apiKey = rsKey.getString(1);
-			secKey = rsKey.getString(2);
+		try {
+			if (rsKey.next()) {
+				apiKey = rsKey.getString(1);
+				secKey = rsKey.getString(2);
+			}
+			else {
+				System.out.println("키 없음");
+				return;
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
-//		this.API_KEY = "F3q8CU2cmpO1WKpQgoqENyZ95Dnjx7sF8dd2eMu9W0kThhg89F9cDmoWWDMMD0Ee";
-//		this.Secret_KEY = "SL2vp07h6wzG7ij2StbY1rb0YqIa3oexN1up6II58276THbadwzOdkuLSUYFhzMM";
 		
 		dbkey.clean();
 		final exAPI exAPIobj;
 		
 		if (exchange.equals("bithumb") || exchange.equals("BITHUMB")) {
 			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);			
-//		} else if (exchange.equals("bittrex")) {
-//			exAPIobj = (exAPI) new BittrexAPI(API_KEY, Secret_KEY, 10, 10);			
 		} else if (exchange.equals("binance") || exchange.equals("BINANCE")) {
 			exAPIobj = (exAPI) new BinanceAPI(apiKey, secKey, 10, 10);			
 		} else if (exchange.equals("hitbtc")|| exchange.equals("HITBTC")) {
@@ -125,7 +130,14 @@ public class tradingBot {
 		// trade DB insert!
 		double initialCoinNum = exAPIobj.getBalance(coin.toLowerCase());
 		double initialBalance = exAPIobj.getBalance(base.toLowerCase());
-		System.out.println(initialCoinNum);
+		
+		if (initialCoinNum == -1 || initialBalance == -1) {
+
+			// api key 오류
+			System.out.println("api key 오류 ! " + initialCoinNum);
+			return;
+		}
+		
 		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1000으로 표시(null)
 		String initialTradeSql = String.format(
 				" INSERT INTO trade VALUES( \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s )",

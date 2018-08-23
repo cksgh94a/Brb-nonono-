@@ -36,6 +36,10 @@ public class Wallet {
 				apiKey = rsKey.getString(1);
 				secKey = rsKey.getString(2);
 			}
+			else {
+				System.out.println("api key 없음");
+				return -1;
+			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -55,6 +59,13 @@ public class Wallet {
 		
 		
 		result = exAPIobj.getBalance(coin);
+		
+		if (result == -1) {
+
+			// 앞단으로 보내야 할 메세지
+			System.out.println("invalid key");
+			return -1; // ?
+		}
 		
 		return result;
 	}

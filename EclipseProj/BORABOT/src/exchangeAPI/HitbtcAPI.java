@@ -107,12 +107,25 @@ public class HitbtcAPI implements exAPI {
 
 	public double getBalance(String currency) {
 		// TODO Auto-generated method stub
-		double resultBalance = 0;
+		double resultBalance = -1;
 
 		try {
-			TradeAPI tApi = ht.tradeAPI();
-			String res = tApi.getAllBalances2();
-			JsonArray jsArr = new JsonParser().parse(res).getAsJsonObject().get("balance").getAsJsonArray();
+			TradeAPI tApi;
+			String res;
+			tApi = ht.tradeAPI();
+			res = tApi.getAllBalances2();
+			System.out.println(res);
+			JsonArray jsArr;
+			try {
+				jsArr = new JsonParser().parse(res).getAsJsonObject().get("balance").getAsJsonArray();
+			} catch (Exception e) {
+				int errorCode = new JsonParser().parse(res).getAsJsonObject().get("error").getAsJsonObject().get("code")
+						.getAsInt();
+				String errorMsg = new JsonParser().parse(res).getAsJsonObject().get("error").getAsJsonObject()
+						.get("messsage").getAsString();
+				System.out.println("hitbtc API Key 오류! : " + " : " + errorMsg);
+				return -1;
+			}
 
 			for (int i = 0; i < jsArr.size(); i++) {
 				JsonObject tempObj = jsArr.get(i).getAsJsonObject();
