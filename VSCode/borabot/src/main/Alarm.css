@@ -10,7 +10,13 @@
 
 .alarm-table {
     width: 99.8%;
-    margin-top: 20px;
+    text-align: center;
+}
+
+.alarm-content {
+    height: 70vh;
+    width: 99.8%;
+    overflow: scroll;
 }
 
 .alarm-title {
@@ -37,7 +43,7 @@
     padding-bottom: 30px;
 }
 
-
+/* 
 
 .alarm-tableTitle1 {
     position: relative;
@@ -112,7 +118,7 @@
     width: 60px;
     height: 48px;
     right: 7.5%;
-}
+} */
 
 
  

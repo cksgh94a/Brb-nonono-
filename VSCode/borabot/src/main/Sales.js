@@ -230,7 +230,7 @@ class Sales extends Component {
 
         <input placeholder="봇 이름" id="botname" className = 'select-botName' size = '1'/>
 
-        <select className='sales-select' id="salesExchange" onChange={this.handleIndex}  >
+        <select className='sales-select' id="salesExchange" onChange={this.handleIndex}>
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
           })}
@@ -304,16 +304,16 @@ class Sales extends Component {
               placeholderText = "종료일"
               dateFormat="YYYY/M/D"
               minDate={new Date()} />
-            <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+            <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px', cursor: "pointer"}}/>
           </div>
-          <select id="endHour" className='select_hour'>
+          <select id="endHour" className='select_hour' style={{cursor: "pointer"}}>
             {hourList.map((e, i) => {
               return (<option key={i} selected={e === new Date().getHours()}> &nbsp; {e}시 </option>)
             })}
           </select>
         </div>
 
-        <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
+        <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn} style={{cursor: "pointer"}}/></div>
       </div>
     );
   }

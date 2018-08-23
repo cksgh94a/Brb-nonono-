@@ -117,10 +117,12 @@ class Board extends Component {
 
     const onTextBg = {
       backgroundImage : `url(${onText})`,
+      cursor: 'pointer'
     }
 
     const offTextBg = {
       backgroundImage : `url(${offText})`,
+      cursor: 'pointer'
     }
     
     return (
@@ -149,7 +151,7 @@ class Board extends Component {
                   postList.map((p, i) => {
                     return (<tr key={i} className = 'table-tr' style={{borderBottom : "1px solid"}} >
                       <td className = 'table-td'>{p.post_num}</td>
-                      <td className = 'table-td' onClick={() => this.selectPost(i)}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
+                      <td className = 'table-td' onClick={() => this.selectPost(i)} style={{cursor: "pointer"}}>{p.title}{p.comment_count !== '0' &&' ('+p.comment_count+')'}</td>
                       <td className = 'table-td'>{p.email}</td>
                       <td className = 'table-td'>{p.post_time}</td>
                     </tr>)
@@ -160,7 +162,7 @@ class Board extends Component {
 
               <div className = "table-chooseBoxContainer">
                 { /* 이전 10 페이지 이동 버튼*/ }
-                <div className = "table-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
+                <div className = "table-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn} style={{cursor: "pointer"}}/> </div>
                 { // 현재 선택된 페이지의 근처 10개 페이지 표시
                 pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                   return(<div  key ={i} onClick={() => this.selectPage(p)}>
@@ -168,10 +170,10 @@ class Board extends Component {
                   </div>)
                 })}
                 { /* 이후 10 페이지 이동 버튼*/ }
-                <div className = "table-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
+                <div className = "table-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn} style={{cursor: "pointer"}}/></div>
               </div>
-              {/*저장버튼*/}
-              <button id="boardButton" onClick={this.writePost}><img src={require('../img/common/btn_11.png')} alt="btn_11" /></button>
+              {/*글쓰기버튼*/}
+              <button id="boardButton" onClick={this.writePost}><img src={require('../img/common/btn_11.png')} alt="btn_11"  style={{cursor: "pointer"}}/></button>
             </div>
           }
         </div>

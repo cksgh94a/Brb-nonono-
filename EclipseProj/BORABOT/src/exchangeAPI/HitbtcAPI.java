@@ -108,13 +108,17 @@ public class HitbtcAPI implements exAPI {
 	public double getBalance(String currency) {
 		// TODO Auto-generated method stub
 		double resultBalance = -1;
-
+		
+		if(currency.equals("USDT") || currency.equals("usdt")) {
+			currency = "USD";
+		}
+		
 		try {
 			TradeAPI tApi;
 			String res;
 			tApi = ht.tradeAPI();
 			res = tApi.getAllBalances2();
-			System.out.println(res);
+//			System.out.println(res);
 			JsonArray jsArr;
 			try {
 				jsArr = new JsonParser().parse(res).getAsJsonObject().get("balance").getAsJsonArray();

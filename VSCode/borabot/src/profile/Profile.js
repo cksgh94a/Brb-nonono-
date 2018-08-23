@@ -206,14 +206,14 @@ class Profile extends Component {
                     <input id="phone_number" placeholder="휴대폰 번호" value={this.state.phone_number} onChange={this.handleValue}/><br/>
                   </div>
                 </div>
-                <button id="modPersonal" onClick={this.handleModPersonal}><img src={require('../img/common/btn_04.png')} /></button>
+                <button id="modPersonal" onClick={this.handleModPersonal}><img src={require('../img/common/btn_04.png')} style={{cursor: "pointer"}} /></button>
               </div>
             </TabPanel>
             <TabPanel>
               <div class="profile_3">
                 <h4 class="personal">거래소 정보</h4>
                 <div class="exchange">
-                  <select id="exchange" onChange={this.handleExchange}>
+                  <select id="exchange" onChange={this.handleExchange} style={{cursor: "pointer"}}>
                   {exchangeList.map((exchange, index) => {
                       return (<option key={index} > {exchange.key} </option>)
                   })}
@@ -227,7 +227,7 @@ class Profile extends Component {
                       <input id="secret_key" placeholder="SECRET KEY" value={selectedExchange.secret_key} onChange={this.handleValue}/><br/>
                   </div>
                 </div>
-                <button id="modExchange" onClick={this.handleModExchange}><img src={require('../img/common/btn_04.png')} /></button><br/><br/><br/>
+                <button id="modExchange" onClick={this.handleModExchange}><img src={require('../img/common/btn_04.png')} style={{cursor: "pointer"}} /></button><br/><br/><br/>
               </div>
             </TabPanel>
             <TabPanel>
@@ -248,7 +248,7 @@ class Profile extends Component {
                     {((passwordC !== '') && pVal && !ppVal) && <text id="pw_error">비밀번호가 다릅니다.<br/></text>}
                   </div>
                 </div>
-                <button id="modPassword" onClick={this.handleModPassword}><img src={require('../img/common/btn_04.png')} /></button>
+                <button id="modPassword" onClick={this.handleModPassword}><img src={require('../img/common/btn_04.png')} style={{cursor: "pointer"}} /></button>
               </div>
             </TabPanel>
           </Tabs>

@@ -98,6 +98,7 @@ class NowTrading extends Component {
 
     const alarmBg = {
       backgroundImage : `url(${alarmImg})`,
+      cursor: 'pointer'
     }
 
     return(
@@ -110,7 +111,7 @@ class NowTrading extends Component {
             onClose={this.handleAlarm}
             // closeOnDocumentClick
           >{close => (<Alarm close={close}/>)}</Popup>
-          <div className="ntr-nowTradingRefresh" onClick={this.getNowTrading}><img src = {refreshBtn}/></div>
+          <div className="ntr-nowTradingRefresh" onClick={this.getNowTrading}><img src = {refreshBtn} style={{cursor: "pointer"}}/></div>
         </div>
 
         <div className = "NowTrading-elementList">
@@ -120,7 +121,7 @@ class NowTrading extends Component {
 
                 <div className = 'ntr-obj-botname'>{nt.bot_name}</div>
                 <div className = 'ntr-obj-coin'>시장 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> <text>{nt.coin}</text> </div>
-                <div className = 'ntr-obj-text' >거래소 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.exchange_name}</div>
+                <div className = 'ntr-obj-text' >거래소 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.exchange_name.toUpperCase()}</div>
                 <div className = 'ntr-obj-text' >전략 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text> {nt.strategy_name}</div>
                 <div className = 'ntr-obj-text' >거래 간격 <text style={{marginLeft : "8px", marginRight:"8px"}}>:</text>
                   {this.props.intervalList.map((interval) => {
@@ -137,8 +138,8 @@ class NowTrading extends Component {
                   pathname: "/log",
                   bot_name: nt.bot_name,
                   state: { bot_name: nt.bot_name }
-                }} id="Sale-stop-btn" className="ntr-obj-logBtn"><img src = {logBtn}/></Link>
-                <div id="Sale-stop-btn" className = "ntr-obj-stopBtn" onClick={() => this.handleStopbtn(nt)}><img src = {stopBtn}/></div>
+                }} id="Sale-stop-btn" className="ntr-obj-logBtn"><img src = {logBtn} style={{cursor: "pointer"}}/></Link>
+                <div id="Sale-stop-btn" className = "ntr-obj-stopBtn" onClick={() => this.handleStopbtn(nt)}><img src = {stopBtn} style={{cursor: "pointer"}}/></div>
 
               </div>);
           })}

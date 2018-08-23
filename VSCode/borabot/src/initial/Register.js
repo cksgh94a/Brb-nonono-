@@ -104,7 +104,7 @@ class Register extends Component {
     console.log(password, pVal)
     return (
       <div>
-        <Link to="/"><img src = {signLogo} className = 'sign-logo'/></Link>
+        <Link to="/"><img src = {signLogo} className = 'sign-logo' style={{cursor: "pointer"}}/></Link>
         
         <div style={signWindow} className = 'sign-windowBackground' >
 
@@ -113,7 +113,7 @@ class Register extends Component {
           <div className = "sign-email-box">
             <img src = {signEmailImg} className = "sign-email-img"/>
             <input type="text" placeholder="email" onChange={this.handleChange} className = 'sign-inputBox' />
-            <div onClick={this.handleAuth} className = 'sign-auth-btn'><img src = {signEmailAuth}/></div>
+            <div onClick={this.handleAuth} className = 'sign-auth-btn'><img src = {signEmailAuth} style={{cursor: "pointer"}}/></div>
           </div>
 
           <div className = 'sign-email-warning-text'>
@@ -149,7 +149,7 @@ class Register extends Component {
           </div>
     
           <div className = 'sign-sign-btn' onClick={this.handleRegister}>
-            <img src = {signBtn}/>
+            <img src = {signBtn} style={{cursor: "pointer"}}/>
           </div>
         </div>
       </div>

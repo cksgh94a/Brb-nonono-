@@ -64,6 +64,7 @@ public class Alarm extends HttpServlet {
 			while(rs.next()) {
 				JSONObject sObject = new JSONObject();
 				sObject.put("exchange_name", rs.getString("exchange_name"));
+				sObject.put("bot_name", rs.getString("bot_name"));
 				sObject.put("coin", rs.getString("coin"));
 				sObject.put("sales_action", rs.getString("sales_action"));
 				sObject.put("coin_intent", rs.getString("coin_intent"));

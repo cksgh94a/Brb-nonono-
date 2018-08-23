@@ -86,16 +86,16 @@ public class IndicatorFunction {
          ret[size - 1][0] = ret[size - 2][0];
          ret[size - 1][1] = ret[size - 2][1];
          ret[size - 1][2] = ret[size - 2][2];
-         ret[size - 1][3] = ret[size - 2][3];
+         ret[size - 1][3] = 0;
       } else {
          h = rs1.getDouble(1);
          l = rs1.getDouble(2);
          v = rs1.getDouble(3);
          c = rs2.getDouble(1);
-         ret[size - 1][1] = h;
-         ret[size - 1][2] = l;
-         ret[size - 1][3] = c;
-         ret[size - 1][4] = v;
+         ret[size - 1][0] = h;
+         ret[size - 1][1] = l;
+         ret[size - 1][2] = c;
+         ret[size - 1][3] = v;
       }
 
       db1.clean();
@@ -353,7 +353,7 @@ public class IndicatorFunction {
       double v;
 
       if (!rs2.next()) {
-         ret[size - 1] = ret[size - 2];
+         ret[size - 1] = 0;
       } else {
          v = rs2.getDouble(1);
          ret[size - 1] = v;

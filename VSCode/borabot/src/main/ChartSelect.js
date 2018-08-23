@@ -61,13 +61,13 @@ class ChartSelect extends Component {
       <div>
         <div className = 'CS-selectingChart'>
 
-          <select  className = 'CS-selectEx' palceholder = '거래소' id="chartExchange" onChange={this.handleIndex}>
+          <select  className = 'CS-selectEx' palceholder = '거래소' id="chartExchange" onChange={this.handleIndex} style={{cursor: "pointer"}}>
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
           })}
           </select>
 
-          <select id="chartBase" className = 'CS-select' onChange={this.handleIndex}>
+          <select id="chartBase" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
               return (<option key={i}>
                 {(base === 'USD')
@@ -77,13 +77,13 @@ class ChartSelect extends Component {
             })}
           </select>
 
-          <select id="chartCoin" className = 'CS-select' onChange={this.handleIndex}>
+          <select id="chartCoin" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
               return (<option key={i}> {coin} </option>)
             })}
           </select>
 
-          <select id="chartInterval" className = 'CS-select' onChange={this.handleIndex}>
+          <select id="chartInterval" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {intervalList.map((int, i) => {
               return (<option key={i}> {int.key} </option>)
             })}

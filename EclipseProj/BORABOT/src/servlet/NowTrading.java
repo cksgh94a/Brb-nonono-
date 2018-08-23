@@ -74,11 +74,10 @@ public class NowTrading extends HttpServlet {
 
 					String profitSql = String.format("SELECT now_asset from trans_log where email=\'%s\' and bot_name=\'%s\' order by trans_time limit 1", (String) session.getAttribute("email"), rs.getString("bot_name"));
 					ResultSet pRs = useDB.Query(profitSql, "select");
-						while(pRs.next()) {subObject.put("profit", pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100);
-						System.out.println(pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100);
-						System.out.println(pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100.0);
-						System.out.println(rs.getDouble("initial_balance"));
-						System.out.println(pRs.getDouble("now_asset"));}
+						while(pRs.next()) {
+							if(rs.getDouble("initial_balance") != 0.0) {System.out.println("0.0 아님");subObject.put("profit", pRs.getDouble("now_asset")/rs.getDouble("initial_balance")*100);}
+							else subObject.put("profit", 0);
+							}
 					jArray.add(subObject);
 				}
 			}

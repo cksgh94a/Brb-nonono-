@@ -256,9 +256,9 @@ class Post extends Component {
         </table>
         <div class="post_btn">
           {/* 저장 버튼 */}
-          <button id="saveButton" onClick={this.enrollPost}><img src={require('../img/common/btn_12.png')} /></button>
+          <button id="saveButton" onClick={this.enrollPost}><img src={require('../img/common/btn_12.png')}  style={{cursor: "pointer"}}/></button>
           {/* 목록 버튼*/}
-          <button id="listButton1" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} /></button>
+          <button id="listButton1" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} style={{cursor: "pointer"}} /></button>
         </div>
       </div>
 
@@ -283,17 +283,17 @@ class Post extends Component {
         </table>
           <div class="post_buttons">
             {/* 글 작성자이면 수정/삭제 가능 */}
-            <button id="post_edit" onClick={this.modifyPost} hidden={!post.writer}><img src={require('../img/common/btn_14.png')} /></button>
-            <button id="post_delete" onClick={this.deletePost} hidden={!post.writer}><img src={require('../img/common/btn_15.png')} /></button>
+            <button id="post_edit" onClick={this.modifyPost} hidden={!post.writer}><img src={require('../img/common/btn_14.png')} style={{cursor: "pointer"}}/></button>
+            <button id="post_delete" onClick={this.deletePost} hidden={!post.writer}><img src={require('../img/common/btn_15.png')} style={{cursor: "pointer"}} /></button>
             {/* 목록 버튼 */}
-            <button id="listButton2" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} /></button>
+            <button id="listButton2" onClick={this.props.toList}><img src={require('../img/common/btn_13.png')} style={{cursor: "pointer"}} /></button>
           </div>
         </div>
         <div class="comment_bottom_1">
         
         {/* 댓글 영역 */}
           <input id="comment" placeholder="댓글을 입력하세요" style={{height: 63, width: 910, resize:"none"}}></input >
-          <button id="comment_new" onClick={this.enrollComment}><img src={require('../img/common/btn_16.png')} /></button>
+          <button id="comment_new" onClick={this.enrollComment}><img src={require('../img/common/btn_16.png')} style={{cursor: "pointer"}} /></button>
         </div>
           
         <div class="comment_commentTotal">
@@ -304,7 +304,7 @@ class Post extends Component {
                   <b>{c.email}</b>  <small>{c.comment_time}</small> 
                 </div>
                 <div class="comment_delete">
-                  {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} /></button>}<br/>
+                  {c.writer && <button id="comment_delete" onClick={() => this.deleteComment(i)}><img src={require('../img/common/btn_15.png')} style={{cursor: "pointer"}} /></button>}<br/>
                 </div>
                 <div class="comment_comment">
                   {c.comment}

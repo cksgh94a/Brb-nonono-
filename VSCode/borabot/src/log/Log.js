@@ -148,23 +148,25 @@ class Log extends Component {
 
     const onTextBg = {
       backgroundImage : `url(${onText})`,
+      cursor: 'pointer'
     }
 
     const offTextBg = {
       backgroundImage : `url(${offText})`,
+      cursor: 'pointer'
     }
 
     return (
       <div style = {mainBgStyle} className = "log-bakcground" > 
         <div className = "log-leftBox">
           <div className = "log-botSelText">봇 선택</div>
-          <select id="botName" className = "log-botSelect" onChange={this.handleChange}>
+          <select id="botName" className = "log-botSelect" onChange={this.handleChange} style={{cursor: "pointer"}}>
             <option selected hidden disabled>봇 이름</option>
             {tradeList.map((t, i) => {
               return (<option key={i}> {t.bot_name} </option>)
             })}
           </select><br/>
-          <select id="salesAction" className = "log-saleSelect" onChange={this.handleChange}>
+          <select id="salesAction" className = "log-saleSelect" onChange={this.handleChange} style={{cursor: "pointer"}}>
             <option>매수/매도</option><option>매수</option><option>매도</option>
           </select><br/>
         </div>
@@ -208,7 +210,7 @@ class Log extends Component {
 
           <div className = "log-chooseBoxContainer">
             { /* 이전 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
+            <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn} style={{cursor: "pointer"}}/> </div>
             { // 현재 선택된 페이지의 근처 10개 페이지 표시
             pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
               return(<div  key ={i} onClick={() => this.selectPage(p)}>
@@ -216,7 +218,7 @@ class Log extends Component {
               </div>)
             })}
             { /* 이후 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
+            <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn} style={{cursor: "pointer"}}/></div>
           </div>
         </div>          
       </div>

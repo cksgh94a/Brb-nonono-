@@ -40,14 +40,14 @@ class FindInfo extends Component {
     console.log(this.state.email)
     return (
       <div>
-        <a href="/"><img class="findInfo_logo" src={require('../img/common/logo_01.png')} /></a>
+        <a href="/"><img class="findInfo_logo" src={require('../img/common/logo_01.png')} style={{cursor: "pointer"}} /></a>
         <div class="findInfo">
           <h1 class="findInfo_title">비밀번호 찾기</h1>
           <input id="inputFindInfo" type="text" placeholder="이메일을 입력하세요." name="email" onChange={this.handleChange}/>
-          <button id="tempPwd" onClick={this.handleTempPwd}><img src={require('../img/common/btn_17.png')} /></button>
+          <button id="tempPwd" onClick={this.handleTempPwd}><img src={require('../img/common/btn_17.png')} style={{cursor: "pointer"}} /></button>
         </div>
         <h5 class="tempPwdText">입력하신 이메일로 임시비밀번호가 발송됩니다.</h5>
-        <button id="backToHome" onClick={this.handleBackHome}><img src={require('../img/common/btn_18.png')} /></button>
+        <button id="backToHome" onClick={this.handleBackHome}><img src={require('../img/common/btn_18.png')} style={{cursor: "pointer"}} /></button>
       </div>      
     );
   }

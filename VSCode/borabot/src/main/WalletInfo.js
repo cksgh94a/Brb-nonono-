@@ -57,7 +57,7 @@ class WalletInfo extends Component{
         </div>
 
         <div style = {{marginTop : "20px", marginBottom : '10px' }}>
-          <select className = "wallet-select" id="WI_exchangeSelectbox" size = '1' onChange = {this.handleExchange} placeholder={'Select something'}>
+          <select className = "wallet-select" id="WI_exchangeSelectbox" size = '1' onChange = {this.handleExchange} placeholder={'Select something'} style={{cursor: "pointer"}}>
             {exchangeList.map((exchange, i) => {
               return (<option key = {i}>{exchange.key}</option>)
             })}

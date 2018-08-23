@@ -43,7 +43,9 @@ class BackTesting extends Component {
 
       showList: [],
       resultList: [],
-      result: {}
+      result: {},
+
+      minDate: moment('2018-08-19')
     }
   }
 
@@ -53,48 +55,30 @@ class BackTesting extends Component {
     && (window.location = "/backtesting")
   }
 
-  // stateRefresh = () => {
-  //   this.setState({
-  //     exchangeIndex: 0,
-  //     baseIndex: 0,
-  //     startDay: '',
-  //     endDay: '',
-  //     nowCash:'',
-      
-  //     buyDetail: false,
-  //     sellDetail: false,
-  //     buyUnit:'',
-  //     sellUnit:'',
-      
-  //     pageNum:1,  // 현재 선택된 페이지 번호
-  //     pageNumList: [1], // 게시물의 전체 페이지 리스트
-
-  //     resultList: [],
-  //     showList: [],
-  //     result: {}
-  //   })
-
-  //   document.getElementById('bt_exchange').selectedIndex = 0
-  //   document.getElementById('base').selectedIndex = 0
-  //   document.getElementById('coin').selectedIndex = 0
-  //   document.getElementById('interval').selectedIndex = 0
-  //   document.getElementById('buyingSetting').selectedIndex = 0
-  //   document.getElementById('sellingSetting').selectedIndex = 0
-  //   document.getElementById('startHour').selectedIndex = 0
-  //   document.getElementById('endHour').selectedIndex = 0
-  //   document.getElementById('buyingDetail').value = ''
-  //   document.getElementById('sellingDetail').value = ''
-  // }
-
   handleIndex = (e) => {
     if (e.target.id === 'bt_exchange'){
       document.getElementById('base').selectedIndex = 0
       document.getElementById('coin').selectedIndex = 0
     } else if(e.target.id === 'base') document.getElementById('coin').selectedIndex = 0
-    this.setState({
-      exchangeIndex: document.getElementById('bt_exchange').selectedIndex,
-      baseIndex: document.getElementById('base').selectedIndex
-    })
+    document.getElementById('bt_exchange').value !== '거래소 선택' && this.setState({ exchangeIndex: document.getElementById('bt_exchange').selectedIndex })
+    document.getElementById('base').value !== '기축통화 선택' && this.setState({ baseIndex: document.getElementById('base').selectedIndex })
+  }
+
+  handleInterval = (e) => {
+    switch(e.target.value){
+      case '5분':
+        return( this.setState({ minDate: moment('2018-08-19'), startDay: '', endDay: '' }) )
+      case '30분':
+        return( this.setState({ minDate: moment('2018-08-12'), startDay: '', endDay: '' }) )
+      case '1시간':
+        return( this.setState({ minDate: moment('2018-08-01'), startDay: '', endDay: '' }) )
+      case '6시간':
+        return( this.setState({ minDate: moment('2018-04-18'), startDay: '', endDay: '' }) )
+      case '12시간':
+        return( this.setState({ minDate: moment('2017-12-15'), startDay: '', endDay: '' }) )
+      case '24시간':
+        return( this.setState({ minDate: moment('2017-12-15'), startDay: '', endDay: '' }) )
+    }
   }
 
   handleSetting = (e) => {
@@ -124,30 +108,7 @@ class BackTesting extends Component {
   handleCash = (e) => {
     !isNaN(e.target.value) && this.setState({
       nowCash:e.target.value
-      // nowCash:Number(e.target.value).toLocaleString('en')  // 3자리마다 , 찍는건데 숫자 형식이 아니라 안됨
     })
-  }
-
-  dateValidate = (sD, eD) =>{
-    var diff = new Date(eD) - new Date(sD)
-    switch(document.getElementById('interval').value) {
-      case "5분":
-        if( diff > 0 && diff < 1*24*60*60*1000 )
-          return true
-        else return false
-      case "30분":
-        if( diff > 0 && diff < 7*24*60*60*1000 )
-          return true
-        else return false
-      case "1시간":
-        if( diff > 0 && diff < 15*24*60*60*1000 )
-          return true
-        else return false
-      default:
-        if( diff > 0 && diff < 90*24*60*60*1000 )
-          return true
-        else return false
-    }
   }
 
   // 데이터 유효성 검증
@@ -211,50 +172,44 @@ class BackTesting extends Component {
         ("0"+document.getElementById('startHour').value.slice(0,-1)).slice(-2)+':00:00.000'
       var endDate = endDay.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('endHour').value.slice(0,-1)).slice(-2)+':00:00.000'
-  
-      if(this.dateValidate(startDate, endDate)){
-        axios.post( 
-          'BackTest', 
-          'exchange='+document.getElementById('bt_exchange').value+
-          '&coin='+document.getElementById('coin').value+
-          '&base='+document.getElementById('base').value+ 
-          '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
-          '&strategyName='+document.getElementById('strategy').value+
-          '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
-          '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
-          '&buyingDetail='+document.getElementById('buyingDetail').value+
-          '&sellingDetail='+document.getElementById('sellingDetail').value+
-          '&startDate='+startDate+
-          '&endDate='+endDate+
-          '&nowCash='+document.getElementById('nowCash').value,
-          { 'Content-Type': 'application/x-www-form-urlencoded' }
-        )
-        .then( response => {
-          // 세션 검증
-          if(response.data === 'sessionExpired') this.sessionExpired()
-          // 백테스트 성공 여부
-          else if(response.data.status === '성공'){
-            var pNL = [1]  // state에 저장할 페이지리스트 생성
-            for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
-              pNL.push(i)
-            }
-            this.setState({
-              resultList: response.data.log,
-              result: response.data.result,
-              pageNumList: pNL,
-              pageNum: 1,
-              showList: response.data.log.slice(0, 10),
-              isResulted: true
-            })
-            alert('백테스팅에 성공하였습니다.')
-          } else alert('백테스팅에 실패하였습니다. (' + response.data + ')')
-        }) 
-        .catch( response => { console.log('err\n'+response); } ); // ERROR
-      } else alert(
-        document.getElementById('interval').value +
-        ' 간격의 거래는 ' +
-        periodLimit[document.getElementById('interval').selectedIndex] +
-        ' 이내의 기간으로 설정해주세요.')
+
+      axios.post( 
+        'BackTest', 
+        'exchange='+document.getElementById('bt_exchange').value+
+        '&coin='+document.getElementById('coin').value+
+        '&base='+document.getElementById('base').value+ 
+        '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
+        '&strategyName='+document.getElementById('strategy').value+
+        '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
+        '&sellingSetting='+sellingSetting[document.getElementById('sellingSetting').selectedIndex].value+
+        '&buyingDetail='+document.getElementById('buyingDetail').value+
+        '&sellingDetail='+document.getElementById('sellingDetail').value+
+        '&startDate='+startDate+
+        '&endDate='+endDate+
+        '&nowCash='+document.getElementById('nowCash').value,
+        { 'Content-Type': 'application/x-www-form-urlencoded' }
+      )
+      .then( response => {
+        // 세션 검증
+        if(response.data === 'sessionExpired') this.sessionExpired()
+        // 백테스트 성공 여부
+        else if(response.data.status === '성공'){
+          var pNL = [1]  // state에 저장할 페이지리스트 생성
+          for(var i = 2; i <= (response.data.log.length-1)/10+1; i++){
+            pNL.push(i)
+          }
+          this.setState({
+            resultList: response.data.log,
+            result: response.data.result,
+            pageNumList: pNL,
+            pageNum: 1,
+            showList: response.data.log.slice(0, 10),
+            isResulted: true
+          })
+          alert('백테스팅에 성공하였습니다.')
+        } else alert('백테스팅에 실패하였습니다. (' + response.data + ')')
+      }) 
+      .catch( response => { console.log('err\n'+response); } ); // ERROR
     }
   }
 
@@ -291,10 +246,12 @@ class BackTesting extends Component {
     
     const onTextBg = {
       backgroundImage : `url(${onText})`,
+      cursor: 'pointer'
     }
 
     const offTextBg = {
       backgroundImage : `url(${offText})`,
+      cursor: 'pointer'
     }
 
     return (
@@ -307,32 +264,36 @@ class BackTesting extends Component {
               {exchangeList.map((exchange, index) => {
                 return (<option key={index} > {exchange.key} </option>)
               })}
-              <option selected hidden disabled>거래소</option>
+              <option selected hidden disabled>거래소 선택</option>
             </select><br/>
             {/* 기축통화 선택 */}
             <select className="bt-select" id="base" placeholder="기축통화" onChange={this.handleIndex}>
               {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
-                return (<option key={i}> {base} </option>)
+                return (<option key={i}>
+                  {(base === 'USD')
+                    ? 'USDT'
+                    : base }
+                  </option>)
               })}
-              <option selected hidden disabled>기축통화</option>
+              <option selected hidden disabled>기축통화 선택</option>
             </select><br/>
             {/* 코인 선택 */}
             <select className="bt-select" id="coin" placeholder="코인">
               {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
                 return (<option key={i}> {coin} </option>)
               })}
-              <option selected hidden disabled>코인</option>
+              <option selected hidden disabled>코인 선택</option>
             </select>
             {/* 거래 간격 선택 */}
-            <select className="bt-select" id="interval" placeholder="거래 간격">
+            <select className="bt-select" id="interval" placeholder="거래 간격" onChange={this.handleInterval}>
               {intervalList.map((int, i) => {
                 return (<option key={i}> {int.key} </option>)
               })}
-              <option selected hidden disabled>거래 간격</option>
+              <option selected hidden disabled>거래 간격 설정</option>
             </select>
             {/* 전략 선택 */}
             <select className="bt-select" id="strategy" placeholder="전략">
-              <option selected hidden disabled>전략</option>
+              <option selected hidden disabled>전략 선택</option>
               {strategyList.map((s, i) => {
                 return (<option key={i}> {s.name} </option>)
               })}
@@ -342,18 +303,18 @@ class BackTesting extends Component {
               {/* 구매 설정 선택 */}
               <select className="bt-select" id="buyingSetting" onChange={this.handleSetting} className = "bt-select">
                 {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
-                <option selected hidden disabled>구매 설정</option>
+                <option selected hidden disabled>구매 방식 설정</option>
               </select>
               <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
               {/* 판매 설정 선택 */}
               <select className="bt-select" id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
                 {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
-                <option selected hidden disabled>판매 설정</option>
+                <option selected hidden disabled>판매 방식 설정</option>
               </select>
               <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
               {/* 시작일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
-                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px", cursor: "pointer"}}>
                   <DatePicker
                     selected={this.state.startDay}
                     onChange={(day) => this.handleDayChange(day, 'start')}
@@ -371,13 +332,14 @@ class BackTesting extends Component {
                       </input>
                     }
                     fixedHeight
-                    placeholderText = "시작일"
+                    placeholderText="시작일"
                     dateFormat="YYYY/M/D"
+                    minDate={this.state.minDate}
                     maxDate={moment()}/>
-                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px', cursor: "pointer"}}/>
                 </div>
                 {/* 시작 시간 선택 */}
-                <select className = "bt-select-hour" id="startHour">
+                <select className = "bt-select-hour" id="startHour" style={{cursor: "pointer"}}>
                   {hourList.map((e, i) => {
                     return (<option key={i}> {e}시 </option>)
                   })}
@@ -385,7 +347,7 @@ class BackTesting extends Component {
               </div>
               {/* 종료일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
-                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
+                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px", cursor: "pointer"}}>
                   <DatePicker
                     selected={this.state.endDay}
                     onChange={(day) => this.handleDayChange(day, 'end')}
@@ -407,7 +369,7 @@ class BackTesting extends Component {
                     dateFormat="YYYY/M/D"
                     minDate={this.state.startDay}
                     maxDate={moment()}/>
-                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px'}}/>
+                  <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px', cursor: "pointer"}}/>
                 </div>
                 {/* 종료 시간 선택 */}
                 <select className = "bt-select-hour" id="endHour">
@@ -420,7 +382,7 @@ class BackTesting extends Component {
               </div>       
             </div>            
           {/* 시작 버튼 */}
-          <div className = 'bt-start-btn' onClick={this.handleStartbtn}><img src = {startBtn}/></div>
+          <div className = 'bt-start-btn' onClick={this.handleStartbtn}><img src = {startBtn} style={{cursor: "pointer"}}/></div>
         </div>
 
         {/* 거래 결과 기록 영역 */}
@@ -458,7 +420,7 @@ class BackTesting extends Component {
 
             <div className = "bt-chooseBoxContainer">
               { /* 이전 10 페이지 이동 버튼*/ }
-              <div className = "bt-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn}/> </div>
+              <div className = "bt-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn} style={{cursor: "pointer"}}/> </div>
               { // 현재 선택된 페이지의 근처 10개 페이지 표시
               pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                 return(<div  key ={i} onClick={() => this.selectPage(p)}>
@@ -466,7 +428,7 @@ class BackTesting extends Component {
                 </div>)
               })}
               { /* 이후 10 페이지 이동 버튼*/ }
-              <div className = "bt-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn}/></div>
+              <div className = "bt-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn} style={{cursor: "pointer"}}/></div>
             </div>
           </div>
         </div>
