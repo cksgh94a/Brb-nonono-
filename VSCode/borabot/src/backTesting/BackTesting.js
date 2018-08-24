@@ -416,7 +416,7 @@ class BackTesting extends Component {
                   <img src = {calendar} style = {{position : "absolute", top : '20px', left : '63px', cursor: "pointer"}}/>
                 </div>
                 {/* 종료 시간 선택 */}
-                <select className = "bt-select-hour" id="endHour">
+                <select className = "bt-select-hour" id="endHour" style={{cursor: "pointer"}}>
                   {hourList.map((e, i) => {
                     return (<option key={i}> {e}시 </option>)
                   })}
