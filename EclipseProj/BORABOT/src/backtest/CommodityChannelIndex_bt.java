@@ -38,13 +38,15 @@ public class CommodityChannelIndex_bt implements calcIndicator_bt {
 		this.initialStart = initialStart;
 		this.initialEnd = initialEnd;
 		
+		// CCI는 가격 데이터만 필요함.
 		this.phArr = IndicatorFunction_bt.toPriceHistory(hArr);
 		
 		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, initialStart, initialEnd);
 		
+		// 볼린저밴드에서 설명했듯이
+		// CCI도 상향,하향 돌파 시 시그널을 생성
+		// 따라서 미리 구해둠
 		this.prevCCI = getCCI(tempArr);
-
-		//System.out.println("CCI obj created ! - prevCCI : " + prevCCI);
 	}
 	
 	@Override
@@ -56,6 +58,8 @@ public class CommodityChannelIndex_bt implements calcIndicator_bt {
 		double nowCCI = getCCI(tempArr);
 		//System.out.print("prevCCI : " + prevCCI + " nowCCI : " + nowCCI);
 		int det;
+		
+		// 볼린저밴드와 같은 알고리즘
 		if(prevCCI < buyIndex) {
 			if(nowCCI > buyIndex) {
 				det = 1;
@@ -78,9 +82,10 @@ public class CommodityChannelIndex_bt implements calcIndicator_bt {
 		return det;
 	}
 	
+	// CCI 구하는 공식
+	// 주어진 hArr가지고만 구하면 된다.
 	public double getCCI(double[] hArr) throws Exception{
 		
-		//double[] hArr = IndicatorFunction_bt.getHistoryMeanPriceArray(crypt, exchange, coin, base, interval, period_day+period_day-1);
 		double M = hArr[hArr.length-1];
 		double N = getMean(makeSublist(hArr, hArr.length-period_day, hArr.length-1));
 	

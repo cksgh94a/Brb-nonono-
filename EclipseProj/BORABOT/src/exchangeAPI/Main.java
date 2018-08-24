@@ -1,6 +1,7 @@
 package exchangeAPI;
 import java.util.HashMap;
 
+// 사용 안됨
 public class Main {
     public static void main(String args[]) {
 		Api_Client api = new Api_Client("c25a72871440aeb07b06c2e0a2f09c99",

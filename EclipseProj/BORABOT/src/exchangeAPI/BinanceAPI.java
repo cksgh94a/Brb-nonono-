@@ -1,5 +1,9 @@
 package exchangeAPI;
 
+
+// https://github.com/binance-exchange/binance-java-api
+// 해당 파일 참고
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -80,15 +84,6 @@ public class BinanceAPI implements exAPI {
 
 	public double getTicker(String coin, String base) { // Returns current tick values for a specific market
 
-		// String symbol = coin+base;
-		// String result = getJson(API_VERSION, "ticker/price",
-		// returnCorrectMap("symbol", symbol.toUpperCase()));
-		//
-		// JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
-		// double price = ohlc_json.get("price").getAsDouble();
-		//
-		// return price;
-
 		String symb = coin + base;
 
 		DB_ohlc db = new DB_ohlc();
@@ -110,13 +105,12 @@ public class BinanceAPI implements exAPI {
 	}
 
 	public String buyLimit(String market, String quantity, String rate) { // Places a limit buy in a specific market;
-																			// returns the UUID of the order
-
+		// returns the UUID of the order
 		return getJson(API_VERSION, "buylimit", returnCorrectMap("market", market, "quantity", quantity, "rate", rate));
 	}
 
 	public String buyMarket(String market, String quantity) { // Places a market buy in a specific market; returns the
-																// UUID of the order
+		// UUID of the order
 
 		return getJson(API_VERSION, "buymarket", returnCorrectMap("market", market, "quantity", quantity));
 	}
@@ -125,8 +119,7 @@ public class BinanceAPI implements exAPI {
 
 		String market = coin + base;
 		Account account = client.getAccount();
-		NewOrderResponse newOrderResponse = client
-				.newOrder(NewOrder.marketBuy(market, qty).newOrderRespType(NewOrderResponseType.FULL));
+		NewOrderResponse newOrderResponse = client.newOrder(NewOrder.marketBuy(market, qty).newOrderRespType(NewOrderResponseType.FULL));
 		List<Trade> fills = newOrderResponse.getFills();
 		System.out.println(newOrderResponse.getClientOrderId());
 
@@ -137,23 +130,22 @@ public class BinanceAPI implements exAPI {
 
 		String market = coin + base;
 		Account account = client.getAccount();
-		NewOrderResponse newOrderResponse = client
-				.newOrder(NewOrder.marketSell(market, qty).newOrderRespType(NewOrderResponseType.FULL));
-		List<Trade> fills = newOrderResponse.getFills();
+		NewOrderResponse newOrderResponse = client.newOrder(NewOrder.marketSell(market, qty).newOrderRespType(NewOrderResponseType.FULL));
+		List<Trade> fills = newOrderResponse.getFills(); 
 		System.out.println(newOrderResponse.getClientOrderId());
 
 		return newOrderResponse.getClientOrderId();
 	}
 
 	public String sellLimit(String market, String quantity, String rate) { // Places a limit sell in a specific market;
-																			// returns the UUID of the order
+		// returns the UUID of the order
 
 		return getJson(API_VERSION, "selllimit",
 				returnCorrectMap("market", market, "quantity", quantity, "rate", rate));
 	}
 
 	public String sellMarket(String market, String quantity) { // Places a market sell in a specific market; returns the
-																// UUID of the order
+		// UUID of the order
 
 		return getJson(API_VERSION, "sellmarket", returnCorrectMap("market", market, "quantity", quantity));
 	}

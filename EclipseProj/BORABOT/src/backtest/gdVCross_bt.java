@@ -5,6 +5,7 @@ import exchangeAPI.CryptowatchAPI;
 
 // period
 
+// gdCross와 동일, 다른 건 Volume을 이용한다는것
 public class gdVCross_bt implements calcIndicator_bt {
 
 	private int longd;

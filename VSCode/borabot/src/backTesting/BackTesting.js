@@ -2,10 +2,12 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
+// 시간 입력 위한 react-datepicker 패키지
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
+// css, img
 import './BackTesting.css';
 import toLeftBtn from '../img/common/pre_btn_01.png';
 import toRightBtn from '../img/common/next_btn_01.png';
@@ -14,38 +16,44 @@ import offText from '../img/common/off_bg_01.png';
 import startBtn from '../img/common/btn_08.png';
 import calendar from '../img/common/calendar_01.png';
 
+// 거래 시작, 종료 시간 설정에 필요한 시간 리스트
 const hourList = []
-for(var i=1;i<=24;i++) hourList.push(i-1) 
+for(var i=1;i<=24;i++) hourList.push(i-1)
 
-const periodLimit = [ "1일", "1주일", "15일", "3개월", "3개월", "3개월" ]
-
-// 구매, 판매 설정 리스트
-const buyingSetting = [ {key: '전액구매', value: 'buyAll'}, {key: '금액구매', value: 'buyCertainPrice'}, {key: '개수구매', value: 'buyCertainNum'} ]
-const sellingSetting = [ {key: '전액판매', value: 'sellAll'}, {key: '금액판매', value: 'sellCertainPrice'}, {key: '개수판매', value: 'sellCertainNum'} ]
+// 구매, 판매 설정 리스트 (key는 화면 표시용, value는 서버 전송용)
+const buyingSetting = [
+  {key: '전액구매', value: 'buyAll'},
+  {key: '금액구매', value: 'buyCertainPrice'},
+  {key: '개수구매', value: 'buyCertainNum'}
+]
+const sellingSetting = [
+  {key: '전액판매', value: 'sellAll'},
+  {key: '금액판매', value: 'sellCertainPrice'},
+  {key: '개수판매', value: 'sellCertainNum'}
+]
 
 class BackTesting extends Component {
   constructor(){
-    super();
+    super();일
     this.state={
-      exchangeIndex: 0,
-      baseIndex: 0,
-      startDay: '',
-      endDay: '',
-      nowCash:'',
-      
-      buyDetail: false,
-      sellDetail: false,
-      buyUnit:'',
-      sellUnit:'',
-        
-      pageNum:1,  // 현재 선택된 페이지 번호
-      pageNumList: [1], // 게시물의 전체 페이지 리스트
+      exchangeIndex: 0,               // 현재 선택된 거래소 인덱스
+      baseIndex: 0,                   // 현재 선택된 기축통화 인덱스
+      startDay: '',                   // 현재 선택된 시작일
+      endDay: '',                     // 현재 선택된 종료일
+      minDate: moment('2018-08-19'),  // 거래 간격에 따른 최소 시작 가능일
+      nowCash:'',                     // 거래 시작 금액
 
-      showList: [],
-      resultList: [],
-      result: {},
+      buyDetail: false,               // 세부 구매 방식 설정 여부
+      sellDetail: false,              // 세부 판매 방식 설정 여부
+      buyUnit:'',                     // 세부 구매 단위
+      sellUnit:'',                    // 세부 판매 단위
 
-      minDate: moment('2018-08-19')
+      pageNum:1,                      // 현재 선택된 페이지 번호
+      pageNumList: [1],               // 게시물의 전체 페이지 리스트
+
+      showList: [],                   // 화면에 표시되는 백테스팅 기록
+      resultList: [],                 // 전체 백테스팅 기록
+      result: {}                      // 수익률과 최종 금액 등의 백테스팅 결과
     }
   }
 
@@ -55,15 +63,21 @@ class BackTesting extends Component {
     && (window.location = "/backtesting")
   }
 
+  // 거래소, 기축통화, 코인 선택 인덱스 변경
+  // 우선순위 : 거래소 > 기축통화 > 코인
+  // 상위 우선순위 항목의 인덱스가 변경되면 하위 항목의 인덱스는 초기화
   handleIndex = (e) => {
     if (e.target.id === 'bt_exchange'){
       document.getElementById('base').selectedIndex = 0
       document.getElementById('coin').selectedIndex = 0
     } else if(e.target.id === 'base') document.getElementById('coin').selectedIndex = 0
-    document.getElementById('bt_exchange').value !== '거래소 선택' && this.setState({ exchangeIndex: document.getElementById('bt_exchange').selectedIndex })
-    document.getElementById('base').value !== '기축통화 선택' && this.setState({ baseIndex: document.getElementById('base').selectedIndex })
+    document.getElementById('bt_exchange').value !== '거래소 선택'
+    && this.setState({ exchangeIndex: document.getElementById('bt_exchange').selectedIndex })
+    document.getElementById('base').value !== '기축통화 선택'
+    && this.setState({ baseIndex: document.getElementById('base').selectedIndex })
   }
 
+  // 거래 간격 설정 (거래 간격에 따라 최소 시작 가능일이 변화, 시작 가능일은 현재 DB에 쌓인 거래소의 데이터 기준)
   handleInterval = (e) => {
     switch(e.target.value){
       case '5분':
@@ -81,6 +95,7 @@ class BackTesting extends Component {
     }
   }
 
+  // 구매/판매 방식 설정에 따라 세부 구매 단위 표시
   handleSetting = (e) => {
     switch(e.target.value){
       case '전액구매':
@@ -99,16 +114,16 @@ class BackTesting extends Component {
     }
   }
 
+  // 시작일, 종료일 설정
   handleDayChange = (day, se) => {
     se === 'start'
     ? this.setState({ startDay: day })
     : this.setState({ endDay: day })
   }
 
+  // 시작 금액 설정
   handleCash = (e) => {
-    !isNaN(e.target.value) && this.setState({
-      nowCash:e.target.value
-    })
+    !isNaN(e.target.value) && this.setState({ nowCash:e.target.value })
   }
 
   // 데이터 유효성 검증
@@ -162,22 +177,26 @@ class BackTesting extends Component {
       alert('시작 금액을 입력하세요')
       return false
     }
-    return true
+    return true // 모든 유효성 검증 통과하면 true 반환
   }
 
+  // 시작 버튼 눌르면 서버에 시작 데이터 전송
   handleStartbtn = () => {
+    // 데이터 유효성이 검증되면
     if(this.validate()){
+      // 시작일과 종료일을 서버에서 처리 가능한 형식으로 만듦
       const { startDay, endDay } = this.state
       var startDate = startDay.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('startHour').value.slice(0,-1)).slice(-2)+':00:00.000'
       var endDate = endDay.format('YYYY-MM-DDT')+
         ("0"+document.getElementById('endHour').value.slice(0,-1)).slice(-2)+':00:00.000'
 
-      axios.post( 
-        'BackTest', 
+      // 데이터 전송
+      axios.post(
+        'BackTest',
         'exchange='+document.getElementById('bt_exchange').value+
         '&coin='+document.getElementById('coin').value+
-        '&base='+document.getElementById('base').value+ 
+        '&base='+document.getElementById('base').value+
         '&interval='+this.props.intervalList[document.getElementById('interval').selectedIndex].value+
         '&strategyName='+document.getElementById('strategy').value+
         '&buyingSetting='+buyingSetting[document.getElementById('buyingSetting').selectedIndex].value+
@@ -208,7 +227,7 @@ class BackTesting extends Component {
           })
           alert('백테스팅에 성공하였습니다.')
         } else alert('백테스팅에 실패하였습니다. (' + response.data + ')')
-      }) 
+      })
       .catch( response => { console.log('err\n'+response); } ); // ERROR
     }
   }
@@ -222,8 +241,9 @@ class BackTesting extends Component {
   // 페이지를 선택하면 state 변화후 게시물을 새로 불러옴
   selectPage = (fbn) => {
     const { pageNum, pageNumList } = this.state
-    var pn = 1  // 서버에 호출할 페이지 번호
+    var pn = 1  // resultList에서 불러올 페이지 번호
 
+    // 앞, 뒤 10페이지 이동과 페이지 직접 선택한 경우
     if(fbn === 'front'){
       (pageNum > 10)
       ? pn = pageNum -(pageNum-1)%10 -1
@@ -233,7 +253,7 @@ class BackTesting extends Component {
       ? pn = (pageNum -1) -(pageNum -1)%10 +11
       : pn = pageNumList.length
     } else pn = fbn
-    
+
     this.setState({
       pageNum: pn,
       showList: this.state.resultList.slice((pn -1)*10, (pn -1)*10+10)
@@ -243,7 +263,7 @@ class BackTesting extends Component {
   render() {
     const { exchangeList, intervalList , strategyList } = this.props
     const { exchangeIndex, baseIndex, isResulted, pageNum, pageNumList, showList, result } = this.state
-    
+
     const onTextBg = {
       backgroundImage : `url(${onText})`,
       cursor: 'pointer'
@@ -257,7 +277,7 @@ class BackTesting extends Component {
     return (
       <div>
         {/* 거래 설정 영역 */}
-        <div className = 'bt-settingContainer'>          
+        <div className = 'bt-settingContainer'>
           <div className = 'bt-btSettingText'>백테스팅 설정</div>
             {/* 거래소 선택 */}
             <select className="bt-select" id="bt_exchange" placeholder="거래소" onChange={this.handleIndex}>
@@ -270,6 +290,7 @@ class BackTesting extends Component {
             <select className="bt-select" id="base" placeholder="기축통화" onChange={this.handleIndex}>
               {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
                 return (<option key={i}>
+                  {/* HITBTC는 표시는 USDT, 실제 값은 USD여야 함 */}
                   {(base === 'USD')
                     ? 'USDT'
                     : base }
@@ -305,22 +326,31 @@ class BackTesting extends Component {
                 {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
                 <option selected hidden disabled>구매 방식 설정</option>
               </select>
-              <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
+              <input id="buyingDetail" className = "bt-input-buySetting" hidden={!this.state.buyDetail}/>
+              {this.state.buyDetail && this.state.buyUnit}
               {/* 판매 설정 선택 */}
               <select className="bt-select" id="sellingSetting" onChange={this.handleSetting} className = "bt-select">
                 {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
                 <option selected hidden disabled>판매 방식 설정</option>
               </select>
-              <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
+              <input id="sellingDetail" className = "bt-input-sellSetting" hidden={!this.state.sellDetail}/>
+              {this.state.sellDetail && this.state.sellUnit}
               {/* 시작일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
-                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px", cursor: "pointer"}}>
+                <div style = {{
+                  position:"absolute",
+                  borderBottom : "1px solid #9646a0",
+                  width : "81px",
+                  float : "left",
+                  marginLeft : "20px",
+                  marginTop : "4px",
+                  cursor: "pointer"}}>
                   <DatePicker
                     selected={this.state.startDay}
                     onChange={(day) => this.handleDayChange(day, 'start')}
                     customInput={
-                      <input 
-                        style={{ 
+                      <input
+                        style={{
                           width: '80px',
                           marginTop : "20px",
                           borderTop : 'transparent',
@@ -347,12 +377,19 @@ class BackTesting extends Component {
               </div>
               {/* 종료일 선택 */}
               <div style = {{ maringTop : "12px", height : "42px"}}>
-                <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px", cursor: "pointer"}}>
+                <div style = {{
+                  position:"absolute",
+                  borderBottom : "1px solid #9646a0",
+                  width : "81px",
+                  float : "left",
+                  marginLeft : "20px",
+                  marginTop : "4px",
+                  cursor: "pointer"}}>
                   <DatePicker
                     selected={this.state.endDay}
                     onChange={(day) => this.handleDayChange(day, 'end')}
                     customInput={
-                      <input 
+                      <input
                         style={{
                           width: '80px',
                           marginTop : "20px",
@@ -377,10 +414,11 @@ class BackTesting extends Component {
                     return (<option key={i}> {e}시 </option>)
                   })}
                 </select>
-                {/* 시작 금액 선택 */}
-                <input id="nowCash" placeholder="시작 금액을 입력하세요"  className = 'bt-startPrice' value={this.state.nowCash} onChange={this.handleCash}/><br/>
-              </div>       
-            </div>            
+                {/* 시작 금액 설정 */}
+                <input id="nowCash" placeholder="시작 금액을 입력하세요"  className = 'bt-startPrice' value={this.state.nowCash} onChange={this.handleCash}/>
+                <br/>
+              </div>
+            </div>
           {/* 시작 버튼 */}
           <div className = 'bt-start-btn' onClick={this.handleStartbtn}><img src = {startBtn} style={{cursor: "pointer"}}/></div>
         </div>
@@ -393,7 +431,6 @@ class BackTesting extends Component {
             </div>
             <table className='bt-tableContainer' >
               <thead>
-                {/* <th className='bt-headTr'>성공 여부</th> */}
                 <th className='bt-headTr'>시간</th>
                 <th className='bt-headTr'>매매</th>
                 <th className='bt-headTr'>가격<small>{result.base !== (null || undefined) && (result.base)}</small></th>
@@ -402,11 +439,10 @@ class BackTesting extends Component {
                 <th className='bt-headTr'>현재 보유 코인수<small>(개)</small></th>
               </thead>
 
-              <tbody className = 'bt-tbodyContainer' >              
-                { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+              <tbody className = 'bt-tbodyContainer' >
+                { // state에 저장된 기록을 map 함수 통하여 표시
                 showList.map((r, i) => {
                   return (<tr key={i} className="bt-tr" style={{borderBottom : "1px solid"}} >
-                    {/* <td className = 'bt-td'>{r.success}</td> */}
                     <td className = 'bt-td'>{r.time}</td>
                     <td className = 'bt-td'>{r.saleAction}</td>
                     <td className = 'bt-td'>{r.coinCurrentPrice}</td>
@@ -424,7 +460,9 @@ class BackTesting extends Component {
               { // 현재 선택된 페이지의 근처 10개 페이지 표시
               pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                 return(<div  key ={i} onClick={() => this.selectPage(p)}>
-                  {pageNum === p ? <div style={onTextBg} className = "bt-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "bt-chooseNumber" >  {p}  </div>}
+                  {pageNum === p
+                  ? <div style={onTextBg} className = "bt-chooseNumberSelected" >  {p}  </div>
+                  : <div style={offTextBg} className = "bt-chooseNumber" >  {p}  </div>}
                 </div>)
               })}
               { /* 이후 10 페이지 이동 버튼*/ }
@@ -435,7 +473,14 @@ class BackTesting extends Component {
 
         {/* 거래 결과 영역 */}
         <div className = 'bt-resultWindow'>
-          <div style={{marginTop : '24px', marginLeft : '20px', fontSize : "24px", fontWeight:"bold", borderRight : '1px solid #9646a0', width : '172px', display: "inline-block"}}>
+          <div style={{
+            marginTop : '24px',
+            marginLeft : '20px',
+            fontSize : "24px",
+            fontWeight:"bold",
+            borderRight : '1px solid #9646a0',
+            width : '172px',
+            display: "inline-block"}}>
             백테스팅 결과
           </div>
           { isResulted

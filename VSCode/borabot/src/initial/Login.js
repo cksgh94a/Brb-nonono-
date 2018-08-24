@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 import { login } from '../reducers/logInOut';
 
+// css, img
 import './Login.css';
 import loginBtn from '../img/login/login_btn_01.png';
 import backGround from '../img/login/login_bg.png';
@@ -17,12 +18,13 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state={
-      email: null,
-      password: null
+      email: null,    // 입력한 email
+      password: null  // 입력한 비밀번호
     }
   }
 
-  handleChange = (e) => {  
+  // email과 비밀번호 변화
+  handleChange = (e) => {
     if(e.target.placeholder === "아이디 (이메일)"){
       this.setState({
         email: e.target.value
@@ -35,11 +37,12 @@ class Login extends Component {
     }
   }
 
+  // 로그인 버튼 누르면 서버에 전송
   handleLogin = () => {
-    (this.state.email !== null && this.state.password !== null)
-    ? axios.post( 
-        'LogInOut', 
-        'email='+this.state.email+'&password='+this.state.password, 
+    (this.state.email !== null && this.state.password !== null) // email과 비밀번호 공백 검증
+    ? axios.post(
+        'LogInOut',
+        'email='+this.state.email+'&password='+this.state.password,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
@@ -48,9 +51,9 @@ class Login extends Component {
         else if(response.data === 'complete') {
           this.props.onLogin()
           window.location = "/";
-        } 
+        }
         else alert(response.data)
-      }) 
+      })
       .catch( response => { console.log('err\n'+response); } ) : // ERROR
       alert('양식을 확인해주세요')
   }
@@ -70,23 +73,25 @@ class Login extends Component {
       <div>
         <img src = {loginLogo} className = 'login-logo' />
         <div style = {windowBg}>
-
+          {/* email 입력 */}
           <div className = "login-email-box">
             <img src = {loginEmailImg} className = "login-email-img"/>
-            <input type="text" placeholder="아이디 (이메일)" onChange={this.handleChange} className = 'login-inputBox' />        
+            <input type="text" placeholder="아이디 (이메일)" onChange={this.handleChange} className = 'login-inputBox' />
           </div>
-
+          {/* 비밀번호 입력 */}
           <div className = "login-password-box">
             <img src = {loginPwImg} className = "login-pw-img"/>
             <input type="password" placeholder="비밀번호" onChange={this.handleChange} className = 'login-inputBox' />
           </div>
-
+          {/* 로그인 버튼 */}
           <div onClick={this.handleLogin} className='login-button' >
             <img src = {loginBtn} style={{cursor: "pointer"}} />
           </div>
           <div className = "login-text" size = '18px'>회원이 아니신가요?</div>
           <div className = "login-text2" size = '18px'>간단한 회원가입으로 보라봇을 이용해 보세요.</div>
+          {/* 회원가입 버튼 */}
           <Link to="/register"><button className ="login-registerButton" style={{cursor: "pointer"}}>회원가입</button></Link>
+          {/* 비밀번호 찾기 버튼 */}
           <Link to="/findInfo"><button className ="login-findButton" style={{cursor: "pointer"}}>비밀번호 찾기</button></Link>
         </div>
       </div>

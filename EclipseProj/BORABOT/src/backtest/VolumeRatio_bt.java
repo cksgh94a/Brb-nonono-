@@ -3,7 +3,7 @@ package backtest;
 import exchangeAPI.CryptowatchAPI;
 
 // period + 1
-// 간격은 하루로 고정
+// 간격은 하루로 고정 ?
 public class VolumeRatio_bt implements calcIndicator_bt {
 
 	private int period_day;
@@ -52,9 +52,9 @@ public class VolumeRatio_bt implements calcIndicator_bt {
 		else {
 			det = 0;
 		}
-
-		System.out.print("now VR : " + VR);
-		System.out.println(" / VR deterConstant : " + det);
+		
+		// System.out.print("now VR : " + VR);
+		// System.out.println(" / VR deterConstant : " + det);
 		return det;
 	}
 	

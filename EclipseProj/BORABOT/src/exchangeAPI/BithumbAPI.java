@@ -23,31 +23,6 @@ public class BithumbAPI implements exAPI {
 	@Override
 	public double getTicker(String coin, String base) {
 
-		// HashMap<String, String> rgParams = new HashMap<String, String>();
-		// // order : coin
-		// // payment : base
-		// rgParams.put("order_currency", coin);
-		// rgParams.put("payment_currency", base);
-		//
-		// String result = null;
-		// try {
-		// result = api.callApi("/public/ticker/"+coin, rgParams);
-		// } catch (Exception e) {
-		// e.printStackTrace();
-		// }
-		//
-		// if(result == null) {
-		// //tradingBot.terminateBot();
-		// //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ에러 알람!
-		// }
-		//
-		// //System.out.println(result);
-		// JsonObject ohlc_json = new JsonParser().parse(result).getAsJsonObject();
-		// JsonObject data = ohlc_json.get("data").getAsJsonObject();
-		// double balance = data.get("closing_price").getAsDouble();
-		//
-		// return balance;
-
 		String symb = coin;
 
 		DB_ohlc db = new DB_ohlc();

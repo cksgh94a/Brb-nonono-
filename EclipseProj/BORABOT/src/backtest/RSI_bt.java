@@ -21,6 +21,7 @@ public class RSI_bt implements calcIndicator_bt {
 	private int initialEnd;
 	
 	// no breakthrough
+	// 미리 구해두지 않는다.
 	public RSI_bt (int day, int buyIndex, int sellIndex, CryptowatchAPI c, String e, String coin, String base, int interval, double[][] hArr,  int initialStart, int initialEnd) {
 		this.period_day = day;
 		this.coin = coin;
@@ -35,8 +36,18 @@ public class RSI_bt implements calcIndicator_bt {
 		this.HLCArr = hArr;
 		this.initialEnd++;
 		this.initialStart++;
+		// 따라서 하나를 업 시킴
+		// 상향 하향 돌파 하는 지표와 같이 사용될 것이기 때문에
+		// +1을 해 주어야 나중에 동일해진다.
+		
+		// 설령 돌파형 지표를 하나도 사용하지 않는다고 해도,
+		// 거래는 시작시간 + 설정한 거래 간격 1단위시간 후에 시작되므로
+		// (즉, 8월 24일 12시 30분에 30분 거래를 시작하면 1시에 첫 매매시그널을 발생시킴)
+		// 플러스를 해주는게 맞다.
 	}
 	
+
+	//HLCV를 가격배열로 변경
 	public double[] toPriceHistory(double[][] arr) {
 		
 		double[] ret = new double[arr.length];
@@ -48,15 +59,13 @@ public class RSI_bt implements calcIndicator_bt {
 		return ret;
 	}
 	
+	
 	public int getDeterminConstant() throws Exception {
 		
 		double[] phArr = toPriceHistory(HLCArr);
-		//System.out.println("RSI : " + initialStart +" / "+initialEnd);
-		System.out.println(initialStart + "/" + initialEnd);
+		
 		double[] tempArr = IndicatorFunction_bt.makeSublist(phArr, (initialStart++), (initialEnd++));
-		System.out.println("phArr len : " + phArr.length);
-		System.out.println("tempArr len : " + tempArr.length);
-		System.out.println(initialStart + "/" + initialEnd+"\n");
+
 		int det;
 		double RSI;
 		RSI = getRSI(tempArr);
@@ -70,17 +79,14 @@ public class RSI_bt implements calcIndicator_bt {
 		else {
 			det = 0;
 		}
-		//System.out.print("now RSI : " + RSI);
-		//System.out.println(" / RSI deterConstant : " + det);
+		
 		return det;
 	}
 	
 	public double getRSI(double[] hArr) throws Exception {
+		// EMA가 아닌 SMA를 사용
+		// fastRSI이다.
 		
-		//double[] hArr = null;
-		//hArr = IndicatorFunction_bt.getHistoryArray(crypt, exchange, coin, base, interval, period_day+1);
-		//initializing.printArray(hArr);
-		//System.out.println("RSI : " + initialStart +" / "+initialEnd);
 		double up=0;
 		double down=0;
 		System.out.println("plz" + hArr.length + "?" + period_day);
@@ -98,7 +104,7 @@ public class RSI_bt implements calcIndicator_bt {
 		
 		double RSI = up / (up+down) * 100.0;
 		RSI = 100 - (100 / (1 + RS));
-		//System.out.println("RSI test cnt : " + cnt);
+		
 		return RSI;
 	}
 	

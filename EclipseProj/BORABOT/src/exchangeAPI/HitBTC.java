@@ -11,9 +11,10 @@
  * roanworkbox@gmail.com
  * GPL c:
  */
+//
+// https://github.com/RoanDev/HitBTC-API
 
 package exchangeAPI;
-
 
 import hitbtc.api.MarketAPI;
 import hitbtc.api.PaymentAPI;

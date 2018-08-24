@@ -26,40 +26,34 @@ import java.sql.*;
 
 public class tradingBot {
 
-	// From dao
-	// private static String API_KEY =
-	// "UMjZpOB0UNMMRRh697FgDiUb81vyKLlOey7fQeeBAM9MoOOoNgDAWB0PpjJNwvWe";
-	// private static String Secret_KEY =
-	// "VsYgQmXENsOwBhVIMnrsvtuBWwn568t5AFRlFHO3bZd47WzXUFBxMRPrTN3TYNAH";
 	private String API_KEY;
 	private String Secret_KEY;
 
 	// From frontend
-	private static String exchange;
-	private static String coin;
-	private static String base;
-	private static int interval;
-	private static String botName;
-	private static String email;
-	private static String strategyName;
-	private static String buyingSetting;
-	private static String sellingSetting;
-	private static String startDate; // 일단 가지고만 있기
-	private static String endDate; // 루프 탈출 요소
-	// 1 : 대기 , 0 : 종료
-	private static int errorHandling;
+	private String exchange;
+	private String coin;
+	private String base;
+	private int interval;
+	private String botName;
+	private String email;
+	private String strategyName;
+	private String buyingSetting;
+	private String sellingSetting;
+	private String startDate; // 일단 가지고만 있기
+	private String endDate; // 루프 탈출 요소
+
+	// 1 : 대기 , 0 : 종료 -> 어드민쪽 설정, 0 mandatory
+	private int errorHandling;
 
 	// optional
-	private static double priceBuyUnit;
-	private static double numBuyUnit;
-	private static double priceSellUnit;
-	private static double numSellUnit;
+	private double priceBuyUnit;
+	private double numBuyUnit;
+	private double priceSellUnit;
+	private double numSellUnit;
 
-	// 보통은 0 -> 이것도 디비 strategy에서 뽑아와야함 ㅇㅇㅇ , 통신으로 받는거 ㄴㄴ
+	// 디비 strategy에서 뽑아오는 부분
 	private double buyCriteria;
 	private double sellCriteria;
-
-	// private dao dao = new dao();
 
 	public tradingBot(String email, String exchange, String botName, String coin, String base, int interval,
 			String startDate, String endDate, String strategyName, String buyingSetting, String sellingSetting,
@@ -83,7 +77,7 @@ public class tradingBot {
 		this.errorHandling = error;
 	}
 
-	private static CryptowatchAPI crypt = new CryptowatchAPI(20, 60);
+	private CryptowatchAPI crypt = new CryptowatchAPI(20, 60);
 
 	public void botStart() throws SQLException {
 
@@ -101,44 +95,44 @@ public class tradingBot {
 			if (rsKey.next()) {
 				apiKey = rsKey.getString(1);
 				secKey = rsKey.getString(2);
-			}
-			else {
-				System.out.println("키 없음");
-				return;
+			} else {
+				System.out.println("등록된 API 키 없음");
+				return; // 종료 및 앞단에 메세지.
 			}
 		} catch (SQLException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
 		dbkey.clean();
+
 		final exAPI exAPIobj;
-		
+
 		if (exchange.equals("bithumb") || exchange.equals("BITHUMB")) {
-			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);			
+			exAPIobj = (exAPI) new BithumbAPI(apiKey, secKey);
 		} else if (exchange.equals("binance") || exchange.equals("BINANCE")) {
-			exAPIobj = (exAPI) new BinanceAPI(apiKey, secKey, 10, 10);			
-		} else if (exchange.equals("hitbtc")|| exchange.equals("HITBTC")) {
-			exAPIobj = (exAPI) new HitbtcAPI(apiKey, secKey);			
+			exAPIobj = (exAPI) new BinanceAPI(apiKey, secKey, 10, 10);
+		} else if (exchange.equals("hitbtc") || exchange.equals("HITBTC")) {
+			exAPIobj = (exAPI) new HitbtcAPI(apiKey, secKey);
 		} else {
 			System.out.println("API 객체 생성 오류!");
 			return;
 		}
 
-		DB dao = new DB();
-
-		// trade DB insert!
+		// 초기에 현재 거래소의 자산과 코인 정보를 api call!
+		// getBalance는 apikey관련 api호출에 오류가 있으면 -1을 리턴함
 		double initialCoinNum = exAPIobj.getBalance(coin.toLowerCase());
 		double initialBalance = exAPIobj.getBalance(base.toLowerCase());
-		
+
 		if (initialCoinNum == -1 || initialBalance == -1) {
 
-			// api key 오류
+			// api key 오류( 높은 확률로 invalidKey )
 			System.out.println("api key 오류 ! " + initialCoinNum);
 			return;
 		}
-		
-		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1000으로 표시(null)
+
+		// trade DB insert!
+		// 초기 진행 상태 = 1(시작) / 초기 최종자산 = -1으로 표시(null)
+		DB dao = new DB();
 		String initialTradeSql = String.format(
 				" INSERT INTO trade VALUES( \"%s\",\"%s\",\"%s\",\"%s\",\"%s\",\"%s\",%s,\"%s\",\"%s\",\"%s\",\"%s\",%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s )",
 				email, botName, exchange, coin, base, strategyName, interval, startDate, endDate, buyingSetting,
@@ -147,103 +141,22 @@ public class tradingBot {
 		dao.Query(initialTradeSql, "insert");
 		dao.clean();
 
-		// 테스트를 위해 만든 JSON객체
-		Gson gson = new Gson();
+		// custom_strategy에서 개인별 전략을 select (JSON)
+		String settingSelectSql = String.format(
+				"SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email,
+				strategyName);
+		String strategySettingJson = "";
+		try {
+			ResultSet rsTemp = dao.Query(settingSelectSql, "select");
+			if (rsTemp.next()) {
+				strategySettingJson = rsTemp.getString(1);
+			}
+			dao.clean();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		// -----------------------------------------------------------------
-		JsonObject indicators = new JsonObject();
-
-		JsonObject indicatorSetting = new JsonObject();
-		indicatorSetting.addProperty("indicator", "BollingerBand");
-		indicatorSetting.addProperty("weight", 1);
-		indicatorSetting.addProperty("period", 5);
-		indicatorSetting.addProperty("mul", 3);
-		indicators.add("0", gson.toJsonTree(indicatorSetting));
-
-		JsonObject indicatorSetting1 = new JsonObject();
-		indicatorSetting1.addProperty("indicator", "CCI");
-		indicatorSetting1.addProperty("weight", 1);
-		indicatorSetting1.addProperty("period", "5");
-		indicatorSetting1.addProperty("buyIndex", "70");
-		indicatorSetting1.addProperty("sellIndex", "30");
-		indicators.add("1", gson.toJsonTree(indicatorSetting1));
-
-		JsonObject indicatorSetting2 = new JsonObject();
-		indicatorSetting2.addProperty("indicator", "RSI");
-		indicatorSetting2.addProperty("weight", 1);
-		indicatorSetting2.addProperty("period", "5");
-		indicatorSetting2.addProperty("buyIndex", "70");
-		indicatorSetting2.addProperty("sellIndex", "30");
-		indicators.add("2", gson.toJsonTree(indicatorSetting2));
-
-		JsonObject indicatorSetting3 = new JsonObject();
-		indicatorSetting3.addProperty("indicator", "StochOsc");
-		indicatorSetting3.addProperty("weight", 1);
-		indicatorSetting3.addProperty("period", "5");
-		indicatorSetting3.addProperty("n", "5");
-		indicatorSetting3.addProperty("m", "4");
-		indicatorSetting3.addProperty("t", "3");
-		indicators.add("3", gson.toJsonTree(indicatorSetting3));
-
-		JsonObject indicatorSetting4 = new JsonObject();
-		indicatorSetting4.addProperty("indicator", "CCI");
-		indicatorSetting4.addProperty("weight", 1);
-		indicatorSetting4.addProperty("period", "5");
-		indicatorSetting4.addProperty("buyIndex", "70");
-		indicatorSetting4.addProperty("sellIndex", "30");
-		indicators.add("4", gson.toJsonTree(indicatorSetting4));
-
-		JsonObject indicatorSetting5 = new JsonObject();
-		indicatorSetting5.addProperty("indicator", "CCI");
-		indicatorSetting5.addProperty("weight", 1);
-		indicatorSetting5.addProperty("period", "5");
-		indicatorSetting5.addProperty("buyIndex", "70");
-		indicatorSetting5.addProperty("sellIndex", "30");
-		indicators.add("5", gson.toJsonTree(indicatorSetting5));
-
-		JsonObject indicatorSetting6 = new JsonObject();
-		indicatorSetting6.addProperty("indicator", "CCI");
-		indicatorSetting6.addProperty("weight", 1);
-		indicatorSetting6.addProperty("period", "20");
-		indicatorSetting6.addProperty("buyIndex", "70");
-		indicatorSetting6.addProperty("sellIndex", "30");
-		indicators.add("6", gson.toJsonTree(indicatorSetting6));
-
-		JsonObject jsobj = new JsonObject();
-		jsobj.add("indicatorList", gson.toJsonTree(indicators));
-		jsobj.addProperty("buyCriteria", 1);
-		jsobj.addProperty("sellCriteria", -1);
-		jsobj.addProperty("expList", "and,or,and,or,or,or");
-		// 제일중요, expList를 꼭 빼내야 한다! from strategySetting!
-		// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ ****************************
-		// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
-
-//		String strategySettingJson = gson.toJson(jsobj);
-		// -----------------------------------------------------------------
-
-		// -----------------------------------------------------------------
-		// DB dbTemp = new DB();
-		// String insetSQL = String.format("insert into custom_strategy values (\"%s\",
-		// \"%s\" , \" %s \" ", email, botName, strategySettingJson );
-		// dbTemp.Query(insetSQL, "insert");
-		// dbTemp.clean();
-		//
-		//
-		//
-		 String settingSelectSql = String.format( "SELECT strategy_content FROM custom_strategy WHERE email = \"%s\" and strategy_name = \"%s\"; ", email, strategyName);
-		 String strategySettingJson = "";
-		 try {
-			 ResultSet rsTemp = dao.Query(settingSelectSql, "select");
-			 if (rsTemp.next()) {
-				 strategySettingJson = rsTemp.getString(1);
-			 }
-			 dao.clean();
-		 } catch (Exception e) {
-			 e.printStackTrace();
-		 }
-		// -----------------------------------------------------------------
-
-		System.out.println("json test" + strategySettingJson);
+		System.out.println("test" + strategySettingJson);
 
 		JsonParser parser = new JsonParser();
 		JsonElement element = parser.parse(strategySettingJson);
@@ -257,13 +170,13 @@ public class tradingBot {
 		calcIndicator[] indicatorCalcer = new calcIndicator[indicatorListJs.size()];
 		int weightList[] = new int[indicatorListJs.size()];
 
-		// 배열에다가 해당하는 지표 객체 담기 (각각 개별 파라미터 및 웨이트 적용)
+		// 배열에다가 해당하는 지표 객체 담기 (각각 개별 파라미터 파싱)
 		for (int i = 0; i < indicatorListJs.size(); i++) {
 			String indexOrder = i + "";
 			String indicator = indicatorListJs.get(indexOrder).getAsJsonObject().get("indicator").getAsString();
 			int weight = indicatorListJs.get(indexOrder).getAsJsonObject().get("weight").getAsInt();
 			weightList[i] = weight;
-			// System.out.println("tradingBot : " + indicator);
+			
 			try {
 				if (indicator.equals("BollingerBand")) {
 					int period = indicatorListJs.get(indexOrder).getAsJsonObject().get("period").getAsInt();
@@ -325,8 +238,6 @@ public class tradingBot {
 				}
 			} catch (Exception e) {
 				/////////////////////////////////// ERROR//////////////////////////////////////////
-				// Sleep or Terminate?
-				// 초기 생성 오류 -> 기다리는걸 추천...
 				e.printStackTrace();
 				System.out.println("지표 객체 생성 도중 발생한 오류 : " + LocalDate.now());
 				if (errorHandling == 1) {
@@ -340,17 +251,17 @@ public class tradingBot {
 					}
 				} else {
 					// 종료
-					// timer를 실행하기 이전에 그냥 리턴해버리므로 걍 봇이 종료되는거임
-					// dao 상태 0으로 전환 , trans_log는 업데이트 ㄴㄴ
+					// timer를 실행하기 이전에 그냥 리턴해버리므로 그냥 봇이 종료 
+					// status 상태 0으로 전환 , trans_log는 X
 					String sql = String.format("UPDATE trade SET status=0 WHERE email = \"%s\" and bot_name = \"%s\" ",
 							email, botName);
 					dao.Query(sql, "insert");
 					dao.clean();
-					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
+					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람 메일ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 초기 오류로 종료되었습니다.";
 					String subject = "보라봇 " + botName + " 종료 알람";
 					SendMail.sendEmail(email, subject, content);
-					return;
+					return;// 종료
 				}
 			}
 		}
@@ -375,7 +286,7 @@ public class tradingBot {
 				// 시간 초과 종료
 				if (now.isAfter(deadDay)) {
 
-					// ---moduel---//
+					// ---module---//
 					double ticker = exAPIobj.getTicker(coin, base);
 					double total = numOfNowCoin * ticker + balanceOfNow;
 
@@ -389,7 +300,7 @@ public class tradingBot {
 						e.printStackTrace();
 					}
 					dao.clean();
-					// ---moduel---//
+					// ---module---//
 
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 거래기간 만료로 종료되었습니다.";
@@ -424,7 +335,7 @@ public class tradingBot {
 				if (nowStatus.equals("0")) {
 					// 종료
 
-					// ---moduel---//
+					// ---module---//
 					double ticker = exAPIobj.getTicker(coin, base);
 					double total = numOfNowCoin * ticker + balanceOfNow;
 
@@ -438,7 +349,7 @@ public class tradingBot {
 						e.printStackTrace();
 					}
 					dao.clean();
-					// ---moduel---//
+					// ---module---//
 
 					// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 					String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 사용자 선택으로 종료되었습니다.";
@@ -493,7 +404,7 @@ public class tradingBot {
 							// 종료
 							// sql update status = 0;
 
-							// ---moduel---//
+							// ---module---//
 							double ticker = exAPIobj.getTicker(coin, base);
 							// double numOfNowCoin = exAPIobj.getBalance(coin);
 							// double balanceOfNow = exAPIobj.getBalance(base);
@@ -509,7 +420,7 @@ public class tradingBot {
 								e1.printStackTrace();
 							}
 							dao.clean();
-							// ---moduel---//
+							// ---module---//
 
 							// ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ봇 종료 알람ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 							String content = LocalDateTime.now() + "\n보라봇 " + botName + " 이 거래 중 데이터 api 오류로 종료되었습니다.";
@@ -527,16 +438,17 @@ public class tradingBot {
 								e1.printStackTrace();
 							}
 							dbt.clean();
-
-							trigger = -1; // timer cancel을 해도 최초 1회는 실행되므로, 그걸 막기 위해 트리거를 별도 설정
+							// timer cancel을 해도 최초 1회는 실행되므로, 그걸 막기 위해 트리거를 별도 설정
+							// 사용자가 봇 시작을 누른 뒤 직후에 취소하는 경우를 대비
+							trigger = -1; 
 							fin = -1; // meaningless
-							timer.cancel(); // 이후에 작업 X
+							timer.cancel(); // 이후에 작업 X : 종료
 						}
 					}
 
-					// 2차관문 : FinalDetermin을 구하는데 에러가 나면 이 트리거로 뒤에 코드는 실행 X
+					// 2차관문 : FinalDetermin을 구하는데 에러가 나면 이 trigger로 뒤에 코드는 실행 X
 					if (trigger == 1) {
-						if (fin >= buyCriteria) {
+						if (fin > buyCriteria) {
 							System.out.println("buy!");
 
 							double numOfSalingCoin;
@@ -568,8 +480,6 @@ public class tradingBot {
 							// }
 
 							double ticker = exAPIobj.getTicker(coin, base);
-							// double numOfNowCoin = exAPIobj.getBalance(coin);
-							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 
 							String currentTime = LocalDateTime.now().toString();
@@ -607,7 +517,7 @@ public class tradingBot {
 							}
 							dbt.clean();
 
-						} else if (fin <= sellCriteria) { // 매도 시그널!
+						} else if (fin < sellCriteria) { // 매도 시그널!
 							System.out.println("sell!");
 
 							double numOfSalingCoin;
@@ -638,8 +548,6 @@ public class tradingBot {
 							// }
 
 							double ticker = exAPIobj.getTicker(coin, base);
-							// double numOfNowCoin = exAPIobj.getBalance(coin);
-							// double balanceOfNow = exAPIobj.getBalance(base);
 							double total = numOfNowCoin * ticker + balanceOfNow;
 
 							String currentTime = LocalDateTime.now().toString();
@@ -705,45 +613,41 @@ public class tradingBot {
 		};
 
 		// 거래 시작!!
-		// till the done..~
-		// 거래 시간을 표준시 분단위로 맞춰서 진행할 지..?
-		// ScheduledExecutorService service =
-		// Executors.newSingleThreadScheduledExecutor();
-		// service.scheduleAtFixedRate(command, initialDelay, period, unit)
-		// timer.schedule(task, 0, interval*1000);
-
 		Date date = new Date();
-		date.setTime(System.currentTimeMillis());
-
+		date.setTime(System.currentTimeMillis() + (interval * 1000));
+		/*
+		 * date + interval = 시작하는 시간(현재, 클릭 시간) 더하기 거래 간격 1단위 만큼 후에 실행이 됨.
+		 * 미리 지표 객체륻을 생성할 때 전 상태를 저장하는 것과 관련
+		 */
 		timer.scheduleAtFixedRate(task, date, interval * 1000);
+	
 
 	}
+
 	
-   // 8자리로
-   private static double shapingnumOfSalingCoin(double numOfSalingCoin, String coin) {
+	private double shapingnumOfSalingCoin(double numOfSalingCoin, String coin) {
 
-      if (coin.equals("XRP") || coin.equals("xrp")) {
+		// 소수점이 너무 길어지면 거래소에서 api콜을 받지 않을 것
+		
+		if (coin.equals("XRP") || coin.equals("xrp")) {
+			// 리플의 경우 거래소에 지원하는 소수점이 대부분 6자리인 것으로 보임.
+			double ret = Double.parseDouble(String.format("%.6f", numOfSalingCoin));
+			return ret;
+		} else {
+			// 나머지 코인은 8자리로
+			double ret = Double.parseDouble(String.format("%.8f", numOfSalingCoin));
+			return ret;
+		}
+	}
 
-         double ret = Double.parseDouble(String.format("%.6f", numOfSalingCoin));
-         return ret;
-      } else {
+	// 올인선택 - 가지고 있는 돈으로 살 수 있느 모든 코인을 사버림
+	private double buyAll(exAPI api, double balanceOfNow) {
 
-         double ret = Double.parseDouble(String.format("%.8f", numOfSalingCoin));
-         return ret;
-      }
-   }
-
-	// 올인선택
-	// 다 사버려
-	private static double buyAll(exAPI api, double balanceOfNow) {
-
-		// return api.getBalance(base) / api.getTicker(coin, base);
 		return balanceOfNow / api.getTicker(coin, base);
 	}
 
 	// 특정 가격 만큼 산다고 정하면
-	// 이 함수
-	private static double buyCertainPrice(exAPI api, double value, double balanceOfNow) {
+	private double buyCertainPrice(exAPI api, double value, double balanceOfNow) {
 
 		if (balanceOfNow > value) {
 
@@ -755,8 +659,7 @@ public class tradingBot {
 	}
 
 	// 특정 갯수 만큼 삼
-	// 이 함수
-	private static double buyCertainNum(exAPI api, double value, double balanceOfNow) {
+	private double buyCertainNum(exAPI api, double value, double balanceOfNow) {
 		if (balanceOfNow / api.getTicker(coin, base) > value) {
 			return value;
 		} else {
@@ -764,12 +667,12 @@ public class tradingBot {
 		}
 	}
 
-	private static double sellAll(double nomOfNowCoin) {
+	private double sellAll(double nomOfNowCoin) {
 
 		return nomOfNowCoin;
 	}
 
-	private static double sellCertainPrice(exAPI api, double value, double numOfNowCoin) {
+	private double sellCertainPrice(exAPI api, double value, double numOfNowCoin) {
 
 		if (value / api.getTicker(coin, base) <= numOfNowCoin) {
 			return value / api.getTicker(coin, base);
@@ -778,7 +681,7 @@ public class tradingBot {
 		}
 	}
 
-	private static double sellCertainNum(exAPI api, double value, double numOfNowCoin) {
+	private double sellCertainNum(exAPI api, double value, double numOfNowCoin) {
 
 		if (numOfNowCoin >= value) {
 			return value;
@@ -787,60 +690,9 @@ public class tradingBot {
 		}
 	}
 
-	// private void IOC() {
-	//
-	// // uuid받아와서
-	// // 바로 취소때려버리기
-	// }
-	//
-	// private double getFinalDetermin(Stack<String> post) {
-	//
-	// // 현재 스택이 abc++식으로 되어있으므로
-	// // 뒤집어서 ++cba식으로 바꿔준다
-	// // pop을 하면 맨 뒤(a)부터 빠져나오기 때문!
-	// Stack<String> tempStk = new Stack<String>();
-	//
-	// int postSize = post.size();
-	// for (int i = 0; i < postSize; i++) {
-	// tempStk.push(post.pop());
-	// }
-	//
-	// // 계산스택
-	// // 연산자를 만나면 두개를 팝해서 연산한 뒤 다시 푸쉬
-	// Stack<String> calStk = new Stack<String>();
-	// int size = tempStk.size();
-	// for (int i = 0; i < size; i++) {
-	//
-	// String poped = tempStk.pop();
-	//
-	// if (poped.equals("or")) {
-	//
-	// String temp1 = calStk.pop();
-	// String temp2 = calStk.pop();
-	//
-	// int ret = Integer.parseInt(temp1) + Integer.parseInt(temp2);
-	// calStk.push(ret + "");
-	// } else if (poped.equals("and")) {
-	// String temp1 = calStk.pop();
-	// String temp2 = calStk.pop();
-	//
-	// int ret = Integer.parseInt(temp1) * Integer.parseInt(temp2);
-	// calStk.push(ret + "");
-	// } else {
-	// calStk.push(poped);
-	// }
-	// }
-	// // printStack(calStk);
-	// return Double.parseDouble(calStk.pop());
-	// }
-
 	private double getFinDeter(calcIndicator[] indicatorCalcer, String[] expList, int[] weightList) throws Exception {
 
-		// 피연산자 리스트
-		// 연산자 리스트
-		// 가 있다. 그러면 연산자 리스트는 피연산자 리스트보다 항상 1개가 작을 수 밖에 없다.
-		// 피연산자는 후위표기스택에 넣고, 연산자는 따로 수식스택에 넣고 계산한다.
-
+		// 백테스트와 동일
 		double ret = 0;
 		for (int i = 0; i < indicatorCalcer.length; i++) {
 
@@ -850,43 +702,9 @@ public class tradingBot {
 		}
 
 		return ret;
-
-		/*
-		 * Stack<String> postStk = new Stack<String>(); Stack<String> expStk = new
-		 * Stack<String>();
-		 * 
-		 * for(int i = 0; i < expList.length; i++) { try {
-		 * 
-		 * String tempStr = indicatorCalcer[i].getDeterminConstant()*weightList[i]+"";
-		 * //System.out.println(indicatorCalcer[i].toString().split("@")[0] + " : " +
-		 * tempStr); returnDetailMessage += indicatorCalcer[i].toString().split("@")[0]
-		 * + " : " + tempStr + "\n"; postStk.push(tempStr);
-		 * 
-		 * } catch(Exception cE) { cE.printStackTrace(); System.out.println();
-		 * System.out.println("getFinDeter error"); throw new Exception(); }
-		 * if(expStk.isEmpty()) { expStk.push(expList[i]); } else {
-		 * if(expList[i].equals("and")) {
-		 * 
-		 * if(expStk.lastElement().equals("and")) { postStk.push(expStk.pop()); }
-		 * expStk.push(expList[i]);
-		 * 
-		 * } else if(expList[i].equals("or")) {
-		 * 
-		 * while(!expStk.empty()) { postStk.push(expStk.pop()); }
-		 * expStk.push(expList[i]); } } } String tempStr =
-		 * indicatorCalcer[indicatorCalcer.length-1].getDeterminConstant()*weightList[
-		 * weightList.length-1]+"";
-		 * //System.out.println(indicatorCalcer[indicatorCalcer.length-1].toString().
-		 * split("@")[0] + " : " + tempStr); returnDetailMessage +=
-		 * indicatorCalcer[indicatorCalcer.length-1].toString().split("@")[0] + " : " +
-		 * tempStr + "\n";
-		 * 
-		 * postStk.push(tempStr); while(!expStk.isEmpty()) { postStk.push(expStk.pop());
-		 * } //printStack(postStk); return postStk;
-		 */
 	}
 
-	public static void printStack(Stack<String> stk) {
+	public void printStack(Stack<String> stk) {
 		System.out.println("------");
 		for (int i = 0; i < stk.size(); i++) {
 			System.out.println(stk.get(stk.size() - i - 1));

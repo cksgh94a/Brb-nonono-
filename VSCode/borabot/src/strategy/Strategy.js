@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
+import { isNullOrUndefined, isUndefined } from 'util';
 
 import { setStrategy } from '../reducers/strategy';
 
 import './Strategy.css';
-import { isNullOrUndefined, isUndefined } from 'util';
 
+// 지표 초기값
 var RSI = { indicator:'RSI', weight:1, period:14, buyIndex:30, sellIndex:70 }
 var BollingerBand = { indicator:'BollingerBand', weight:1, period:20, mul:2 }
 var CCI = { indicator:'CCI', weight:1, period:20, buyIndex:-100, sellIndex:100 }
@@ -26,6 +27,7 @@ var defaultMFI = { indicator:'MFI', weight:1, period:14, buyIndex:0, sellIndex:0
 var defaultStochOsc = { indicator:'StochOsc', weight:1, n:15, m:5, t:3 }
 var defaultVolumeRatio = { indicator:'VolumeRatio', weight:1, period:20, buyIndex:70, sellIndex:350 }
 
+// 지표 초기값, 기본값 배열
 var indicatorList = [RSI, BollingerBand, CCI, gdCross, gdVCross, MFI, StochOsc, VolumeRatio]
 var defaultIndicatorList = [defaultRSI, defaultBollingerBand, defaultCCI, defaultgdCross, defaultgdVCross, defaultMFI, defaultStochOsc, defaultVolumeRatio]
 
@@ -34,20 +36,20 @@ class Strategy extends Component {
   constructor(){
     super();
     this.state={
-      strategy_name: '',
-      selectedIndicator: RSI, // 설정된 지표
+      strategy_name: '',            // 설정된 전략 이름
+      selectedIndicator: RSI,       // 설정된 지표
       defaultIndicator: defaultRSI, // 설정된 지표의 기본값
-      calculate: 'or', // 연산 방법
-      buyC: '', // 구매 기준
-      sellC: '',  // 판매 기준
+      calculate: 'or',              // 연산 방법
+      buyC: '',                     // 구매 기준치
+      sellC: '',                    // 판매 기준치
 
-      indicatorList: [],  // 설정된 지표 리스트
-      expList: [],  // 지표 연산 방법 리스트
-      savedCnt: 0,  // 설정된 지표 개수
-      jsonString:'', // 서버에 보내기 위한 json
+      indicatorList: [],            // 설정된 지표 리스트
+      expList: [],                  // 지표 연산 방법 리스트
+      savedCnt: 0,                  // 설정된 지표 개수
+      jsonString:'',                // 저장된 지표를 서버에 보내기 위한 json
 
-      selectedStrategy:'',
-      isLoad: false  // 불러오기이면 true, 새로 만들기이면 false 
+      selectedStrategy:'',          // 선택된 전략 (서버에서 불러옴)
+      isLoad: false                 // 불러오기이면 true, 새로 만들기이면 false 
     }
   }
 
@@ -57,25 +59,25 @@ class Strategy extends Component {
     && (window.location = "/strategy")
   }
 
+  // 새로 만들기, 불러오기 선택
   handleLoad = (e) => {
     // 새로 만들기 선택하면 기존에 만든 것 초기화
     if(e.target.value === '새로 만들기'){
       document.getElementById('strategy_name').value = ''
       this.setState({
         strategy_name: '',
-        selectedIndicator: RSI, // 설정된 지표
-        defaultIndicator: defaultRSI, // 설정된 지표의 기본값
-        calculate: 'or', // 연산 방법
-        buyC:'', // 구매 기준
-        sellC:'',  // 판매 기준
+        selectedIndicator: RSI,
+        defaultIndicator: defaultRSI,
+        buyC:'',
+        sellC:'',
   
-        indicatorList: [],  // 설정된 지표 리스트
-        expList: [],  // 지표 연산 방법 리스트
-        savedCnt: 0,  // 설정된 지표 개수
-        jsonString:'', // 서버에 보내기 위한 json
+        indicatorList: [],
+        expList: [],
+        savedCnt: 0,
+        jsonString:'',
         isLoad: false
       })
-    } else{
+    } else{ 
       document.getElementById('strategy_name').value = e.target.value
       this.setState({
         isLoad: true
@@ -92,7 +94,9 @@ class Strategy extends Component {
     }
   }
 
+  // 구매, 판매 기준치 입력
   handleCriteria = (e, bs) => {
+    // 숫자일 경우만 입력받음
     if(!isNaN(e.target.value) || e.target.value === '-'){
       (bs === 'buy')
         ? this.setState({
@@ -104,7 +108,7 @@ class Strategy extends Component {
     }
   }
 
-  // 지표 select box 변화에 따른 현재 선택된 지표와 기본값 state 변화
+  // 지표 select box 변화에 따른 현재 선택된 지표와 지표 기본값 state 변화
   handleIndicator = (e) => {
     indicatorList.map((idc) => {
       if(idc.indicator === e.target.value){
@@ -123,8 +127,9 @@ class Strategy extends Component {
     this.initInput()
   }
 
-  // 설정한 지표 저장 및 리스트, json 저장
-  handleSave = (e) => {
+  // 설정한 지표 json 저장
+  handleSave = () => {
+    
     const { selectedIndicator, jsonString, savedCnt, expList, defaultIndicator, calculate } = this.state
 
     // 현재 설정된 지표 세부 설정 저장 (공백이면 기본값)

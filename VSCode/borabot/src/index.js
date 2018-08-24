@@ -35,7 +35,7 @@ ReactDOM.render(
 // 개발용 react hot loader (새로고침 없이 페이지 수정하지만 간혹 느려지는 원인)
 if (module.hot) {
   module.hot.accept('./App', () => {
-    const NextApp = require('./App').default; 
+    const NextApp = require('./App').default;
     ReactDOM.render(
       <AppContainer>
         <Provider store = {store}>

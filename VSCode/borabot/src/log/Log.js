@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 
+// css, img
 import './log.css';
 import mainBackground from '../img/sign/sign_bg_01.png';
 import toLeftBtn from '../img/common/pre_btn_01.png';
@@ -13,31 +14,33 @@ class Log extends Component {
     super();
     this.state={
 
-      selectedTrade: {},
-      selectedSalesAction: {},
-      tradeList: [],
-      logList: [], // 현재 선택된 페이지의 10개의 로그 리스트
+      selectedTrade: {},        // 현재 선택된 거래
+      selectedSalesAction: {},  // 현재 선택된 매매 행동
+      tradeList: [],            // 거래 목록
+      logList: [],              // 현재 선택된 페이지의 10개의 기록
 
       // 앞단 테스트용 ==================================================================================================================== //
       // tradeList: [{"exchange_name":"bithumb","bot_name":"asdfasdf","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"qweteaw","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"tqtqtqtq","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"xcbaqwesadg","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"zxbwefa","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"zxbwefaxzc","coin":"btckrw"},{"exchange_name":"bithumb","bot_name":"ㅋㅌ츚ㅂㄷㅅㅁㄴㅇㄹ","coin":"btckrw"}],
       // logList: [{"now_coin_number":"0.0","coin_intent":"0.0","now_balance":"0.0","trans_time":"2018-07-30 17:42:14","coin_price":"9175000.0","sales_action":"1"},{"now_coin_number":"0.0","coin_intent":"0.0","now_balance":"0.0","trans_time":"2018-07-30 17:47:12","coin_price":"9153000.0","sales_action":"1"}],
       // ================================================================================================================================ //
 
-      pageNum:1,  // 현재 선택된 페이지 번호
-      pageNumList: [1] // 게시물의 전체 페이지 리스트
+      pageNum:1,                // 현재 선택된 페이지 번호
+      pageNumList: [1]          // 게시물의 전체 페이지 리스트
     }
   }
 
+  // 초기 페이지 로딩 시에 거래 목록 불러옴
   componentDidMount() {
     axios.get( 'Log' )
     .then( response => {
+      // 세션 검증
       if(response.data === 'sessionExpired') this.sessionExpired()
       else{
         this.setState({
           tradeList: response.data,
           pageNumList: [1]
         })
-        // 거래 현황에서 거래 기록을 눌렀을 경우
+        // 거래화면의 거래 현황에서 거래 기록을 눌렀을 경우
         this.props.location.bot_name !== undefined
         && response.data.map((t, i) => {
           if(t.bot_name === this.props.location.bot_name){
@@ -48,9 +51,9 @@ class Log extends Component {
             document.getElementById('botName').selectedIndex=i+1
           }})
       }
-    }) 
-    .catch( response => { 
-      console.log('err\n'+response); 
+    })
+    .catch( response => {
+      console.log('err\n'+response);
     }); // ERROR
   }
 
@@ -62,10 +65,11 @@ class Log extends Component {
 
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
-    (this.props.location.key !== nextProps.location.key) 
+    (this.props.location.key !== nextProps.location.key)
     && (window.location = "/log")
   }
 
+  // 봇 이름, 매매 행동 선택
   handleChange = (e) => {
     const { tradeList } = this.state
     if(e.target.id === 'botName'){  // 봇 이름 선택일 때
@@ -83,7 +87,7 @@ class Log extends Component {
           '매수/매도'
         )
       }
-    } else {  // 매수/매도 선택일 
+    } else {  // 매수/매도 선택일 때
       document.getElementById('botName').selectedIndex !== 0
       && this.getLog(
           tradeList[document.getElementById('botName').selectedIndex-1].bot_name,
@@ -93,14 +97,16 @@ class Log extends Component {
     }
   }
 
+  // 서버에 해당 봇의 로그 요청
   getLog = (bn, pN, sa) => {
-    axios.post('Log', 
+    axios.post('Log',
       'bot_name='+bn+
       '&pageNum='+pN+
       '&sales_action='+sa,
       { 'Content-Type': 'application/x-www-form-urlencoded' }
     )
     .then( response => {
+      // 세션 검증
       if(response.data === 'sessionExpired') this.sessionExpired()
       else{
         var pNL = [1]  // state에 저장할 페이지리스트 생성
@@ -112,7 +118,7 @@ class Log extends Component {
           pageNumList: pNL
         })
       }
-    }) 
+    })
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
@@ -121,6 +127,7 @@ class Log extends Component {
     const { pageNum, pageNumList } = this.state
     var pn = 1  // 서버에 호출할 페이지 번호
 
+    // 앞, 뒤 10페이지 이동과 페이지 직접 선택한 경우
     if(fbn === 'front'){
       (pageNum > 10)
       ? pn = pageNum -(pageNum-1)%10 -1
@@ -130,7 +137,7 @@ class Log extends Component {
       ? pn = (pageNum -1) -(pageNum -1)%10 +11
       : pn = pageNumList.length
     } else pn = fbn
-    
+
     this.setState({ pageNum: pn })
     this.getLog(
       this.state.selectedTrade.bot_name,
@@ -141,7 +148,7 @@ class Log extends Component {
 
   render() {
     const { tradeList, selectedTrade, logList, pageNum, pageNumList } = this.state
-    
+
     const mainBgStyle = {
       backgroundImage: `url(${mainBackground})`,
     }
@@ -157,31 +164,34 @@ class Log extends Component {
     }
 
     return (
-      <div style = {mainBgStyle} className = "log-bakcground" > 
+      <div style = {mainBgStyle} className = "log-bakcground" >
         <div className = "log-leftBox">
           <div className = "log-botSelText">봇 선택</div>
+          {/* 봇 선택 */}
           <select id="botName" className = "log-botSelect" onChange={this.handleChange} style={{cursor: "pointer"}}>
             <option selected hidden disabled>봇 이름</option>
             {tradeList.map((t, i) => {
               return (<option key={i}> {t.bot_name} </option>)
             })}
           </select><br/>
+          {/* 매매 행동 선택 */}
           <select id="salesAction" className = "log-saleSelect" onChange={this.handleChange} style={{cursor: "pointer"}}>
             <option>매수/매도</option><option>매수</option><option>매도</option>
           </select><br/>
         </div>
 
         <div className = "log-mainBox">
+          {/* 거래 요약 정보 */}
           <div className = "log-botTextContainer">
             <div className = "log-botIndivText">
-              {selectedTrade.bot_name}의 거래 기록 
-            </div> 
+              {selectedTrade.bot_name}의 거래 기록
+            </div>
             <div className = "log-botBackground">
               거래소 : {selectedTrade.exchange_name}
-            </div>  
+            </div>
             <div className = "log-botBackground">
               코인 : {selectedTrade.coin}
-            </div>  
+            </div>
           </div>
           <table className='log-tableContainer'>
             <thead>
@@ -193,8 +203,8 @@ class Log extends Component {
               <th className='log-headTr'>현재 보유 코인수<small>(개)</small></th>
             </thead>
 
-            <tbody className = 'log-tbodyContainer' >              
-              { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+            <tbody className = 'log-tbodyContainer' >
+              { // state에 저장된 로그를 map 함수 통하여 표시
               logList.map((l, i) => {
                 return (<tr key={i} style={{borderBottom : "1px solid"}} >
                   <td className = 'log-td'>{l.trans_time}</td>
@@ -210,17 +220,23 @@ class Log extends Component {
 
           <div className = "log-chooseBoxContainer">
             { /* 이전 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}> <img src = {toLeftBtn} style={{cursor: "pointer"}}/> </div>
+            <div className = "log-chooseLeft" onClick={() => this.selectPage('front')}>
+              <img src = {toLeftBtn} style={{cursor: "pointer"}}/>
+            </div>
             { // 현재 선택된 페이지의 근처 10개 페이지 표시
             pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
               return(<div  key ={i} onClick={() => this.selectPage(p)}>
-                {pageNum === p ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
+                {pageNum === p
+                ? <div style={onTextBg} className = "log-chooseNumberSelected" >  {p}  </div>
+                : <div style={offTextBg} className = "log-chooseNumber" >  {p}  </div>}
               </div>)
             })}
             { /* 이후 10 페이지 이동 버튼*/ }
-            <div className = "log-chooseRight" onClick={() => this.selectPage('back')}><img src = {toRightBtn} style={{cursor: "pointer"}}/></div>
+            <div className = "log-chooseRight" onClick={() => this.selectPage('back')}>
+              <img src = {toRightBtn} style={{cursor: "pointer"}}/>
+            </div>
           </div>
-        </div>          
+        </div>
       </div>
     );
   }

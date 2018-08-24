@@ -58,7 +58,7 @@ class Alarm extends Component {
               <th class="alarm-tableTitle6">시간</th>
               <th class="alarm-tableTitle6">봇 이름</th>
               <th class="alarm-tableTitle1">거래소</th>
-              <th class="alarm-tableTitle2">코인/기축통화</th>
+              <th class="alarm-tableTitle2">시장</th>
               <th class="alarm-tableTitle3">매매</th>
               <th class="alarm-tableTitle4">수량</th>
               <th class="alarm-tableTitle5">가격<small>(KRW)</small></th>

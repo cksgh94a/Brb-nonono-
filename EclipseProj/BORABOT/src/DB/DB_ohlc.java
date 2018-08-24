@@ -60,7 +60,7 @@ public class DB_ohlc {
           System.out.println(e.getMessage()+"드라이버 로드 실패");       
        }
       
-      // DB 접속
+      // DB 접속 : borabot_ohlc DB로 접속함
       String url = "jdbc:mysql://localhost:3306/borabot_ohlc?autoReconnect=true&useSSL=false&characterEncoding=UTF-8&serverTimezone=UTC";
        con = DriverManager.getConnection(url,"root","1111");   
        stmt = con.createStatement();

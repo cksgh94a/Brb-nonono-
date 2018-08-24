@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import Post from './Post';
 
+// css, img
 import './Board.css';
 import onText from '../img/common/on_bg_01.png';
 import offText from '../img/common/off_bg_01.png';
@@ -12,31 +13,32 @@ class Board extends Component {
   constructor(){
     super();
     this.state={
-      post: false,  // true : 게시물 작성, 보기, false : 목록 표시
-      write: false, // true : 게시물 작성, false : 게시물 보기 / 목록 표시
+      post: false,      // true : 게시물 작성&보기, false : 목록 표시
+      write: false,     // true : 게시물 작성, false : 게시물 보기&목록 표시
 
-      post_num: 0,  // 현재 선택된 게시물 번호
-      postList: [], // 현재 선택된 페이지의 10개의 게시물 리스트
+      post_num: 0,      // 현재 선택된 게시물 번호
+      postList: [],     // 현재 선택된 페이지의 10개의 게시물 리스트
 
-      pageNum:1,  // 현재 선택된 페이지 번호
-      pageNumList: [1] // 게시물의 전체 페이지 리스트
+      pageNum:1,        // 현재 선택된 페이지 번호
+      pageNumList: [1]  // 게시물의 전체 페이지 리스트
 
-      // 앞단 테스트용 ============================================================================================================================= //
+      // 앞단 테스트용 게시물 목록==================================================================================================================== //
       // post_num: 0,  // 현재 선택된 게시물 번호
       // pageNum:1,  // 현재 선택된 페이지 번호
       // postList: [{"comment_count":"1","post_num":"247","title":"zxbasdfgweqtgw","email":"test","post_time":"2018-07-31 18:47:35"},{"comment_count":"2","post_num":"244","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"243","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"242","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"241","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"240","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"239","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"238","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"237","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"},{"comment_count":"2","post_num":"236","title":"ㅇㅊㅌㅍㅂㅁㅈㄷㄱ","email":"qwe","post_time":"2018-07-30 11:42:06"}],
       // pageNumList: [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33]
-      // 앞단 테스트용 ============================================================================================================================= //
+      // 앞단 테스트용 게시물 목록==================================================================================================================== //
     }
   }
 
+  // board 페이지가 render 되기 전에 게시물 목록 불러옴
   componentWillMount() {
     this.getBoard(1)
   }
 
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
-    (this.props.location.key !== nextProps.location.key) 
+    (this.props.location.key !== nextProps.location.key)
     && (window.location = "/board")
   }
 
@@ -44,6 +46,7 @@ class Board extends Component {
   getBoard = (i) => {
     axios.get( 'Board?pageNum='+i )
     .then( response => {
+      // 세션 검증
       if(response.data === 'sessionExpired') this.sessionExpired()
       else{
         var pNL = [1]  // state에 저장할 페이지리스트 생성
@@ -55,7 +58,7 @@ class Board extends Component {
           pageNumList: pNL
         })
       }
-    }) 
+    })
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
@@ -70,6 +73,7 @@ class Board extends Component {
     const { pageNum, pageNumList } = this.state
     var pn = 1  // 서버에 호출할 페이지 번호
 
+    // 앞, 뒤 10페이지 이동과 페이지 직접 선택한 경우
     if(fbn === 'front'){
       (pageNum > 10)
       ? pn = pageNum -(pageNum -1)%10 -1
@@ -79,9 +83,9 @@ class Board extends Component {
       ? pn = (pageNum -1) -(pageNum -1)%10 +11
       : pn = pageNumList.length
     } else pn = fbn
-    
+
     this.setState({ pageNum: pn })
-    this.getBoard(pn)
+    this.getBoard(pn) // 페이지 변경 후 게시물을 새로 불러옴
   }
 
   // 게시물을 선택하면 해당 게시물 표시
@@ -93,7 +97,7 @@ class Board extends Component {
     })
   }
 
-  // 게시물에서 목록으로 돌아가는 버튼
+  // 게시물에서 목록으로 돌아오는 버튼
   moveList = () => {
     this.setState({
       post: false,
@@ -124,7 +128,7 @@ class Board extends Component {
       backgroundImage : `url(${offText})`,
       cursor: 'pointer'
     }
-    
+
     return (
       <div class="board_total">
         <div class="board">
@@ -132,9 +136,7 @@ class Board extends Component {
           { // 게시물 작성/보기일 경우엔 게시물 표시, 아니면 목록 표시
           post
           ? <div class="post_table">
-              <Post post_num={post_num} write={write} toList={this.moveList}/>  
-              {/*목록버튼*/}
-              {/* <button id="listButton" onClick={this.moveList}><img src={require('../img/common/btn_13.png')} /></button> */}
+              <Post post_num={post_num} write={write} toList={this.moveList}/>
             </div>
 
           : <div>
@@ -146,8 +148,8 @@ class Board extends Component {
                   <th className='table-headTr'>날짜</th>
                 </thead>
 
-                <tbody className = 'table-tbodyContainer' >              
-                  { // state에 저장된 게시물 리스트를 map 함수 통하여 표시
+                <tbody className = 'table-tbodyContainer' >
+                  { // state에 저장된 게시물 목록을 map 함수 통하여 표시
                   postList.map((p, i) => {
                     return (<tr key={i} className = 'table-tr' style={{borderBottom : "1px solid"}} >
                       <td className = 'table-td'>{p.post_num}</td>
@@ -158,7 +160,7 @@ class Board extends Component {
                   })}
                 </tbody>
               </table>
-              
+
 
               <div className = "table-chooseBoxContainer">
                 { /* 이전 10 페이지 이동 버튼*/ }
@@ -166,7 +168,9 @@ class Board extends Component {
                 { // 현재 선택된 페이지의 근처 10개 페이지 표시
                 pageNumList.slice(pageNum -(pageNum-1)%10 -1, pageNum -(pageNum-1)%10 +9).map((p, i) => {
                   return(<div  key ={i} onClick={() => this.selectPage(p)}>
-                    {pageNum === p ? <div style={onTextBg} className = "table-chooseNumberSelected" >  {p}  </div> : <div style={offTextBg} className = "table-chooseNumber" >  {p}  </div>}
+                    {pageNum === p
+                    ? <div style={onTextBg} className = "table-chooseNumberSelected" >  {p}  </div>
+                    : <div style={offTextBg} className = "table-chooseNumber" >  {p}  </div>}
                   </div>)
                 })}
                 { /* 이후 10 페이지 이동 버튼*/ }

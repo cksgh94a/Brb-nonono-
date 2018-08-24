@@ -15,7 +15,7 @@ import DB.DB_ohlc;
 
 public class HitbtcAPI implements exAPI {
 
-	private static HitBTC ht;
+	private HitBTC ht;
 
 	public HitbtcAPI(String APIKey, String SecKey) {
 		ht = new HitBTC(APIMode.PRODUCTION, APIKey, SecKey);
@@ -28,14 +28,12 @@ public class HitbtcAPI implements exAPI {
 		String result = "";
 		String symb;
 
-		if (base.equals("usdt")) {
+		if (base.equals("usdt") || base.equals("USDT")) {
 			symb = coin + "usd";
 		}
-
 		else {
 			symb = coin + base;
 		}
-		
 		
 		try {
 			TradeAPI tApi = ht.tradeAPI();
@@ -59,10 +57,14 @@ public class HitbtcAPI implements exAPI {
 		// TODO Auto-generated method stub
 
 		String result = "";
-		if (base.equals("usdt")) {
-			base = "usd";
+		String symb;
+
+		if (base.equals("usdt") || base.equals("USDT")) {
+			symb = coin + "usd";
 		}
-		String symb = coin + base;
+		else {
+			symb = coin + base;
+		}
 
 		try {
 			TradeAPI tApi = ht.tradeAPI();
@@ -85,6 +87,9 @@ public class HitbtcAPI implements exAPI {
 	public double getTicker(String coin, String base) {
 		// TODO Auto-generated method stub
 
+		if (base.equals("usdt") || base.equals("USDT")) {
+			base = "usd";
+		}
 		String symb = coin + base;
 
 		DB_ohlc db = new DB_ohlc();
@@ -109,16 +114,16 @@ public class HitbtcAPI implements exAPI {
 		// TODO Auto-generated method stub
 		double resultBalance = -1;
 		
-		if(currency.equals("USDT") || currency.equals("usdt")) {
-			currency = "USD";
+		if (currency.equals("usdt") || currency.equals("USDT")) {
+			currency = "usd";
 		}
-		
+
 		try {
 			TradeAPI tApi;
 			String res;
 			tApi = ht.tradeAPI();
 			res = tApi.getAllBalances2();
-//			System.out.println(res);
+			System.out.println(res);
 			JsonArray jsArr;
 			try {
 				jsArr = new JsonParser().parse(res).getAsJsonObject().get("balance").getAsJsonArray();
@@ -127,7 +132,7 @@ public class HitbtcAPI implements exAPI {
 						.getAsInt();
 				String errorMsg = new JsonParser().parse(res).getAsJsonObject().get("error").getAsJsonObject()
 						.get("messsage").getAsString();
-				System.out.println("hitbtc API Key 오류! : " + " : " + errorMsg);
+				System.out.println("hitbtc API Key �삤瑜�! : " + " : " + errorMsg);
 				return -1;
 			}
 
@@ -155,6 +160,7 @@ public class HitbtcAPI implements exAPI {
 			result = tApi.getAllBalances2();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return "all balance fail";
 		}
 
 		return result;

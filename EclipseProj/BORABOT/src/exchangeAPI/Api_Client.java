@@ -1,5 +1,9 @@
 package exchangeAPI;
 
+// 빗썸 홈페이지에서 가지고 옴
+//빗썸 홈페이지에서 가지고 옴
+//빗썸 홈페이지에서 가지고 옴
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;

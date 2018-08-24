@@ -11,8 +11,6 @@ public class CoinRecommendation {
 
 	private String[] bithumbCoinList = { "BTC", "ETH", "DASH", "LTC", "ETC", "XRP", "BCH", "XMR", "ZEC", "BTG", "EOS" };
 
-//	private String[] coinoneCoinList = { "btc", "bch", "eth", "etc", "ltc", "btg" };
-
 	static String[] binanceCoinList = { "BCCUSDT", "BNBUSDT", "BTCUSDT", "ETHUSDT", "LTCUSDT", "NEOUSDT", "QTUMUSDT",
 			"ADAUSDT", "EOSUSDT", "TUSDUSDT", "XLMUSDT", "XRPUSDT", "ICXUSDT", "ONTUSDT", "TRXBTC", "ETHBTC", "XRPBTC",
 			"NEOBTC", "BCDBTC", "BNBBTC", "VIBBTC", "WTCBTC", "ELFBTC", "ICXBTC", "IOSTBTC", "VENBTC", "EOSBTC",
@@ -24,13 +22,11 @@ public class CoinRecommendation {
 	
 	private Map<String, String[]> exchangeCoinList = new HashMap<String, String[]>();
 
-//	private String[] exchangeList = { "bithumb", "coinone", "binance" };
 	private String[] exchangeList = { "bithumb", "binance", "hitbtc" };
 	
 	public CoinRecommendation() {
 
 		exchangeCoinList.put("bithumb", bithumbCoinList);
-//		exchangeCoinList.put("coinone", coinoneCoinList);
 		exchangeCoinList.put("binance", binanceCoinList);
 		exchangeCoinList.put("hitbtc", hitbtcCoinList);
 	}
