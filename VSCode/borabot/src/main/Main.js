@@ -23,10 +23,11 @@ class Main extends Component {
     && (window.location = "/")
   }
 
-  handleToggle = () => {  // Sales에서 거래가 시작되면 toggle을 변화
+  // Sales에서 거래가 시작되면 toggle을 변화하여 NowTrading에 알림
+  handleToggle = () => {
     this.setState({ toggle: !this.state.toggle })
   }
-  
+
   render() {
     return (
       <div className="App">

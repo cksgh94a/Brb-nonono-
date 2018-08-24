@@ -17,7 +17,8 @@ class WalletInfo extends Component{
     };
   }
 
-  componentDidMount() {    
+  // 페이지 불러올 때 거래소 지갑 불러옴
+  componentDidMount() {
     axios.get( 'WalletInfo?exchange=BINANCE' )
     .then( response => {
       if(response.data === 'sessionExpired') this.sessionExpired()
@@ -28,10 +29,12 @@ class WalletInfo extends Component{
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
 
+  // 거래소 선택
   handleExchange = (e) => {
     if(e.target.value !== '거래소'){
       axios.get( 'WalletInfo?exchange='+e.target.value )
       .then( response => {
+        // 세션 검증
         if(response.data === 'sessionExpired') this.sessionExpired()
         else {
           this.setState({ selectedWallet: response.data })

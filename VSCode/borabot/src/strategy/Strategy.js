@@ -49,13 +49,13 @@ class Strategy extends Component {
       jsonString:'',                // 저장된 지표를 서버에 보내기 위한 json
 
       selectedStrategy:'',          // 선택된 전략 (서버에서 불러옴)
-      isLoad: false                 // 불러오기이면 true, 새로 만들기이면 false 
+      isLoad: false                 // 불러오기이면 true, 새로 만들기이면 false
     }
   }
 
   // 현재 페이지에서 새로고침을 위해 메뉴를 다시 눌렀을 경우
   componentWillReceiveProps (nextProps) {
-    (this.props.location.key !== nextProps.location.key) 
+    (this.props.location.key !== nextProps.location.key)
     && (window.location = "/strategy")
   }
 
@@ -70,14 +70,14 @@ class Strategy extends Component {
         defaultIndicator: defaultRSI,
         buyC:'',
         sellC:'',
-  
+
         indicatorList: [],
         expList: [],
         savedCnt: 0,
         jsonString:'',
         isLoad: false
       })
-    } else{ 
+    } else{
       document.getElementById('strategy_name').value = e.target.value
       this.setState({
         isLoad: true
@@ -129,7 +129,7 @@ class Strategy extends Component {
 
   // 설정한 지표 json 저장
   handleSave = () => {
-    
+
     const { selectedIndicator, jsonString, savedCnt, expList, defaultIndicator, calculate } = this.state
 
     // 현재 설정된 지표 세부 설정 저장 (공백이면 기본값)
@@ -211,7 +211,7 @@ class Strategy extends Component {
 
     var tempJson = jsonString
 
-    if(savedCnt === 0) {
+    if(savedCnt === 0) {  // 지표를 처음에 저장할 때
       this.setState({
         isLoad: false,
         indicatorList: indicatorList.concat(selectedIndicator),
@@ -244,7 +244,8 @@ class Strategy extends Component {
     if(!isNullOrUndefined(document.getElementById('m'))) document.getElementById('m').value = null
     if(!isNullOrUndefined(document.getElementById('t'))) document.getElementById('t').value = null
   }
-  
+
+  // 완료 버튼
   handleComplete = () => {
     // 항목 검증
     if(document.getElementById('strategy_name').value === '') {
@@ -267,14 +268,14 @@ class Strategy extends Component {
       alert('한개 이상의 지표를 저장하세요')
       return
     }
-    
+
     if(window.confirm("전략을 저장하시겠습니까?")){
       var send = '{"indicatorList":{'+this.state.jsonString+'},"buyCriteria":'+this.state.buyC+',"sellCriteria":'+this.state.sellC+',"expList":"'+this.state.expList+'"}'
-  
+
       // DB에 새로운 전략 저장
       axios.post(
-        'Strategy', 
-        'name='+this.state.strategy_name+'&data='+send, 
+        'Strategy',
+        'name='+this.state.strategy_name+'&data='+send,
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
@@ -287,7 +288,7 @@ class Strategy extends Component {
           alert('저장되었습니다')
           window.location = "/strategy"
         }
-      }) 
+      })
       .catch( response => { console.log('err\n'+response); } ); // ERROR로
     }
   }
@@ -298,12 +299,13 @@ class Strategy extends Component {
     window.location = '/'
   }
 
-  handleDelete = () => {    
+  // 삭제 버튼
+  handleDelete = () => {
     if(window.confirm("전략을 삭제하시겠습니까?")){
       // DB에 해당 전략 삭제
       axios.post(
-        'Strategy', 
-        'name='+this.props.strategyList[document.getElementById('serverStrategy').selectedIndex-1].name+'&data=delete', 
+        'Strategy',
+        'name='+this.props.strategyList[document.getElementById('serverStrategy').selectedIndex-1].name+'&data=delete',
         { 'Content-Type': 'application/x-www-form-urlencoded' }
       )
       .then( response => {
@@ -316,7 +318,7 @@ class Strategy extends Component {
           alert('삭제되었습니다')
           window.location = "/strategy"
         }
-      }) 
+      })
       .catch( response => { console.log('err\n'+response); } ); // ERROR로
     }
   }
@@ -327,6 +329,7 @@ class Strategy extends Component {
       <div class="strategy">
         <div class="strategy_1">
           <div class="strategy_1_contents">
+            {/* 불러오기 영역 */}
             <div class="strategy_1_contents_top">
               <h4 class="strategy_1_contents_titles_1">불러오기</h4>
               <select id="serverStrategy" onChange={(e)=>this.handleLoad(e)} style={{cursor: "pointer"}}>
@@ -335,15 +338,17 @@ class Strategy extends Component {
                   this.props.strategyList.map((e, i) => {
                   return (<option key={i}> {e.name} </option>)
                 })
-                
+
                 }
               </select>
             </div>
+            {/* 전략 만들기 영역 */}
             <div class="strategy_1_contents_bottom">
               <h4 class="strategy_1_contents_titles_2">전략 만들기</h4>
               <input placeholder="전략 이름" id="strategy_name" readOnly={isLoad}/>
               <h4 class="strategy_1_contents_titles_3">거래 세팅</h4>
-              <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} readOnly={isLoad} onChange={(e) => this.handleCriteria(e, 'buy')}/><br/>
+              <input placeholder="구매 기준치" id="buyWeight" value={this.state.buyC} readOnly={isLoad} onChange={(e) => this.handleCriteria(e, 'buy')}/>
+              <br/>
               <input placeholder="판매 기준치" id="sellWeight" value={this.state.sellC} readOnly={isLoad} onChange={(e) => this.handleCriteria(e, 'sell')}/>
 
               <h4 class="strategy_1_contents_titles_4">지표 세팅</h4>
@@ -354,35 +359,39 @@ class Strategy extends Component {
                 })
               }
               </select>
+              {/* 선택한 지표에 따라 input이 변화 */}
               <input placeholder={"weight: "+defaultIndicator.weight} id="weight"/>
-              {selectedIndicator.period !== undefined && 
-                (<input placeholder={"period: "+defaultIndicator.period} id="period"/>)}
-              {selectedIndicator.buyIndex !== undefined && 
-                (<input placeholder={"buyIndex: "+defaultIndicator.buyIndex} id="buyIndex"/>)}
-              {selectedIndicator.sellIndex !== undefined && 
-                (<input placeholder={"sellIndex: "+defaultIndicator.sellIndex} id="sellIndex"/>)}
-              {selectedIndicator.mul !== undefined && 
-                (<input placeholder={"mul: "+defaultIndicator.mul} id="mul"/>)}
-              {selectedIndicator.longD !== undefined && 
-                (<input placeholder={"longD: "+defaultIndicator.longD} id="longD"/>)}
-              {selectedIndicator.shortD !== undefined && 
-                (<input placeholder={"shortD: "+defaultIndicator.shortD} id="shortD"/>)}
-              {selectedIndicator.mT !== undefined && 
-                (<input placeholder={"mT: "+defaultIndicator.mT} id="mT"/>)}
-              {selectedIndicator.n !== undefined && 
-                (<input placeholder={"n: "+defaultIndicator.n} id="n"/>)}
-              {selectedIndicator.m !== undefined && 
-                (<input placeholder={"m: "+defaultIndicator.m} id="m"/>)}
-              {selectedIndicator.t !== undefined && 
-                (<input placeholder={"t: "+defaultIndicator.t} id="t"/>)}
+              {selectedIndicator.period !== undefined
+              && (<input placeholder={"period: "+defaultIndicator.period} id="period"/>)}
+              {selectedIndicator.buyIndex !== undefined
+              && (<input placeholder={"buyIndex: "+defaultIndicator.buyIndex} id="buyIndex"/>)}
+              {selectedIndicator.sellIndex !== undefined
+              && (<input placeholder={"sellIndex: "+defaultIndicator.sellIndex} id="sellIndex"/>)}
+              {selectedIndicator.mul !== undefined
+              && (<input placeholder={"mul: "+defaultIndicator.mul} id="mul"/>)}
+              {selectedIndicator.longD !== undefined
+              && (<input placeholder={"longD: "+defaultIndicator.longD} id="longD"/>)}
+              {selectedIndicator.shortD !== undefined
+              && (<input placeholder={"shortD: "+defaultIndicator.shortD} id="shortD"/>)}
+              {selectedIndicator.mT !== undefined
+              && (<input placeholder={"mT: "+defaultIndicator.mT} id="mT"/>)}
+              {selectedIndicator.n !== undefined
+              && (<input placeholder={"n: "+defaultIndicator.n} id="n"/>)}
+              {selectedIndicator.m !== undefined
+              && (<input placeholder={"m: "+defaultIndicator.m} id="m"/>)}
+              {selectedIndicator.t !== undefined
+              && (<input placeholder={"t: "+defaultIndicator.t} id="t"/>)}
             </div>
-
+            {/* 전략 저장 버튼 */}
             <div class="strategySaveButton">
-              <button id="strategySaveButton" hidden={isLoad} onClick={this.handleSave}><img src={require('../img/common/btn_09.png')} style={{cursor: "pointer"}} /></button>
+              <button id="strategySaveButton" hidden={isLoad} onClick={this.handleSave}>
+                <img src={require('../img/common/btn_09.png')} style={{cursor: "pointer"}}/>
+              </button>
             </div>
           </div>
         </div>
-        
+
+        {/* 저장된 항목 영역 */}
         <div class="strategy_2_wrap">
           <h4 class="strategy_2_title">저장된 항목</h4>
           <h5 class="strategy_2_common">아래 지표들의 시그널값 합이 '구매기준치' 보다 높으면 매수, '판매기준치' 보다 작으면 매도를 하게 됩니다</h5>
@@ -390,6 +399,7 @@ class Strategy extends Component {
         <div class="strategy_2">
           <div class="strategy_2_grid">
             {isLoad === false
+            // 새로 만들기일 때
             ? (Object.keys(JSON.parse('{'+jsonString+'}')).map((idc, i) => {
                 return (<div class="setting _1" key={i}>
                 <table>
@@ -398,6 +408,7 @@ class Strategy extends Component {
                       <p class="strategy_2_titles">{JSON.parse('{'+jsonString+'}')[idc].indicator}</p>
                     </tr>
                   </thead>
+                  {/* 지표에 따라 표시되는 값 변화 */}
                   <tbody>
                     <div class="strategy_2_contents">
                       <div class="strategy_2_subtitles">
@@ -420,17 +431,28 @@ class Strategy extends Component {
                       <div class="strategy_2_subcontents">
                         <tr class="strategy_2_subcontent">
                           <td class="strategy_2_sub_subcontent">
-                            {JSON.parse('{'+jsonString+'}')[idc].weight !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].weight} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].period !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].period} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].buyIndex} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].sellIndex} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mul} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].longD} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].shortD} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mT} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].n !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].n} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].m !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].m} &emsp;</td>)}
-                            {JSON.parse('{'+jsonString+'}')[idc].t !== undefined && (<td>{JSON.parse('{'+jsonString+'}')[idc].t} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].weight !== undefined
+                            && (<td>{JSON.parse('{'+jsonString+'}')[idc].weight} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].period !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].period} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].buyIndex !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].buyIndex} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].sellIndex !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].sellIndex} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mul !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mul} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].longD !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].longD} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].shortD !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].shortD} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].mT !== undefined
+                            && (<td>&emsp;{JSON.parse('{'+jsonString+'}')[idc].mT} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].n !== undefined
+                            && (<td>{JSON.parse('{'+jsonString+'}')[idc].n} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].m !== undefined
+                            && (<td>{JSON.parse('{'+jsonString+'}')[idc].m} &emsp;</td>)}
+                            {JSON.parse('{'+jsonString+'}')[idc].t !== undefined
+                            && (<td>{JSON.parse('{'+jsonString+'}')[idc].t} &emsp;</td>)}
                           </td>
                         </tr>
                       </div>
@@ -438,8 +460,8 @@ class Strategy extends Component {
                   </tbody>
                 </table>
                 </div>);
-              })) 
-
+              }))
+              // 불러오기일 때
               : (Object.keys(selectedStrategy.indicatorList).map((idc, i) => {
                   return (<div class="setting _1" key={i}>
                   <table>
@@ -448,6 +470,7 @@ class Strategy extends Component {
                         <p class="strategy_2_titles">{selectedStrategy.indicatorList[idc].indicator}</p>
                       </tr>
                     </thead>
+                    {/* 지표에 따라 표시되는 값 변화 */}
                     <tbody>
                       <div class="strategy_2_contents">
                         <div class="strategy_2_subtitles">
@@ -470,31 +493,45 @@ class Strategy extends Component {
                         <div class="strategy_2_subcontents">
                           <tr class="strategy_2_subcontent">
                             <td class="strategy_2_sub_subcontent">
-                              {selectedStrategy.indicatorList[idc].weight !== undefined && (<td>{selectedStrategy.indicatorList[idc].weight} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].period !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].period} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].buyIndex !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].buyIndex} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].sellIndex !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].sellIndex} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].mul !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].mul} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].longD !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].longD} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].shortD !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].shortD} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].mT !== undefined && (<td>&emsp;{selectedStrategy.indicatorList[idc].mT} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].n !== undefined && (<td>{selectedStrategy.indicatorList[idc].n} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].m !== undefined && (<td>{selectedStrategy.indicatorList[idc].m} &emsp;</td>)}
-                              {selectedStrategy.indicatorList[idc].t !== undefined && (<td>{selectedStrategy.indicatorList[idc].t} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].weight !== undefined
+                              && (<td>{selectedStrategy.indicatorList[idc].weight} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].period !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].period} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].buyIndex !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].buyIndex} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].sellIndex !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].sellIndex} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].mul !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].mul} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].longD !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].longD} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].shortD !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].shortD} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].mT !== undefined
+                              && (<td>&emsp;{selectedStrategy.indicatorList[idc].mT} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].n !== undefined
+                              && (<td>{selectedStrategy.indicatorList[idc].n} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].m !== undefined
+                              && (<td>{selectedStrategy.indicatorList[idc].m} &emsp;</td>)}
+                              {selectedStrategy.indicatorList[idc].t !== undefined
+                              && (<td>{selectedStrategy.indicatorList[idc].t} &emsp;</td>)}
                             </td>
                           </tr>
-                        </div>                        
+                        </div>
                       </div>
                     </tbody>
                   </table>
                   </div>);
-                })) 
+                }))
             }
           </div>
-          
+
         </div>
+        {/* 저장, 삭제 버튼 */}
         <div class="strategyCompleteButton">
-          <button id="strategyCompleteButton" hidden={isLoad} onClick={this.handleComplete}><img src={require('../img/common/btn_10.png')} style={{cursor: "pointer"}} /></button>
+          <button id="strategyCompleteButton" hidden={isLoad} onClick={this.handleComplete}>
+            <img src={require('../img/common/btn_10.png')} style={{cursor: "pointer"}}/>
+          </button>
           <button id="strategyDeleteButton" hidden={!isLoad} onClick={this.handleDelete} style={{cursor: "pointer"}}>삭제</button>
         </div>
       </div>

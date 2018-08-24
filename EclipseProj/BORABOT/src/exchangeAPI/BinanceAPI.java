@@ -37,10 +37,10 @@ import DB.DB_ohlc;
 
 public class BinanceAPI implements exAPI {
 
-	public static final String ORDERBOOK_BUY = "BUY", ORDERBOOK_SELL = "SELL", ORDERBOOK_BOTH = "BOTH";
-	public static final int DEFAULT_RETRY_ATTEMPTS = 1;
-	public static final int DEFAULT_RETRY_DELAY = 15;
-	private static final Exception InvalidStringListException = new Exception("Must be in key-value pairs");
+	public  final String ORDERBOOK_BUY = "BUY", ORDERBOOK_SELL = "SELL", ORDERBOOK_BOTH = "BOTH";
+	public  final int DEFAULT_RETRY_ATTEMPTS = 1;
+	public  final int DEFAULT_RETRY_DELAY = 15;
+	private  final Exception InvalidStringListException = new Exception("Must be in key-value pairs");
 	private final String API_VERSION = "1", INITIAL_URL = "https://www.binance.com/api/";
 	private final String PUBLIC = "public", MARKET = "market", ACCOUNT = "account";
 	private final String encryptionAlgorithm = "HmacSHA256";
@@ -62,19 +62,6 @@ public class BinanceAPI implements exAPI {
 		this.retryAttempts = retryAttempts;
 		this.retryDelaySeconds = retryDelaySeconds;
 		this.retryAttemptsLeft = retryAttempts;
-	}
-
-	public BinanceAPI(int retryAttempts, int retryDelaySeconds) {
-
-		this.retryAttempts = retryAttempts;
-		this.retryDelaySeconds = retryDelaySeconds;
-
-		this.retryAttemptsLeft = retryAttempts;
-	}
-
-	public BinanceAPI() {
-
-		this(DEFAULT_RETRY_ATTEMPTS, DEFAULT_RETRY_DELAY);
 	}
 
 	public String getCurrencies() { // Returns all currencies currently on Bittrex with their metadata
@@ -265,7 +252,7 @@ public class BinanceAPI implements exAPI {
 		return urlAttachment;
 	}
 
-	public static List<HashMap<String, String>> getMapsFromResponse(String response) {
+	public  List<HashMap<String, String>> getMapsFromResponse(String response) {
 
 		final List<HashMap<String, String>> maps = new ArrayList<>();
 
@@ -289,7 +276,7 @@ public class BinanceAPI implements exAPI {
 		return maps;
 	}
 
-	private static HashMap<String, String> jsonMapToHashMap(String jsonMap) {
+	private  HashMap<String, String> jsonMapToHashMap(String jsonMap) {
 
 		final HashMap<String, String> map = new HashMap<>();
 

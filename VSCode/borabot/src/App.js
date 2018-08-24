@@ -78,7 +78,7 @@ class App extends Component {
               </Switch>
             </div>
           </div>
-          
+
         : <Switch>
             <Route path="/register"><div className="main"><Register/></div></Route>
             <Route path="/findInfo"><div className="main"><FindInfo/></div></Route>

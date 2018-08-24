@@ -87,9 +87,6 @@ public class HitbtcAPI implements exAPI {
 	public double getTicker(String coin, String base) {
 		// TODO Auto-generated method stub
 
-		if (base.equals("usdt") || base.equals("USDT")) {
-			base = "usd";
-		}
 		String symb = coin + base;
 
 		DB_ohlc db = new DB_ohlc();

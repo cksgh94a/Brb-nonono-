@@ -34,7 +34,7 @@ const sellingSetting = [
 
 class BackTesting extends Component {
   constructor(){
-    super();일
+    super();
     this.state={
       exchangeIndex: 0,               // 현재 선택된 거래소 인덱스
       baseIndex: 0,                   // 현재 선택된 기축통화 인덱스
@@ -129,55 +129,63 @@ class BackTesting extends Component {
   // 데이터 유효성 검증
   validate = () => {
     // 거래소 검증
-    if(document.getElementById('bt_exchange').value === '거래소'){
+    if(document.getElementById('bt_exchange').value === '거래소 선택'){
       alert('거래소를 설정해주세요')
       return false
     }
     // 기축통화 검증
-    if(document.getElementById('base').value === '기축통화'){
+    else if(document.getElementById('base').value === '기축통화 선택'){
       alert('기축통화를 설정해주세요')
       return false
     }
     // 코인 검증
-    if(document.getElementById('coin').value === '코인'){
+    else if(document.getElementById('coin').value === '코인 선택'){
       alert('거래할 코인을 설정해주세요')
       return false
     }
     // 거래 간격 검증
-    if(document.getElementById('interval').value === '거래 간격'){
+    else if(document.getElementById('interval').value === '거래 간격 설정'){
       alert('거래 간격을 설정해주세요')
       return false
     }
     // 전략 검증
-    if(document.getElementById('strategy').value === '전략'){
+    else if(document.getElementById('strategy').value === '전략 선택'){
       alert('전략을 설정해주세요')
       return false
     }
     // 구매 방식 검증
-    if(document.getElementById('buyingSetting').value === '구매 설정'){
+    else if(document.getElementById('buyingSetting').value === '구매 방식 설정'){
       alert('구매 방식을 설정해주세요')
       return false
     }
     // 세부 구매 설정 검증
-    if(document.getElementById('buyingDetail').value === '' && document.getElementById('buyingSetting').value !== '전액구매'){
+    else if(document.getElementById('buyingDetail').value === '' && document.getElementById('buyingSetting').value !== '전액구매'){
       alert('구매할 금액(수량)을 설정해주세요')
       return false
     }
     // 판매 방식 검증
-    if(document.getElementById('sellingSetting').value === '판매 설정'){
+    else if(document.getElementById('sellingSetting').value === '판매 방식 설정'){
       alert('판매 방식을 설정해주세요')
       return false
     }
     // 세부 판매 설정 검증
-    if(document.getElementById('sellingDetail').value === '' && document.getElementById('sellingSetting').value !== '전액판매'){
+    else if(document.getElementById('sellingDetail').value === '' && document.getElementById('sellingSetting').value !== '전액판매'){
       alert('판매할 금액(수량)을 설정해주세요')
       return false
     }
-    if(document.getElementById('nowCash').value === '') {
+    else if(this.state.startDay === '') {
+      alert('시작일을 설정해주세요')
+      return false
+    }
+    else if(this.state.endDay === '') {
+      alert('종료일을 설정해주세요')
+      return false
+    }
+    else if(document.getElementById('nowCash').value === '') {
       alert('시작 금액을 입력하세요')
       return false
     }
-    return true // 모든 유효성 검증 통과하면 true 반환
+    else return true // 모든 유효성 검증 통과하면 true 반환
   }
 
   // 시작 버튼 눌르면 서버에 시작 데이터 전송
@@ -292,8 +300,8 @@ class BackTesting extends Component {
                 return (<option key={i}>
                   {/* HITBTC는 표시는 USDT, 실제 값은 USD여야 함 */}
                   {(base === 'USD')
-                    ? 'USDT'
-                    : base }
+                  ? 'USDT'
+                  : base }
                   </option>)
               })}
               <option selected hidden disabled>기축통화 선택</option>
@@ -314,11 +322,10 @@ class BackTesting extends Component {
             </select>
             {/* 전략 선택 */}
             <select className="bt-select" id="strategy" placeholder="전략">
-              <option selected hidden disabled>전략 선택</option>
               {strategyList.map((s, i) => {
                 return (<option key={i}> {s.name} </option>)
               })}
-              <option selected hidden disabled>전략</option>
+              <option selected hidden disabled>전략 선택</option>
             </select>
             <div class="bt-input">
               {/* 구매 설정 선택 */}

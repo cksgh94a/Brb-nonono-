@@ -12,10 +12,10 @@ class ChartSelect extends Component {
 
     // 차트 선택 화면에서 선택한 인덱스
     this.state = {
-      exchangeIndex: 0,
-      baseIndex: 0,
-      coinIndex: 0,
-      intervalIndex: 0
+      exchangeIndex: 0, // 거래소 인덱스
+      baseIndex: 0,     // 기축통화 인덱스
+      coinIndex: 0,     // 코인 인덱스
+      intervalIndex: 0  // 거래 간격 인덱스
     };
   }
 
@@ -29,7 +29,7 @@ class ChartSelect extends Component {
       document.getElementById('chartInterval').selectedIndex = intervalIndex
     }
   }
-  
+
   // 차트 선택 인덱스를 차트 데이터 인덱스로 설정
   handleIndex = (e) => {
     if (e.target.id === 'chartExchange'){
@@ -50,46 +50,43 @@ class ChartSelect extends Component {
   render() {
     const { exchangeList, intervalList, sales } = this.props
     let exchangeIndex = 0;  let baseIndex = 0;  let coinIndex = 0;  let intervalIndex = 0
-        
-    sales.sales 
-      ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales // 거래 시작 화면에서 설정이 변경되면 차트는 해당 내용을 그림
-      : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
 
-    // console.log(exchangeList[exchangeIndex].key)
-    // console.log(exchangeIndex[exchangeIndex].value.baseList[baseIndex])
+    sales.sales
+    ? { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.props.sales // 거래 시작 화면에서 설정이 변경되면 차트는 해당 내용을 그림
+    : { exchangeIndex, baseIndex, coinIndex, intervalIndex } = this.state // 차트 선택 화면에서 설정이 변경되면 차트는 해당 내용을 그림
     return (
       <div>
         <div className = 'CS-selectingChart'>
-
+          {/* 거래소 선택 */}
           <select  className = 'CS-selectEx' palceholder = '거래소' id="chartExchange" onChange={this.handleIndex} style={{cursor: "pointer"}}>
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
           })}
           </select>
-
+          {/* 기축통화 선택 */}
           <select id="chartBase" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
               return (<option key={i}>
                 {(base === 'USD')
-                  ? 'USDT'
-                  : base }
+                ? 'USDT'
+                : base }
                 </option>)
             })}
           </select>
-
+          {/* 코인 선택 */}
           <select id="chartCoin" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
               return (<option key={i}> {coin} </option>)
             })}
           </select>
-
+          {/* 거래 간격 선택 */}
           <select id="chartInterval" className = 'CS-select' onChange={this.handleIndex} style={{cursor: "pointer"}}>
             {intervalList.map((int, i) => {
               return (<option key={i}> {int.key} </option>)
             })}
           </select>
         </div>
-
+        {/* 트레이딩뷰 차트 위젯 */}
         <TradingViewWidget
           symbol={exchangeList[exchangeIndex].key+":"+exchangeList[exchangeIndex].value.coin[baseIndex].list[coinIndex]+exchangeList[exchangeIndex].value.baseList[baseIndex]}
           theme={Themes.LIGHT}
@@ -99,10 +96,10 @@ class ChartSelect extends Component {
           height = "700px"
           // 트레이딩뷰에서 6시간과 12시간 데이터를 제공하지 않으므로 4시간으로 바꿔서 표시
           interval={((intervalList[intervalIndex].value/60 === 360) || (intervalList[intervalIndex].value/60 === 720))
-            ? 240
-            : intervalList[intervalIndex].value/60
+          ? 240
+          : intervalList[intervalIndex].value/60
           }
-          // hide_top_toolbar
+          // hide_top_toolbar // 차트 상단 툴바 숨기기
         />
       </div>
     );

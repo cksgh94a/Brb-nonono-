@@ -2,36 +2,43 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { connect } from 'react-redux';
 
+// 시간 입력 위한 react-datepicker 패키지
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 import { setSales } from '../reducers/sales';
 
 import './Sales.css';
-
 import startBtn from '../img/common/btn_03.png';
 import calendar from '../img/common/calendar_01.png';
 
-// 시간 선택 리스트
+// 종료 시간 설정에 필요한 시간 리스트
 const hourList = []
 for(var i=1;i<=24;i++) hourList.push(i-1)
 
-// 구매, 판매 설정 리스트
-const buyingSetting = [ {key: '전액구매', value: 'buyAll'}, {key: '금액구매', value: 'buyCertainPrice'}, {key: '개수구매', value: 'buyCertainNum'} ]
-const sellingSetting = [ {key: '전액판매', value: 'sellAll'}, {key: '금액판매', value: 'sellCertainPrice'}, {key: '개수판매', value: 'sellCertainNum'} ]
-
+// 구매, 판매 설정 배열 (key는 화면 표시용, value는 서버 전송용)
+const buyingSetting = [
+  {key: '전액구매', value: 'buyAll'},
+  {key: '금액구매', value: 'buyCertainPrice'},
+  {key: '개수구매', value: 'buyCertainNum'}
+]
+const sellingSetting = [
+  {key: '전액판매', value: 'sellAll'},
+  {key: '금액판매', value: 'sellCertainPrice'},
+  {key: '개수판매', value: 'sellCertainNum'}
+]
 
 class Sales extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      selectedDate: '', // 선택한 날짜
+      selectedDate: '',   // 선택한 날짜
 
-      buyDetail: false,
-      sellDetail: false,
-      buyUnit:'',
-      sellUnit:''
+      buyDetail: false,               // 세부 구매 방식 설정 여부
+      sellDetail: false,              // 세부 판매 방식 설정 여부
+      buyUnit:'',                     // 세부 구매 단위
+      sellUnit:'',                    // 세부 판매 단위
     };
   }
 
@@ -81,6 +88,7 @@ class Sales extends Component {
     }
   }
 
+  // 구매/판매 방식 설정에 따라 세부 구매 단위 표시
   handleSetting = (e) => {
     switch(e.target.value){
       case '전액구매':
@@ -107,32 +115,32 @@ class Sales extends Component {
       return false
     }
     // 거래소 검증
-    else if(document.getElementById('salesExchange').value === '거래소'){
+    else if(document.getElementById('salesExchange').value === '거래소 선택'){
       alert('거래소를 설정해주세요')
       return false
     }
     // 기축통화 검증
-    else if(document.getElementById('salesBase').value === '기축통화'){
+    else if(document.getElementById('salesBase').value === '기축통화 선택'){
       alert('기축통화를 설정해주세요')
       return false
     }
     // 코인 검증
-    else if(document.getElementById('salesCoin').value === '코인'){
+    else if(document.getElementById('salesCoin').value === '코인 선택'){
       alert('거래할 코인을 설정해주세요')
       return false
     }
     // 거래 간격 검증
-    else if(document.getElementById('salesInterval').value === '거래 간격'){
+    else if(document.getElementById('salesInterval').value === '거래 간격 설정'){
       alert('거래 간격을 설정해주세요')
       return false
     }
     // 전략 검증
-    else if(document.getElementById('strategy').value === '전략'){
+    else if(document.getElementById('strategy').value === '전략 선택'){
       alert('전략을 설정해주세요')
       return false
     }
     // 구매 방식 검증
-    else if(document.getElementById('buyingSetting').value === '구매 설정'){
+    else if(document.getElementById('buyingSetting').value === '구매 방식 설정'){
       alert('구매 방식을 설정해주세요')
       return false
     }
@@ -142,7 +150,7 @@ class Sales extends Component {
       return false
     }
     // 판매 방식 검증
-    else if(document.getElementById('sellingSetting').value === '판매 설정'){
+    else if(document.getElementById('sellingSetting').value === '판매 방식 설정'){
       alert('판매 방식을 설정해주세요')
       return false
     }
@@ -151,11 +159,17 @@ class Sales extends Component {
       alert('판매할 금액(수량)을 설정해주세요')
       return false
     }
-    return true
+    // 종료일 검증
+    else if(this.state.selectedDate === ''){
+      alert('종료일을 설정해주세요')
+      return false
+    }
+    else return true
   }
 
   // 거래 시작 버튼 클릭 시
   handleStartbtn = () => {
+    // 데이터 유효성이 검증되면
     if(this.validate()) {
       // 종료일 검증
       const { selectedDate } = this.state
@@ -178,7 +192,7 @@ class Sales extends Component {
 
       // 거래 확인 메세지
       let alertMsg = document.getElementById('botname').value
-        + ' 매매를 시작하시겠습니까?\n(한 번 사용한 봇 이름은 다시 사용할 수 없습니다';
+        + ' 매매를 시작하시겠습니까?\n(한 번 사용한 봇 이름은 다시 사용할 수 없습니다)';
 
       // 최종 확인 후 거래 시작 (서버에 거래 정보 전송)
       if(window.confirm(alertMsg)){
@@ -200,6 +214,7 @@ class Sales extends Component {
           { 'Content-Type': 'application/x-www-form-urlencoded' }
         )
         .then( response => {
+          // 세션 검증
           if(response.data === 'sessionExpired') this.sessionExpired()
           else if(response.data === 1062) { // db 키 중복 오류
             alert('중복된 봇 이름입니다.')
@@ -229,59 +244,61 @@ class Sales extends Component {
         <h3 style={{textAlign : "center"}}>자동 매매 설정</h3>
 
         <input placeholder="봇 이름" id="botname" className = 'select-botName' size = '1'/>
-
+        {/* 거래소 선택 */}
         <select className='sales-select' id="salesExchange" onChange={this.handleIndex}>
           {exchangeList.map((exchange, index) => {
             return (<option key={index} > {exchange.key} </option>)
           })}
           <option selected hidden disabled>거래소 선택</option>
         </select>
-
+        {/* 기축통화 선택 */}
         <select className='sales-select' id="salesBase" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.baseList.map((base, i) => {
             return (<option key={i}>
               {/* HITBTC는 표시는 USDT, 실제 값은 USD여야 함 */}
               {(base === 'USD')
-                ? 'USDT'
-                : base }
+              ? 'USDT'
+              : base }
               </option>)
           })}
           <option selected hidden disabled>기축통화 선택</option>
         </select>
-
+        {/* 코인 선택 */}
         <select className='sales-select' id="salesCoin" onChange={this.handleIndex}>
           {exchangeList[exchangeIndex].value.coin[baseIndex].list.map((coin, i) => {
             return (<option key={i}> {coin} </option>)
           })}
           <option selected hidden disabled>코인 선택</option>
         </select>
-
+        {/* 거래 간격 설정 */}
         <select className='sales-select' id="salesInterval" onChange={this.handleIndex}>
           {intervalList.map((int, i) => {
             return (<option key={i}> {int.key} </option>)
           })}
           <option selected hidden disabled>거래 간격 설정</option>
         </select>
-
+        {/* 전략 선택 */}
         <select className='sales-select' id="strategy">
           {strategyList.map((s, i) => {
             return (<option key={i}> {s.name} </option>)
           })}
           <option selected hidden disabled>전략 선택</option>
         </select>
-
+        {/* 구매 방식 설정 */}
         <select className='sales-select' id="buyingSetting" onChange={this.handleSetting}>
           {buyingSetting.map((b, i) => { return (<option key={i}> {b.key} </option>) })}
           <option selected hidden disabled>구매 방식 설정</option>
         </select>
-        <input className = 'input-buySetting' id="buyingDetail" hidden={!this.state.buyDetail}/>{this.state.buyDetail && this.state.buyUnit}
-
+        <input className = 'input-buySetting' id="buyingDetail" hidden={!this.state.buyDetail}/>
+        {this.state.buyDetail && this.state.buyUnit}
+        {/* 판매 방식 설정 */}
         <select className='sales-select' id="sellingSetting" onChange={this.handleSetting}>
           {sellingSetting.map((s, i) => { return (<option key={i}> {s.key} </option>) })}
           <option selected hidden disabled>판매 방식 설정</option>
         </select>
-        <input className = 'input-sellSetting' id="sellingDetail" hidden={!this.state.sellDetail}/>{this.state.sellDetail && this.state.sellUnit}
-
+        <input className = 'input-sellSetting' id="sellingDetail" hidden={!this.state.sellDetail}/>
+        {this.state.sellDetail && this.state.sellUnit}
+        {/* 종료일 설정 */}
         <div style = {{ maringTop : "12px", height : "42px"}}>
           <div style = {{ position:"absolute", borderBottom : "1px solid #9646a0", width : "81px", float : "left", marginLeft : "20px", marginTop : "4px"}}>
             <DatePicker
@@ -313,8 +330,10 @@ class Sales extends Component {
             })}
           </select>
         </div>
-
-        <div className = 'sales-start-btn' onClick={this.handleStartbtn}><img src = {startBtn} style={{cursor: "pointer"}}/></div>
+        {/* 시작 버튼 */}
+        <div className = 'sales-start-btn' onClick={this.handleStartbtn}>
+          <img src = {startBtn} style={{cursor: "pointer"}}/>
+        </div>
       </div>
     );
   }

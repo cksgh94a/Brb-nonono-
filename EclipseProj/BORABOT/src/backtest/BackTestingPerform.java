@@ -22,28 +22,28 @@ import com.google.gson.JsonParser;
 // run함수 실행 !
 public class BackTestingPerform {
 
-	private static String exchange;
-	private static String coin;
-	private static String base;
-	private static int interval;
+	private String exchange;
+	private String coin;
+	private String base;
+	private int interval;
 
-	private static String email; // 이메일
-	private static String strategyName; // 백테스트에 사용할 전략 이름
-	private static String buyingSetting; // 구매 방식 설정
-	private static String sellingSetting; // 판매 방식 설정
+	private String email; // 이메일
+	private String strategyName; // 백테스트에 사용할 전략 이름
+	private String buyingSetting; // 구매 방식 설정
+	private String sellingSetting; // 판매 방식 설정
 
-	private static String startDate; // 시작 시간
-	private static String endDate; // 종료 시간 : 루프 탈출 요소
+	private String startDate; // 시작 시간
+	private String endDate; // 종료 시간 : 루프 탈출 요소
 
 	// 택 1
-	private static double priceBuyUnit; // 한 번 구매에 사용하는 금액 (얼마치)
-	private static double numBuyUnit; // 한 번에 구매할 코인의 갯수 (몇개)
+	private double priceBuyUnit; // 한 번 구매에 사용하는 금액 (얼마치)
+	private double numBuyUnit; // 한 번에 구매할 코인의 갯수 (몇개)
 	// 택 1
-	private static double priceSellUnit; // 판매
-	private static double numSellUnit; // 판매
+	private double priceSellUnit; // 판매
+	private double numSellUnit; // 판매
 
-	private static double buyCriteria; // 구매 기준치; 지표들의 생성 값 합이 해당 기준치를 넘으면 구매
-	private static double sellCriteria; // 판매 기준치
+	private double buyCriteria; // 구매 기준치; 지표들의 생성 값 합이 해당 기준치를 넘으면 구매
+	private double sellCriteria; // 판매 기준치
 
 	private double nowCash; // 현재 캐쉬(돈)
 	private double nowCoin; // 현재 코인
@@ -55,9 +55,6 @@ public class BackTestingPerform {
 
 	JsonObject resultLog = new JsonObject();
 	JsonArray resultLogArr = new JsonArray(); // 앞단에 값을 전달하기 위한 제이슨
-
-	// 크립토 : 필요없음
-	private static CryptowatchAPI crypt = new CryptowatchAPI(20, 60);
 
 	public BackTestingPerform(String email, String exchange, String coin, String base, double initialCash, int interval,
 			String startDate, String endDate, String strategyName, String buyingSetting, String sellingSetting,
@@ -296,17 +293,17 @@ public class BackTestingPerform {
 				date.setTime((long) hHLCVArr[i][4] * 1000);
 				returnDetailMessage += "시간 : " + date + "\n";
 				returnDetailMessage += "가중치 계산 결과 : " + fin + "\n";
-				
+
 			} catch (Exception e) {
 				// getFinDeter 에러일 확률이 높음
-				returnDetailMessage += "가중치 결정 값을 구하는 도중 일어난  error ! : " + LocalDate.now() +"\n";
-				returnMessage += "가중치 결정 값을 구하는 도중 일어난 error ! : " + LocalDate.now() +"\n";
+				returnDetailMessage += "가중치 결정 값을 구하는 도중 일어난  error ! : " + LocalDate.now() + "\n";
+				returnMessage += "가중치 결정 값을 구하는 도중 일어난 error ! : " + LocalDate.now() + "\n";
 				resultLog.addProperty("status", "fail");
 				resultLog.addProperty("error", "가중치 결정 값을 구하는 도중 일어난 오류" + LocalDate.now());
 				e.printStackTrace();
 				return resultLog.getAsString();
 			}
-			
+
 			// h : history
 			// H : High 0
 			// L : Low 1
@@ -330,7 +327,7 @@ public class BackTestingPerform {
 						nowCoin += coinToBuy;
 						nowCash = 0;
 					} else if (buyingSetting.equals("buyCertainPrice")) {
-						
+
 						// 일정 가격 구매
 						if (nowCash > priceBuyUnit) {
 							double coinToBuy = priceBuyUnit / currentPrice;
@@ -350,7 +347,7 @@ public class BackTestingPerform {
 							nowCoin += numBuyUnit;
 							nowCash -= currentPrice * numBuyUnit;
 						} else {
-							
+
 							returnMessage += date + "\n" + "일정수 구매 - fail : 잔액부족" + "\n";
 							returnDetailMessage += "일정수 구매 - fail : 잔액부족\n";
 							continue;
@@ -410,7 +407,7 @@ public class BackTestingPerform {
 
 							returnMessage += "일정가 판매 - fail : 코인부족" + "\n";
 							returnDetailMessage += "일정가 판매 - fail : 코인부족" + "\n";
-							
+
 							continue;
 						}
 
@@ -422,7 +419,7 @@ public class BackTestingPerform {
 							finCoinToSell = numSellUnit;
 							nowCoin -= numSellUnit;
 							nowCash += numSellUnit * currentPrice;
-						
+
 						} else {
 							returnMessage += "일정수 판매 - fail : 코인부족" + "\n";
 							returnDetailMessage += "일정수 판매 - fail : 코인부족\n";
@@ -446,7 +443,7 @@ public class BackTestingPerform {
 					tempJob.addProperty("nowCoin", String.format("%.4f", nowCoin));
 					resultLogArr.add(tempJob);
 
-				} 
+				}
 				// 코인이 없음
 				else {
 					returnMessage += date + "\n판매 - no coin!" + "\n";
@@ -454,7 +451,7 @@ public class BackTestingPerform {
 				}
 
 				returnMessage += "--------------------------------------------------------------\n";
-				
+
 			} else {
 				// 대기 ( sellCriteria < fin < buyCriteria인 상황
 				returnDetailMessage += "대기!\n";
@@ -468,7 +465,7 @@ public class BackTestingPerform {
 		// 결과 처리
 		// 최종 자산 = 최종 코인 갯수 * 코인 최종가 + 최종 현금
 		double finalAsset = (hHLCVArr[hHLCVArr.length - 1][2] * nowCoin + nowCash);
-		//수익률
+		// 수익률
 		double profit = ((finalAsset - initialCash) / initialCash);
 		System.out.println(finalAsset + " / 시작금액 : " + initialCash);
 
@@ -533,9 +530,9 @@ public class BackTestingPerform {
 		return Double.parseDouble(calStk.pop());
 	}
 
-	private double getFinDeter(calcIndicator_bt[] indicatorCalcer, String[] expList, int[] weightList) throws Exception {
+	private double getFinDeter(calcIndicator_bt[] indicatorCalcer, String[] expList, int[] weightList)
+			throws Exception {
 
-	
 		// 피연산자인 지표를 배열로 가지고 있는 상태.
 		// 각 지표객체에 getDeterminConstant(지표 생성 시그널 값)을 실행하여
 		// 0, -1, 1 중 하나를 받음.

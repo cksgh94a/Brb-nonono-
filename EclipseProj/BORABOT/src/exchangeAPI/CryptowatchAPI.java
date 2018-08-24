@@ -16,8 +16,8 @@ import javax.net.ssl.HttpsURLConnection;
 
 public class CryptowatchAPI {
 
-	private static String exchangeList[] = {"borabit", "coinone", "binance", "bithumb", "bittrex"};
-	private static String coinList[] = {"btc", "eth", "ltc", "xrp"};
+	private  String exchangeList[] = {"borabit", "coinone", "binance", "bithumb", "bittrex"};
+	private  String coinList[] = {"btc", "eth", "ltc", "xrp"};
 	
 	final String baseUrl = "https://api.cryptowat.ch/markets/";
 	private final int retryAttempts;

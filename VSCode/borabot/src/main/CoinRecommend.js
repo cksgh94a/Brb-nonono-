@@ -16,7 +16,8 @@ class CoinRecommend extends Component {
     };
   }
 
-  componentDidMount() {    
+  // 페이지 표시할 때 코인 추천 목록 받아옴
+  componentDidMount() {
     axios.get('CoinRecommend')
     .then( response => {
       this.setState({
@@ -25,16 +26,16 @@ class CoinRecommend extends Component {
         biggestGap: response.data.biggestGap,
         exchangeList: response.data.exchangeList
       })
-    }) 
+    })
     .catch( response => { console.log('err\n'+response); } ); // ERROR
   }
-  
+
   render() {
     const { volumeHigh, priceHigh, biggestGap, exchangeList } = this.state
 
     const settings = {
       autoplay: true,
-      autoplaySpeed:1000,
+      autoplaySpeed:2000,
       vertical: true,
       arrows: false,
     };
